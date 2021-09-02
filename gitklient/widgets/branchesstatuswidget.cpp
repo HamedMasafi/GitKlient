@@ -4,7 +4,7 @@
 #include "dialogs/filestreedialog.h"
 #include "dialogs/diffdialog.h"
 #include "dialogs/runnerdialog.h"
-
+#include "diffwindow.h"
 #include <KMessageBox>
 
 BranchesStatusWidget::BranchesStatusWidget(QWidget *parent) : WidgetBase(parent)
@@ -81,10 +81,15 @@ void BranchesStatusWidget::on_pushButtonDiff_clicked()
     if (!treeWidgetBranches->currentItem())
         return;
 
-    DiffDialog d(treeWidgetBranches->currentItem()->text(0),
+    /*DiffDialog d(treeWidgetBranches->currentItem()->text(0),
                  comboBoxReferenceBranch->currentText(),
                  this);
-    d.exec();
+    d.exec();*/
+    auto d = new DiffWindow(treeWidgetBranches->currentItem()->text(0),
+                            comboBoxReferenceBranch->currentText());
+    d->setWindowModality(Qt::ApplicationModal);
+    d->setAttribute(Qt::WA_DeleteOnClose, true);
+    d->show();
 }
 
 

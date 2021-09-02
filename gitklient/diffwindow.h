@@ -7,7 +7,8 @@
 
 class DiffTreeModel;
 class DiffWidget;
-class QTreeView;
+class DiffTreeView;
+class FilesModel;
 class DiffWindow : public KXmlGuiWindow
 {
     Q_OBJECT
@@ -18,9 +19,10 @@ class DiffWindow : public KXmlGuiWindow
     QString _oldBranch;
     QString _newBranch;
 
+    FilesModel *_filesModel;
     DiffTreeModel *_diffModel;
     DiffWidget *_diffWidget;
-    QTreeView *_treeView;
+    DiffTreeView *_treeView;
 
     void initActions();
     void init();
@@ -32,6 +34,7 @@ public:
 
 private slots:
     void fileOpen();
+    void on_treeView_fileSelected(const QString &file);
 };
 
 #endif // DIFFWINDOW_H

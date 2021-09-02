@@ -49,6 +49,7 @@ ki18n_wrap_ui(gitklient_SRCS
     widgets/submoduleswidget.ui
     widgets/commitswidget.ui
     widgets/tagswidget.ui
+    widgets/difftreeview.ui
 
     dialogs/changedfilesdialog.ui
     dialogs/filestreedialog.ui

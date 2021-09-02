@@ -13,16 +13,20 @@
 #include "widgets/codeeditor.h"
 #include "widgets/diffwidget.h"
 #include "widgets/editactionsmapper.h"
+#include "widgets/difftreeview.h"
+
+#include <models/filesmodel.h>
 
 void DiffWindow::init()
 {
     auto mapper = new EditActionsMapper;
+    _diffWidget = new DiffWidget(this);
+
     mapper->init(actionCollection());
 
     initActions();
     setupGUI(StandardWindowOption::Default, "/doc/dev/gitklient/gitklient/gitklientdiffui.rc");
 
-    _diffWidget = new DiffWidget(this);
     setCentralWidget(_diffWidget);
 
     mapper->addTextEdit(_diffWidget->oldCodeEditor());
@@ -32,7 +36,8 @@ void DiffWindow::init()
     auto dock = new QDockWidget(this);
     dock->setObjectName("treeViewDock");
 
-    _treeView = new QTreeView(this);
+    _treeView = new DiffTreeView(this);
+    connect(_treeView, &DiffTreeView::fileSelected, this, &DiffWindow::on_treeView_fileSelected);
     dock->setWidget(_treeView);
     addDockWidget(Qt::LeftDockWidgetArea, dock);
 }
@@ -57,18 +62,30 @@ DiffWindow::DiffWindow(const QString &oldBranch, const QString &newBranch)
 {
     init();
 
-    _diffModel = new DiffTreeModel;
+    _filesModel = new FilesModel(this);
+    _diffModel = new DiffTreeModel(this);
     auto diffs = Git::Manager::instance()->diffBranches(oldBranch, newBranch);
 
-    for (auto &f: diffs)
+    for (auto &f: diffs) {
         _diffModel->addFile(f);
-    _treeView->setModel(_diffModel);
+        _filesModel->append(f.name());
+    }
+    _treeView->setDiffModel(_diffModel, _filesModel);
 }
 
 void DiffWindow::fileOpen()
 {
     DiffOpenDialog d(this);
     d.exec();
+}
+
+void DiffWindow::on_treeView_fileSelected(const QString &file)
+{
+    Git::File oldFile(_oldBranch, file);
+    Git::File newFile(_newBranch, file);
+    _diffWidget->setOldFile(std::move(oldFile));
+    _diffWidget->setNewFile(std::move(newFile));
+    _diffWidget->compare();
 }
 
 void DiffWindow::initActions()
