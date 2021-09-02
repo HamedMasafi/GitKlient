@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>settingsBase</class>
+ <widget class="QWidget" name="settingsBase">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>517</width>
+    <height>371</height>
+   </rect>
+  </property>
+  <layout class="QFormLayout">
+   <item row="0" column="0">
+    <widget class="QCheckBox" name="kcfg_openLastRepo">
+     <property name="text">
+      <string>Open last repo as startup</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="0">
+    <widget class="QComboBox" name="kcfg_calendarType">
+     <item>
+      <property name="text">
+       <string>Default</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Gregorian</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Persian</string>
+      </property>
+     </item>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

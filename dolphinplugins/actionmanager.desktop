@@ -1,0 +1,7 @@
+[Desktop Entry]
+Type=Service
+Name=My fancy action plugin
+X-KDE-Library=kde_git_dolphin_plugin
+X-KDE-ServiceTypes=KFileItemAction/Plugin
+MimeType=application/octet-stream;inode/directory;
+ServiceTypes=KFileItemAction/Plugin

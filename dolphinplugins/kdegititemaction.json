@@ -1,0 +1,14 @@
+{
+    "KPlugin": {
+        "MimeTypes": [
+            "application/octet-stream",
+            "inode/directory"
+        ],
+        "Name": "Git Klient",
+        "ServiceTypes": [
+            "KFileItemAction/Plugin"
+        ]
+    },
+    "MimeType": "application/octet-stream;inode/directory;",
+    "X-KDE-Submenu": "Git Klient"
+}

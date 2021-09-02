@@ -1,0 +1,7 @@
+[Desktop Entry]
+Name=Git Klient
+Exec=gitklient
+Icon=gitklient
+Type=Application
+X-DocPath=gitklient/index.html
+GenericName=Git client gui for KDE

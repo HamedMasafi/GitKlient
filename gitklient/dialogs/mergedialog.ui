@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MergeDialog</class>
+ <widget class="QDialog" name="MergeDialog">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>422</width>
+    <height>385</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Merge</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout_2">
+   <item>
+    <layout class="QFormLayout" name="formLayout">
+     <item row="0" column="0">
+      <widget class="QLabel" name="label_2">
+       <property name="text">
+        <string>From:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="1">
+      <widget class="QComboBox" name="comboBox_2"/>
+     </item>
+     <item row="2" column="0">
+      <widget class="QLabel" name="label">
+       <property name="text">
+        <string>Strategy:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="1">
+      <widget class="QComboBox" name="comboBox">
+       <property name="whatsThis">
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-family:'Adelle','Roboto Slab','DejaVu Serif','Georgia','Times New Roman','sans-serif'; font-size:14px; color:#4e443c; background-color:#fcfcfa;&quot;&gt;The merge mechanism (&lt;/span&gt;&lt;span style=&quot; font-family:'Courier','monospace'; font-size:14px; color:#f14e32; background-color:#ffffff;&quot;&gt;git merge&lt;/span&gt;&lt;span style=&quot; font-family:'Adelle','Roboto Slab','DejaVu Serif','Georgia','Times New Roman','sans-serif'; font-size:14px; color:#4e443c; background-color:#fcfcfa;&quot;&gt; and &lt;/span&gt;&lt;span style=&quot; font-family:'Courier','monospace'; font-size:14px; color:#f14e32; background-color:#ffffff;&quot;&gt;git pull&lt;/span&gt;&lt;span style=&quot; font-family:'Adelle','Roboto Slab','DejaVu Serif','Georgia','Times New Roman','sans-serif'; font-size:14px; color:#4e443c; background-color:#fcfcfa;&quot;&gt; commands) allows the backend &lt;/span&gt;&lt;span style=&quot; font-family:'Courier','monospace'; font-size:14px; font-weight:600; color:#4e443c; background-color:#fcfcfa;&quot;&gt;merge strategies&lt;/span&gt;&lt;span style=&quot; font-family:'Adelle','Roboto Slab','DejaVu Serif','Georgia','Times New Roman','sans-serif'; font-size:14px; color:#4e443c; background-color:#fcfcfa;&quot;&gt; to be chosen with &lt;/span&gt;&lt;span style=&quot; font-family:'Courier','monospace'; font-size:14px; color:#f14e32; background-color:#ffffff;&quot;&gt;-s&lt;/span&gt;&lt;span style=&quot; font-family:'Adelle','Roboto Slab','DejaVu Serif','Georgia','Times New Roman','sans-serif'; font-size:14px; color:#4e443c; background-color:#fcfcfa;&quot;&gt; option. Some strategies can also take their own options, which can be passed by giving &lt;/span&gt;&lt;span style=&quot; font-family:'Courier','monospace'; font-size:14px; color:#f14e32; background-color:#ffffff;&quot;&gt;-X&amp;lt;option&amp;gt;&lt;/span&gt;&lt;span style=&quot; font-family:'Adelle','Roboto Slab','DejaVu Serif','Georgia','Times New Roman','sans-serif'; font-size:14px; color:#4e443c; background-color:#fcfcfa;&quot;&gt; arguments to &lt;/span&gt;&lt;span style=&quot; font-family:'Courier','monospace'; font-size:14px; color:#f14e32; background-color:#ffffff;&quot;&gt;git merge&lt;/span&gt;&lt;span style=&quot; font-family:'Adelle','Roboto Slab','DejaVu Serif','Georgia','Times New Roman','sans-serif'; font-size:14px; color:#4e443c; background-color:#fcfcfa;&quot;&gt; and/or &lt;/span&gt;&lt;span style=&quot; font-family:'Courier','monospace'; font-size:14px; color:#f14e32; background-color:#ffffff;&quot;&gt;git pull&lt;/span&gt;&lt;span style=&quot; font-family:'Adelle','Roboto Slab','DejaVu Serif','Georgia','Times New Roman','sans-serif'; font-size:14px; color:#4e443c; background-color:#fcfcfa;&quot;&gt;.&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;a href=&quot;https://git-scm.com/docs/merge-strategies&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#2980b9;&quot;&gt;More informations&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       </property>
+       <item>
+        <property name="text">
+         <string>Octopus</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Ours</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Recursive</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Resolve</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Subtree</string>
+        </property>
+       </item>
+      </widget>
+     </item>
+     <item row="1" column="0">
+      <widget class="QLabel" name="label_3">
+       <property name="text">
+        <string>To:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="1">
+      <widget class="QLabel" name="label_4">
+       <property name="text">
+        <string>-</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <widget class="QGroupBox" name="groupBox">
+     <property name="title">
+      <string>Fast forward</string>
+     </property>
+     <layout class="QVBoxLayout" name="verticalLayout">
+      <item>
+       <widget class="QRadioButton" name="radioButton">
+        <property name="text">
+         <string>Default</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QRadioButton" name="radioButton_4">
+        <property name="whatsThis">
+         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;https://git-scm.com/docs/git-merge#Documentation/git-merge.txt---ff&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#2980b9;&quot;&gt;More informations&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+        </property>
+        <property name="text">
+         <string>Allow fast forward</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QRadioButton" name="radioButton_2">
+        <property name="whatsThis">
+         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;https://git-scm.com/docs/git-merge#Documentation/git-merge.txt---ff-only&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#2980b9;&quot;&gt;More informations&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+        </property>
+        <property name="text">
+         <string>Fast forward only</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QRadioButton" name="radioButton_3">
+        <property name="whatsThis">
+         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;https://git-scm.com/docs/git-merge#Documentation/git-merge.txt---no-ff&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#2980b9;&quot;&gt;More informations&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+        </property>
+        <property name="text">
+         <string>No fast forward</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <widget class="QCheckBox" name="checkBoxNoFastForward_2">
+     <property name="text">
+      <string>Allow unrelated histories</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QCheckBox" name="checkBoxNoFastForward_3">
+     <property name="text">
+      <string>Squash</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <spacer name="verticalSpacer">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>40</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item>
+    <widget class="QDialogButtonBox" name="buttonBox">
+     <property name="standardButtons">
+      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+     </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <tabstops>
+  <tabstop>comboBox_2</tabstop>
+  <tabstop>comboBox</tabstop>
+  <tabstop>radioButton</tabstop>
+  <tabstop>radioButton_2</tabstop>
+  <tabstop>radioButton_3</tabstop>
+  <tabstop>checkBoxNoFastForward_2</tabstop>
+  <tabstop>checkBoxNoFastForward_3</tabstop>
+ </tabstops>
+ <resources/>
+ <connections/>
+</ui>
