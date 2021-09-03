@@ -40,8 +40,7 @@ void DiffTreeView::on_treeView_clicked(const QModelIndex &index)
 
 void DiffTreeView::on_listView_clicked(const QModelIndex &index)
 {
-    auto r = _filterModel->mapToSource(index).row();
-    auto t = _filesModel->data(_filesModel->index(r, 1), Qt::DisplayRole);
-    qDebug() << t;
-    emit fileSelected(t.toString());
+    auto row = _filterModel->mapToSource(index).row();
+    auto fileName = _filesModel->data(_filesModel->index(row, 1), Qt::DisplayRole);
+    emit fileSelected(fileName.toString());
 }

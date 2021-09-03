@@ -19,6 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 // application headers
+#include "diffwindow.h"
 #include "gitklientwindow.h"
 
 #include "dialogs/changedfilesdialog.h"
@@ -28,9 +29,19 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "dialogs/mergedialog.h"
 #include "dialogs/pulldialog.h"
 #include "dialogs/runnerdialog.h"
+#include "dialogs/selectbranchestodiffdialog.h"
+#include "git/gitmanager.h"
 #include "gitklientdebug.h"
 #include "gitklientview.h"
 #include "mainwidget.h"
+#include "multipagewidget.h"
+#include "widgets/branchesstatuswidget.h"
+#include "widgets/commitswidget.h"
+#include "widgets/historyviewwidget.h"
+#include "widgets/remoteswidget.h"
+#include "widgets/stasheswidget.h"
+#include "widgets/submoduleswidget.h"
+#include "widgets/tagswidget.h"
 
 // KF headers
 #include <KActionCollection>
@@ -41,16 +52,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <QSettings>
 #include <QtConcurrent/QtConcurrent>
 
-#include <git/gitmanager.h>
-#include "multipagewidget.h"
 
-#include "widgets/branchesstatuswidget.h"
-#include "widgets/historyviewwidget.h"
-#include "widgets/stasheswidget.h"
-#include "widgets/remoteswidget.h"
-#include "widgets/submoduleswidget.h"
-#include "widgets/commitswidget.h"
-#include "widgets/tagswidget.h"
 
 GitKlientWindow::GitKlientWindow()
     : KXmlGuiWindow()
@@ -159,6 +161,9 @@ void GitKlientWindow::initActions()
 
     auto repoPushAction = actionCollection->addAction("repo_push", this, &GitKlientWindow::commitPushAction);
     repoPushAction->setText(i18n("Push..."));
+
+    auto diffBranchesAction = actionCollection->addAction("diff_branches", this, &GitKlientWindow::diffBranches);
+    diffBranchesAction->setText(i18n("Diff branches..."));
 
     KStandardAction::quit(qApp, SLOT(closeAllWindows()), actionCollection);
     KStandardAction::preferences(this, SLOT(settingsConfigure()), actionCollection);
@@ -282,6 +287,17 @@ void GitKlientWindow::clone()
 {
     CloneDialog d(this);
     d.exec();
+}
+
+void GitKlientWindow::diffBranches()
+{
+    SelectBranchesToDiffDialog d(Git::Manager::instance(), this);
+    if (d.exec() == QDialog::Accepted) {
+        auto diffWin = new DiffWindow(d.oldBranch(), d.newBranch());
+        diffWin->setWindowModality(Qt::ApplicationModal);
+        diffWin->setAttribute(Qt::WA_DeleteOnClose, true);
+        diffWin->show();
+    }
 }
 
 template<class T>

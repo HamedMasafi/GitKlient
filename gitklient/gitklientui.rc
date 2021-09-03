@@ -11,6 +11,7 @@
     <Action name="open_repo"/>
     <Action name="recent" />
     <Separator/>
+    <Action name="diff_branches"/>
     <Action name="repo_status"/>
     <Action name="repo_pull"/>
     <Action name="repo_push"/>

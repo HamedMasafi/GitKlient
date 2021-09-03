@@ -24,7 +24,10 @@ TreeModel::Node *DiffTreeModel::createPath(const QStringList &path, const FileSt
         if (!child) {
             child = parent->createChild();
             child->title = p;
-            child->metaData = status;
+            child->metaData = FileStatus::Added;
+        } else {
+            if (child->metaData != FileStatus::Unmodified)
+                child->metaData = status;
         }
         parent = child;
     }

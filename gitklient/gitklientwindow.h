@@ -63,6 +63,7 @@ private Q_SLOTS:
     void pull();
     void showBranchesStatus();
     void clone();
+    void diffBranches();
 
 private:
     Ui::settingsBase settingsBase;

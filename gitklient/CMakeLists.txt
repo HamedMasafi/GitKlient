@@ -64,6 +64,7 @@ ki18n_wrap_ui(gitklient_SRCS
     dialogs/modificationsdialog.ui
     dialogs/taginfodialog.ui
     dialogs/diffopendialog.ui
+    dialogs/selectbranchestodiffdialog.ui
 )
 
 add_executable(gitklient ${gitklient_SRCS})
@@ -87,6 +88,8 @@ target_link_libraries(gitklient
 
 install(TARGETS gitklient ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
 install(PROGRAMS org.kde.gitklient.desktop  DESTINATION ${KDE_INSTALL_APPDIR})
+install(PROGRAMS org.kde.gitklient.diff.desktop  DESTINATION ${KDE_INSTALL_APPDIR})
+install(PROGRAMS org.kde.gitklient.merge.desktop  DESTINATION ${KDE_INSTALL_APPDIR})
 install(FILES org.kde.gitklient.appdata.xml DESTINATION ${KDE_INSTALL_METAINFODIR})
 install(FILES gitklientui.rc DESTINATION ${KDE_INSTALL_KXMLGUI5DIR}/gitklient)
 install(FILES gitklientdiffui.rc DESTINATION ${KDE_INSTALL_KXMLGUI5DIR}/gitklient)
