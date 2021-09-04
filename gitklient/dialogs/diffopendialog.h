@@ -8,7 +8,17 @@ class DiffOpenDialog : public QDialog, private Ui::DiffOpenDialog
     Q_OBJECT
 
 public:
+    enum Mode {
+        Files,
+        Dirs
+    };
     explicit DiffOpenDialog(QWidget *parent = nullptr);
+
+    QString oldFile() const;
+    QString newFile() const;
+    QString oldDir() const;
+    QString newDir() const;
+    Mode mode() const;
 
 private slots:
     void on_toolButtonBrowseNewFile_clicked();

@@ -12,11 +12,20 @@ void DiffTreeModel::addFile(const FileStatus &file)
     auto nodePath = file.name();
 
     auto parts = nodePath.split(seprator());
-    node = createPath(parts, file.status());
+    node = createPath(parts, toDiffType(file.status()));
     node->key = file.name();
 }
 
-TreeModel::Node *DiffTreeModel::createPath(const QStringList &path, const FileStatus::Status &status)
+void DiffTreeModel::addFile(const QString &file, const Diff::DiffType &type)
+{
+    TreeModel::Node *node{nullptr};
+
+    auto parts = file.split(seprator());
+    node = createPath(parts, type);
+    node->key = file;
+}
+
+TreeModel::Node *DiffTreeModel::createPath(const QStringList &path, const Diff::DiffType &status)
 {
     Node *parent = rootNode;
     for (auto &p: path) {
@@ -24,9 +33,9 @@ TreeModel::Node *DiffTreeModel::createPath(const QStringList &path, const FileSt
         if (!child) {
             child = parent->createChild();
             child->title = p;
-            child->metaData = FileStatus::Added;
+            child->metaData = Diff::DiffType::Added;
         } else {
-            if (child->metaData != FileStatus::Unmodified)
+            if (child->metaData != Diff::DiffType::Unchanged)
                 child->metaData = status;
         }
         parent = child;
@@ -34,26 +43,41 @@ TreeModel::Node *DiffTreeModel::createPath(const QStringList &path, const FileSt
     return parent;
 }
 
-QColor DiffTreeModel::statusColor(const FileStatus::Status &status) const
+QColor DiffTreeModel::statusColor(const Diff::DiffType &status) const
+{
+    switch (status) {
+    case Diff::DiffType::Unchanged:
+        return Qt::black;
+    case Diff::DiffType::Added:
+        return Qt::green;
+    case Diff::DiffType::Removed:
+        return Qt::red;
+    case Diff::DiffType::Modified:
+        return Qt::blue;
+    }
+    return QColor();
+}
+
+Diff::DiffType DiffTreeModel::toDiffType(const FileStatus::Status &status)
 {
     switch (status) {
     case FileStatus::Unknown:
     case FileStatus::Unmodified:
-        return Qt::black;
+        return Diff::DiffType::Unchanged;
     case FileStatus::Added:
-        return Qt::green;
+        return Diff::DiffType::Added;
     case FileStatus::Removed:
-        return Qt::red;
+        return Diff::DiffType::Removed;
     case FileStatus::Modified:
     case FileStatus::Renamed:
     case FileStatus::Copied:
-        return Qt::blue;
+        return Diff::DiffType::Modified;
     case FileStatus::UpdatedButInmerged:
     case FileStatus::Ignored:
     case FileStatus::Untracked:
-        break;
+        return Diff::DiffType::Unchanged;
     }
-    return QColor();
+    return Diff::DiffType::Unchanged;
 }
 
 QVariant DiffTreeModel::data(const QModelIndex &index, int role) const

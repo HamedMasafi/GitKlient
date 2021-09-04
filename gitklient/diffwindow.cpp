@@ -2,8 +2,8 @@
 
 #include <KActionCollection>
 #include <KLocalizedString>
-#include <QDockWidget>
 
+#include <QDockWidget>
 #include <QApplication>
 #include <QTreeView>
 
@@ -11,9 +11,9 @@
 #include "git/gitmanager.h"
 #include "models/difftreemodel.h"
 #include "widgets/codeeditor.h"
+#include "widgets/difftreeview.h"
 #include "widgets/diffwidget.h"
 #include "widgets/editactionsmapper.h"
-#include "widgets/difftreeview.h"
 
 #include <models/filesmodel.h>
 
@@ -40,6 +40,11 @@ void DiffWindow::init()
     connect(_treeView, &DiffTreeView::fileSelected, this, &DiffWindow::on_treeView_fileSelected);
     dock->setWidget(_treeView);
     addDockWidget(Qt::LeftDockWidgetArea, dock);
+
+
+    _filesModel = new FilesModel(this);
+    _diffModel = new DiffTreeModel(this);
+    _treeView->setDiffModel(_diffModel, _filesModel);
 }
 
 DiffWindow::DiffWindow() : KXmlGuiWindow()
@@ -62,21 +67,25 @@ DiffWindow::DiffWindow(const QString &oldBranch, const QString &newBranch)
 {
     init();
 
-    _filesModel = new FilesModel(this);
-    _diffModel = new DiffTreeModel(this);
     auto diffs = Git::Manager::instance()->diffBranches(oldBranch, newBranch);
 
     for (auto &f: diffs) {
         _diffModel->addFile(f);
         _filesModel->append(f.name());
     }
-    _treeView->setDiffModel(_diffModel, _filesModel);
 }
 
 void DiffWindow::fileOpen()
 {
     DiffOpenDialog d(this);
-    d.exec();
+    if (d.exec() != QDialog::Accepted)
+        return;
+
+    if (d.mode() == DiffOpenDialog::Dirs) {
+        _oldDir = d.oldDir();
+        _newDir = d.newDir();
+        compareDirs();
+    }
 }
 
 void DiffWindow::on_treeView_fileSelected(const QString &file)
@@ -86,6 +95,14 @@ void DiffWindow::on_treeView_fileSelected(const QString &file)
     _diffWidget->setOldFile(std::move(oldFile));
     _diffWidget->setNewFile(std::move(newFile));
     _diffWidget->compare();
+}
+
+void DiffWindow::compareDirs()
+{
+    auto map = Diff::diffDirs(_oldDir, _newDir);
+    for (auto i = map.begin(); i != map.end(); ++i) {
+        _diffModel->addFile(i.key(), i.value());
+    }
 }
 
 void DiffWindow::initActions()

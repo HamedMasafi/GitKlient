@@ -19,6 +19,8 @@ class DiffWindow : public KXmlGuiWindow
     QString _oldBranch;
     QString _newBranch;
 
+    QString _oldDir, _newDir;
+
     FilesModel *_filesModel;
     DiffTreeModel *_diffModel;
     DiffWidget *_diffWidget;
@@ -35,6 +37,9 @@ public:
 private slots:
     void fileOpen();
     void on_treeView_fileSelected(const QString &file);
+
+private:
+    void compareDirs();
 };
 
 #endif // DIFFWINDOW_H

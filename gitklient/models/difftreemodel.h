@@ -1,9 +1,11 @@
 #ifndef DIFFTREEMODEL_H
 #define DIFFTREEMODEL_H
 
+#include "diff/diff.h"
 #include "git/filestatus.h"
-#define TREEMODEL_NODE_DATA_TYPE FileStatus::Status
+#define TREEMODEL_NODE_DATA_TYPE Diff::DiffType
 #include "treemodel.h"
+
 
 class DiffTreeModel : public TreeModel
 {
@@ -13,12 +15,14 @@ public:
     DiffTreeModel(QObject *parent = nullptr);
 
     void addFile(const FileStatus& file);
+    void addFile(const QString &file, const Diff::DiffType &type);
 
-    QVariant data(const QModelIndex &index, int role) const;
+    QVariant data(const QModelIndex &index, int role) const override;
 
 private:
-    Node *createPath(const QStringList &path, const FileStatus::Status &status);
-    QColor statusColor(const FileStatus::Status &status) const;
+    Node *createPath(const QStringList &path, const Diff::DiffType &status);
+    QColor statusColor(const Diff::DiffType &status) const;
+    Diff::DiffType toDiffType(const FileStatus::Status &status);
 };
 
 #endif // DIFFTREEMODEL_H

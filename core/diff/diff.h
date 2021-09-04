@@ -8,8 +8,9 @@ int matchesCount(const QStringList &base, const QStringList &local, const QStrin
 QStringList take(QStringList &list, int count);
 int remove(QStringList &list, int count);
 
-enum class DiffType
+#define DiffTypeEnum(x) enum class x { Unchanged, Added, Removed, Modified };
 
+enum class DiffType
 {
     Unchanged,
     Added,
@@ -93,7 +94,7 @@ struct MergeSegment : Segment
 //    MergeDiffType type;
     MergeType mergeType{None};
 
-    QStringList get(int index)
+    QStringList get(int index) override
     {
         switch (index) {
         case 0:
@@ -121,6 +122,8 @@ QList<MergeSegment *> diff3(const QStringList &base,
 QString gitDiff(QList<Segment*> segments);
 
 QPair<int, int> firstMatch(const QStringList &list1, const QStringList &list2);
+
+QMap<QString, DiffType> diffDirs(const QString &dir1, const QString &dir2);
 }; // namespace Diff
 
 #endif // DIFF_H

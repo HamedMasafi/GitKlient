@@ -11,6 +11,31 @@ DiffOpenDialog::DiffOpenDialog(QWidget *parent) :
     widgetSelectDirectories->hide();
 }
 
+QString DiffOpenDialog::oldFile() const
+{
+    return lineEditOldFile->text();
+}
+
+QString DiffOpenDialog::newFile() const
+{
+    return lineEditNewFile->text();
+}
+
+QString DiffOpenDialog::oldDir() const
+{
+    return lineEditOldDirectory->text();
+}
+
+QString DiffOpenDialog::newDir() const
+{
+    return lineEditNewDirectory->text();
+}
+
+DiffOpenDialog::Mode DiffOpenDialog::mode() const
+{
+    return radioButtonCompareFiles->isChecked() ? Files : Dirs;
+}
+
 void DiffOpenDialog::on_toolButtonBrowseNewFile_clicked()
 {
     auto f = QFileDialog::getOpenFileName(this, i18n("Select new file"));

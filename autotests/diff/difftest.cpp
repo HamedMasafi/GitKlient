@@ -9,6 +9,7 @@ class DiffTest : public QObject
 
 private Q_SLOTS:
     void diff();
+    void files();
 
 };
 
@@ -40,6 +41,7 @@ void print(Diff::Segment *segment)
 
 void DiffTest::diff()
 {
+    return;
     QString oldCode{R"~(
 #include <iostream>
 int main()
@@ -69,7 +71,26 @@ int main()
 //    QCOMPARE(segments.at(1)->type, Diff::DiffType::Added);
 //    QCOMPARE(segments.at(2)->type, Diff::DiffType::Unchanged);
 //    QCOMPARE(segments.at(3)->type, Diff::DiffType::Modified);
-//    QCOMPARE(segments.at(4)->type, Diff::DiffType::Unchanged);
+    //    QCOMPARE(segments.at(4)->type, Diff::DiffType::Unchanged);
+}
+
+QString diffTypeText(const Diff::DiffType type)
+{
+    switch (type) {
+    case Diff::DiffType::Unchanged: return "Unchanged";
+    case Diff::DiffType::Added: return "Added";
+    case Diff::DiffType::Removed: return "Removed";
+    case Diff::DiffType::Modified: return "Modified";
+    }
+    return QString();
+}
+
+void DiffTest::files()
+{
+    auto map = Diff::diffDirs("/home/hamed/tmp/diff/1", "/home/hamed/tmp/diff/2");
+    for (auto i = map.begin(); i != map.end(); ++i) {
+        qDebug() << i.key() << diffTypeText(i.value());
+    }
 }
 
 QTEST_MAIN(DiffTest)
