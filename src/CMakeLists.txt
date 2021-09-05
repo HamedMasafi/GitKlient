@@ -7,6 +7,7 @@ aux_source_directory(widgets WIDGETS_SRC)
 aux_source_directory(dialogs DIALOGS_SRC)
 include_directories(${CMAKE_SOURCE_DIR}/core)
 
+
 set(gitklient_SRCS
     ${GIT_SRC}
     ${DIFF_SRC}
@@ -26,6 +27,7 @@ set(gitklient_SRCS
     argsparser.cpp
     diffwindow.cpp
 )
+#add_subdirectory(merge)
 
 ecm_qt_declare_logging_category(gitklient_SRCS
     HEADER gitklientdebug.h

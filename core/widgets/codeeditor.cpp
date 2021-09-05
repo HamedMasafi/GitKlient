@@ -313,14 +313,14 @@ void CodeEditor::paintEvent(QPaintEvent *e)
 {
     QPlainTextEdit::paintEvent(e);
 
-    QPainter p(viewport());
-    for (auto i = _lines.begin(); i != _lines.end(); ++i) {
-//        auto b = document()->findBlockByLineNumber(i.key());
-        auto rc = blockBoundingGeometry(i.key());
-        rc.moveTop(rc.top() - 2);
-        rc.setBottom(rc.top() + 2);
-        p.fillRect(rc, _formats.value(i.value()).background());
-    }
+//    QPainter p(viewport());
+//    for (auto i = _lines.begin(); i != _lines.end(); ++i) {
+////        auto b = document()->findBlockByLineNumber(i.key());
+//        auto rc = blockBoundingGeometry(i.key());
+//        rc.moveTop(rc.top() - 2);
+//        rc.setBottom(rc.top() + 2);
+//        p.fillRect(rc, _formats.value(i.value()).background());
+//    }
     viewport()->update();
 }
 
@@ -332,17 +332,7 @@ void CodeEditor::setHighlighting(const QString &fileName)
 
 void CodeEditor::append(const QString &code, const BlockType &type, Diff::Segment *segment)
 {
-    //    if (segment == previousSegment) {
-
     auto t = textCursor();
-    //    t.insertBlock(_formats.value(type));
-    //    if (!code.isEmpty())
-    //        t.insertText(code);
-    //    else
-    //        t.insertText(" ");
-    //    t.block().setUserData(new SegmentData{segment});
-
-    //    assert(code==t.block().text());
 
     if (_segments.size())
         t.insertBlock();
@@ -352,18 +342,20 @@ void CodeEditor::append(const QString &code, const BlockType &type, Diff::Segmen
     _segments.insert(t.block().blockNumber(), segment);
     t.setBlockFormat(_formats.value(type));
     t.block().setUserData(new SegmentData{segment});
-    //    }
-    //    append(QStringList() << code, type, segment);
 }
 
-void CodeEditor::append(const QStringList &code, const BlockType &type, Diff::Segment *segment)
+void CodeEditor::append(const QStringList &code, const BlockType &type, Diff::Segment *segment, int size)
 {
-    if (!code.size() && (type == Added || type == Removed)) {
-        _lines.insert(textCursor().block(), type == Added ? Removed : Added);
-        return;
-    }
+//    if (!code.size() && (type == Added || type == Removed)) {
+//        _lines.insert(textCursor().block(), type == Added ? Removed : Added);
+//        return;
+//    }
     for (auto &e : code)
         append(e, type, segment);
+    if (size > code.size())
+        for (int var = 0; var < size - code.size(); ++var) {
+            append(QString(), type, segment);
+        }
 }
 
 QPair<int, int> CodeEditor::blockArea(int from, int to)

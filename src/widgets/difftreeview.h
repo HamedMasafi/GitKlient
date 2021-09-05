@@ -13,12 +13,16 @@ class DiffTreeView : public QWidget, private Ui::DiffTreeView
     DiffTreeModel *_diffModel{nullptr};
     QSortFilterProxyModel *_filterModel{nullptr};
     FilesModel *_filesModel;
+    Q_PROPERTY(bool hideUnchangeds READ hideUnchangeds WRITE setHideUnchangeds NOTIFY hideUnchangedsChanged)
 
 public:
     explicit DiffTreeView(QWidget *parent = nullptr);
 
     DiffTreeModel *diffModel() const;
     void setDiffModel(DiffTreeModel *newDiffModel, FilesModel *filesModel);
+
+    bool hideUnchangeds() const;
+    void setHideUnchangeds(bool newHideUnchangeds);
 
 private slots:
     void on_lineEditFilter_textChanged(QString text);
@@ -27,6 +31,7 @@ private slots:
 
 signals:
     void fileSelected(const QString &file);
+    void hideUnchangedsChanged();
 };
 
 #endif // DIFFTREEVIEW_H

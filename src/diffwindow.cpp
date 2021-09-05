@@ -6,6 +6,7 @@
 #include <QDockWidget>
 #include <QApplication>
 #include <QTreeView>
+#include <QDebug>
 
 #include "dialogs/diffopendialog.h"
 #include "git/gitmanager.h"
@@ -25,7 +26,7 @@ void DiffWindow::init()
     mapper->init(actionCollection());
 
     initActions();
-    setupGUI(StandardWindowOption::Default, "/doc/dev/gitklient/gitklient/gitklientdiffui.rc");
+    setupGUI(StandardWindowOption::Default, "gitklientdiffui.rc");
 
     setCentralWidget(_diffWidget);
 
@@ -34,6 +35,7 @@ void DiffWindow::init()
     setWindowTitle(i18n("GitKlient Diff[*]"));
 
     auto dock = new QDockWidget(this);
+    dock->setWindowTitle(i18n("Tree"));
     dock->setObjectName("treeViewDock");
 
     _treeView = new DiffTreeView(this);
@@ -90,11 +92,23 @@ void DiffWindow::fileOpen()
 
 void DiffWindow::on_treeView_fileSelected(const QString &file)
 {
-    Git::File oldFile(_oldBranch, file);
-    Git::File newFile(_newBranch, file);
+    qDebug() << file;
+    Git::File oldFile(_oldDir + "/" + file);// _oldBranch, file);
+    Git::File newFile(_newDir + "/" + file);//_newBranch, file);
     _diffWidget->setOldFile(std::move(oldFile));
     _diffWidget->setNewFile(std::move(newFile));
     _diffWidget->compare();
+}
+
+QString diffTypeText(const Diff::DiffType type)
+{
+    switch (type) {
+    case Diff::DiffType::Unchanged: return "Unchanged";
+    case Diff::DiffType::Added: return "Added";
+    case Diff::DiffType::Removed: return "Removed";
+    case Diff::DiffType::Modified: return "Modified";
+    }
+    return QString();
 }
 
 void DiffWindow::compareDirs()
@@ -102,7 +116,9 @@ void DiffWindow::compareDirs()
     auto map = Diff::diffDirs(_oldDir, _newDir);
     for (auto i = map.begin(); i != map.end(); ++i) {
         _diffModel->addFile(i.key(), i.value());
+        qDebug() << i.key() << diffTypeText(i.value());
     }
+    _diffModel->emitAll();
 }
 
 void DiffWindow::initActions()
@@ -113,6 +129,10 @@ void DiffWindow::initActions()
     viewHiddenCharsAction->setText(i18n("View hidden chars..."));
     viewHiddenCharsAction->setCheckable(true);
     connect(viewHiddenCharsAction, &QAction::triggered, _diffWidget, &DiffWidget::showHiddenChars);
+
+    auto viewSameSizeBlocksAction = actionCollection->addAction(QStringLiteral("view_same_size_blocks"));
+    viewSameSizeBlocksAction->setText(i18n("Same size blocks"));
+    viewSameSizeBlocksAction->setCheckable(true);
 
     KStandardAction::quit(this, &QWidget::close, actionCollection);
     KStandardAction::preferences(this, SLOT(settingsConfigure()), actionCollection);

@@ -2,6 +2,7 @@
 
 #include <QFileDialog>
 #include <KLocalizedString>
+#include <QSettings>
 
 DiffOpenDialog::DiffOpenDialog(QWidget *parent) :
       QDialog(parent)
@@ -9,6 +10,26 @@ DiffOpenDialog::DiffOpenDialog(QWidget *parent) :
     setupUi(this);
     radioButtonCompareFiles->setChecked(true);
     widgetSelectDirectories->hide();
+
+    QSettings s;
+    s.beginGroup("diff");
+    lineEditOldFile->setText(s.value("oldFile").toString());
+    lineEditNewFile->setText(s.value("newFile").toString());
+    lineEditOldDirectory->setText(s.value("oldDir").toString());
+    lineEditNewDirectory->setText(s.value("newDir").toString());
+    s.endGroup();
+}
+
+DiffOpenDialog::~DiffOpenDialog()
+{
+    QSettings s;
+    s.beginGroup("diff");
+    s.setValue("oldFile", lineEditOldFile->text());
+    s.setValue("newFile", lineEditNewFile->text());
+    s.setValue("oldDir", lineEditOldDirectory->text());
+    s.setValue("newDir", lineEditNewDirectory->text());
+    s.endGroup();
+    s.sync();
 }
 
 QString DiffOpenDialog::oldFile() const

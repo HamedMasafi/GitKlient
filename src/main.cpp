@@ -63,7 +63,7 @@ ArgParserReturn argsWidget() {
     p.add("changes", "changes <path>");
     p.add("diff", "diff <file>");
     p.add("merge", "merge <base> <local> <remote> <result>");
-    p.add("d", "d");
+    p.add("diff1", "diff");
 
     auto key = p.checkAll();
 
@@ -93,7 +93,7 @@ ArgParserReturn argsWidget() {
         ChangedFilesDialog d;
         d.exec();
         return 0;
-    } else if (key == "d") {
+    } else if (key == "diff1") {
         auto d = new DiffWindow;
         d->show();
         return ExecApp;

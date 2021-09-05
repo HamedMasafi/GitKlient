@@ -78,10 +78,10 @@ struct LanesData
     {
         auto index = hashes.indexOf(commitHash);
         index = set(index, childHashes.first(), GraphLane::Node);
-        qDebug() << "Inserted" << commitHash << index;
+//        qDebug() << "Inserted" << commitHash << index;
         for (int i = 1; i < childHashes.size(); ++i) {
             auto n = set(-1, childHashes.at(i), GraphLane::Start, index);
-            qDebug() << "Inserted" << n;
+//            qDebug() << "Inserted" << n;
         }
     }
     QList<int> find(const QString &hash)

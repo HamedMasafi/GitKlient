@@ -11,6 +11,9 @@ class CodeEditor;
 class DiffWidget : public WidgetBase//, private Ui::DiffWIdget
 {
     Q_OBJECT
+
+    Q_PROPERTY(bool sameSize READ sameSize WRITE setSameSize NOTIFY sameSizeChanged)
+
     Git::File _oldFile;
     Git::File _newFile;
 
@@ -34,8 +37,14 @@ public:
 
     CodeEditor *newCodeEditor() const;
 
+    bool sameSize() const;
+    void setSameSize(bool newSameSize);
+
 public slots:
     void showHiddenChars(bool show);
+
+signals:
+    void sameSizeChanged();
 
 private slots:
 
@@ -46,6 +55,7 @@ private slots:
 private:
     void setupUi();
 
+    bool m_sameSize{false};
 };
 
 #endif // DIFFWIDGET_H

@@ -68,7 +68,7 @@ GitKlientWindow::GitKlientWindow()
     addPage<RemotesWidget>("view_remotes");
     addPage<TagsWidget>("view_tags");
 
-    setupGUI(StandardWindowOption::Default, "/doc/dev/gitklient/gitklient/gitklientui.rc");
+    setupGUI(StandardWindowOption::Default, "gitklientui.rc");
     _mainWidget->setCurrentIndex(0);
 
     setCentralWidget(_mainWidget);

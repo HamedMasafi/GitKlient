@@ -3,9 +3,13 @@
 
 #include <QObject>
 
+namespace Git {
+class Manager;
+}
 class ArgsParser : public QObject
 {
     Q_OBJECT
+        Git::Manager *git;
 public:
     explicit ArgsParser(QObject *parent = nullptr);
 
@@ -13,7 +17,7 @@ public:
 
 private slots:
     void run_diff(const QString &f1, const QString &f2);
-
+    void run_changes(const QString &path);
 private:
     void runMethod(const QMetaMethod &method);
 };

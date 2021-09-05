@@ -604,8 +604,12 @@ void browseDir(QStringList &filesList, const QString &dirPath, const QString &ba
     }
 
     auto dirs = d.entryList(QDir::NoDotAndDotDot | QDir::Dirs);
-    for (auto &d : dirs)
-        browseDir(filesList, dirPath + d, basePath);
+    for (auto &d : dirs) {
+        if (dirPath.isEmpty())
+            browseDir(filesList, dirPath + d, basePath);
+        else
+            browseDir(filesList, dirPath + "/" + d, basePath);
+    }
 }
 
 bool isFilesSame(const QString &file1, const QString &file2)
@@ -613,7 +617,7 @@ bool isFilesSame(const QString &file1, const QString &file2)
     QFileInfo fi1{file1};
     QFileInfo fi2{file2};
 
-    if (fi1.size() != fi2.size() || fi1.lastModified() != fi2.lastModified())
+    if (fi1.size() != fi2.size()/* || fi1.lastModified() != fi2.lastModified()*/)
         return false;
 
     QFile f1{file1};

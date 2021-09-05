@@ -24,6 +24,8 @@ DiffTreeView::DiffTreeView(QWidget *parent) :
     setupUi(this);
     _filterModel = new QSortFilterProxyModel(this);
     _filterModel->setFilterKeyColumn(0);
+    connect(checkBoxHideUnchangeds, &QAbstractButton::toggled, this, &DiffTreeView::hideUnchangedsChanged);
+    checkBoxHideUnchangeds->hide();
 }
 
 void DiffTreeView::on_lineEditFilter_textChanged(QString text)
@@ -43,4 +45,17 @@ void DiffTreeView::on_listView_clicked(const QModelIndex &index)
     auto row = _filterModel->mapToSource(index).row();
     auto fileName = _filesModel->data(_filesModel->index(row, 1), Qt::DisplayRole);
     emit fileSelected(fileName.toString());
+}
+
+bool DiffTreeView::hideUnchangeds() const
+{
+    return checkBoxHideUnchangeds->isChecked();
+}
+
+void DiffTreeView::setHideUnchangeds(bool newHideUnchangeds)
+{
+    if (checkBoxHideUnchangeds->isChecked() == newHideUnchangeds)
+        return;
+    checkBoxHideUnchangeds->setChecked(newHideUnchangeds);
+    emit hideUnchangedsChanged();
 }

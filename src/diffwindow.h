@@ -29,6 +29,13 @@ class DiffWindow : public KXmlGuiWindow
     void initActions();
     void init();
 
+    enum Mode {
+        None,
+        Dirs,
+        Files
+    };
+    Mode _mode{None};
+
 public:
     explicit DiffWindow();
     DiffWindow(const Git::File &oldFile, const Git::File &newFile);

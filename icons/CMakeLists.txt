@@ -18,6 +18,9 @@ set(GIT_KLIENT_ICONS
   sc-actions-diff-keep-their-file.svg
   sc-actions-diff-keep-mine-file.svg
 
+  48-actions-git-status-added.png
+  32-actions-git-status-added.png
+  sc-actions-git-status-added.svg
   sc-actions-git-status-added.svgz
   sc-actions-git-status-ignored.svgz
   sc-actions-git-status-modified.svgz

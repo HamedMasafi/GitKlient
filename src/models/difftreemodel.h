@@ -19,6 +19,8 @@ public:
 
     QVariant data(const QModelIndex &index, int role) const override;
 
+    void emitAll();
+
 private:
     Node *createPath(const QStringList &path, const Diff::DiffType &status);
     QColor statusColor(const Diff::DiffType &status) const;

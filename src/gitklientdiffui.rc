@@ -8,12 +8,14 @@
 <MenuBar>
   <Menu name="view">
     <Action name="view_hidden_chars"/>
+    <Action name="view_same_size_blocks"/>
   </Menu>
 </MenuBar>
 
 <ToolBar name="mainToolBar" noMerge="1">
     <text>Main Toolbar</text>
     <Action name="view_hidden_chars"/>
+    <Action name="view_same_size_blocks"/>
 
 </ToolBar>
 

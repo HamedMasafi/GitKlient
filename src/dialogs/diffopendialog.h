@@ -13,6 +13,7 @@ public:
         Dirs
     };
     explicit DiffOpenDialog(QWidget *parent = nullptr);
+    ~DiffOpenDialog();
 
     QString oldFile() const;
     QString newFile() const;

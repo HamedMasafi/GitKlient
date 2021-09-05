@@ -42,23 +42,31 @@ void DiffWidget::compare()
     _segmentConnector->update();
 
     for (auto &s: segments) {
+        CodeEditor::BlockType oldBlockType, newBlockType;
         switch (s->type) {
         case Diff::SegmentType::SameOnBoth:
-            _oldCodeEditor->append(s->oldText, CodeEditor::Unchanged, s);
-            _newCodeEditor->append(s->newText, CodeEditor::Unchanged, s);
+            oldBlockType = newBlockType = CodeEditor::Unchanged;
             break;
         case Diff::SegmentType::OnlyOnLeft:
-            _oldCodeEditor->append(s->oldText, CodeEditor::Removed, s);
-            _newCodeEditor->append(s->newText, CodeEditor::Added, s);
+            oldBlockType = CodeEditor::Removed;
+            newBlockType = CodeEditor::Added;
             break;
         case Diff::SegmentType::OnlyOnRight:
-            _oldCodeEditor->append(s->oldText, CodeEditor::Removed, s);
-            _newCodeEditor->append(s->newText, CodeEditor::Added, s);
+            oldBlockType = CodeEditor::Removed;
+            newBlockType = CodeEditor::Added;
             break;
         case Diff::SegmentType::DifferentOnBoth:
-            _oldCodeEditor->append(s->oldText, CodeEditor::Edited, s);
-            _newCodeEditor->append(s->newText, CodeEditor::Edited, s);
+            oldBlockType = newBlockType = CodeEditor::Edited;
             break;
+        }
+
+        if (m_sameSize) {
+            int size = qMax(s->oldText.size(), s->newText.size());
+            _oldCodeEditor->append(s->oldText, oldBlockType, s, size);
+            _newCodeEditor->append(s->newText, newBlockType, s, size);
+        } else {
+            _oldCodeEditor->append(s->oldText, oldBlockType, s);
+            _newCodeEditor->append(s->newText, newBlockType, s);
         }
     }
 }
@@ -191,4 +199,17 @@ void DiffWidget::newCodeEditor_blockSelected()
 //        _segmentConnector->setCurrentSegment(b);
 //        _oldCodeEditor->highlightSegment(b);
 //    }
+}
+
+bool DiffWidget::sameSize() const
+{
+    return m_sameSize;
+}
+
+void DiffWidget::setSameSize(bool newSameSize)
+{
+    if (m_sameSize == newSameSize)
+        return;
+    m_sameSize = newSameSize;
+    emit sameSizeChanged();
 }
