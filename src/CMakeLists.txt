@@ -26,6 +26,7 @@ set(gitklient_SRCS
     multipagewidget.cpp
     argsparser.cpp
     diffwindow.cpp
+    gitklientmergewindow.cpp
 )
 #add_subdirectory(merge)
 
@@ -41,6 +42,7 @@ ki18n_wrap_ui(gitklient_SRCS
     mainwidget.ui
     diffsettings.ui
     multipagewidget.ui
+    gitklientmergeview.ui
 
     widgets/branchesstatuswidget.ui
     widgets/remotedetailswidget.ui
@@ -53,6 +55,8 @@ ki18n_wrap_ui(gitklient_SRCS
     widgets/tagswidget.ui
     widgets/difftreeview.ui
 
+    dialogs/mergeopenfilesdialog.ui
+    dialogs/mergecloseeventdialog.ui
     dialogs/changedfilesdialog.ui
     dialogs/filestreedialog.ui
     dialogs/commitpushdialog.ui
@@ -89,9 +93,10 @@ target_link_libraries(gitklient
 )
 
 install(TARGETS gitklient ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
-install(PROGRAMS org.kde.gitklient.desktop  DESTINATION ${KDE_INSTALL_APPDIR})
-install(PROGRAMS org.kde.gitklient.diff.desktop  DESTINATION ${KDE_INSTALL_APPDIR})
+install(PROGRAMS org.kde.gitklient.desktop        DESTINATION ${KDE_INSTALL_APPDIR})
+install(PROGRAMS org.kde.gitklient.diff.desktop   DESTINATION ${KDE_INSTALL_APPDIR})
 install(PROGRAMS org.kde.gitklient.merge.desktop  DESTINATION ${KDE_INSTALL_APPDIR})
 install(FILES org.kde.gitklient.appdata.xml DESTINATION ${KDE_INSTALL_METAINFODIR})
-install(FILES gitklientui.rc DESTINATION ${KDE_INSTALL_KXMLGUI5DIR}/gitklient)
-install(FILES gitklientdiffui.rc DESTINATION ${KDE_INSTALL_KXMLGUI5DIR}/gitklient)
+install(FILES gitklientui.rc      DESTINATION ${KDE_INSTALL_KXMLGUI5DIR}/gitklient)
+install(FILES gitklientdiffui.rc  DESTINATION ${KDE_INSTALL_KXMLGUI5DIR}/gitklient)
+install(FILES gitklientmergeui.rc DESTINATION ${KDE_INSTALL_KXMLGUI5DIR}/gitklient)

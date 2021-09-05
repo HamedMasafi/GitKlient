@@ -21,9 +21,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "gitklientmergewindow.h"
 
 #include "GitKlientSettings.h"
-#include "closeeventdialog.h"
+#include "dialogs/mergecloseeventdialog.h"
+#include "dialogs/mergeopenfilesdialog.h"
 #include "diff/segmentsmapper.h"
-#include "openfilesdialog.h"
 #include "widgets/codeeditor.h"
 #include "widgets/editactionsmapper.h"
 
@@ -149,7 +149,7 @@ GitKlientMergeWindow::GitKlientMergeWindow(Mode mode, QWidget *parent) : KXmlGui
     initActions();
     auto mapper = new EditActionsMapper;
     mapper->init(actionCollection());
-    setupGUI();
+    setupGUI(Default, "gitklientmergeui.rc");
     auto w = new QWidget(this);
     m_ui.setupUi(w);
     setCentralWidget(w);
@@ -396,16 +396,16 @@ bool GitKlientMergeWindow::isFullyResolved()
 void GitKlientMergeWindow::closeEvent(QCloseEvent *event)
 {
     if (isWindowModified()) {
-        CloseEventDialog d(this);
+        MergeCloseEventDialog d(this);
         auto r = d.exec();
 
         switch (r) {
-        case CloseEventDialog::MarkAsResolved:
+        case MergeCloseEventDialog::MarkAsResolved:
             fileSave();
             break;
-        case CloseEventDialog::LeaveAsIs:
+        case MergeCloseEventDialog::LeaveAsIs:
             break;
-        case CloseEventDialog::DontExit:
+        case MergeCloseEventDialog::DontExit:
             event->ignore();
             break;
         }
@@ -460,7 +460,7 @@ void GitKlientMergeWindow::fileSave()
 
 void GitKlientMergeWindow::fileOpen()
 {
-    OpenFilesDialog d;
+    MergeOpenFilesDialog d;
     if (d.exec() == QDialog::Accepted) {
         setFilePathBase(d.filePathBase());
         setFilePathLocal(d.filePathLocal());
@@ -621,7 +621,7 @@ void GitKlientMergeWindow::settingsConfigure()
         return;
     }
 
-    KConfigDialog *dialog = new KConfigDialog(this, QStringLiteral("settings"), GitKlientMergeSettings::self());
+    KConfigDialog *dialog = new KConfigDialog(this, QStringLiteral("settings"), GitKlientSettings::self());
     QWidget *generalSettingsPage = new QWidget;
 //    settingsBase.setupUi(generalSettingsPage);
     dialog->addPage(generalSettingsPage, i18n("General"), QStringLiteral("package_setting"));

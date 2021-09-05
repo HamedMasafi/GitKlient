@@ -29,6 +29,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "diffwindow.h"
 #include "gitklientdebug.h"
 #include "gitklientwindow.h"
+#include "gitklientmergewindow.h"
 
 // KF headers
 #include <KAboutData>
@@ -64,6 +65,7 @@ ArgParserReturn argsWidget() {
     p.add("diff", "diff <file>");
     p.add("merge", "merge <base> <local> <remote> <result>");
     p.add("diff1", "diff");
+    p.add("merge1", "merge");
 
     auto key = p.checkAll();
 
@@ -95,6 +97,10 @@ ArgParserReturn argsWidget() {
         return 0;
     } else if (key == "diff1") {
         auto d = new DiffWindow;
+        d->show();
+        return ExecApp;
+    } else if (key == "merge1") {
+        auto d = new GitKlientMergeWindow;
         d->show();
         return ExecApp;
     } else {

@@ -26,7 +26,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <diff/diff.h>
 
 #include "ui_settingsBase.h"
-#include "GitKlientMergeSettings.h"
+#include "GitKlientSettings.h"
 #include "ui_gitklientmergeview.h"
 
 class GitKlientView;
@@ -53,7 +53,7 @@ public:
     /**
      * Default Constructor
      */
-    explicit GitKlientMergeWindow(Mode mode, QWidget *parent = nullptr);
+    explicit GitKlientMergeWindow(Mode mode = NoParams, QWidget *parent = nullptr);
 
     /**
      * Default Destructor
