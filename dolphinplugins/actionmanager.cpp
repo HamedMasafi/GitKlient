@@ -1,5 +1,5 @@
 
-#include "git/gitmanager.h"
+#include "../src/git/gitmanager.h"
 #include <KFileItem>
 #include <KFileItemListProperties>
 #include <KIOWidgets/KAbstractFileItemActionPlugin>

@@ -34,7 +34,14 @@ class DiffWindow : public KXmlGuiWindow
         Dirs,
         Files
     };
+    enum Storage {
+        NoStorage,
+        FileSystem,
+        Git
+    };
+
     Mode _mode{None};
+    Storage _storage{NoStorage};
 
 public:
     explicit DiffWindow();

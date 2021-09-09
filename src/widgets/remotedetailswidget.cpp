@@ -24,6 +24,7 @@ void RemoteDetailsWidget::reload()
 
 void RemoteDetailsWidget::on_listWidget_currentItemChanged(QListWidgetItem *current, QListWidgetItem *previous)
 {
+    Q_UNUSED(previous)
     setBranch(current->text());
 }
 

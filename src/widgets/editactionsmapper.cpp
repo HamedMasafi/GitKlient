@@ -39,17 +39,17 @@ void EditActionsMapper::init(KActionCollection *actionCollection)
 
 void EditActionsMapper::control_undoAvailable(bool b)
 {
-
+    Q_UNUSED(b)
 }
 
 void EditActionsMapper::control_redoAvailable(bool b)
 {
-
+    Q_UNUSED(b)
 }
 
 void EditActionsMapper::control_copyAvailable(bool b)
 {
-
+    Q_UNUSED(b)
 }
 
 void EditActionsMapper::control_selectionChanged()

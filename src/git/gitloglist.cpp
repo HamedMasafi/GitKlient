@@ -236,7 +236,12 @@ struct LanesData
         }
 
         {
-            QSet<QString> set = hashes.toSet();
+#if QT_VERSION < QT_VERSION_CHECK(5, 14, 0)
+            auto set = hashes.toSet();
+#else
+            QSet<QString> set{hashes.begin(), hashes.end()};
+#endif
+
             if (hashes.size() != set.size()) {
 //                qDebug() << hashes.size() << set.size();
             }
@@ -384,9 +389,9 @@ void LogList::initGraph()
 
     for (auto i = rbegin(); i != rend(); i++) {
         auto &log = *i;
-        bool isFork = log->_childs.size() > 1;
-        bool isMerge = log->parentHash().size() > 1;
-        bool isInitial = log->parentHash().isEmpty();
+//        bool isFork = log->_childs.size() > 1;
+//        bool isMerge = log->parentHash().size() > 1;
+//        bool isInitial = log->parentHash().isEmpty();
 
         auto bn = branchName(log->refLog());
         if (!bn.isEmpty()) {

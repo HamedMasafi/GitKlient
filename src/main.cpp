@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 // application header
-#include "common/commandargsparser.h"
+#include "commandargsparser.h"
 #include "dialogs/diffdialog.h"
 #include "dialogs/pulldialog.h"
 #include "dialogs/runnerdialog.h"

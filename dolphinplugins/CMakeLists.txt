@@ -22,8 +22,8 @@ find_package(KF5 ${KF5_MIN_VERSION} REQUIRED COMPONENTS KIO)
 #---ACTION PLUGIN---
 set(PLUGIN kdegititemaction)
 
-include_directories(../core)
-aux_source_directory(../core/git GIT_SRC)
+include_directories(../src)
+aux_source_directory(../src/git GIT_SRC)
 
 set(PLUGIN_SRC actionmanager.cpp ${GIT_SRC})
 kcoreaddons_add_plugin(${PLUGIN}

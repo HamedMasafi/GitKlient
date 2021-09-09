@@ -32,6 +32,9 @@ void ChangedFilesDialog::reload()
         case Git::Manager::Modified:
             item->setForeground(Qt::blue);
             break;
+
+        default:
+            break;
         }
         listWidget->addItem(item);
     }

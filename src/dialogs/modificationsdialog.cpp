@@ -23,6 +23,9 @@ ModificationsDialog::ModificationsDialog(QWidget *parent) :
         case Git::Manager::Removed:
             item->setForeground(Qt::red);
             break;
+
+        default:
+            break;
         }
         item->setCheckState(Qt::Unchecked);
         item->setData(1, i.value());

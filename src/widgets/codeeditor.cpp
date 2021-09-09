@@ -145,8 +145,11 @@ int CodeEditor::sidebarWidth() const
         ++digits;
         count /= 10;
     }
-    //return 4 + fontMetrics().horizontalAdvance(QLatin1Char('9')) * digits + fontMetrics().lineSpacing();
+#if QT_VERSION >= QT_VERSION_CHECK(5, 11, 0)
+    return 4 + fontMetrics().horizontalAdvance(QLatin1Char('9')) * digits + fontMetrics().lineSpacing();
+#else
     return 4 + fontMetrics().width(QLatin1Char('9')) * digits + fontMetrics().lineSpacing();
+#endif
 }
 
 void CodeEditor::sidebarPaintEvent(QPaintEvent *event)

@@ -12,7 +12,7 @@ public:
     explicit SubmodulesWidget(QWidget *parent = nullptr);
     explicit SubmodulesWidget(Git::Manager *git, QWidget *parent = nullptr);
 
-    void reload();
+    void reload() override;
 private slots:
     void on_pushButtonAddNew_clicked();
 };

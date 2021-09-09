@@ -26,7 +26,7 @@ void ArgsParser::checkAll()
     if (index == -1)
         return;
 
-    auto method = metaObject()->method(index);
+//    auto method = metaObject()->method(index);
 
     QList<QGenericArgument> args;
     for (int i = 2; i < qApp->arguments().size(); ++i)
@@ -47,7 +47,7 @@ void ArgsParser::checkAll()
 
 void ArgsParser::run_diff(const QString &f1, const QString &f2)
 {
-    qDebug() << "diff";
+    qDebug() << "diff" << f1 << f2;
     auto d = new DiffWindow;
     d->show();
 }
@@ -61,7 +61,7 @@ void ArgsParser::run_changes(const QString &path)
 
 void ArgsParser::runMethod(const QMetaMethod &method)
 {
-    int firstOptional{0};
+//    int firstOptional{0};
     for (int i = 0; i < method.parameterCount(); ++i) {
 //        if (method.parameterCount())
     }

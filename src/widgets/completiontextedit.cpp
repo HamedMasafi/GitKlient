@@ -22,9 +22,10 @@ CompletionTextEdit::CompletionTextEdit(QWidget *parent) : QTextEdit(parent)
 
 void CompletionTextEdit::setCompleter(QCompleter *completer)
 {
+    Q_UNUSED(completer)
+
     if (c)
         c->disconnect(this);
-
 }
 
 QCompleter *CompletionTextEdit::completer() const

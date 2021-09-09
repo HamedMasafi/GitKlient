@@ -26,6 +26,7 @@ p {
 
 QTextObject *CodeEditorDocument::createObject(const QTextFormat &f)
 {
+    Q_UNUSED(f)
     auto frame = new QTextFrame(this);
     return frame;
 }

@@ -73,7 +73,7 @@ struct DiffSegment : Segment
 {
     virtual ~DiffSegment() {}
 
-    QStringList get(int index)
+    QStringList get(int index) override
     {
         switch (index) {
         case 0:

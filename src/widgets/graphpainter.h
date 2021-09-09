@@ -14,13 +14,13 @@ class GraphPainter : public QStyledItemDelegate
 public:
     GraphPainter(HistoryModel *model, QObject *parent = nullptr);
 
-    void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const;
+    void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const override;
     void paintLane(QPainter *painter, const Git::GraphLane &lane, int index) const;
     int colX(const int &col) const;
 
     // QAbstractItemDelegate interface
 public:
-    QSize sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const;
+    QSize sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const override;
 };
 
 #endif // GRAPHPAINTER_H

@@ -8,7 +8,7 @@
 #endif
 #include <QCache>
 #include <QMap>
-#include "git/filestatus.h"
+#include "../src/git/filestatus.h"
 
 class KlientDolphinOverlayPlugin : public
 #ifdef GK_TEST

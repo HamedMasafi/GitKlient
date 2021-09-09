@@ -75,6 +75,7 @@ DiffWindow::DiffWindow(const QString &oldBranch, const QString &newBranch)
         _diffModel->addFile(f);
         _filesModel->append(f.name());
     }
+    _storage = Git;
 }
 
 void DiffWindow::fileOpen()
@@ -83,20 +84,24 @@ void DiffWindow::fileOpen()
     if (d.exec() != QDialog::Accepted)
         return;
 
+    _storage = FileSystem;
     if (d.mode() == DiffOpenDialog::Dirs) {
         _oldDir = d.oldDir();
         _newDir = d.newDir();
         compareDirs();
+    } else {
     }
 }
 
 void DiffWindow::on_treeView_fileSelected(const QString &file)
 {
-    qDebug() << file;
-    Git::File oldFile(_oldDir + "/" + file);// _oldBranch, file);
-    Git::File newFile(_newDir + "/" + file);//_newBranch, file);
-    _diffWidget->setOldFile(std::move(oldFile));
-    _diffWidget->setNewFile(std::move(newFile));
+    if (_storage == FileSystem) {
+        _diffWidget->setOldFile({_oldDir + "/" + file});
+        _diffWidget->setNewFile({_newDir + "/" + file});
+    } else if (_storage == Git) {
+        _diffWidget->setOldFile({_oldBranch, file});
+        _diffWidget->setNewFile({_newBranch, file});
+    }
     _diffWidget->compare();
 }
 

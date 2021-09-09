@@ -16,6 +16,7 @@ NonEmptyLinesCommand::NonEmptyLinesCommand() : ParameteresCommand()
 
 void NonEmptyLinesCommand::parseOutput(const QByteArray &output, const QByteArray &errorOutput)
 {
+    Q_UNUSED(errorOutput)
     QStringList list;
     auto out = QString(output).split("\n");
 

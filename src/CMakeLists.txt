@@ -1,7 +1,6 @@
-aux_source_directory(../core/git GIT_SRC)
-aux_source_directory(../core/diff DIFF_SRC)
-aux_source_directory(../core/widgets CORE_WIDGETS_SRC)
-aux_source_directory(../core/common COMMON_SRC)
+aux_source_directory(git GIT_SRC)
+aux_source_directory(diff DIFF_SRC)
+aux_source_directory(common COMMON_SRC)
 aux_source_directory(models MODELS_SRC)
 aux_source_directory(widgets WIDGETS_SRC)
 aux_source_directory(dialogs DIALOGS_SRC)
@@ -27,6 +26,7 @@ set(gitklient_SRCS
     argsparser.cpp
     diffwindow.cpp
     gitklientmergewindow.cpp
+    commandargsparser.cpp
 )
 #add_subdirectory(merge)
 
@@ -93,6 +93,8 @@ target_link_libraries(gitklient
 )
 
 install(TARGETS gitklient ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
+install(PROGRAMS gitklientdiff.sh DESTINATION bin RENAME gitklientdiff)
+install(PROGRAMS gitklientmerge.sh DESTINATION bin RENAME gitklientmerge)
 install(PROGRAMS org.kde.gitklient.desktop        DESTINATION ${KDE_INSTALL_APPDIR})
 install(PROGRAMS org.kde.gitklient.diff.desktop   DESTINATION ${KDE_INSTALL_APPDIR})
 install(PROGRAMS org.kde.gitklient.merge.desktop  DESTINATION ${KDE_INSTALL_APPDIR})

@@ -235,10 +235,6 @@ Solution longestCommonSubsequence(const QStringList &source, const QStringList &
     return r;
 }
 
-static bool stringListCompare(Solution a, Solution b)
-{
-    return (a.size() < b.size());
-}
 }
 struct Tuple {
     int base;
@@ -587,6 +583,7 @@ QList<Segment *> diff(const QString &oldText, const QString &newText)
 
 QString gitDiff(QList<Segment *> segments)
 {
+    Q_UNUSED(segments)
     QString s;
 
     return s;

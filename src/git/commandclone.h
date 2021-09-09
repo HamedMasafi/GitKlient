@@ -33,7 +33,7 @@ private:
 
     // AbstractCommand interface
 public:
-    QStringList generateArgs() const;
+    QStringList generateArgs() const override;
 };
 
 } // namespace Git

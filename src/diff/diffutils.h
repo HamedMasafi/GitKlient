@@ -23,6 +23,7 @@
 #include <QString>
 #include <QVariant>
 
+//TODO: remove this file
 
 /*
  * Functions for diff, match and patch.

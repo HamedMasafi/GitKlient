@@ -43,7 +43,7 @@ signals:
 
     // QWidget interface
 protected:
-    void paintEvent(QPaintEvent *event);
+    void paintEvent(QPaintEvent *event) override;
 };
 
 #endif // SEGMENTCONNECTOR_H

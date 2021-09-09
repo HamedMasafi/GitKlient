@@ -44,7 +44,7 @@ private Q_SLOTS:
 
     // QObject interface
 public:
-    bool eventFilter(QObject *watched, QEvent *event);
+    bool eventFilter(QObject *watched, QEvent *event) override;
 };
 
 #endif // EDITACTIONSMAPPER_H

@@ -32,6 +32,7 @@ void LogDetailsWidget::createText()
     for (auto i = files.begin(); i != files.end(); ++i) {
         QString color;
         switch (i.value()) {
+
         case Git::Manager::Modified:
             color = "blue";
             break;
@@ -40,6 +41,15 @@ void LogDetailsWidget::createText()
             break;
         case Git::Manager::Removed:
             color = "red";
+            break;
+
+        case Git::Manager::Unknown:
+        case Git::Manager::Unmodified:
+        case Git::Manager::Renamed:
+        case Git::Manager::Copied:
+        case Git::Manager::UpdatedButInmerged:
+        case Git::Manager::Ignored:
+        case Git::Manager::Untracked:
             break;
         }
         filesHtml.append(

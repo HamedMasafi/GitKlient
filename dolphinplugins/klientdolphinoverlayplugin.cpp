@@ -1,6 +1,6 @@
 #include "klientdolphinoverlayplugin.h"
 
-#include "git/gitmanager.h"
+#include "../src/git/gitmanager.h"
 #include <QUrl>
 #include <QDebug>
 
