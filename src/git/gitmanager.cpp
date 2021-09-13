@@ -129,8 +129,11 @@ bool Manager::isValid() const
     return _isValid;
 }
 
-const LogList &Manager::logs() const
+const LogList &Manager::logs()
 {
+    if (!_logs.size())
+        _logs.load();
+
     return _logs;
 }
 
@@ -166,6 +169,11 @@ QPair<int, int> Manager::uniqueCommiteOnBranches(const QString &branch1,
         return qMakePair(-1, -1);
 
     return qMakePair(parts.at(0).toInt(), parts.at(1).toInt());
+}
+
+QStringList Manager::fileLog(const QString &fileName) const
+{
+    return readAllNonEmptyOutput({"log", "--format=format:%H", "--", fileName});
 }
 
 QString Manager::diff(const QString &from, const QString &to)

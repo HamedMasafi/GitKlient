@@ -6,6 +6,7 @@
 #include <QMenu>
 #include <KIOCore/KFileItem>
 #include "dialogs/fileviewerdialog.h"
+#include "dialogs/filehistorydialog.h"
 
 FilesTreeDialog::FilesTreeDialog(const QString &place, QWidget *parent) :
       QDialog(parent), _place(place)
@@ -38,6 +39,11 @@ FilesTreeDialog::FilesTreeDialog(const QString &place, QWidget *parent) :
     actionView->setText(i18n("View"));
     connect(actionView, &QAction::triggered, this, &FilesTreeDialog::viewFile);
     _fileMenu->addAction(actionView);
+
+    auto actionHistory = new QAction(this);
+    actionHistory->setText(i18n("Log"));
+    connect(actionHistory, &QAction::triggered, this, &FilesTreeDialog::logFile);
+    _fileMenu->addAction(actionHistory);
 }
 
 void FilesTreeDialog::on_treeView_clicked(const QModelIndex &index)
@@ -70,6 +76,14 @@ void FilesTreeDialog::copyFile()
     auto path = _treeModel->fullPath(treeView->currentIndex()) + "/"
                 + listWidget->currentItem()->text();
 
+}
+
+void FilesTreeDialog::logFile()
+{
+    auto path = _treeModel->fullPath(treeView->currentIndex()) + "/"
+                + listWidget->currentItem()->text();
+    FileHistoryDialog d(Git::Manager::instance(), path, this);
+    d.exec();
 }
 
 

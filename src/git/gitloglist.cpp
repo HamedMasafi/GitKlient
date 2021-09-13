@@ -354,11 +354,11 @@ H -- commit hash              c -- committer details        m -- mark           
     auto parts = ret.split("SEP>");
 
     for (auto &p : parts) {
-        auto d = new Log;
         auto lines = p.split("\n");
         if (lines.size() < 4)
             continue;
 
+        auto d = new Log;
         QString commitDate;
         QString authDate;
         QString parentHash;

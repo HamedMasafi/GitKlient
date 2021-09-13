@@ -76,8 +76,10 @@ public:
             } else {
                 addMenu(menu, "Pull", {"pull", path});
                 addMenu(menu, "Modifications", {"changes", path});
-                if (fileItemInfos.isFile())
+                if (fileItemInfos.isFile()) {
                     addMenu(menu, "Diff", {"diff", path});
+                    addMenu(menu, "Log", {"log", path});
+                }
             }
                 
         } else {

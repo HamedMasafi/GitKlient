@@ -94,13 +94,15 @@ public:
     QList<Log *> log(const QString &branch) const;
     bool isValid() const;
 
-    const LogList &logs() const;
+    const LogList &logs();
 
     bool addRemote(const QString &name, const QString &url) const;
     bool removeRemote(const QString &name) const;
     bool renameRemote(const QString &name, const QString &newName) const;
 
     QPair<int, int> uniqueCommiteOnBranches(const QString &branch1, const QString &branch2) const;
+
+    QStringList fileLog(const QString &fileName) const;
 
     QString diff(const QString &from, const QString &to);
     QList<FileStatus> diffBranches(const QString &from, const QString &to);

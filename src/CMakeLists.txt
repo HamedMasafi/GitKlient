@@ -71,6 +71,7 @@ ki18n_wrap_ui(gitklient_SRCS
     dialogs/taginfodialog.ui
     dialogs/diffopendialog.ui
     dialogs/selectbranchestodiffdialog.ui
+    dialogs/filehistorydialog.ui
 )
 
 add_executable(gitklient ${gitklient_SRCS})
