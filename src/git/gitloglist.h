@@ -12,7 +12,8 @@ class LogList : public QList<Log *>
     QString _branch;
     QList<Log *> _data;
     QStringList _branches;
-    QMap<QString, Log *> _dataByCommitHash;
+    QMap<QString, Log *> _dataByCommitHashLong;
+    QMap<QString, Log *> _dataByCommitHashShort;
 
 public:
     LogList();

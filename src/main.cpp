@@ -30,6 +30,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "gitklientdebug.h"
 #include "gitklientwindow.h"
 #include "gitklientmergewindow.h"
+#include "dialogs/fileblamedialog.h"
 
 // KF headers
 #include <KAboutData>
@@ -66,6 +67,7 @@ ArgParserReturn argsWidget() {
     p.add("merge", "merge <base> <local> <remote> <result>");
     p.add("diff1", "diff");
     p.add("merge1", "merge");
+    p.add("test", "test");
 
     auto key = p.checkAll();
 
@@ -103,6 +105,13 @@ ArgParserReturn argsWidget() {
         auto d = new GitKlientMergeWindow;
         d->show();
         return ExecApp;
+    } else if (key == "test") {
+        auto g = Git::Manager::instance();
+        g->setPath("/doc/dev/gitklient");
+        Git::File f("alpha", "src/widgets/blamecodeview.cpp", g);
+        FileBlameDialog d(f);
+        d.exec();
+        return 0;
     } else {
         GitKlientWindow *window = new GitKlientWindow;
         window->show();

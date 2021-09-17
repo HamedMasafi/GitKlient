@@ -13,4 +13,5 @@ public:
     QList<QAction*> actions(const KFileItemListProperties& fileItemInfos, QWidget* parentWidget) Q_DECL_OVERRIDE;
 };*/
 
+
 #endif // ACTIONMANAGER_H

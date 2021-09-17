@@ -1,4 +1,5 @@
 #include "codeeditor.h"
+#include "codeeditorsidebar.h"
 
 #include <KSyntaxHighlighting/Definition>
 #include <KSyntaxHighlighting/FoldingRegion>
@@ -33,44 +34,6 @@ Diff::Segment *SegmentData::segment() const
 void SegmentData::setSegment(Diff::Segment *newSegment)
 {
     _segment = newSegment;
-}
-
-class CodeEditorSidebar : public QWidget
-{
-    Q_OBJECT
-public:
-    explicit CodeEditorSidebar(CodeEditor *editor);
-    QSize sizeHint() const override;
-
-protected:
-    void paintEvent(QPaintEvent *event) override;
-    void mouseReleaseEvent(QMouseEvent *event) override;
-
-private:
-    CodeEditor *m_codeEditor;
-};
-
-CodeEditorSidebar::CodeEditorSidebar(CodeEditor *editor) : QWidget(editor), m_codeEditor(editor) {}
-
-QSize CodeEditorSidebar::sizeHint() const
-{
-    return QSize(m_codeEditor->sidebarWidth(), 0);
-}
-
-void CodeEditorSidebar::paintEvent(QPaintEvent *event)
-{
-    m_codeEditor->sidebarPaintEvent(event);
-}
-
-void CodeEditorSidebar::mouseReleaseEvent(QMouseEvent *event)
-{
-    if (event->x() >= width() - m_codeEditor->fontMetrics().lineSpacing()) {
-        auto block = m_codeEditor->blockAtPosition(event->y());
-        if (!block.isValid() || !m_codeEditor->isFoldable(block))
-            return;
-        m_codeEditor->toggleFold(block);
-    }
-    QWidget::mouseReleaseEvent(event);
 }
 
 CodeEditor::CodeEditor(QWidget *parent)
@@ -347,6 +310,20 @@ void CodeEditor::append(const QString &code, const BlockType &type, Diff::Segmen
     t.block().setUserData(new SegmentData{segment});
 }
 
+void CodeEditor::append(const QString &code, const QColor &backGroundColor)
+{
+    auto t = textCursor();
+
+    if (_segments.size())
+        t.insertBlock();
+
+    QTextCursor c(t.block());
+    c.insertText(code);
+    QTextBlockFormat fmt;
+    fmt.setBackground(backGroundColor);
+    t.setBlockFormat(fmt);
+}
+
 void CodeEditor::append(const QStringList &code, const BlockType &type, Diff::Segment *segment, int size)
 {
 //    if (!code.size() && (type == Added || type == Removed)) {
@@ -421,5 +398,6 @@ void CodeEditor::clearAll()
     _lines.clear();
     clear();
 }
+
 
 #include "codeeditor.moc"

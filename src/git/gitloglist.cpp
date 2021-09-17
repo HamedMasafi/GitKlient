@@ -282,7 +282,7 @@ void LogList::initChilds()
     for (auto i = rbegin(); i != rend(); i++) {
         auto &log = *i;
         for (auto &p: log->parentHash())
-            _dataByCommitHash.value(p)->_childs.append(log->commitHash());
+            _dataByCommitHashLong.value(p)->_childs.append(log->commitHash());
     }
 }
 
@@ -326,7 +326,7 @@ H -- commit hash              c -- committer details        m -- mark           
 */
     qDeleteAll(*this);
     clear();
-    _dataByCommitHash.clear();
+    _dataByCommitHashLong.clear();
 
     _branches = Manager::instance()->branches();
 
@@ -336,7 +336,7 @@ H -- commit hash              c -- committer details        m -- mark           
                      "--no-color",
                      "--parents",
                      "--boundary",
-                     "--pretty=format:'SEP%m%HX%P%n"
+                     "--pretty=format:'SEP%m%HX%hX%P%n"
                      "%cnX%ceX%cI%n"
                      "%anX%aeX%aI%n"
                      "%d%n"
@@ -362,7 +362,7 @@ H -- commit hash              c -- committer details        m -- mark           
         QString commitDate;
         QString authDate;
         QString parentHash;
-        readLine(lines.at(0), "X", {&d->_commitHash, &parentHash});
+        readLine(lines.at(0), "X", {&d->_commitHash, &d->_commitShortHash, &parentHash});
         readLine(lines.at(1), "X", {&d->_committerName, &d->_committerEmail, &commitDate});
         readLine(lines.at(2), "X", {&d->_authorName, &d->_authorEmail, &authDate});
 
@@ -374,7 +374,8 @@ H -- commit hash              c -- committer details        m -- mark           
         d->_authDate = QDateTime::fromString(authDate, Qt::ISODate);
         d->_body = lines.mid(5).join("\n");
         append(d);
-        _dataByCommitHash.insert(d->commitHash(), d);
+        _dataByCommitHashLong.insert(d->commitHash(), d);
+        _dataByCommitHashLong.insert(d->commitShortHash(), d);
     }
 //    std::sort(begin(), end(), [](GitLog *log1,GitLog *log2){
 //        return log1->commitDate() < log2->commitDate();

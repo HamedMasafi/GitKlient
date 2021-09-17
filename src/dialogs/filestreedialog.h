@@ -20,6 +20,7 @@ private slots:
     void viewFile();
     void copyFile();
     void logFile();
+    void blameFile();
     void on_listWidget_customContextMenuRequested(const QPoint &pos);
 
 };

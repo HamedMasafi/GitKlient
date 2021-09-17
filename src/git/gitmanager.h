@@ -6,6 +6,8 @@
 #include "filestatus.h"
 #include "gitremote.h"
 #include "gitsubmodule.h"
+#include "blamedata.h"
+#include "gitfile.h"
 
 #include <QString>
 #include <QObject>
@@ -73,6 +75,8 @@ public:
 
     Remote remoteDetails(const QString &remoteName);
     bool removeBranch(const QString &branchName) const;
+
+    BlameData blame(const File &file);
 
     QList<Git::Submodule> submodules() const;
     bool addSubmodule(const Git::Submodule &module);

@@ -248,6 +248,8 @@ bool Manager::isGitDir() const
 
 QByteArray Manager::runGit(const QStringList &args) const
 {
+//    qDebug().noquote() << "Running: git " << args.join(" ");
+
     QProcess p;
     p.setProgram("git");
     p.setArguments(args);
@@ -359,6 +361,35 @@ bool Manager::removeBranch(const QString &branchName) const
 {
     auto ret = readAllNonEmptyOutput({"branch", "-D", branchName});
     return true;
+}
+
+BlameData Manager::blame(const File &file)
+{
+    auto logList = logs();
+    BlameData b;
+    auto lines = readAllNonEmptyOutput({"--no-pager", "blame", "-l", file.fileName()});
+    b.reserve(lines.size());
+
+    for (auto &line: lines) {
+
+        BlameDataRow row;
+        row.commitHash = line.mid(0, 40);
+
+        auto metaIndex = line.indexOf(")");
+        row.code = line.mid(metaIndex + 1);
+
+        auto log = logList.findByHash(row.commitHash);
+        if (!log) {
+            row.log = log;
+        } else {
+            row.log = nullptr;
+            qDebug() << "Log not found";
+        }
+        auto parts = line.split("\t");
+        b.append(row);
+    }
+
+    return b;
 }
 
 QList<Submodule> Manager::submodules() const

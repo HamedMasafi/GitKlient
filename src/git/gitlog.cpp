@@ -1,5 +1,7 @@
 #include "gitlog.h"
 
+#include <QDebug>
+
 namespace Git {
 
 const QString &Log::refLog() const
@@ -32,6 +34,11 @@ const QStringList &Log::childs() const
     return _childs;
 }
 
+const QString &Log::commitShortHash() const
+{
+    return _commitShortHash;
+}
+
 Log::Log() {}
 
 Log::Log(const QString &authorName,
@@ -50,6 +57,11 @@ Log::Log(const QString &authorName,
       _message(message), _subject(subject), _body(body), _commitHash(commitHash),
       _parentHash(parentHash)
 {}
+
+Log::~Log()
+{
+    qDebug() << "~";
+}
 
 const QString &Log::authorName() const
 {

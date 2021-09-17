@@ -1,3 +1,4 @@
+#include "actionmanager.h"
 
 #include "../src/git/gitmanager.h"
 #include <KFileItem>

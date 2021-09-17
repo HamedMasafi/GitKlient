@@ -7,6 +7,7 @@
 #include <KIOCore/KFileItem>
 #include "dialogs/fileviewerdialog.h"
 #include "dialogs/filehistorydialog.h"
+#include "dialogs/fileblamedialog.h"
 
 FilesTreeDialog::FilesTreeDialog(const QString &place, QWidget *parent) :
       QDialog(parent), _place(place)
@@ -44,6 +45,12 @@ FilesTreeDialog::FilesTreeDialog(const QString &place, QWidget *parent) :
     actionHistory->setText(i18n("Log"));
     connect(actionHistory, &QAction::triggered, this, &FilesTreeDialog::logFile);
     _fileMenu->addAction(actionHistory);
+
+
+    auto actionBlame = new QAction(this);
+    actionBlame->setText(i18n("Blame"));
+    connect(actionBlame, &QAction::triggered, this, &FilesTreeDialog::blameFile);
+    _fileMenu->addAction(actionBlame);
 }
 
 void FilesTreeDialog::on_treeView_clicked(const QModelIndex &index)
@@ -86,6 +93,14 @@ void FilesTreeDialog::logFile()
     d.exec();
 }
 
+void FilesTreeDialog::blameFile()
+{
+    auto path = _treeModel->fullPath(treeView->currentIndex()) + "/"
+                + listWidget->currentItem()->text();
+    Git::File file(_place, path, Git::Manager::instance());
+    FileBlameDialog d(file, this);
+    d.exec();
+}
 
 void FilesTreeDialog::on_listWidget_customContextMenuRequested(const QPoint &pos)
 {

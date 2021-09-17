@@ -33,6 +33,7 @@ public:
     void setHighlighting(const QString &fileName);
 
     void append(const QString &code, const BlockType &type = Unchanged, Diff::Segment *segment = nullptr);
+    void append(const QString &code, const QColor &backGroundColor);
     void append(const QStringList &code, const BlockType &type = Unchanged, Diff::Segment *segment = nullptr, int size = -1);
 
     QPair<int, int> blockArea(int from, int to);
@@ -52,13 +53,16 @@ protected:
     void resizeEvent(QResizeEvent *event) override;
     void mousePressEvent(QMouseEvent *event) override;
     void mouseReleaseEvent(QMouseEvent *event) override;
+    virtual int sidebarWidth() const;
+    virtual void sidebarPaintEvent(QPaintEvent *event);
+    CodeEditorSidebar *m_sideBar;
+    KSyntaxHighlighting::SyntaxHighlighter *m_highlighter;
 
 private:
     friend class CodeEditorSidebar;
     QMap<BlockType, QTextBlockFormat> _formats;
     void setTheme(const KSyntaxHighlighting::Theme &theme);
-    int sidebarWidth() const;
-    void sidebarPaintEvent(QPaintEvent *event);
+
     void updateSidebarGeometry();
     void updateSidebarArea(const QRect &rect, int dy);
     void highlightCurrentLine();
@@ -69,8 +73,6 @@ private:
     void toggleFold(const QTextBlock &block);
 
     KSyntaxHighlighting::Repository m_repository;
-    KSyntaxHighlighting::SyntaxHighlighter *m_highlighter;
-    CodeEditorSidebar *m_sideBar;
 
 
 protected:

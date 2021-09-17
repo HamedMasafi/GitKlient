@@ -30,6 +30,7 @@ public:
            const QString &body,
            const QString &commitHash,
            const QStringList &parentHash);
+    ~Log();
 
     const QString &authorName() const;
     const QString &authorEmail() const;
@@ -50,6 +51,8 @@ public:
 
     const QStringList &childs() const;
 
+    const QString &commitShortHash() const;
+
 private:
     QString _authorName;
     QString _authorEmail;
@@ -61,6 +64,7 @@ private:
     QString _subject;
     QString _body;
     QString _commitHash;
+    QString _commitShortHash;
     QStringList _parentHash;
     QString _refLog;
     QString _branch;
