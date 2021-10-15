@@ -14,7 +14,7 @@
 
 BlameCodeView::BlameCodeView(QWidget *parent) : CodeEditor(parent)
 {
-
+    setReadOnly(true);
 }
 
 const Git::BlameData &BlameCodeView::blameData() const

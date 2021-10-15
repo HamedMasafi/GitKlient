@@ -379,12 +379,9 @@ BlameData Manager::blame(const File &file)
         row.code = line.mid(metaIndex + 1);
 
         auto log = logList.findByHash(row.commitHash);
-        if (!log) {
-            row.log = log;
-        } else {
-            row.log = nullptr;
+        if (!log)
             qDebug() << "Log not found";
-        }
+        row.log = log;
         auto parts = line.split("\t");
         b.append(row);
     }
