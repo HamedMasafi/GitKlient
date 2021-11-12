@@ -3,6 +3,7 @@
 #include "../src/git/gitmanager.h"
 #include <QUrl>
 #include <QDebug>
+#include <QDir>
 
 KlientDolphinOverlayPlugin::KlientDolphinOverlayPlugin(QObject *parent)
     :
@@ -37,13 +38,35 @@ QString icon(const FileStatus::Status &status)
     return "git-status-update";
 }
 
+QString KlientDolphinOverlayPlugin::pathIcon(const QString &path)
+{
+    QSet<FileStatus::Status> statues;
+    for (auto i = _statusCache.begin(); i != _statusCache.end(); ++i) {
+        if (i.key().startsWith(path))
+            statues.insert(i.value());
+    }
+    if (!statues.size() )
+        return icon(FileStatus::Unknown);
+    else if (statues.size() == 1)
+        return icon (statues.values().first());
+    else {
+        return icon(FileStatus::Modified);
+    }
+}
+
 QStringList KlientDolphinOverlayPlugin::getOverlays(const QUrl &url)
 {
     auto p = url.toLocalFile();
 
 //    qDebug() << "init" << _lastDir << p ;
     if (!_lastDir.isEmpty() && p.startsWith(_lastDir)) {
-        return {icon(_statusCache.value(p, FileStatus::Unmodified))};
+        if (_statusCache.contains(p))
+            return {icon(_statusCache.value(p))};
+
+        QDir d;
+        if (d.exists(p))
+            return {pathIcon(p)};
+        //return {icon(_statusCache.value(p, FileStatus::Unmodified))};
     }
 
 //    if (_statusCache.contains(p)) {
@@ -64,7 +87,7 @@ QStringList KlientDolphinOverlayPlugin::getOverlays(const QUrl &url)
     auto statuses = git.repoFilesStatus();
 
     for (auto &s: statuses) {
-//        qDebug() << "insert" << s.name() << git.path() << s.status();
+        qDebug() << "insert" << s.name() << git.path() << s.status();
         _statusCache.insert(git.path() + "/" + s.name(), s.status());
         if (git.path() + "/" + s.name() == p) {
             qDebug() <<"Found"<<s.status();

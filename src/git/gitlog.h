@@ -42,7 +42,7 @@ public:
     const QString &subject() const;
     const QString &body() const;
     const QString &commitHash() const;
-    const QStringList &parentHash() const;
+    const QStringList &parents() const;
     const QString &refLog() const;
     const QString &branch() const;
     const QString &extraData() const;

@@ -113,7 +113,7 @@ const QString &Log::commitHash() const
     return _commitHash;
 }
 
-const QStringList &Log::parentHash() const
+const QStringList &Log::parents() const
 {
     return _parentHash;
 }

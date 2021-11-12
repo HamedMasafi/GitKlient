@@ -79,8 +79,8 @@ void HistoryViewWidget::on_textBrowser_fileClicked(const QString &file)
 
     Git::File oldFile;
     Git::File newFile(log->commitHash(), file);
-    if (log->parentHash().size()) {
-        oldFile = {log->parentHash().first(), file};
+    if (log->parents().size()) {
+        oldFile = {log->parents().first(), file};
     }
     DiffDialog d(oldFile, newFile, this);
     d.exec();

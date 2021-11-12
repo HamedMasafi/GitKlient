@@ -34,6 +34,8 @@ public:
         override;
 #endif
 
+private:
+    QString pathIcon(const QString &path);
 };
 
 #endif // KLIENTDOLPHINOVERLAYPLUGIN_H

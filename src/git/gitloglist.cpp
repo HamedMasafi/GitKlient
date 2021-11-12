@@ -38,7 +38,7 @@ struct LanesData
 //                lane._type = GitGraphLane::End;
         }
 
-        if (index==connection)
+        if (index == connection)
             qDebug() << "777777777777777";
 
 //        if (index != connection)
@@ -205,15 +205,19 @@ struct LanesData
 */
     QVector<GraphLane> apply(Log *log)
     {
-        if (!log->parentHash().size()) {
+        if (!log->parents().size()) {
             init(log->childs());
-        } else if (log->parentHash().size() > 1) {
+        } else if (log->parents().size() > 1) {
             merge(log->commitHash(), log->childs());
-        } else if (log->childs().size() > 1) {
+        }
+
+        if (log->childs().size() > 1) {
             fork(log->commitHash(), log->childs());
-        } else if (log->childs().size()) {
+        }
+        else if (log->childs().size() == 1) {
             updateHash(log->commitHash(), log->childs().first());
-        } else if (!log->childs().size()) {
+        }
+        else if (!log->childs().size()) {
             for (int i = 0; i < lanes.size(); ++i) {
                 auto lane = lanes[i];
                 if (lane.type() != GraphLane::None && lane.type() != GraphLane::Transparent)
@@ -281,7 +285,7 @@ void LogList::initChilds()
 {
     for (auto i = rbegin(); i != rend(); i++) {
         auto &log = *i;
-        for (auto &p: log->parentHash())
+        for (auto &p: log->parents())
             _dataByCommitHashLong.value(p)->_childs.append(log->commitHash());
     }
 }
@@ -398,9 +402,9 @@ void LogList::initGraph()
         if (!bn.isEmpty()) {
             log->_branch = bn;
         }
-        if (!log->parentHash().isEmpty()) {
-            auto parent = findByHash(log->parentHash().first());
-            if (parent->refLog() != log->refLog() && log->parentHash().size() == 1) {
+        if (!log->parents().isEmpty()) {
+            auto parent = findByHash(log->parents().first());
+            if (parent->refLog() != log->refLog() && log->parents().size() == 1) {
 //                isFork = true;
                 log->_extraData="fork";
             }

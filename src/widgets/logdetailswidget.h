@@ -19,6 +19,8 @@ public:
 
 private:
     void createText();
+    void appendParagraph(QString &html, const QString &text) const;
+    void appendParagraph(QString &html, const QString &name, const QString &value) const;
     QString createHashLink(const QString &hash) const;
     QString createFileLink(const QString &hash) const;
 
