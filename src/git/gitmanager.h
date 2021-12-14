@@ -58,7 +58,7 @@ public:
 
     bool isGitDir() const;
     QByteArray runGit(const QStringList &args) const;
-    QString ls(const QString &place) const;
+    QStringList ls(const QString &place) const;
     QString fileContent(const QString &place, const QString &fileName) const;
     void saveFile(const QString &place, const QString &fileName, const QString &localFile) const;
     QStringList branches() const;

@@ -45,6 +45,7 @@ private:
 
     friend class LogList;
     friend struct LanesData;
+    friend struct LanesFactory;
 };
 
 }

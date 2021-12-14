@@ -8,6 +8,7 @@
 #include "dialogs/fileviewerdialog.h"
 #include "dialogs/filehistorydialog.h"
 #include "dialogs/fileblamedialog.h"
+#include "dialogs/searchdialog.h"
 
 FilesTreeDialog::FilesTreeDialog(const QString &place, QWidget *parent) :
       QDialog(parent), _place(place)
@@ -22,7 +23,7 @@ FilesTreeDialog::FilesTreeDialog(const QString &place, QWidget *parent) :
     _treeModel->setLastPartAsData(true);
     QFileIconProvider p;
     _treeModel->setDefaultIcon(p.icon(QFileIconProvider::Folder));
-    _treeModel->addData(files.split("\n"));
+    _treeModel->addData(files);
     treeView->setModel(_treeModel);
 
     setWindowTitle(QStringLiteral("Browse files: %1").arg(place));
@@ -51,6 +52,11 @@ FilesTreeDialog::FilesTreeDialog(const QString &place, QWidget *parent) :
     actionBlame->setText(i18n("Blame"));
     connect(actionBlame, &QAction::triggered, this, &FilesTreeDialog::blameFile);
     _fileMenu->addAction(actionBlame);
+
+    auto actionSearch = new QAction(this);
+    actionSearch->setText(i18n("Search history"));
+    connect(actionSearch, &QAction::triggered, this, &FilesTreeDialog::search);
+    _fileMenu->addAction(actionSearch);
 }
 
 void FilesTreeDialog::on_treeView_clicked(const QModelIndex &index)
@@ -99,6 +105,14 @@ void FilesTreeDialog::blameFile()
                 + listWidget->currentItem()->text();
     Git::File file(_place, path, Git::Manager::instance());
     FileBlameDialog d(file, this);
+    d.exec();
+}
+
+void FilesTreeDialog::search()
+{
+    auto path = _treeModel->fullPath(treeView->currentIndex()) + "/"
+                + listWidget->currentItem()->text();
+    SearchDialog d(path, Git::Manager::instance(), this);
     d.exec();
 }
 

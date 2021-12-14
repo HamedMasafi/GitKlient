@@ -21,6 +21,7 @@ private slots:
     void copyFile();
     void logFile();
     void blameFile();
+    void search();
     void on_listWidget_customContextMenuRequested(const QPoint &pos);
 
 };

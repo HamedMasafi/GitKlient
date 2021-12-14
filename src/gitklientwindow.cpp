@@ -30,6 +30,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "dialogs/pulldialog.h"
 #include "dialogs/runnerdialog.h"
 #include "dialogs/selectbranchestodiffdialog.h"
+#include "dialogs/searchdialog.h"
 #include "git/gitmanager.h"
 #include "gitklientdebug.h"
 #include "gitklientview.h"
@@ -165,6 +166,9 @@ void GitKlientWindow::initActions()
     auto diffBranchesAction = actionCollection->addAction("diff_branches", this, &GitKlientWindow::diffBranches);
     diffBranchesAction->setText(i18n("Diff branches..."));
 
+    auto repoSearchAction = actionCollection->addAction("repo_search", this, &GitKlientWindow::search);
+    repoSearchAction->setText(i18n("Search..."));
+
     KStandardAction::quit(qApp, SLOT(closeAllWindows()), actionCollection);
     KStandardAction::preferences(this, SLOT(settingsConfigure()), actionCollection);
     KStandardAction::openNew(this, &GitKlientWindow::clone, actionCollection);
@@ -298,6 +302,12 @@ void GitKlientWindow::diffBranches()
         diffWin->setAttribute(Qt::WA_DeleteOnClose, true);
         diffWin->show();
     }
+}
+
+void GitKlientWindow::search()
+{
+    SearchDialog d(Git::Manager::instance(), this);
+    d.exec();
 }
 
 template<class T>

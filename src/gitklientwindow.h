@@ -64,6 +64,7 @@ private Q_SLOTS:
     void showBranchesStatus();
     void clone();
     void diffBranches();
+    void search();
 
 private:
     Ui::settingsBase settingsBase;

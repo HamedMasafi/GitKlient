@@ -16,6 +16,7 @@
     <Action name="repo_pull"/>
     <Action name="repo_push"/>
     <Action name="repo_merge"/>
+    <Action name="repo_search"/>
   </Menu>
   <Menu name="view">
     <Action name="view_overview"/>

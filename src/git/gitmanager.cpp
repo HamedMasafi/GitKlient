@@ -262,9 +262,9 @@ QByteArray Manager::runGit(const QStringList &args) const
     return out; // + err;
 }
 
-QString Manager::ls(const QString &place) const
+QStringList Manager::ls(const QString &place) const
 {
-    return runGit({"ls-tree", "--name-only", "-r", place});
+    return readAllNonEmptyOutput({"ls-tree", "--name-only", "-r", place});
 }
 
 QString Manager::fileContent(const QString &place, const QString &fileName) const

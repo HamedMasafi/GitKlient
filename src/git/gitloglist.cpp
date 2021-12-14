@@ -8,9 +8,57 @@
 
 namespace Git {
 
+struct LanesFactory
+{
+    QStringList parents;
+    QStringList childs;
+
+    QVector<GraphLane> lanes;
+
+    QVector<GraphLane> apply(Log *log)
+    {
+        int firstIndex{-1};
+        for (auto &parent: log->parents()) {
+            auto index = childs.indexOf(parent);
+            Q_ASSERT(index != -1);
+
+            if (firstIndex!=-1)
+                firstIndex = index;
+            else {
+                lanes[firstIndex]._joinFrom = index;
+            }
+        }
+
+        firstIndex = -1;
+        for (auto &child: log->childs()) {
+            auto index = parents.indexOf(child);
+
+            if (index ==-1)
+                index = parents.indexOf(QString());
+
+            if (index ==-1)
+                index = parents.size();
+            Q_ASSERT(index != -1);
+
+            if (firstIndex!=-1)
+                firstIndex = index;
+            else {
+                auto lane =  GraphLane(GraphLane::Start);
+                lane._joinFrom = firstIndex;
+                lanes[index] = lane;
+            }
+        }
+
+        auto list = lanes;
+        return lanes;
+    }
+};
+
 struct LanesData
 {
     QStringList hashes;
+    QStringList parents;
+    QStringList childs;
     int activeCol;
     QVector<GraphLane> lanes;
     QStringList branchNames;
@@ -79,28 +127,27 @@ struct LanesData
         auto index = hashes.indexOf(commitHash);
         index = set(index, childHashes.first(), GraphLane::Node);
 //        qDebug() << "Inserted" << commitHash << index;
-        for (int i = 1; i < childHashes.size(); ++i) {
-            auto n = set(-1, childHashes.at(i), GraphLane::Start, index);
-//            qDebug() << "Inserted" << n;
+        for (auto &hash: childHashes) {
+            set(-1, hash, GraphLane::Start, index);
         }
     }
     QList<int> find(const QString &hash)
     {
         QList<int> ret;
         for (int i = 0; i < hashes.size(); ++i) {
-            if (hashes.at(i)==hash)
+            if (hashes.at(i) == hash)
                 ret.append(i);
         }
         return ret;
     }
-    void merge(const QString &commitHash, const QStringList &childHashes) {
+    void merge(const QString &commitHash) {
         auto list = find(commitHash);
         int firstIndex{-1};
 
         for (auto &index : list) {
-            if (childHashes.size() && firstIndex == -1) {
+            if (firstIndex == -1) {
                 firstIndex = index;
-                set(index, childHashes.first(), GraphLane::Node);
+                set(index, commitHash, GraphLane::Node);
             } else {
                 set(index, QString(), GraphLane::End, firstIndex);
             }
@@ -207,8 +254,9 @@ struct LanesData
     {
         if (!log->parents().size()) {
             init(log->childs());
+        } else if (log->parents().size() == 1) {
         } else if (log->parents().size() > 1) {
-            merge(log->commitHash(), log->childs());
+            merge(log->commitHash());
         }
 
         if (log->childs().size() > 1) {
@@ -216,8 +264,7 @@ struct LanesData
         }
         else if (log->childs().size() == 1) {
             updateHash(log->commitHash(), log->childs().first());
-        }
-        else if (!log->childs().size()) {
+        } else if (!log->childs().size()) {
             for (int i = 0; i < lanes.size(); ++i) {
                 auto lane = lanes[i];
                 if (lane.type() != GraphLane::None && lane.type() != GraphLane::Transparent)
@@ -390,6 +437,13 @@ H -- commit hash              c -- committer details        m -- mark           
 
 void LogList::initGraph()
 {
+//    LanesFactory factory;
+//    for (auto i = rbegin(); i != rend(); i++) {
+//        auto &log = *i;
+//        log->_lanes = factory.apply(log);
+//    }
+//    return;
+
     LanesData cols;
 
     for (auto i = rbegin(); i != rend(); i++) {
