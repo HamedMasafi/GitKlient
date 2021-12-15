@@ -27,7 +27,6 @@ public:
     Type type() const;
     const QColor &color() const;
 
-    friend inline bool operator==(const GraphLane &, const GraphLane &);
 
     int joinFrom() const;
 
@@ -47,6 +46,7 @@ private:
     friend struct LanesData;
     friend struct LanesFactory;
 };
+bool operator==(const GraphLane &, const GraphLane &);
 
 }
 

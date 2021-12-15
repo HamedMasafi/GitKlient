@@ -10,46 +10,76 @@ namespace Git {
 
 struct LanesFactory
 {
-    QStringList parents;
+//    QStringList parents;
     QStringList childs;
 
     QVector<GraphLane> lanes;
+    struct Data {
+        QString parent;
+        QString child;
+        bool isNull;
+    };
+
+    int findEmpty() {
+        for (int i =0;i<lanes.size();++i)
+            if (lanes[i] == GraphLane())
+                return i;
+        lanes.append(GraphLane());
+        childs.append(QString());
+        return lanes.size() - 1;
+    }
+    QList<int> findByParent(const QString &hash)
+    {
+        QList<int> ret;
+        int idx{0};
+        for (auto &p: childs) {
+            if (p == hash)
+                ret << idx;
+            idx++;
+        }
+        return ret;
+    }
 
     QVector<GraphLane> apply(Log *log)
     {
-        int firstIndex{-1};
-        for (auto &parent: log->parents()) {
-            auto index = childs.indexOf(parent);
-            Q_ASSERT(index != -1);
+        for (int i = 0; i < lanes.size(); ++i) {
+            auto lane = lanes[i];
+            if (lane.type() == GraphLane::End)
+                lane = GraphLane{};
+            else if (lane.type() == GraphLane::Node)
+                lane = GraphLane(GraphLane::Pipe);
+            else if (lane.type() == GraphLane::Start)
+                lane = GraphLane(GraphLane::Pipe);
 
+            lane._joinFrom = lane._joinTo = -1;
+            lanes.replace(i, lane);
+        }
+
+        auto myList = findByParent(log->commitHash());
+
+        int firstIndex{-1};
+        for (auto &p: myList) {
             if (firstIndex!=-1)
-                firstIndex = index;
+                firstIndex = p;
             else {
-                lanes[firstIndex]._joinFrom = index;
+                lanes[p]._joinTo = firstIndex;
+                lanes[p]._type = GraphLane::End;
             }
         }
 
         firstIndex = -1;
-        for (auto &child: log->childs()) {
-            auto index = parents.indexOf(child);
-
-            if (index ==-1)
-                index = parents.indexOf(QString());
-
-            if (index ==-1)
-                index = parents.size();
-            Q_ASSERT(index != -1);
+        for (auto &ch: log->childs()) {
+            auto fi = findEmpty();
+            lanes[fi]._type = GraphLane::Start;
+            childs[fi] = ch;
 
             if (firstIndex!=-1)
-                firstIndex = index;
+                firstIndex = fi;
             else {
-                auto lane =  GraphLane(GraphLane::Start);
-                lane._joinFrom = firstIndex;
-                lanes[index] = lane;
+                lanes[fi]._joinFrom = firstIndex;
             }
         }
 
-        auto list = lanes;
         return lanes;
     }
 };
@@ -437,12 +467,12 @@ H -- commit hash              c -- committer details        m -- mark           
 
 void LogList::initGraph()
 {
-//    LanesFactory factory;
-//    for (auto i = rbegin(); i != rend(); i++) {
-//        auto &log = *i;
-//        log->_lanes = factory.apply(log);
-//    }
-//    return;
+    LanesFactory factory;
+    for (auto i = rbegin(); i != rend(); i++) {
+        auto &log = *i;
+        log->_lanes = factory.apply(log);
+    }
+    return;
 
     LanesData cols;
 
