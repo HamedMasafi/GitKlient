@@ -156,7 +156,29 @@ void GraphPainter::paintLane(QPainter *painter, const Git::GraphLane &lane, int 
         break;//just to avoid compiler warning
     }
 
-    if (lane.joinTo()!=-1) {
+    for (auto &i: lane.upJoins()) {
+        QPainterPath p;
+        p.moveTo(point(i));
+        p.cubicTo(centerGuide(index, Qt::LeftEdge),
+                  centerGuide(index, Qt::TopEdge),
+                  point(index, Qt::AlignTop));
+        painter->setBrush(Qt::transparent);
+        painter->drawPath(p);
+        if (lane.type() != Git::GraphLane::End)
+            qDebug() << "Invalid lane" << lane.type()<<lane.type();
+    }
+    for (auto &i: lane.bottomJoins()) {
+        QPainterPath p;
+        p.moveTo(point(index, Qt::AlignBottom));
+        p.cubicTo(centerGuide(index, Qt::BottomEdge),
+                  centerGuide(index, Qt::LeftEdge),
+                  point(i));
+        painter->setBrush(Qt::transparent);
+        //        painter->setPen(Qt::DotLine);
+        painter->drawPath(p);
+    }
+
+    if (lane.joinTo() != -1) {
         QPainterPath p;
         p.moveTo(point(lane.joinTo()));
         p.cubicTo(centerGuide(index, Qt::LeftEdge),

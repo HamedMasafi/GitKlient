@@ -23,6 +23,21 @@ void GraphLane::generateRandomColor()
     //    _color = QColor(r->bounded(0, 150), r->bounded(0, 150), r->bounded(0, 150));
 }
 
+void GraphLane::setType(Type newType)
+{
+    _type = newType;
+}
+
+const QList<int> &GraphLane::upJoins() const
+{
+    return _upJoins;
+}
+
+const QList<int> &GraphLane::bottomJoins() const
+{
+    return _bottomJoins;
+}
+
 int GraphLane::joinTo() const
 {
     return _joinTo;

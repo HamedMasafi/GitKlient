@@ -1,4 +1,4 @@
-#ifndef GITGRAPHLANE_H
+﻿#ifndef GITGRAPHLANE_H
 #define GITGRAPHLANE_H
 
 #include <QColor>
@@ -32,6 +32,12 @@ public:
 
     int joinTo() const;
 
+    const QList<int> &bottomJoins() const;
+
+    const QList<int> &upJoins() const;
+
+    void setType(Type newType);
+
 private:
     void generateRandomColor();
 
@@ -44,7 +50,9 @@ private:
 
     friend class LogList;
     friend struct LanesData;
+    friend struct LanesData2;
     friend struct LanesFactory;
+    friend struct LanesFactory2;
 };
 bool operator==(const GraphLane &, const GraphLane &);
 
