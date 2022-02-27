@@ -9,9 +9,112 @@
 namespace Git {
 
 struct LanesFactory2 {
+
+    QList<int> findHashes(const QString &hash, const QStringList &hashes) {
+        int index{0};
+        QList<int> ret;
+        for (auto const &h: qAsConst(hashes)) {
+            if (hash == h)
+                ret.append(index);
+            index++;
+        }
+        return ret;
+    }
+
+    QVector<GraphLane> initLanes(const QStringList &hashes, const QString &myHash, int &myIndex)
+    {
+        int index{0};
+        QVector<GraphLane> lanes;
+        lanes.reserve(hashes.size());
+        for (const auto &hash : hashes) {
+            if (hash == QString()) {
+                lanes.append(GraphLane::Transparent);
+            } else {
+                if (hash == myHash) {
+                    lanes.append(GraphLane::Node);
+                    myIndex = index;
+                } else {
+                    lanes.append(hash == myHash ? GraphLane::Node : GraphLane::Pipe);
+                }
+            }
+            index++;
+        }
+        return lanes;
+    }
+
+    QList<int> setHashes(const QStringList &hashesList, QStringList &hashes) {
+        QList<int> ret;
+        /*QMutableListIterator<QString> i(hashes);
+        int index{0};
+
+        while (i.hasNext() && index < hashesList.size()) {
+            auto hash = i.next();
+            if (hash == QString()) {
+                i.setValue(hashesList.at(index));
+                ret.append(index);
+                index++;
+            }
+        }
+        for (int j = 0; j < hashesList.size() - index; ++j) {
+            hashes.append(hashesList.at(index));
+            ret.append(index);
+            index++;
+        }*/
+        for (const auto &h: hashesList) {
+//            auto index = hashes.indexOf(h);
+//            if (index == -1)
+                auto index = hashes.indexOf(QString());
+
+            if (index == -1) {
+                hashes.append(h);
+                index = hashes.size() - 1;
+            } else {
+                hashes.replace(index, h);
+            }
+            ret.append(index);
+        }
+        return ret;
+    }
+
+
+    void join(const QString &hash, QStringList &hashList, QVector<GraphLane> &lanes) {
+        int firstIndex{-1};
+        auto list = findHashes(hash, hashList);
+        for (auto i = list.begin(); i != list.end(); ++i) {
+            if (firstIndex == -1) {
+                firstIndex = *i;
+                set(*i, GraphLane::Node, lanes);
+            } else {
+                GraphLane lane{GraphLane::Transparent};
+                lane._bottomJoins = {firstIndex};
+                set(*i, lane, lanes);
+            }
+            hashes.replace(*i, QString());
+        }
+    }
+
+    void fork(const QStringList &childrenList, QStringList &hashList, QVector<GraphLane> &lanes, bool isStart, const int &myInedx) {
+        auto list = setHashes(childrenList, hashList);
+        auto children = childrenList;
+        int firstIndex{myInedx};
+        lanes.reserve(hashes.size());
+        firstIndex = -1;
+        for (auto i = list.begin(); i != list.end(); ++i) {
+            if (firstIndex == -1) {
+                firstIndex = myInedx;// *i;
+                set(*i, isStart ? GraphLane::Start : GraphLane::Node, lanes);
+            } else {
+                GraphLane lane{GraphLane::Transparent};
+                lane._upJoins = {firstIndex};
+                set(*i, lane, lanes);
+            }
+            hashes.replace(*i, children.takeFirst());
+        }
+    }
+
     QStringList hashes;
 
-    QList<int> findHashes(const QString &hash) {
+    /*QList<int> findHashes(const QString &hash) {
         int index{0};
         QList<int> ret;
         for (auto const &h: qAsConst(hashes)) {
@@ -41,6 +144,7 @@ struct LanesFactory2 {
         }
         return ret;
     }
+    */
     void set(const int &index, const GraphLane &lane, QVector<GraphLane> &lanes) {
         if (index < lanes.size())
             lanes.replace(index, lane);
@@ -50,44 +154,10 @@ struct LanesFactory2 {
     }
     QVector<GraphLane> apply(Log *log)
     {
-        QVector<GraphLane> lanes;
-        GraphLane *firstLane{nullptr};
-        lanes.reserve(hashes.size());
-        int firstIndex{-1};
-
-        for (int i = 0; i < hashes.size(); i++) {
-            if (hashes.at(i) != QString())
-                set(i, GraphLane::Pipe, lanes);
-        }
-
-        auto list = findHashes(log->commitHash());
-        for (auto i = list.begin(); i != list.end(); ++i) {
-            if (firstIndex == -1) {
-                firstIndex = *i;
-                set(*i, GraphLane::Node, lanes);
-            } else {
-                GraphLane lane{GraphLane::End};
-                lane._bottomJoins = {firstIndex};
-                set(*i, lane, lanes);
-            }
-            hashes.replace(*i, QString());
-        }
-
-        list = setHashes(log->childs());
-        auto childs = log->childs();
-        lanes.reserve(hashes.size());
-        firstIndex = -1;
-        for (auto i = list.begin(); i != list.end(); ++i) {
-            if (firstIndex == -1) {
-                firstIndex = *i;
-                set(*i, GraphLane::Node, lanes);
-            } else {
-                GraphLane lane{GraphLane::Start};
-                lane._upJoins = {firstIndex};
-                set(*i, lane, lanes);
-            }
-            hashes.replace(*i, childs.takeFirst());
-        }
+        int myIndex = -1;
+        QVector<GraphLane> lanes = initLanes(hashes, log->commitHash(), myIndex);
+        join(log->commitHash(), hashes, lanes);
+        fork(log->childs(), hashes, lanes, !log->parents().size(), myIndex);
         return lanes;
     }
 };
@@ -715,7 +785,7 @@ H -- commit hash              c -- committer details        m -- mark           
 
 void LogList::initGraph()
 {
-    LanesData2 factory;
+    LanesFactory2 factory;
     for (auto i = rbegin(); i != rend(); i++) {
         auto &log = *i;
         log->_lanes = factory.apply(log);
