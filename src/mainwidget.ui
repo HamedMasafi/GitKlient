@@ -92,6 +92,12 @@ QToolButto2 {
           <iconset theme="git-overview">
            <normaloff>.</normaloff>.</iconset>
          </property>
+         <property name="iconSize">
+          <size>
+           <width>24</width>
+           <height>24</height>
+          </size>
+         </property>
          <property name="checkable">
           <bool>true</bool>
          </property>
@@ -114,6 +120,12 @@ QToolButto2 {
          <property name="icon">
           <iconset theme="git-branch">
            <normaloff>.</normaloff>.</iconset>
+         </property>
+         <property name="iconSize">
+          <size>
+           <width>24</width>
+           <height>24</height>
+          </size>
          </property>
          <property name="checkable">
           <bool>true</bool>
@@ -138,6 +150,12 @@ QToolButto2 {
           <iconset theme="git-commit">
            <normaloff>.</normaloff>.</iconset>
          </property>
+         <property name="iconSize">
+          <size>
+           <width>24</width>
+           <height>24</height>
+          </size>
+         </property>
          <property name="checkable">
           <bool>true</bool>
          </property>
@@ -160,6 +178,12 @@ QToolButto2 {
          <property name="icon">
           <iconset theme="git-stash">
            <normaloff>.</normaloff>.</iconset>
+         </property>
+         <property name="iconSize">
+          <size>
+           <width>24</width>
+           <height>24</height>
+          </size>
          </property>
          <property name="checkable">
           <bool>true</bool>
@@ -184,6 +208,12 @@ QToolButto2 {
           <iconset theme="git-submodules">
            <normaloff>.</normaloff>.</iconset>
          </property>
+         <property name="iconSize">
+          <size>
+           <width>24</width>
+           <height>24</height>
+          </size>
+         </property>
          <property name="checkable">
           <bool>true</bool>
          </property>
@@ -207,6 +237,12 @@ QToolButto2 {
           <iconset theme="git-remote">
            <normaloff>.</normaloff>.</iconset>
          </property>
+         <property name="iconSize">
+          <size>
+           <width>24</width>
+           <height>24</height>
+          </size>
+         </property>
          <property name="checkable">
           <bool>true</bool>
          </property>
@@ -229,6 +265,12 @@ QToolButto2 {
          <property name="icon">
           <iconset theme="git-tag">
            <normaloff>.</normaloff>.</iconset>
+         </property>
+         <property name="iconSize">
+          <size>
+           <width>24</width>
+           <height>24</height>
+          </size>
          </property>
          <property name="checkable">
           <bool>true</bool>

@@ -10,6 +10,9 @@ namespace Git {
 
 struct LanesFactory {
 
+
+    QStringList hashes;
+
     QList<int> findHashes(const QString &hash, const QStringList &hashes) {
         int index{0};
         QList<int> ret;
@@ -21,8 +24,14 @@ struct LanesFactory {
         return ret;
     }
 
-    QVector<GraphLane> initLanes(const QStringList &hashes, const QString &myHash, int &myIndex)
+    QVector<GraphLane> initLanes(QStringList &hashes, const QString &myHash, int &myIndex)
     {
+        if (!hashes.size())
+            return QVector<GraphLane>();
+
+        while (hashes.last() == QString())
+            hashes.removeLast();
+
         int index{0};
         QVector<GraphLane> lanes;
         lanes.reserve(hashes.size());
@@ -42,18 +51,18 @@ struct LanesFactory {
         return lanes;
     }
 
-    QList<int> setHashes(const QStringList &hashesList, QStringList &hashes, const int &myIndex) {
+    QList<int> setHashes(const QStringList &children, QStringList &hashes, const int &myIndex) {
         QList<int> ret;
         bool myIndexSet{myIndex == -1 ? true : false};
-        int index;
+        int index{-1};
 
-        for (const auto &h: hashesList) {
-
+        for (const auto &h: children) {
+            index = -1;
             if (!myIndexSet) {
                 index = myIndex;
                 myIndexSet = true;
             } else {
-                index = hashes.indexOf(h);
+//                index = hashes.indexOf(h);
             }
             if (index == -1)
                 index = hashes.indexOf(QString());
@@ -71,49 +80,56 @@ struct LanesFactory {
 
 
     void join(const QString &hash, QStringList &hashList, QVector<GraphLane> &lanes, const int &myIndex) {
-        int firstIndex{-10};
+        int firstIndex{-1};
         auto list = findHashes(hash, hashList);
+        if (list.size() > 1) {
+            qDebug() << "11";
+        }
         for (auto i = list.begin(); i != list.end(); ++i) {
             if (firstIndex == -1) {
                 firstIndex = *i;
-                set(*i, GraphLane::Node, lanes);
+                set(*i, list.contains(myIndex) ? GraphLane::End : GraphLane::End, lanes);
             } else {
-                if (*i==myIndex) {
-                                    set(*i, GraphLane::Node, lanes);
-                } else {
-                    GraphLane lane{GraphLane::Transparent};
-                    lane._bottomJoins = {myIndex};
-                    set(*i, lane, lanes);
-                }
+                auto lane = lanes.at(*i);
+//                GraphLane lane{GraphLane::Test};
+//                if (lane.type() == GraphLane::None)
+//                    _lane._type = GraphLane::Transparent
+                lane._bottomJoins.append(firstIndex);
+                lane._type = GraphLane::Transparent;
+                set(*i, lane, lanes);
             }
             hashes.replace(*i, QString());
         }
     }
 
     void fork(const QStringList &childrenList, QStringList &hashList, QVector<GraphLane> &lanes, bool isStart, const int &myInedx) {
-        auto list = setHashes(childrenList, hashList, myInedx);
+        auto list = setHashes(childrenList, hashList, -1);
         auto children = childrenList;
         int firstIndex{myInedx};
         lanes.reserve(hashes.size());
-//        firstIndex = -1;
+        firstIndex = -1;
         for (auto i = list.begin(); i != list.end(); ++i) {
             if (firstIndex == -1) {
-                firstIndex = myInedx;// *i;
+                firstIndex = *i;
                 set(*i, isStart ? GraphLane::Start : GraphLane::Node, lanes);
             } else {
-                if (*i==myInedx){
-                    set(*i, isStart ? GraphLane::Start : GraphLane::Node, lanes);
-                } else {
-                    GraphLane lane{GraphLane::Transparent};
-                    lane._upJoins = {myInedx};
-                    set(*i, lane, lanes);
-                }
+                //                if (*i==myInedx){
+                //                    set(*i, isStart ? GraphLane::Start : GraphLane::Node, lanes);
+                //                } else {
+                auto in = *i;
+//                auto lane = lanes.at(*i);
+//                lane._type = GraphLane::Node;
+
+                                    GraphLane lane{GraphLane::Transparent};
+                lane._upJoins.append(firstIndex);
+//                lanes[firstIndex]._upJoins.append(*i);
+                set(*i, lane, lanes);
+                //                }
             }
             hashes.replace(*i, children.takeFirst());
         }
     }
 
-    QStringList hashes;
 
     /*QList<int> findHashes(const QString &hash) {
         int index{0};
@@ -166,7 +182,12 @@ struct LanesFactory {
 //                hashes.replace(myIndex, log->childs().first());
             fork(log->childs(), hashes, lanes, !log->parents().size(), myIndex);
         }
+
         return lanes;
+        int n = lanes.size() - 1;
+        while (lanes[n].type() == GraphLane())
+            --n;
+        return lanes.mid(0, lanes.size() - n);
     }
 };
 

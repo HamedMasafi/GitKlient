@@ -134,6 +134,9 @@ void GraphPainter::paintLane(QPainter *painter, const Git::GraphLane &lane, int 
 
     switch (lane.type()) {
     case Git::GraphLane::Start:
+        painter->drawLine(point(index), point(index, Qt::AlignTop));
+        painter->setBrush(Qt::white);
+        painter->drawEllipse(point(index), 3, 3);
         break;
     case Git::GraphLane::Pipe:
         painter->drawLine(point(index, Qt::AlignTop), point(index, Qt::AlignBottom));
@@ -144,6 +147,9 @@ void GraphPainter::paintLane(QPainter *painter, const Git::GraphLane &lane, int 
         painter->drawEllipse(point(index), 3, 3);
         break;
     case Git::GraphLane::End:
+        painter->drawLine(point(index), point(index, Qt::AlignBottom));
+        painter->setBrush(Qt::white);
+        painter->drawEllipse(point(index), 3, 3);
         break;
     case Git::GraphLane::Test:
         painter->drawLine(point(index, Qt::AlignTop | Qt::AlignLeft),
@@ -165,8 +171,6 @@ void GraphPainter::paintLane(QPainter *painter, const Git::GraphLane &lane, int 
                   point(index, Qt::AlignTop));
         painter->setBrush(Qt::transparent);
         painter->drawPath(p);
-        if (lane.type() != Git::GraphLane::End)
-            qDebug() << "Invalid lane" << lane.type()<<lane.type();
     }
     for (auto &i: lane.bottomJoins()) {
         QPainterPath p;
