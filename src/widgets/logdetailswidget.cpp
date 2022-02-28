@@ -2,6 +2,7 @@
 #include "git/gitlog.h"
 #include "git/gitmanager.h"
 #include "GitKlientSettings.h"
+#include <KLocalizedString>
 
 //#include <QCalendar>
 
@@ -74,19 +75,19 @@ void LogDetailsWidget::createText()
     clear();
     QString html;
     appendParagraph(html, _log->subject());
-    appendParagraph(html, tr("Branch"), _log->refLog());
-    appendParagraph(html, tr("Committer"), QStringLiteral("%1 &lt;%2&gt;").arg(_log->committerName(), _log->committerEmail()));
-    appendParagraph(html, tr("Author"), QStringLiteral("%1 &lt;%2&gt;").arg(_log->authorName(), _log->authorEmail()));
-    appendParagraph(html, tr("Date"), date);
-    appendParagraph(html, "Hash", createHashLink(_log->commitHash()));
+    appendParagraph(html, i18n("Branch"), _log->refLog());
+    appendParagraph(html, i18n("Committer"), QStringLiteral("%1 &lt;%2&gt;").arg(_log->committerName(), _log->committerEmail()));
+    appendParagraph(html, i18n("Author"), QStringLiteral("%1 &lt;%2&gt;").arg(_log->authorName(), _log->authorEmail()));
+    appendParagraph(html, i18n("Date"), date);
+    appendParagraph(html, i18n("Hash"), createHashLink(_log->commitHash()));
 
     if (_log->parents().size())
         appendParagraph(html,
-                        _log->parents().size() == 1 ? tr("Parent") : tr("Parents"),
+                        _log->parents().size() == 1 ? i18n("Parent") : i18n("Parents"),
                         parentHashHtml);
     if (_log->childs().size())
         appendParagraph(html,
-                        _log->childs().size() == 1 ? tr("Child") : tr("Childs"),
+                        _log->childs().size() == 1 ? i18n("Child") : i18n("Children"),
                         childsHashHtml);
     appendParagraph(html, _log->body());
     appendParagraph(html, QStringLiteral("<b>Changed files:</b><ul>%1</ul>").arg(filesHtml));

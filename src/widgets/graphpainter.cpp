@@ -8,57 +8,6 @@
 
 #define HEIGHT 30
 
-GraphPainter::GraphPainter(HistoryModel *model, QObject *parent)
-    : QStyledItemDelegate(parent), _model(model)
-{
-    _colors = {
-        Qt::red, Qt::blue, Qt::green, Qt::magenta, Qt::darkMagenta, Qt::darkBlue, Qt::darkBlue,
-        Qt::darkRed, Qt::darkYellow, Qt::darkGreen
-    };
-}
-
-void GraphPainter::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
-{
-
-    auto log = _model->log(index);
-
-
-    painter->setRenderHints(QPainter::Antialiasing);
-
-//    painter->fillRect(option.rect, option.palette.base());
-    if (option.state & QStyle::State_Selected)
-        painter->fillRect(option.rect, option.palette.highlight());
-    else if (option.state & QStyle::State_MouseOver)
-        painter->fillRect(option.rect, option.palette.brush(QPalette::Normal, QPalette::Highlight));
-//    else if (index.row() & 1)
-//        painter->fillRect(option.rect, option.palette.alternateBase());
-    else
-        painter->fillRect(option.rect, option.palette.base());
-
-    painter->save();
-    painter->setClipRect(option.rect, Qt::IntersectClip);
-    painter->translate(option.rect.topLeft());
-
-    int x{-1};
-    for (auto &l: log->lanes()) {
-        ++x;
-        if (l.type() == Git::GraphLane::None)
-            continue;
-
-        if (x >= _colors.size()) {
-            painter->setPen(Qt::black);
-            painter->setBrush(Qt::black);
-        } else {
-            painter->setPen(_colors.at(x));
-            painter->setBrush(_colors.at(x));
-        }
-//        painter->setPen(l.color());
-//        painter->setBrush(l.color());
-        paintLane(painter, l, x);
-    }
-    painter->restore();
-
-}
 
 QPoint center(int x) {
     return {(x * HEIGHT) + (HEIGHT / 2), HEIGHT / 2};
@@ -118,16 +67,73 @@ QPoint centerGuide(int x, const Qt::Edge &edge) {
     return pt;
 }
 
+
+GraphPainter::GraphPainter(HistoryModel *model, QObject *parent)
+    : QStyledItemDelegate(parent), _model(model)
+{
+    _colors = {
+        Qt::red, Qt::blue, Qt::darkGreen, Qt::magenta, Qt::darkMagenta, Qt::darkBlue, Qt::darkBlue,
+        Qt::darkRed, Qt::darkYellow, Qt::darkGreen
+    };
+}
+
+void GraphPainter::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
+{
+
+    auto log = _model->log(index);
+
+
+    painter->setRenderHints(QPainter::Antialiasing);
+
+//    painter->fillRect(option.rect, option.palette.base());
+    if (option.state & QStyle::State_Selected)
+        painter->fillRect(option.rect, option.palette.highlight());
+//    else if (option.state & QStyle::State_MouseOver)
+//        painter->fillRect(option.rect, option.palette.brush(QPalette::Normal, QPalette::Highlight));
+//    else if (index.row() & 1)
+//        painter->fillRect(option.rect, option.palette.alternateBase());
+    else
+        painter->fillRect(option.rect, option.palette.base());
+
+    painter->save();
+    painter->setClipRect(option.rect, Qt::IntersectClip);
+    painter->translate(option.rect.topLeft());
+
+    int x{-1};
+    for (auto &l: log->lanes()) {
+        ++x;
+        if (l.type() == Git::GraphLane::None)
+            continue;
+
+        if (x >= _colors.size()) {
+            painter->setPen(Qt::black);
+            painter->setBrush(Qt::black);
+        } else {
+            painter->setPen(_colors.at(x));
+            painter->setBrush(_colors.at(x));
+        }
+//        painter->setPen(l.color());
+//        painter->setBrush(l.color());
+        paintLane(painter, l, x);
+    }
+    QRect rc(
+        log->lanes().size() * HEIGHT,
+        0,
+        painter->fontMetrics().horizontalAdvance(log->subject()),
+        HEIGHT
+    );
+    painter->setPen(option.palette.color(QPalette::Text));
+    painter->drawText(rc, Qt::AlignVCenter, log->subject());
+
+    painter->restore();
+
+}
+
 void GraphPainter::paintLane(QPainter *painter, const Git::GraphLane &lane, int index) const
 {
 
     switch (lane.type()) {
     case Git::GraphLane::Start:
-        if (lane.joinTo() == -1) {
-            painter->drawLine(point(index), point(index, Qt::AlignTop));
-            painter->setBrush(Qt::white);
-            painter->drawEllipse(point(index), 3, 3);
-        }
         break;
     case Git::GraphLane::Pipe:
         painter->drawLine(point(index, Qt::AlignTop), point(index, Qt::AlignBottom));
@@ -138,11 +144,6 @@ void GraphPainter::paintLane(QPainter *painter, const Git::GraphLane &lane, int 
         painter->drawEllipse(point(index), 3, 3);
         break;
     case Git::GraphLane::End:
-        if (lane.joinFrom() == -1) {
-            painter->drawLine(point(index), point(index, Qt::AlignBottom));
-            painter->setBrush(Qt::white);
-            painter->drawEllipse(point(index), 3, 3);
-        }
         break;
     case Git::GraphLane::Test:
         painter->drawLine(point(index, Qt::AlignTop | Qt::AlignLeft),
@@ -175,28 +176,6 @@ void GraphPainter::paintLane(QPainter *painter, const Git::GraphLane &lane, int 
                   point(i));
         painter->setBrush(Qt::transparent);
         //        painter->setPen(Qt::DotLine);
-        painter->drawPath(p);
-    }
-
-    if (lane.joinTo() != -1) {
-        QPainterPath p;
-        p.moveTo(point(lane.joinTo()));
-        p.cubicTo(centerGuide(index, Qt::LeftEdge),
-                  centerGuide(index, Qt::TopEdge),
-                  point(index, Qt::AlignTop));
-        painter->setBrush(Qt::transparent);
-        painter->drawPath(p);
-        if (lane.type() != Git::GraphLane::End)
-            qDebug() << "Invalid lane" << lane.type()<<lane.type();
-    }
-    if (lane.joinFrom() != -1) {
-        QPainterPath p;
-        p.moveTo(point(index, Qt::AlignBottom));
-        p.cubicTo(centerGuide(index, Qt::BottomEdge),
-                  centerGuide(index, Qt::LeftEdge),
-                  point(lane.joinFrom()));
-        painter->setBrush(Qt::transparent);
-//        painter->setPen(Qt::DotLine);
         painter->drawPath(p);
     }
 }

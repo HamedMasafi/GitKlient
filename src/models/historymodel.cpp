@@ -48,7 +48,7 @@ int HistoryModel::rowCount(const QModelIndex &parent) const
 int HistoryModel::columnCount(const QModelIndex &parent) const
 {
     Q_UNUSED(parent)
-    return _branch.isEmpty() ? 2 : 3;
+    return _branch.isEmpty() ? 1 : 3;
 }
 
 QVariant HistoryModel::data(const QModelIndex &index, int role) const
