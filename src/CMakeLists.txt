@@ -54,6 +54,7 @@ ki18n_wrap_ui(gitklient_SRCS
     widgets/commitswidget.ui
     widgets/tagswidget.ui
     widgets/difftreeview.ui
+    widgets/diffwidget.ui
 
     dialogs/mergeopenfilesdialog.ui
     dialogs/mergecloseeventdialog.ui

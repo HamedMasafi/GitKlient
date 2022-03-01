@@ -12,6 +12,7 @@ class CommitsWidget : public WidgetBase, private Ui::CommitsWidget
 
     TreeModel *_repoModel;
     QMenu *_branchesMenu;
+    QString _mainBranch;
 
 public:
     explicit CommitsWidget(QWidget *parent = nullptr);
@@ -19,7 +20,7 @@ public:
     void reload() override;
 
 private slots:
-    void on_treeViewRepo_activated(const QModelIndex &index);
+    void on_treeViewRepo_itemActivated(const QModelIndex &index);
     void on_treeViewRepo_customContextMenuRequested(const QPoint &pos);
 
     void on_actionBrowse_triggered();

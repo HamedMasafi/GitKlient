@@ -33,13 +33,13 @@ void DiffWidget::compare()
 {
     auto segments = Diff::diff(_oldFile.content(), _newFile.content());
 
-    _oldCodeEditor->clearAll();
-    _newCodeEditor->clearAll();
+    leftCodeEditor->clearAll();
+    rightCodeEditor->clearAll();
 
-    _oldCodeEditor->setHighlighting(_oldFile.fileName());
-    _newCodeEditor->setHighlighting(_newFile.fileName());
-    _segmentConnector->setSegments(segments);
-    _segmentConnector->update();
+    leftCodeEditor->setHighlighting(_oldFile.fileName());
+    rightCodeEditor->setHighlighting(_newFile.fileName());
+    segmentConnector->setSegments(segments);
+    segmentConnector->update();
 
     for (auto &s: segments) {
         CodeEditor::BlockType oldBlockType, newBlockType;
@@ -62,11 +62,11 @@ void DiffWidget::compare()
 
         if (m_sameSize) {
             int size = qMax(s->oldText.size(), s->newText.size());
-            _oldCodeEditor->append(s->oldText, oldBlockType, s, size);
-            _newCodeEditor->append(s->newText, newBlockType, s, size);
+            leftCodeEditor->append(s->oldText, oldBlockType, s, size);
+            rightCodeEditor->append(s->newText, newBlockType, s, size);
         } else {
-            _oldCodeEditor->append(s->oldText, oldBlockType, s);
-            _newCodeEditor->append(s->newText, newBlockType, s);
+            leftCodeEditor->append(s->oldText, oldBlockType, s);
+            rightCodeEditor->append(s->newText, newBlockType, s);
         }
     }
 }
@@ -76,35 +76,48 @@ void DiffWidget::showHiddenChars(bool show)
     if (show) {
         auto n = _defaultOption;
         n.setFlags(QTextOption::ShowTabsAndSpaces | QTextOption::ShowDocumentTerminator);
-        _oldCodeEditor->document()->setDefaultTextOption(n);
-        _newCodeEditor->document()->setDefaultTextOption(n);
+        leftCodeEditor->document()->setDefaultTextOption(n);
+        rightCodeEditor->document()->setDefaultTextOption(n);
     } else {
-        _oldCodeEditor->document()->setDefaultTextOption(_defaultOption);
-        _newCodeEditor->document()->setDefaultTextOption(_defaultOption);
+        leftCodeEditor->document()->setDefaultTextOption(_defaultOption);
+        rightCodeEditor->document()->setDefaultTextOption(_defaultOption);
     }
+}
+
+void DiffWidget::on_splitter_splitterMoved(int, int)
+{
+
 }
 
 CodeEditor *DiffWidget::oldCodeEditor() const
 {
-    return _oldCodeEditor;
+    return leftCodeEditor;
 }
 
 CodeEditor *DiffWidget::newCodeEditor() const
 {
-    return _newCodeEditor;
+    return rightCodeEditor;
 }
 
 DiffWidget::DiffWidget(QWidget *parent) : WidgetBase(parent), _oldFile(), _newFile()
 {
-    setupUi();
+    setupUi(this);
+    segmentConnectorContainer->setMinimumWidth(80);
+    segmentConnectorContainer->setMaximumWidth(80);
+    segmentConnector->setLeft(leftCodeEditor);
+    segmentConnector->setRight(rightCodeEditor);
 }
 
 DiffWidget::DiffWidget(const Git::File &oldFile, const Git::File &newFile, QWidget *parent)
     : WidgetBase(parent), _oldFile(oldFile), _newFile(newFile)
 {
-    setupUi();
+    setupUi(this);
+    segmentConnectorContainer->setMinimumWidth(80);
+    segmentConnectorContainer->setMaximumWidth(80);
+    segmentConnector->setLeft(leftCodeEditor);
+    segmentConnector->setRight(rightCodeEditor);
 }
-
+/*
 void DiffWidget::setupUi()
 {
     _oldCodeEditor = new CodeEditor(this);
@@ -154,7 +167,7 @@ void DiffWidget::setupUi()
             &DiffWidget::newCodeEditor_scroll);
 
 }
-
+*/
 
 void DiffWidget::oldCodeEditor_scroll(int value)
 {
@@ -162,11 +175,11 @@ void DiffWidget::oldCodeEditor_scroll(int value)
     if (b)
         return;
     b = true;
-    _newCodeEditor->verticalScrollBar()->setValue(
-        (int) (((float) value / (float) _newCodeEditor->verticalScrollBar()->maximum())
-               * (float) _newCodeEditor->verticalScrollBar()->maximum()));
+    rightCodeEditor->verticalScrollBar()->setValue(
+        (int) (((float) value / (float) rightCodeEditor->verticalScrollBar()->maximum())
+               * (float) rightCodeEditor->verticalScrollBar()->maximum()));
     b = false;
-    _segmentConnector->update();
+    segmentConnector->update();
 }
 
 void DiffWidget::newCodeEditor_scroll(int value)
@@ -175,11 +188,11 @@ void DiffWidget::newCodeEditor_scroll(int value)
     if (b)
         return;
     b = true;
-    _oldCodeEditor->verticalScrollBar()->setValue(
-        (int) (((float) value / (float) _oldCodeEditor->verticalScrollBar()->maximum())
-               * (float) _oldCodeEditor->verticalScrollBar()->maximum()));
+    leftCodeEditor->verticalScrollBar()->setValue(
+        (int) (((float) value / (float) leftCodeEditor->verticalScrollBar()->maximum())
+               * (float) leftCodeEditor->verticalScrollBar()->maximum()));
     b = false;
-    _segmentConnector->update();
+    segmentConnector->update();
 }
 
 void DiffWidget::oldCodeEditor_blockSelected()

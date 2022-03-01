@@ -27,16 +27,15 @@ void HistoryModel::setBranch(const QString &newBranch)
 
 void HistoryModel::reload()
 {
+    beginResetModel();
     if (_logs.size()) {
-        beginRemoveRows(QModelIndex(), 0, _logs.size() - 1);
         qDeleteAll(_logs);
         _logs.clear();
-        endRemoveRows();
     }
 
     _logs.load();
-    beginInsertRows(QModelIndex(), 0, _logs.size() - 1);
-    endInsertRows();
+
+    endResetModel();
 }
 
 int HistoryModel::rowCount(const QModelIndex &parent) const
@@ -114,7 +113,7 @@ Git::Log *HistoryModel::log(const QModelIndex &index) const
     if (index.row() < 0 || index.row() >= _logs.size())
         return nullptr;
 
-    return Git::Manager::instance()->logs().at(index.row());
+    return _logs.at(index.row());
 }
 
 QModelIndex HistoryModel::findIndexByHash(const QString &hash) const

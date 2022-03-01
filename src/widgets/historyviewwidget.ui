@@ -14,7 +14,8 @@
    <string>Overview</string>
   </property>
   <property name="windowIcon">
-   <iconset theme="git-overview"/>
+   <iconset theme="git-overview">
+    <normaloff>.</normaloff>.</iconset>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <property name="leftMargin">
@@ -34,7 +35,7 @@
      <property name="orientation">
       <enum>Qt::Vertical</enum>
      </property>
-     <widget class="QTreeView" name="treeViewHistory">
+     <widget class="TreeView" name="treeViewHistory">
       <property name="contextMenuPolicy">
        <enum>Qt::CustomContextMenu</enum>
       </property>
@@ -56,6 +57,11 @@
    <class>LogDetailsWidget</class>
    <extends>QTextBrowser</extends>
    <header>widgets/logdetailswidget.h</header>
+  </customwidget>
+  <customwidget>
+   <class>TreeView</class>
+   <extends>QTreeView</extends>
+   <header>widgets/treeview.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

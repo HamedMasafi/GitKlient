@@ -55,7 +55,7 @@ void HistoryViewWidget::setBranch(const QString &branchName)
         treeViewHistory->setCurrentIndex(_historyModel->index(0));
 }
 
-void HistoryViewWidget::on_treeViewHistory_activated(const QModelIndex &index)
+void HistoryViewWidget::on_treeViewHistory_itemActivated(const QModelIndex &index)
 {
     auto log = _historyModel->log(index);
     if (!log)
@@ -69,7 +69,7 @@ void HistoryViewWidget::on_textBrowser_hashClicked(const QString &hash)
     auto index = _historyModel->findIndexByHash(hash);
     if (index.isValid()) {
         treeViewHistory->setCurrentIndex(index);
-        on_treeViewHistory_activated(index);
+        on_treeViewHistory_itemActivated(index);
     }
 }
 
@@ -98,11 +98,6 @@ void HistoryViewWidget::browseCommit()
 void HistoryViewWidget::on_treeViewHistory_customContextMenuRequested(const QPoint &pos)
 {
     _commitMenu->popup(treeViewHistory->mapToGlobal(pos));
-}
-
-void HistoryViewWidget::on_treeViewHistory_clicked(const QModelIndex &index)
-{
-    on_treeViewHistory_activated(index);
 }
 
 void HistoryViewWidget::git_pathChanged()

@@ -108,10 +108,10 @@ void DiffWindow::on_treeView_fileSelected(const QString &file)
 QString diffTypeText(const Diff::DiffType type)
 {
     switch (type) {
-    case Diff::DiffType::Unchanged: return "Unchanged";
-    case Diff::DiffType::Added: return "Added";
-    case Diff::DiffType::Removed: return "Removed";
-    case Diff::DiffType::Modified: return "Modified";
+    case Diff::DiffType::Unchanged: return i18n("Unchanged");
+    case Diff::DiffType::Added: return i18n("Added");
+    case Diff::DiffType::Removed: return i18n("Removed");
+    case Diff::DiffType::Modified: return i18n("Modified");
     }
     return QString();
 }

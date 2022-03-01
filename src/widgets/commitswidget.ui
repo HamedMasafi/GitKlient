@@ -14,7 +14,8 @@
    <string>Commits</string>
   </property>
   <property name="windowIcon">
-   <iconset theme="git-commit"/>
+   <iconset theme="git-commit">
+    <normaloff>.</normaloff>.</iconset>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
@@ -22,7 +23,7 @@
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
      </property>
-     <widget class="QTreeView" name="treeViewRepo">
+     <widget class="TreeView" name="treeViewRepo">
       <property name="contextMenuPolicy">
        <enum>Qt::CustomContextMenu</enum>
       </property>
@@ -51,6 +52,11 @@
    <extends>QWidget</extends>
    <header>widgets/historyviewwidget.h</header>
    <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>TreeView</class>
+   <extends>QTreeView</extends>
+   <header>widgets/treeview.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

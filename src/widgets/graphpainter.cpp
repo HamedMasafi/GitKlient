@@ -164,6 +164,7 @@ void GraphPainter::paintLane(QPainter *painter, const Git::GraphLane &lane, int 
     }
 
     for (auto &i: lane.upJoins()) {
+        painter->drawEllipse(point(i), 2, 2);
         QPainterPath p;
         p.moveTo(point(i));
         p.cubicTo(centerGuide(index, Qt::LeftEdge),
@@ -173,6 +174,8 @@ void GraphPainter::paintLane(QPainter *painter, const Git::GraphLane &lane, int 
         painter->drawPath(p);
     }
     for (auto &i: lane.bottomJoins()) {
+        painter->drawEllipse(point(i), 2, 2);
+
         QPainterPath p;
         p.moveTo(point(index, Qt::AlignBottom));
         p.cubicTo(centerGuide(index, Qt::BottomEdge),

@@ -9,14 +9,13 @@
 namespace Git {
 
 struct LanesFactory {
+    QStringList _hashes;
 
-
-    QStringList hashes;
-
-    QList<int> findHashes(const QString &hash, const QStringList &hashes) {
+    QList<int> findByChild(const QString &hash)
+    {
         int index{0};
         QList<int> ret;
-        for (auto const &h: qAsConst(hashes)) {
+        for (auto const &h : qAsConst(_hashes)) {
             if (hash == h)
                 ret.append(index);
             index++;
@@ -24,18 +23,29 @@ struct LanesFactory {
         return ret;
     }
 
-    QVector<GraphLane> initLanes(QStringList &hashes, const QString &myHash, int &myIndex)
+    int indexOfChild(const QString &hash)
     {
-        if (!hashes.size())
+        int index{0};
+        for (auto const &h : qAsConst(_hashes)) {
+            if (hash == h)
+                return index;
+            index++;
+        }
+        return -1;
+    }
+
+    QVector<GraphLane> initLanes(const QString &myHash, int &myIndex)
+    {
+        if (!_hashes.size())
             return QVector<GraphLane>();
 
-        while (hashes.last() == QString())
-            hashes.removeLast();
+        while (_hashes.size() && _hashes.last() == QString())
+            _hashes.removeLast();
 
         int index{0};
         QVector<GraphLane> lanes;
-        lanes.reserve(hashes.size());
-        for (const auto &hash : hashes) {
+        lanes.reserve(_hashes.size());
+        for (const auto &hash : qAsConst(_hashes)) {
             if (hash == QString()) {
                 lanes.append(GraphLane::Transparent);
             } else {
@@ -51,136 +61,129 @@ struct LanesFactory {
         return lanes;
     }
 
-    QList<int> setHashes(const QStringList &children, QStringList &hashes, const int &myIndex) {
+    QList<int> setHashes(const QStringList &children, const int &myIndex)
+    {
         QList<int> ret;
         bool myIndexSet{myIndex == -1 ? true : false};
         int index{-1};
 
-        for (const auto &h: children) {
+        for (const auto &h : children) {
             index = -1;
             if (!myIndexSet) {
                 index = myIndex;
                 myIndexSet = true;
             } else {
-//                index = hashes.indexOf(h);
+                //                index = hashes.indexOf(h);
             }
             if (index == -1)
-                index = hashes.indexOf(QString());
+                index = indexOfChild(QString());
 
             if (index == -1) {
-                hashes.append(h);
-                index = hashes.size() - 1;
+                _hashes.append(h);
+                index = _hashes.size() - 1;
             } else {
-                hashes.replace(index, h);
+                _hashes.replace(index, h);
             }
             ret.append(index);
         }
         return ret;
     }
 
+    void start(const QString &hash, QVector<GraphLane> &lanes)
+    {
+        Q_UNUSED(hash)
+        _hashes.append(QString());
+        set(_hashes.size() - 1, GraphLane::Start, lanes);
+    }
 
-    void join(const QString &hash, QStringList &hashList, QVector<GraphLane> &lanes, const int &myIndex) {
+    void join(const QString &hash, QVector<GraphLane> &lanes, int &myIndex)
+    {
         int firstIndex{-1};
-        auto list = findHashes(hash, hashList);
-        if (list.size() > 1) {
-            qDebug() << "11";
-        }
+        auto list = findByChild(hash);
+
         for (auto i = list.begin(); i != list.end(); ++i) {
             if (firstIndex == -1) {
                 firstIndex = *i;
-                set(*i, list.contains(myIndex) ? GraphLane::End : GraphLane::End, lanes);
+                set(*i, list.contains(myIndex) ? GraphLane::Node : GraphLane::End, lanes);
             } else {
                 auto lane = lanes.at(*i);
-//                GraphLane lane{GraphLane::Test};
-//                if (lane.type() == GraphLane::None)
-//                    _lane._type = GraphLane::Transparent
+                //                GraphLane lane{GraphLane::Test};
+                //                if (lane.type() == GraphLane::None)
+                //                    _lane._type = GraphLane::Transparent
                 lane._bottomJoins.append(firstIndex);
                 lane._type = GraphLane::Transparent;
                 set(*i, lane, lanes);
             }
-            hashes.replace(*i, QString());
+            _hashes.replace(*i, QString());
         }
+        myIndex = firstIndex;
     }
 
-    void fork(const QStringList &childrenList, QStringList &hashList, QVector<GraphLane> &lanes, bool isStart, const int &myInedx) {
-        auto list = setHashes(childrenList, hashList, -1);
+    void fork(const QStringList &childrenList, QVector<GraphLane> &lanes, const int &myInedx)
+    {
+        auto list = setHashes(childrenList, -1);
         auto children = childrenList;
-        int firstIndex{myInedx};
-        lanes.reserve(hashes.size());
-        firstIndex = -1;
-        for (auto i = list.begin(); i != list.end(); ++i) {
-            if (firstIndex == -1) {
-                firstIndex = *i;
-                set(*i, isStart ? GraphLane::Start : GraphLane::Node, lanes);
+        int firstIndex{-1};
+        lanes.reserve(_hashes.size());
+
+        if (myInedx != -1 && lanes.size() <= myInedx)
+            lanes.resize(myInedx + 1);
+
+        if (myInedx != -1 && childrenList.size() == 1) {
+            auto &l = lanes[list.first()];
+
+            if (list.first() == myInedx) {
+                if (l.type() == GraphLane::None)
+                    l._type = GraphLane::Transparent;
+                if (l.type() == GraphLane::End)
+                    l._type = GraphLane::Node;
             } else {
-                //                if (*i==myInedx){
-                //                    set(*i, isStart ? GraphLane::Start : GraphLane::Node, lanes);
-                //                } else {
-                auto in = *i;
-//                auto lane = lanes.at(*i);
-//                lane._type = GraphLane::Node;
-
-                                    GraphLane lane{GraphLane::Transparent};
-                lane._upJoins.append(firstIndex);
-//                lanes[firstIndex]._upJoins.append(*i);
-                set(*i, lane, lanes);
-                //                }
+                l._upJoins.append(myInedx);
+                lanes[myInedx]._type = GraphLane::End;
             }
-            hashes.replace(*i, children.takeFirst());
+
+            return;
         }
-    }
+        for (auto i = list.begin(); i != list.end(); ++i) {
+            if (lanes.size() <= *i)
+                lanes.resize((*i) + 1);
 
+            auto &l = lanes[*i];
+            if (*i == myInedx) {
+                l._type = GraphLane::Node;
+            } else {
+                if (l.type() == GraphLane::None)
+                    l._type = GraphLane::Transparent;
+                if (l.type() == GraphLane::End)
+                    l._type = GraphLane::Node;
 
-    /*QList<int> findHashes(const QString &hash) {
-        int index{0};
-        QList<int> ret;
-        for (auto const &h: qAsConst(hashes)) {
-            if (hash == h)
-                ret.append(index);
-            index++;
-        }
-        return ret;
-    }
-    QList<int> setHashes(const QStringList &hashesList) {
-        QList<int> ret;
-        QMutableListIterator<QString> i(hashes);
-        int index{0};
-
-        while (i.hasNext() && index < hashesList.size()) {
-            auto hash = i.next();
-            if (hash == QString()) {
-                i.setValue(hashesList.at(index));
-                ret.append(index);
-                index++;
+                l._upJoins.append(myInedx);
             }
+            _hashes.replace(*i, children.takeFirst());
         }
-        for (int j = 0; j < hashesList.size() - index; ++j) {
-            hashes.append(hashesList.at(index));
-            ret.append(index);
-            index++;
-        }
-        return ret;
     }
-    */
-    void set(const int &index, const GraphLane &lane, QVector<GraphLane> &lanes) {
+
+    void set(const int &index, const GraphLane &lane, QVector<GraphLane> &lanes)
+    {
         if (index < lanes.size())
             lanes.replace(index, lane);
         else
             lanes.append(lane);
-
     }
     QVector<GraphLane> apply(Log *log)
     {
-        if (log->subject() == "resolve symbols export errors on msvc") {
-            qDebug() << "wip: model";
-        }
         int myIndex = -1;
-        QVector<GraphLane> lanes = initLanes(hashes, log->commitHash(), myIndex);
-        join(log->commitHash(), hashes, lanes, myIndex);
-        if (log->childs().size() ) {
-//            if (myIndex!=-1)
-//                hashes.replace(myIndex, log->childs().first());
-            fork(log->childs(), hashes, lanes, !log->parents().size(), myIndex);
+        QVector<GraphLane> lanes = initLanes(log->commitHash(), myIndex);
+
+        if (log->parents().size())
+            join(log->commitHash(), lanes, myIndex);
+        else if (log->childs().size()) {
+            start(log->childs().first(), lanes);
+            myIndex = _hashes.size() - 1;
+        }
+
+        if (log->childs().size()) {
+            fork(log->childs(), lanes, myIndex);
         }
 
         return lanes;

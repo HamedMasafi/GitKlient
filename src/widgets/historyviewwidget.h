@@ -20,12 +20,11 @@ public:
 
 private slots:
     void browseCommit();
-    void on_treeViewHistory_activated(const QModelIndex &index);
+    void on_treeViewHistory_itemActivated(const QModelIndex &index);
     void on_textBrowser_hashClicked(const QString &hash);
     void on_textBrowser_fileClicked(const QString &file);
     void on_treeViewHistory_customContextMenuRequested(const QPoint &pos);
 
-    void on_treeViewHistory_clicked(const QModelIndex &index);
     void git_pathChanged();
 };
 

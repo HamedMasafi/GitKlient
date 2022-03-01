@@ -13,52 +13,138 @@
   <property name="windowTitle">
    <string>Form</string>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout">
+  <layout class="QVBoxLayout" name="verticalLayout_4">
+   <property name="leftMargin">
+    <number>0</number>
+   </property>
+   <property name="topMargin">
+    <number>0</number>
+   </property>
+   <property name="rightMargin">
+    <number>0</number>
+   </property>
+   <property name="bottomMargin">
+    <number>0</number>
+   </property>
    <item>
     <widget class="QSplitter" name="splitter">
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
      </property>
-     <widget class="CodeEditor" name="plainTextEditMine">
-      <property name="font">
-       <font>
-        <family>Source Code Pro</family>
-       </font>
-      </property>
-      <property name="contextMenuPolicy">
-       <enum>Qt::CustomContextMenu</enum>
-      </property>
-      <property name="lineWrapMode">
-       <enum>QPlainTextEdit::NoWrap</enum>
-      </property>
-      <property name="readOnly">
-       <bool>true</bool>
-      </property>
+     <widget class="QWidget" name="">
+      <layout class="QVBoxLayout" name="verticalLayout_2">
+       <item>
+        <widget class="QLabel" name="label">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="text">
+          <string>Left:</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLineEdit" name="lineEditOldFileName">
+         <property name="readOnly">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="CodeEditor" name="leftCodeEditor">
+         <property name="font">
+          <font>
+           <family>Source Code Pro</family>
+          </font>
+         </property>
+         <property name="contextMenuPolicy">
+          <enum>Qt::CustomContextMenu</enum>
+         </property>
+         <property name="lineWrapMode">
+          <enum>QPlainTextEdit::NoWrap</enum>
+         </property>
+         <property name="readOnly">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+      </layout>
      </widget>
-     <widget class="SegmentConnector" name="widgetSegmentsConnector" native="true">
-      <property name="minimumSize">
-       <size>
-        <width>80</width>
-        <height>0</height>
-       </size>
-      </property>
-      <property name="maximumSize">
-       <size>
-        <width>80</width>
-        <height>16777215</height>
-       </size>
-      </property>
+     <widget class="QWidget" name="segmentConnectorContainer" native="true">
+      <layout class="QVBoxLayout" name="verticalLayout_3">
+       <item>
+        <spacer name="verticalSpacer">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeType">
+          <enum>QSizePolicy::Fixed</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item>
+        <widget class="SegmentConnector" name="segmentConnector" native="true">
+         <property name="minimumSize">
+          <size>
+           <width>80</width>
+           <height>0</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>80</width>
+           <height>16777215</height>
+          </size>
+         </property>
+        </widget>
+       </item>
+      </layout>
      </widget>
-     <widget class="CodeEditor" name="plainTextEditTheir">
-      <property name="contextMenuPolicy">
-       <enum>Qt::CustomContextMenu</enum>
-      </property>
-      <property name="lineWrapMode">
-       <enum>QPlainTextEdit::NoWrap</enum>
-      </property>
-      <property name="readOnly">
-       <bool>true</bool>
-      </property>
+     <widget class="QWidget" name="">
+      <layout class="QVBoxLayout" name="verticalLayout">
+       <item>
+        <widget class="QLabel" name="label_2">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="text">
+          <string>Right:</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLineEdit" name="lineEditNewFileName">
+         <property name="readOnly">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="CodeEditor" name="rightCodeEditor">
+         <property name="contextMenuPolicy">
+          <enum>Qt::CustomContextMenu</enum>
+         </property>
+         <property name="lineWrapMode">
+          <enum>QPlainTextEdit::NoWrap</enum>
+         </property>
+         <property name="readOnly">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+      </layout>
      </widget>
     </widget>
    </item>
@@ -73,7 +159,7 @@
   <customwidget>
    <class>SegmentConnector</class>
    <extends>QWidget</extends>
-   <header>diff/segmentconnector.h</header>
+   <header>widgets/segmentconnector.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

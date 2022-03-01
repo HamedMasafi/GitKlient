@@ -2,6 +2,7 @@
 
 #include "dialogs/filestreedialog.h"
 #include "dialogs/diffdialog.h"
+#include "diffwindow.h"
 #include "models/treemodel.h"
 #include "git/gitmanager.h"
 
@@ -23,10 +24,18 @@ CommitsWidget::CommitsWidget(Git::Manager *git, QWidget *parent) : WidgetBase(gi
 void CommitsWidget::reload()
 {
     _repoModel->clear();
-    _repoModel->addData(git()->branches());
+    auto branches = git()->branches();
+    _repoModel->addData(branches);
+
+    if (branches.contains("master"))
+        _mainBranch = "master";
+    else if (branches.contains("main"))
+        _mainBranch = "main";
+
+    widgetCommitsView->setBranch(QString());
 }
 
-void CommitsWidget::on_treeViewRepo_activated(const QModelIndex &index)
+void CommitsWidget::on_treeViewRepo_itemActivated(const QModelIndex &index)
 {
     auto key = _repoModel->key(index);
     if (!key.isEmpty())
@@ -48,8 +57,11 @@ void CommitsWidget::on_actionBrowse_triggered()
 void CommitsWidget::on_actionDiffWithMain_triggered()
 {
     auto branchName = _repoModel->fullPath(treeViewRepo->currentIndex());
-    DiffDialog d(branchName, "master", this);
-    d.exec();
+
+    auto diffWin = new DiffWindow(branchName, _mainBranch);
+    diffWin->setWindowModality(Qt::ApplicationModal);
+    diffWin->setAttribute(Qt::WA_DeleteOnClose, true);
+    diffWin->show();
 }
 
 void CommitsWidget::init()
@@ -60,4 +72,5 @@ void CommitsWidget::init()
     _branchesMenu = new QMenu(this);
     _branchesMenu->addAction(actionBrowse);
     _branchesMenu->addAction(actionDiffWithMain);
+
 }

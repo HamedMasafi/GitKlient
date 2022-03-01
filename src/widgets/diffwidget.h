@@ -1,14 +1,14 @@
 #ifndef DIFFWIDGET_H
 #define DIFFWIDGET_H
 
-//#include "ui_diffwidget.h"
+#include "ui_diffwidget.h"
 #include <QTextOption>
 #include "widgetbase.h"
 #include "git/gitfile.h"
 
 class SegmentConnector;
 class CodeEditor;
-class DiffWidget : public WidgetBase//, private Ui::DiffWIdget
+class DiffWidget : public WidgetBase, private Ui::DiffWIdget
 {
     Q_OBJECT
 
@@ -17,9 +17,9 @@ class DiffWidget : public WidgetBase//, private Ui::DiffWIdget
     Git::File _oldFile;
     Git::File _newFile;
 
-    CodeEditor *_oldCodeEditor;
-    CodeEditor *_newCodeEditor;
-    SegmentConnector *_segmentConnector;
+//    CodeEditor *oldCodeEditor;
+//    CodeEditor *newCodeEditor;
+//    SegmentConnector *_segmentConnector;
 
     QTextOption _defaultOption;
 public:
@@ -47,13 +47,13 @@ signals:
     void sameSizeChanged();
 
 private slots:
-
+    void on_splitter_splitterMoved(int, int);
     void oldCodeEditor_scroll(int value);
     void newCodeEditor_scroll(int value);
     void oldCodeEditor_blockSelected();
     void newCodeEditor_blockSelected();
 private:
-    void setupUi();
+//    void setupUi();
 
     bool m_sameSize{false};
 };
