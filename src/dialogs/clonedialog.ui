@@ -13,6 +13,9 @@
   <property name="windowTitle">
    <string>Clone a repository</string>
   </property>
+  <property name="windowIcon">
+   <iconset theme="gitklient"/>
+  </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
     <layout class="QFormLayout" name="formLayout">
@@ -133,6 +136,18 @@
    </item>
   </layout>
  </widget>
+ <tabstops>
+  <tabstop>lineEditUrl</tabstop>
+  <tabstop>lineEditPath</tabstop>
+  <tabstop>toolButtonBrowseLocalPath</tabstop>
+  <tabstop>checkBoxDepth</tabstop>
+  <tabstop>spinBoxDepth</tabstop>
+  <tabstop>checkBoxRecursive</tabstop>
+  <tabstop>checkBoxBranch</tabstop>
+  <tabstop>lineEditBranch</tabstop>
+  <tabstop>checkBoxOriginName</tabstop>
+  <tabstop>lineEditOriginName</tabstop>
+ </tabstops>
  <resources/>
  <connections>
   <connection>

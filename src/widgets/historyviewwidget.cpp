@@ -1,11 +1,11 @@
 #include "historyviewwidget.h"
+#include "diffwindow.h"
 #include "models/historymodel.h"
 #include "dialogs/filestreedialog.h"
 #include "git/gitlog.h"
 #include <QDebug>
 #include <QMenu>
 #include "widgets/graphpainter.h"
-#include <dialogs/diffdialog.h>
 
 HistoryViewWidget::HistoryViewWidget(QWidget *parent) :
       WidgetBase(parent)
@@ -55,6 +55,16 @@ void HistoryViewWidget::setBranch(const QString &branchName)
         treeViewHistory->setCurrentIndex(_historyModel->index(0));
 }
 
+void HistoryViewWidget::saveState(QSettings &settings) const
+{
+    save(settings, splitter);
+}
+
+void HistoryViewWidget::restoreState(QSettings &settings)
+{
+    restore(settings, splitter);
+}
+
 void HistoryViewWidget::on_treeViewHistory_itemActivated(const QModelIndex &index)
 {
     auto log = _historyModel->log(index);
@@ -82,8 +92,10 @@ void HistoryViewWidget::on_textBrowser_fileClicked(const QString &file)
     if (log->parents().size()) {
         oldFile = {log->parents().first(), file};
     }
-    DiffDialog d(oldFile, newFile, this);
-    d.exec();
+    auto diffWin = new DiffWindow(oldFile, newFile);
+    diffWin->setWindowModality(Qt::ApplicationModal);
+    diffWin->setAttribute(Qt::WA_DeleteOnClose, true);
+    diffWin->show();
 }
 
 void HistoryViewWidget::browseCommit()

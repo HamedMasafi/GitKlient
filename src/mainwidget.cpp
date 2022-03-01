@@ -1,4 +1,5 @@
 #include "buttonsgroup.h"
+#include "diffwindow.h"
 #include "mainwidget.h"
 #include "models/treemodel.h"
 #include "dialogs/taginfodialog.h"
@@ -12,7 +13,6 @@
 #include "git/gitmanager.h"
 #include "git/gitremote.h"
 #include "dialogs/filestreedialog.h"
-#include "dialogs/diffdialog.h"
 
 Git::Manager *MainWidget::git() const
 {
@@ -147,8 +147,11 @@ void MainWidget::on_actionBrowseBranch_triggered()
 void MainWidget::on_actionDiffBranch_triggered()
 {
     auto branchName = _repoModel->fullPath(treeViewRepo->currentIndex());
-    DiffDialog d(branchName, "master", this);
-    d.exec();
+
+    auto diffWin = new DiffWindow(branchName, "master");
+    diffWin->setWindowModality(Qt::ApplicationModal);
+    diffWin->setAttribute(Qt::WA_DeleteOnClose, true);
+    diffWin->show();
 }
 
 

@@ -55,8 +55,8 @@ protected:
     void mouseReleaseEvent(QMouseEvent *event) override;
     virtual int sidebarWidth() const;
     virtual void sidebarPaintEvent(QPaintEvent *event);
-    CodeEditorSidebar *m_sideBar;
     KSyntaxHighlighting::SyntaxHighlighter *m_highlighter;
+    CodeEditorSidebar *m_sideBar;
 
 private:
     friend class CodeEditorSidebar;

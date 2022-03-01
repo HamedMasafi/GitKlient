@@ -13,6 +13,18 @@ RemotesWidget::RemotesWidget(Git::Manager *git, QWidget *parent) :
     setupUi(this);
 }
 
+void RemotesWidget::saveState(QSettings &settings) const
+{
+    save(settings, splitter);
+    save(settings, treeWidget);
+}
+
+void RemotesWidget::restoreState(QSettings &settings)
+{
+    restore(settings, splitter);
+    restore(settings, treeWidget);
+}
+
 void RemotesWidget::reload()
 {
     listWidget->clear();

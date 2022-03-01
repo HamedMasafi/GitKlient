@@ -138,6 +138,11 @@ QVariant TreeModel::headerData(int section, Qt::Orientation orientation, int rol
     }
 }
 
+QStringList TreeModel::rootData() const
+{
+    return rootNode->data;
+}
+
 QStringList TreeModel::data(const QModelIndex &index) const
 {
     return static_cast<Node*>(index.internalPointer())->data;
@@ -146,8 +151,12 @@ QStringList TreeModel::data(const QModelIndex &index) const
 QString TreeModel::fullPath(const QModelIndex &index) const
 {
     QString path;
-    getFullPath(path, static_cast<Node *>(index.internalPointer()));
-    qDebug() << "Path is"<<path << static_cast<Node *>(index.internalPointer())->key;
+
+    if (index.isValid())
+        getFullPath(path, static_cast<Node *>(index.internalPointer()));
+    else
+        getFullPath(path, rootNode);
+
     return path;
 }
 

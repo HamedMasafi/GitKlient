@@ -2,6 +2,7 @@
 #define ABSTRACTCOMMAND_H
 
 #include <QByteArray>
+#include <QObject>
 #include <QStringList>
 #include <QStringList>
 
@@ -12,13 +13,19 @@ class QWidget;
 namespace Git {
 
 class Manager;
-class AbstractCommand
+class AbstractCommand : public QObject
 {
+    Q_OBJECT
+    Q_PROPERTY(int progress READ progress WRITE setProgress NOTIFY progressChanged)
+
     bool _isValid{false};
+
+    int m_progress{0};
 
 protected:
     QStringList _args;
     Manager *_git;
+    void setProgress(int newProgress);
 
 public:
     enum Status {
@@ -30,7 +37,7 @@ public:
         Error
     };
 
-    AbstractCommand();
+    AbstractCommand(QObject *parent = nullptr);
     AbstractCommand(const QStringList &args);
     AbstractCommand(Manager *git);
 
@@ -44,6 +51,9 @@ public:
     virtual bool supportWidget() const { return false; }
     virtual bool supportProgress() const { return false; }
     QWidget *createWidget() const;
+    int progress() const;
+signals:
+    void progressChanged(int progress);
 };
 
 } // namespace Git

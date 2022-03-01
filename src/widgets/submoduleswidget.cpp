@@ -16,6 +16,16 @@ SubmodulesWidget::SubmodulesWidget(Git::Manager *git, QWidget *parent) :
     setupUi(this);
 }
 
+void SubmodulesWidget::saveState(QSettings &settings) const
+{
+    save(settings, treeWidget);
+}
+
+void SubmodulesWidget::restoreState(QSettings &settings)
+{
+    restore(settings, treeWidget);
+}
+
 void SubmodulesWidget::reload()
 {
     auto modulesList = git()->submodules();

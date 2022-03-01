@@ -116,7 +116,7 @@ void CommitPushDialog::on_pushButtonPush_clicked()
 
     Git::Manager::instance()->commit(textEditMessage->toPlainText());
     RunnerDialog d(this);
-    d.run(cmd);
+    d.run(&cmd);
     d.exec();
     close();
 }

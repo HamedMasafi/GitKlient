@@ -17,10 +17,6 @@ class DiffWidget : public WidgetBase, private Ui::DiffWIdget
     Git::File _oldFile;
     Git::File _newFile;
 
-//    CodeEditor *oldCodeEditor;
-//    CodeEditor *newCodeEditor;
-//    SegmentConnector *_segmentConnector;
-
     QTextOption _defaultOption;
 public:
     DiffWidget(QWidget *parent = nullptr);
@@ -42,6 +38,7 @@ public:
 
 public slots:
     void showHiddenChars(bool show);
+    void showFilesInfo(bool show);
 
 signals:
     void sameSizeChanged();
@@ -52,10 +49,15 @@ private slots:
     void newCodeEditor_scroll(int value);
     void oldCodeEditor_blockSelected();
     void newCodeEditor_blockSelected();
-private:
-//    void setupUi();
 
+private:
     bool m_sameSize{false};
+
+    void recalculateInfoPaneSize();
+
+protected:
+    void resizeEvent(QResizeEvent *event) override;
+    void showEvent(QShowEvent *event) override;
 };
 
 #endif // DIFFWIDGET_H

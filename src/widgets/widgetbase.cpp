@@ -4,6 +4,9 @@
 
 #include <QDialog>
 #include <QPushButton>
+#include <QSplitter>
+#include <QHeaderView>
+#include <QTreeView>
 #include <QVBoxLayout>
 
 WidgetBase::WidgetBase(QWidget *parent) : QWidget(parent)
@@ -49,7 +52,42 @@ int WidgetBase::exec(QWidget *parent)
 
 }
 
+void WidgetBase::saveState(QSettings &settings) const
+{
+    Q_UNUSED(settings)
+}
+
+void WidgetBase::restoreState(QSettings &settings)
+{
+    Q_UNUSED(settings)
+}
+
+void WidgetBase::save(QSettings &settings, QSplitter *splitter) const
+{
+    settings.setValue(stateName(splitter), splitter->saveState());
+}
+
+void WidgetBase::restore(QSettings &settings, QSplitter *splitter)
+{
+    splitter->restoreState(settings.value(stateName(splitter)).toByteArray());
+}
+
+void WidgetBase::save(QSettings &settings, QTreeView *treeView) const
+{
+    settings.setValue(stateName(treeView), treeView->header()->saveState());
+}
+
+void WidgetBase::restore(QSettings &settings, QTreeView *treeView)
+{
+    treeView->header()->restoreState(settings.value(stateName(treeView)).toByteArray());
+}
+
 void WidgetBase::git_pathChanged()
 {
     reload();
+}
+
+QString WidgetBase::stateName(QWidget *w) const
+{
+    return QLatin1String("%1_%2_state").arg(metaObject()->className(), w->objectName());
 }

@@ -146,6 +146,8 @@ void GitKlientMergeWindow::load()
 
 GitKlientMergeWindow::GitKlientMergeWindow(Mode mode, QWidget *parent) : KXmlGuiWindow(parent)
 {
+    Q_UNUSED(mode)
+
     initActions();
     auto mapper = new EditActionsMapper;
     mapper->init(actionCollection());
@@ -362,13 +364,10 @@ void GitKlientMergeWindow::doMergeAction(Diff::MergeType type)
         return;
 
     CodeEditor *from;
-    CodeEditor *to;
     if (m_ui.plainTextEditMine->hasFocus()) {
         from = m_ui.plainTextEditMine;
-        to = from = m_ui.plainTextEditTheir;
     } else {
-        from = from = m_ui.plainTextEditTheir;
-        to = m_ui.plainTextEditMine;
+        from = m_ui.plainTextEditTheir;
     }
     auto s = from->currentSegment();
 

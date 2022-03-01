@@ -62,6 +62,7 @@ QStringList CommandChangedFiles::generateArgs() const
 
 void CommandChangedFiles::parseOutput(const QByteArray &output, const QByteArray &errorOutput)
 {
+    Q_UNUSED(errorOutput)
     auto buffer = QString(output).split("\n");
 
     for (auto &item: buffer) {

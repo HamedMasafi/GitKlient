@@ -57,6 +57,17 @@ FilesTreeDialog::FilesTreeDialog(const QString &place, QWidget *parent) :
     actionSearch->setText(i18n("Search history"));
     connect(actionSearch, &QAction::triggered, this, &FilesTreeDialog::search);
     _fileMenu->addAction(actionSearch);
+
+    listWidget->clear();
+
+    for (auto &f: _treeModel->rootData()) {
+        QFileInfo fi(f);
+        auto icon = p.icon(fi);
+        auto item = new QListWidgetItem(listWidget);
+        item->setText(f);
+        item->setIcon(icon);
+        listWidget->addItem(item);
+    }
 }
 
 void FilesTreeDialog::on_treeView_clicked(const QModelIndex &index)
@@ -64,7 +75,6 @@ void FilesTreeDialog::on_treeView_clicked(const QModelIndex &index)
     QFileIconProvider p;
     listWidget->clear();
 
-//    listWidget->addItems(_treeModel->data(index));
     for (auto &f: _treeModel->data(index)) {
         QFileInfo fi(f);
         auto icon = p.icon(fi);
@@ -77,8 +87,12 @@ void FilesTreeDialog::on_treeView_clicked(const QModelIndex &index)
 
 void FilesTreeDialog::viewFile()
 {
-    auto path = _treeModel->fullPath(treeView->currentIndex()) + "/"
-                + listWidget->currentItem()->text();
+    QString path;
+    if (treeView->currentIndex().isValid())
+        path = _treeModel->fullPath(treeView->currentIndex()) + "/"
+               + listWidget->currentItem()->text();
+    else
+        path = listWidget->currentItem()->text();
     qDebug() << "p=" << path;
     FileViewerDialog d(_place, path);
     d.exec();

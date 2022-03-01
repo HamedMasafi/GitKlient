@@ -13,10 +13,18 @@ class RunnerDialog : public QDialog, private Ui::RunnerDialog
 
     QProcess *_git;
 
+    enum Mode {
+        None,
+        RunByArgs,
+        RunByCommand
+    };
+    Mode _mode{None};
+    Git::AbstractCommand *_cmd{nullptr};
+
 public:
     explicit RunnerDialog(QWidget *parent = nullptr);
     void run(const QStringList &args);
-    void run(const Git::AbstractCommand &command);
+    void run(Git::AbstractCommand *command);
 
 private slots:
     void git_readyReadStandardOutput();

@@ -47,6 +47,9 @@
    </item>
    <item>
     <widget class="QTreeWidget" name="treeWidgetBranches">
+     <property name="enabled">
+      <bool>true</bool>
+     </property>
      <column>
       <property name="text">
        <string>Name</string>
@@ -81,16 +84,23 @@
      </item>
      <item>
       <widget class="QPushButton" name="pushButtonNew">
+       <property name="enabled">
+        <bool>true</bool>
+       </property>
        <property name="text">
         <string>New</string>
        </property>
        <property name="icon">
-        <iconset theme="document-new"/>
+        <iconset theme="document-new">
+         <normaloff>.</normaloff>.</iconset>
        </property>
       </widget>
      </item>
      <item>
       <widget class="QPushButton" name="pushButtonCheckout">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
        <property name="text">
         <string>Checkout</string>
        </property>
@@ -98,6 +108,9 @@
      </item>
      <item>
       <widget class="QPushButton" name="pushButtonRemoveSelected">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
        <property name="text">
         <string>Remove</string>
        </property>
@@ -105,6 +118,9 @@
      </item>
      <item>
       <widget class="QPushButton" name="pushButtonBrowse">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
        <property name="text">
         <string>Browse</string>
        </property>
@@ -112,6 +128,9 @@
      </item>
      <item>
       <widget class="QPushButton" name="pushButtonDiff">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
        <property name="text">
         <string>Diff</string>
        </property>
@@ -121,6 +140,15 @@
    </item>
   </layout>
  </widget>
+ <tabstops>
+  <tabstop>comboBoxReferenceBranch</tabstop>
+  <tabstop>treeWidgetBranches</tabstop>
+  <tabstop>pushButtonNew</tabstop>
+  <tabstop>pushButtonCheckout</tabstop>
+  <tabstop>pushButtonRemoveSelected</tabstop>
+  <tabstop>pushButtonBrowse</tabstop>
+  <tabstop>pushButtonDiff</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>

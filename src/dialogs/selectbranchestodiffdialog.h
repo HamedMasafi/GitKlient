@@ -16,6 +16,9 @@ public:
 
     QString oldBranch() const;
     QString newBranch() const;
+
+private slots:
+    void on_buttonBox_accepted();
 };
 
 #endif // SELECTBRANCHESTODIFFDIALOG_H

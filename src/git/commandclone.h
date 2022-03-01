@@ -7,8 +7,10 @@ namespace Git {
 
 class CloneCommand : public AbstractCommand
 {
+    Q_OBJECT
+
 public:
-    CloneCommand();
+    CloneCommand(QObject *parent = nullptr);
 
     const QString &repoUrl() const;
     void setRepoUrl(const QString &newRepoUrl);
@@ -34,6 +36,8 @@ private:
     // AbstractCommand interface
 public:
     QStringList generateArgs() const override;
+    void parseOutput(const QByteArray &output, const QByteArray &errorOutput) override;
+    bool supportProgress() const override;
 };
 
 } // namespace Git

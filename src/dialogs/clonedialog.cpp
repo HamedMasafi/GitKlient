@@ -1,11 +1,38 @@
 #include "clonedialog.h"
 
 #include <QFileDialog>
+#include <KLocalizedString>
+#include <QStandardPaths>
+#include <QSettings>
 
 CloneDialog::CloneDialog(QWidget *parent) :
       QDialog(parent)
 {
     setupUi(this);
+    _fixedPath = QStandardPaths::writableLocation(QStandardPaths::HomeLocation);
+
+    QSettings s;
+    lineEditUrl->setText(s.value("lastClonedRepo").toString());
+}
+
+CloneDialog::~CloneDialog()
+{
+    QSettings s;
+    s.setValue("lastClonedRepo", lineEditUrl->text());
+}
+
+Git::CloneCommand *CloneDialog::command()
+{
+    auto cmd = new Git::CloneCommand(this);
+
+    cmd->setRepoUrl(lineEditUrl->text());
+    cmd->setLocalPath(lineEditPath->text());
+    if (checkBoxBranch->isChecked())
+        cmd->setBranch(lineEditBranch->text());
+    if(checkBoxDepth->isChecked())
+        cmd->setDepth(spinBoxDepth->value());
+    cmd->setRecursive(checkBoxRecursive->isChecked());
+    return cmd;
 }
 
 void CloneDialog::on_lineEditUrl_textChanged(QString text)
@@ -16,7 +43,7 @@ void CloneDialog::on_lineEditUrl_textChanged(QString text)
         if (local.toLower().endsWith(".git"))
             local = local.mid(0, local.size() - 4);
 
-        lineEditPath->setText("/fixed/" + local);
+        lineEditPath->setText(_fixedPath + "/" + local);
     }
 }
 
@@ -25,4 +52,9 @@ void CloneDialog::on_toolButtonBrowseLocalPath_clicked()
     auto localPath = QFileDialog::getExistingDirectory(this, i18n("Local path"));
     if (!localPath.isEmpty())
         lineEditPath->setText(localPath);
+}
+
+void CloneDialog::on_buttonBox_accepted()
+{
+    accept();
 }

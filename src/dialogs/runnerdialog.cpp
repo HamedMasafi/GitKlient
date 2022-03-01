@@ -25,23 +25,32 @@ RunnerDialog::RunnerDialog(QWidget *parent) :
 
 void RunnerDialog::run(const QStringList &args)
 {
+    _mode = RunByArgs;
     lineEditCommand->setText("git " + args.join(" "));
     _git->setArguments(args);
     _git->start();
 }
 
-void RunnerDialog::run(const Git::AbstractCommand &command)
+void RunnerDialog::run(Git::AbstractCommand *command)
 {
-    if (command.supportWidget()) {
-        auto w = command.createWidget();
+    _mode = RunByCommand;
+    if (command->supportWidget()) {
+        auto w = command->createWidget();
         tabWidget->addTab(w, i18n("View"));
     }
 
-    auto args = command.generateArgs();
+    auto args = command->generateArgs();
     lineEditCommand->setText("git " + args.join(" "));
-    progressBar->setVisible(command.supportProgress());
+
+    if (command->supportProgress()) {
+        progressBar->show();
+        connect(command, &Git::AbstractCommand::progressChanged, progressBar, &QProgressBar::setValue);
+    } else {
+        progressBar->hide();
+    }
     _git->setArguments(args);
     _git->start();
+    _cmd =command;
 }
 
 void RunnerDialog::git_readyReadStandardOutput()
@@ -58,4 +67,7 @@ void RunnerDialog::git_readyReadStandardError()
     qDebug() << "ERROR" << buffer;
     textBrowser->setTextColor(Qt::red);
     textBrowser->append(buffer);
+
+    if (_cmd)
+        _cmd->parseOutput(QByteArray(), buffer);
 }

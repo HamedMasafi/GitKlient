@@ -406,6 +406,8 @@ QList<Submodule> Manager::submodules() const
 
 bool Manager::addSubmodule(const Submodule &module)
 {
+    Q_UNUSED(module)
+    //TODO:
     return true;
 }
 

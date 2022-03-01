@@ -16,10 +16,14 @@ public:
     explicit BranchesStatusWidget(QWidget *parent = nullptr);
     explicit BranchesStatusWidget(Git::Manager *git, QWidget *parent = nullptr);
 
+    void saveState(QSettings &settings) const override;
+    void restoreState(QSettings &settings) override;
+
 private slots:
     void on_comboBoxReferenceBranch_currentIndexChanged(const QString &selectedBranch);
     void on_pushButtonRemoveSelected_clicked();
-
+    void on_treeWidgetBranches_currentItemChanged(QTreeWidgetItem *current,
+                                                  QTreeWidgetItem *previous);
     void reload() override;
     void on_pushButtonBrowse_clicked();
     void on_pushButtonDiff_clicked();

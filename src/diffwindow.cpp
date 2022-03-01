@@ -18,7 +18,7 @@
 
 #include <models/filesmodel.h>
 
-void DiffWindow::init()
+void DiffWindow::init(bool showSideBar)
 {
     auto mapper = new EditActionsMapper;
     _diffWidget = new DiffWidget(this);
@@ -34,30 +34,31 @@ void DiffWindow::init()
     mapper->addTextEdit(_diffWidget->newCodeEditor());
     setWindowTitle(i18n("GitKlient Diff[*]"));
 
-    auto dock = new QDockWidget(this);
-    dock->setWindowTitle(i18n("Tree"));
-    dock->setObjectName("treeViewDock");
+    if (showSideBar) {
+        auto dock = new QDockWidget(this);
+        dock->setWindowTitle(i18n("Tree"));
+        dock->setObjectName("treeViewDock");
 
-    _treeView = new DiffTreeView(this);
-    connect(_treeView, &DiffTreeView::fileSelected, this, &DiffWindow::on_treeView_fileSelected);
-    dock->setWidget(_treeView);
-    addDockWidget(Qt::LeftDockWidgetArea, dock);
+        _treeView = new DiffTreeView(this);
+        connect(_treeView, &DiffTreeView::fileSelected, this, &DiffWindow::on_treeView_fileSelected);
+        dock->setWidget(_treeView);
+        addDockWidget(Qt::LeftDockWidgetArea, dock);
 
-
-    _filesModel = new FilesModel(this);
-    _diffModel = new DiffTreeModel(this);
-    _treeView->setDiffModel(_diffModel, _filesModel);
+        _filesModel = new FilesModel(this);
+        _diffModel = new DiffTreeModel(this);
+        _treeView->setDiffModel(_diffModel, _filesModel);
+    }
 }
 
 DiffWindow::DiffWindow() : KXmlGuiWindow()
 {
-    init();
+    init(true);
 }
 
 DiffWindow::DiffWindow(const Git::File &oldFile, const Git::File &newFile)
     : KXmlGuiWindow(), _oldFile(oldFile), _newFile(newFile)
 {
-    init();
+    init(false);
 
     _diffWidget->setOldFile(std::move(oldFile));
     _diffWidget->setNewFile(std::move(newFile));
@@ -67,7 +68,7 @@ DiffWindow::DiffWindow(const Git::File &oldFile, const Git::File &newFile)
 DiffWindow::DiffWindow(const QString &oldBranch, const QString &newBranch)
     : KXmlGuiWindow(), _oldBranch(oldBranch), _newBranch(newBranch)
 {
-    init();
+    init(true);
 
     auto diffs = Git::Manager::instance()->diffBranches(oldBranch, newBranch);
 
@@ -139,7 +140,14 @@ void DiffWindow::initActions()
     viewSameSizeBlocksAction->setText(i18n("Same size blocks"));
     viewSameSizeBlocksAction->setCheckable(true);
 
+    auto viewFilesInfo = actionCollection->addAction(QStringLiteral("view_files_info"),
+                                                     _diffWidget,
+                                                     &DiffWidget::showFilesInfo);
+    viewFilesInfo->setText(i18n("Show files names"));
+    viewFilesInfo->setCheckable(true);
+    viewFilesInfo->setChecked(true);
+
     KStandardAction::quit(this, &QWidget::close, actionCollection);
-    KStandardAction::preferences(this, SLOT(settingsConfigure()), actionCollection);
+//    KStandardAction::preferences(this, SLOT(settingsConfigure()), actionCollection);
     KStandardAction::open(this, &DiffWindow::fileOpen, actionCollection);
 }

@@ -3,7 +3,7 @@
 
 #include "ui_mergeopenfilesdialog.h"
 
-class MergeOpenFilesDialog : public QDialog, private Ui::OpenFilesDialog
+class MergeOpenFilesDialog : public QDialog, private Ui::MergeOpenFilesDialog
 {
     Q_OBJECT
 

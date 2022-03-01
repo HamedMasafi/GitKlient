@@ -27,7 +27,7 @@ class DiffWindow : public KXmlGuiWindow
     DiffTreeView *_treeView;
 
     void initActions();
-    void init();
+    void init(bool showSideBar);
 
     enum Mode {
         None,

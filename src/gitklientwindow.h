@@ -30,6 +30,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 class GitKlientView;
 class MultiPageWidget;
 class MainWidget;
+class WidgetBase;
 /**
  * This class serves as the main window for gitklient.  It handles the
  * menus, toolbars and status bars.
@@ -71,6 +72,7 @@ private:
     Ui::DiffSettings diffSettings;
     QAction *recentAction;
     MultiPageWidget *_mainWidget;
+    QList<WidgetBase*> _baseWidgets;
 
     void initActions();
     void initRecentFiles(const QString &newItem = QString());

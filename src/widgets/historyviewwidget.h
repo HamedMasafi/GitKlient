@@ -18,6 +18,9 @@ public:
     explicit HistoryViewWidget(Git::Manager *git, QWidget *parent = nullptr);
     void setBranch(const QString &branchName);
 
+    void saveState(QSettings &settings) const override;
+    void restoreState(QSettings &settings) override;
+
 private slots:
     void browseCommit();
     void on_treeViewHistory_itemActivated(const QModelIndex &index);

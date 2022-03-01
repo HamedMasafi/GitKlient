@@ -19,6 +19,9 @@ public:
     explicit CommitsWidget(Git::Manager *git, QWidget *parent = nullptr);
     void reload() override;
 
+    void saveState(QSettings &settings) const override;
+    void restoreState(QSettings &settings) override;
+
 private slots:
     void on_treeViewRepo_itemActivated(const QModelIndex &index);
     void on_treeViewRepo_customContextMenuRequested(const QPoint &pos);

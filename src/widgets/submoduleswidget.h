@@ -12,6 +12,10 @@ public:
     explicit SubmodulesWidget(QWidget *parent = nullptr);
     explicit SubmodulesWidget(Git::Manager *git, QWidget *parent = nullptr);
 
+
+    void saveState(QSettings &settings) const override;
+    void restoreState(QSettings &settings) override;
+
     void reload() override;
 private slots:
     void on_pushButtonAddNew_clicked();

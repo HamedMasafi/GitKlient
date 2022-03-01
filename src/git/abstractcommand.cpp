@@ -12,10 +12,16 @@ QWidget *AbstractCommand::createWidget() const
     return nullptr;
 }
 
-AbstractCommand::AbstractCommand() {}
+int AbstractCommand::progress() const
+{
+    return m_progress;
+}
 
-AbstractCommand::AbstractCommand(const QStringList &args) : _args(args)
-{}
+AbstractCommand::AbstractCommand(QObject *parent) : QObject(parent) {}
+
+AbstractCommand::AbstractCommand(const QStringList &args) : QObject(), _args(args) {}
+
+AbstractCommand::AbstractCommand(Manager *git) : QObject(), _git(git) {}
 
 AbstractCommand::~AbstractCommand()
 {
@@ -27,7 +33,13 @@ void AbstractCommand::parseOutput(const QByteArray &output, const QByteArray &er
     Q_UNUSED(errorOutput)
 }
 
-AbstractCommand::AbstractCommand(Manager *git) : _git(git)
-{}
+void AbstractCommand::setProgress(int newProgress)
+{
+    if (m_progress == newProgress)
+        return;
+    m_progress = newProgress;
+    emit progressChanged(newProgress);
+}
+
 
 } // namespace Git

@@ -2,7 +2,6 @@
 
 #include "git/gitmanager.h"
 #include "dialogs/filestreedialog.h"
-#include "dialogs/diffdialog.h"
 #include "dialogs/runnerdialog.h"
 #include "diffwindow.h"
 #include <KMessageBox>
@@ -17,6 +16,16 @@ BranchesStatusWidget::BranchesStatusWidget(Git::Manager *git, QWidget *parent) :
 
 {
     setupUi(this);
+}
+
+void BranchesStatusWidget::saveState(QSettings &settings) const
+{
+    save(settings, treeWidgetBranches);
+}
+
+void BranchesStatusWidget::restoreState(QSettings &settings)
+{
+    restore(settings, treeWidgetBranches);
 }
 
 void BranchesStatusWidget::on_comboBoxReferenceBranch_currentIndexChanged(const QString &selectedBranch)
@@ -47,6 +56,17 @@ void BranchesStatusWidget::on_pushButtonRemoveSelected_clicked()
     auto tmp = treeWidgetBranches->takeTopLevelItem(treeWidgetBranches->currentIndex().row());
     if (tmp)
         delete tmp;
+}
+
+void BranchesStatusWidget::on_treeWidgetBranches_currentItemChanged(QTreeWidgetItem *current, QTreeWidgetItem *previous)
+{
+    Q_UNUSED(current)
+    Q_UNUSED(previous)
+
+    pushButtonBrowse->setEnabled(true);
+    pushButtonCheckout->setEnabled(true);
+    pushButtonDiff->setEnabled(true);
+    pushButtonRemoveSelected->setEnabled(true);
 }
 
 void BranchesStatusWidget::reload()

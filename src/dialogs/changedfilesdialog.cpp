@@ -1,8 +1,8 @@
 #include "changedfilesdialog.h"
+#include "diffwindow.h"
 #include "git/gitmanager.h"
 #include "git/gitfile.h"
 #include "commitpushdialog.h"
-#include "dialogs/diffdialog.h"
 
 #include <QDebug>
 
@@ -44,6 +44,9 @@ void ChangedFilesDialog::on_listWidget_itemDoubleClicked(QListWidgetItem *item)
 {
     Git::File original{Git::Manager::instance()->currentBranch(), item->text()};
     Git::File changed{Git::Manager::instance()->path() + "/" + item->text()};
-    DiffDialog d(original, changed, this);
-    d.exec();
+
+    auto diffWin = new DiffWindow(original, changed);
+    diffWin->setWindowModality(Qt::ApplicationModal);
+    diffWin->setAttribute(Qt::WA_DeleteOnClose, true);
+    diffWin->show();
 }

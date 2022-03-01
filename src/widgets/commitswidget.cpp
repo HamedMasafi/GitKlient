@@ -1,7 +1,6 @@
 #include "commitswidget.h"
 
 #include "dialogs/filestreedialog.h"
-#include "dialogs/diffdialog.h"
 #include "diffwindow.h"
 #include "models/treemodel.h"
 #include "git/gitmanager.h"
@@ -33,6 +32,18 @@ void CommitsWidget::reload()
         _mainBranch = "main";
 
     widgetCommitsView->setBranch(QString());
+}
+
+void CommitsWidget::saveState(QSettings &settings) const
+{
+    save(settings, splitter);
+    save(settings, treeViewRepo);
+}
+
+void CommitsWidget::restoreState(QSettings &settings)
+{
+    restore(settings, splitter);
+    restore(settings, treeViewRepo);
 }
 
 void CommitsWidget::on_treeViewRepo_itemActivated(const QModelIndex &index)

@@ -16,6 +16,7 @@
     <text>Main Toolbar</text>
     <Action name="view_hidden_chars"/>
     <Action name="view_same_size_blocks"/>
+    <Action name="view_files_info"/>
 
 </ToolBar>
 

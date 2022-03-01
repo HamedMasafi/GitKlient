@@ -1,8 +1,10 @@
 #include "commandclone.h"
 
+#include <QDebug>
+
 namespace Git {
 
-CloneCommand::CloneCommand() : AbstractCommand() {}
+CloneCommand::CloneCommand(QObject *parent) : AbstractCommand(parent) {}
 
 const QString &CloneCommand::repoUrl() const
 {
@@ -66,7 +68,7 @@ void CloneCommand::setRecursive(bool newRecursive)
 
 QStringList CloneCommand::generateArgs() const
 {
-    QStringList args{"clone", _repoUrl, _localPath};
+    QStringList args{"clone", "--progress", _repoUrl, _localPath};
 
     if (!_branch.isEmpty())
         args << "--branch=" + _branch;
@@ -82,6 +84,19 @@ QStringList CloneCommand::generateArgs() const
 
     return args;
 
+}
+
+void CloneCommand::parseOutput(const QByteArray &output, const QByteArray &errorOutput)
+{
+    Q_UNUSED(output)
+    auto p = errorOutput.mid(0, errorOutput.lastIndexOf("%"));
+    p  = p.mid(p.lastIndexOf(" ") + 1);
+    setProgress(p.toDouble());
+}
+
+bool CloneCommand::supportProgress() const
+{
+    return true;
 }
 
 } // namespace Git

@@ -16,6 +16,7 @@ public:
 
 public Q_SLOTS:
     void on_treeView_clicked(const QModelIndex &index);
+
 private slots:
     void viewFile();
     void copyFile();

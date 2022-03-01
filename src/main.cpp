@@ -20,7 +20,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 // application header
 #include "commandargsparser.h"
-#include "dialogs/diffdialog.h"
 #include "dialogs/pulldialog.h"
 #include "dialogs/runnerdialog.h"
 #include "dialogs/changedfilesdialog.h"
@@ -89,8 +88,11 @@ ArgParserReturn argsWidget() {
         Git::File changed{fi.absoluteFilePath()};
         qDebug() << "[DIFF]" << git->currentBranch() + ":" + filePath.replace(git->path() + "/", "")
                  << filePath;
-        DiffDialog d(original, changed);
-        d.exec();
+
+        auto diffWin = new DiffWindow(original, changed);
+        diffWin->setWindowModality(Qt::ApplicationModal);
+        diffWin->setAttribute(Qt::WA_DeleteOnClose, true);
+        diffWin->show();
         return 0;
     } else if (key == "changes") {
         git->setPath(p.param("path"));

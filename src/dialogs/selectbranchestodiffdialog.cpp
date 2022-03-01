@@ -1,6 +1,8 @@
 #include "selectbranchestodiffdialog.h"
 
 #include "git/gitmanager.h"
+#include <KMessageBox>
+#include <KLocalizedString>
 
 SelectBranchesToDiffDialog::SelectBranchesToDiffDialog(Git::Manager *git, QWidget *parent) :
       QDialog(parent)
@@ -21,4 +23,13 @@ QString SelectBranchesToDiffDialog::oldBranch() const
 QString SelectBranchesToDiffDialog::newBranch() const
 {
     return comboBoxNewBranch->currentText();
+}
+
+void SelectBranchesToDiffDialog::on_buttonBox_accepted()
+{
+    if (oldBranch() == newBranch()) {
+        KMessageBox::sorry(this, i18n("The selected branches must be different!"));
+        return;
+    }
+    accept();
 }

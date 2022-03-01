@@ -67,6 +67,7 @@ public:
     QModelIndex index(int row, int column, const QModelIndex &parent) const override;
     QModelIndex parent(const QModelIndex &child) const override;
     QVariant headerData(int section, Qt::Orientation orientation, int role) const override;
+    QStringList rootData() const;
     QStringList data(const QModelIndex &index) const;
     QString fullPath(const QModelIndex &index) const;
     QString key(const QModelIndex &index) const;

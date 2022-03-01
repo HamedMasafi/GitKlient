@@ -11,6 +11,11 @@ class RemotesWidget : public WidgetBase, private Ui::RemotesWidget
 public:
     explicit RemotesWidget(QWidget *parent = nullptr);
     explicit RemotesWidget(Git::Manager *git, QWidget *parent = nullptr);
+
+
+    void saveState(QSettings &settings) const override;
+    void restoreState(QSettings &settings) override;
+
     void reload() override;
 
 private slots:

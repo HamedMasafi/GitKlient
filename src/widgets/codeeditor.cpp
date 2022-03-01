@@ -38,9 +38,8 @@ void SegmentData::setSegment(Diff::Segment *newSegment)
 
 CodeEditor::CodeEditor(QWidget *parent)
     : QPlainTextEdit(parent)
-          , m_highlighter(new KSyntaxHighlighting::SyntaxHighlighter(document()))
-      ,
-      m_sideBar(new CodeEditorSidebar(this))
+      , m_highlighter(new KSyntaxHighlighting::SyntaxHighlighter(document()))
+      , m_sideBar(new CodeEditorSidebar(this))
 {
     setFont(QFontDatabase::systemFont(QFontDatabase::FixedFont));
     setWordWrapMode(QTextOption::NoWrap);

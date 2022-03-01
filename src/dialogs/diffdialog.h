@@ -17,9 +17,9 @@ class DiffDialog : public QDialog, private Ui::DiffDialog
     DiffTreeModel *_diffModel;
 
 public:
-    explicit DiffDialog(QWidget *parent = nullptr);
-    DiffDialog(const Git::File &oldFile, const Git::File &newFile, QWidget *parent = nullptr);
-    DiffDialog(const QString &oldBranch, const QString &newBranch, QWidget *parent = nullptr);
+    Q_DECL_DEPRECATED explicit DiffDialog(QWidget *parent = nullptr);
+    Q_DECL_DEPRECATED DiffDialog(const Git::File &oldFile, const Git::File &newFile, QWidget *parent = nullptr);
+    Q_DECL_DEPRECATED DiffDialog(const QString &oldBranch, const QString &newBranch, QWidget *parent = nullptr);
 
 private slots:
     void on_toolButtonShowHiddenChars_clicked(bool checked);

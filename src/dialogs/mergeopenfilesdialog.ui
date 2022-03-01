@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>OpenFilesDialog</class>
+ <class>MergeOpenFilesDialog</class>
  <widget class="QDialog" name="MergeOpenFilesDialog">
   <property name="geometry">
    <rect>
@@ -12,6 +12,9 @@
   </property>
   <property name="windowTitle">
    <string>Select files to merge</string>
+  </property>
+  <property name="windowIcon">
+   <iconset theme="gitklient"/>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
@@ -107,38 +110,5 @@
   </layout>
  </widget>
  <resources/>
- <connections>
-  <connection>
-   <sender>buttonBox</sender>
-   <signal>accepted()</signal>
-   <receiver>OpenFilesDialog</receiver>
-   <slot>accept()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>257</x>
-     <y>186</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>157</x>
-     <y>274</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>buttonBox</sender>
-   <signal>rejected()</signal>
-   <receiver>OpenFilesDialog</receiver>
-   <slot>reject()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>313</x>
-     <y>186</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>286</x>
-     <y>274</y>
-    </hint>
-   </hints>
-  </connection>
- </connections>
+ <connections/>
 </ui>

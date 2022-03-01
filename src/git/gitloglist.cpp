@@ -72,8 +72,6 @@ struct LanesFactory {
             if (!myIndexSet) {
                 index = myIndex;
                 myIndexSet = true;
-            } else {
-                //                index = hashes.indexOf(h);
             }
             if (index == -1)
                 index = indexOfChild(QString());
@@ -107,9 +105,6 @@ struct LanesFactory {
                 set(*i, list.contains(myIndex) ? GraphLane::Node : GraphLane::End, lanes);
             } else {
                 auto lane = lanes.at(*i);
-                //                GraphLane lane{GraphLane::Test};
-                //                if (lane.type() == GraphLane::None)
-                //                    _lane._type = GraphLane::Transparent
                 lane._bottomJoins.append(firstIndex);
                 lane._type = GraphLane::Transparent;
                 set(*i, lane, lanes);
@@ -123,7 +118,6 @@ struct LanesFactory {
     {
         auto list = setHashes(childrenList, -1);
         auto children = childrenList;
-        int firstIndex{-1};
         lanes.reserve(_hashes.size());
 
         if (myInedx != -1 && lanes.size() <= myInedx)

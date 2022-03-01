@@ -85,6 +85,9 @@ GitKlientWindow::GitKlientWindow()
 
 GitKlientWindow::~GitKlientWindow()
 {
+    QSettings s;
+    for (auto &w: _baseWidgets)
+        w->saveState(s);
 }
 
 void GitKlientWindow::settingsConfigure()
@@ -290,7 +293,14 @@ void GitKlientWindow::showBranchesStatus()
 void GitKlientWindow::clone()
 {
     CloneDialog d(this);
-    d.exec();
+    if (d.exec() == QDialog::Accepted) {
+        RunnerDialog r(this);
+        auto branch = Git::Manager::instance()->currentBranch();
+        auto cmd = d.command();;
+        r.run(cmd);
+        r.exec();
+        cmd->deleteLater();
+    }
 }
 
 void GitKlientWindow::diffBranches()
@@ -333,4 +343,7 @@ void GitKlientWindow::addPage(const QString &actionName)
         actionCollection()->setDefaultShortcut(action, QKeySequence(Qt::CTRL + keys[_mainWidget->count()]));
 
     _mainWidget->addPage(w, action);
+    QSettings s;
+    w->restoreState(s);
+    _baseWidgets.append(w);
 }
