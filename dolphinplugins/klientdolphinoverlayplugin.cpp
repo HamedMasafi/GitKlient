@@ -74,8 +74,8 @@ QStringList KlientDolphinOverlayPlugin::getOverlays(const QUrl &url)
 //        return {icon(_statusCache.value(p))};
 //    }
 
-    Git::Manager git;
-    git.setPath(p);
+    Git::Manager git(QFileInfo(p).absolutePath());
+
 //    qDebug() << "setpath=" << p << git.isValid() << git.path();
 
     if (!git.isValid()) {

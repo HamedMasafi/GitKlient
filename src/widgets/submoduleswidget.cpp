@@ -10,7 +10,7 @@ SubmodulesWidget::SubmodulesWidget(QWidget *parent) :
     setupUi(this);
 }
 
-SubmodulesWidget::SubmodulesWidget(Git::Manager *git, QWidget *parent) :
+SubmodulesWidget::SubmodulesWidget(Git::Manager *git, GitKlientWindow *parent) :
       WidgetBase(git, parent)
 {
     setupUi(this);

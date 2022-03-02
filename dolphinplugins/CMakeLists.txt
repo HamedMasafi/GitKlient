@@ -38,12 +38,13 @@ target_link_libraries(${PLUGIN}
 
 
 #---OVERLAY PLUGIN---
+set(OVERLAY_SRC klientdolphinoverlayplugin.cpp ${GIT_SRC})
 set(OVERLAY_PLUGIN klientdolphinoverlayplugin)
 kcoreaddons_add_plugin(
     ${OVERLAY_PLUGIN}
     INSTALL_NAMESPACE "kf5/overlayicon"
     JSON ${OVERLAY_PLUGIN}.json
-    SOURCES klientdolphinoverlayplugin.cpp ${GIT_SRC}
+    SOURCES ${OVERLAY_SRC}
 )
 target_link_libraries(
     ${OVERLAY_PLUGIN}

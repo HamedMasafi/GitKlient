@@ -14,7 +14,7 @@ CommitsWidget::CommitsWidget(QWidget *parent) : WidgetBase(parent)
     init();
 }
 
-CommitsWidget::CommitsWidget(Git::Manager *git, QWidget *parent) : WidgetBase(git, parent)
+CommitsWidget::CommitsWidget(Git::Manager *git, GitKlientWindow *parent) : WidgetBase(git, parent)
 {
     setupUi(this);
     init();

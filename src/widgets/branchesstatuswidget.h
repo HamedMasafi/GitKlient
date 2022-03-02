@@ -14,7 +14,7 @@ class BranchesStatusWidget : public WidgetBase, private Ui::BranchesStatusWidget
 
 public:
     explicit BranchesStatusWidget(QWidget *parent = nullptr);
-    explicit BranchesStatusWidget(Git::Manager *git, QWidget *parent = nullptr);
+    explicit BranchesStatusWidget(Git::Manager *git, GitKlientWindow *parent = nullptr);
 
     void saveState(QSettings &settings) const override;
     void restoreState(QSettings &settings) override;

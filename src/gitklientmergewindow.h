@@ -30,7 +30,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "ui_gitklientmergeview.h"
 
 class GitKlientView;
-class MainWidget;
 class SegmentsMapper;
 /**
  * This class serves as the main window for gitklient.  It handles the

@@ -8,6 +8,7 @@
 #include <QHeaderView>
 #include <QTreeView>
 #include <QVBoxLayout>
+#include "gitklientwindow.h"
 
 WidgetBase::WidgetBase(QWidget *parent) : QWidget(parent)
 {
@@ -15,8 +16,8 @@ WidgetBase::WidgetBase(QWidget *parent) : QWidget(parent)
     connect(_git, &Git::Manager::pathChanged, this, &WidgetBase::git_pathChanged);
 }
 
-WidgetBase::WidgetBase(Git::Manager *git, QWidget *parent) : QWidget(parent),
-      _git(git)
+WidgetBase::WidgetBase(Git::Manager *git, GitKlientWindow *parent) : QWidget(parent),
+      _git(git), _parent{parent}
 {
     if (!_git)
         _git = Git::Manager::instance();
@@ -89,5 +90,5 @@ void WidgetBase::git_pathChanged()
 
 QString WidgetBase::stateName(QWidget *w) const
 {
-    return QLatin1String("%1_%2_state").arg(metaObject()->className(), w->objectName());
+    return QStringLiteral("%1_%2_state").arg(metaObject()->className(), w->objectName());
 }

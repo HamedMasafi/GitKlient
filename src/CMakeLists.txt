@@ -20,7 +20,6 @@ set(gitklient_SRCS
     gitklientwindow.cpp
     gitklientview.cpp
 #    widgetbase.cpp
-    mainwidget.cpp
     buttonsgroup.cpp
     multipagewidget.cpp
     argsparser.cpp
@@ -39,7 +38,6 @@ kconfig_add_kcfg_files(gitklient_SRCS GitKlientSettings.kcfgc)
 ki18n_wrap_ui(gitklient_SRCS
     gitklientViewBase.ui
     settingsBase.ui
-    mainwidget.ui
     diffsettings.ui
     multipagewidget.ui
     gitklientmergeview.ui

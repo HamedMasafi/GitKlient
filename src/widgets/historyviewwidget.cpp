@@ -27,7 +27,7 @@ HistoryViewWidget::HistoryViewWidget(QWidget *parent) :
             &HistoryViewWidget::git_pathChanged);
 }
 
-HistoryViewWidget::HistoryViewWidget(Git::Manager *git, QWidget *parent):
+HistoryViewWidget::HistoryViewWidget(Git::Manager *git, GitKlientWindow *parent):
       WidgetBase(git, parent)
 {
     setupUi(this);

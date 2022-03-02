@@ -119,7 +119,7 @@ void GitKlientWindow::initActions()
     connect(branchBrowseAction, &QAction::triggered, this, &GitKlientWindow::browseBranch);
     {
         auto repoStatusAction = actionCollection->addAction(QStringLiteral("repo_status"));
-        repoStatusAction->setText(i18n("Status..."));
+        repoStatusAction->setText(i18n("Changed files..."));
         connect(repoStatusAction, &QAction::triggered, this, &GitKlientWindow::repoStatus);
         repoStatusAction->setIcon(QIcon::fromTheme(QStringLiteral("folder-open")));
         actionCollection->setDefaultShortcut(repoStatusAction, QKeySequence("Ctrl+S"));
@@ -336,7 +336,7 @@ void GitKlientWindow::addPage(const QString &actionName)
         Qt::Key_9
     };
     auto action = actionCollection()->addAction(actionName);
-    auto w = new T(this);
+    auto w = new T(Git::Manager::instance(), this);
     action->setText(w->windowTitle());
     action->setIcon(QIcon::fromTheme(actionName));
     if (_mainWidget->count() < 10)

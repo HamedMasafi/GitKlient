@@ -1,4 +1,4 @@
-#include "../../core/diff/diff.h"
+#include "../../src/diff/diff.h"
 #include <QtTest/QTest>
 #include <QDebug>
 

@@ -10,7 +10,7 @@ class SubmodulesWidget : public WidgetBase, private Ui::SubmodulesWidget
 
 public:
     explicit SubmodulesWidget(QWidget *parent = nullptr);
-    explicit SubmodulesWidget(Git::Manager *git, QWidget *parent = nullptr);
+    explicit SubmodulesWidget(Git::Manager *git, GitKlientWindow *parent = nullptr);
 
 
     void saveState(QSettings &settings) const override;

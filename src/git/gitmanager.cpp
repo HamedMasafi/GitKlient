@@ -240,6 +240,12 @@ QString Manager::run(const AbstractCommand &cmd) const
     return QString(runGit(cmd.generateArgs()));
 }
 
+void Manager::init(const QString &path)
+{
+    _path = path;
+    runGit({"init"});
+}
+
 bool Manager::isGitDir() const
 {
     auto out = runGit(QStringList() << "status");

@@ -9,7 +9,7 @@ TagsWidget::TagsWidget(QWidget *parent) :
     setupUi(this);
 }
 
-TagsWidget::TagsWidget(Git::Manager *git, QWidget *parent):
+TagsWidget::TagsWidget(Git::Manager *git, GitKlientWindow *parent):
       WidgetBase(git, parent)
 {
     setupUi(this);

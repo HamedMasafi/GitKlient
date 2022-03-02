@@ -10,7 +10,7 @@ class StashesWidget : public WidgetBase, private Ui::StashesWidget
 
 public:
     explicit StashesWidget(QWidget *parent = nullptr);
-    StashesWidget(Git::Manager *git, QWidget *parent = nullptr);
+    StashesWidget(Git::Manager *git, GitKlientWindow *parent = nullptr);
 
     void reload() override;
 private slots:

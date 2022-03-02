@@ -10,7 +10,7 @@ class TagsWidget : public WidgetBase, private Ui::TagsWidget
 
 public:
     explicit TagsWidget(QWidget *parent = nullptr);
-    explicit TagsWidget(Git::Manager *git, QWidget *parent = nullptr);
+    explicit TagsWidget(Git::Manager *git, GitKlientWindow *parent = nullptr);
     void reload() override;
 private slots:
     void on_pushButtonAddTag_clicked();

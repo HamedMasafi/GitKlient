@@ -29,7 +29,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 class GitKlientView;
 class MultiPageWidget;
-class MainWidget;
 class WidgetBase;
 /**
  * This class serves as the main window for gitklient.  It handles the
@@ -52,6 +51,9 @@ public:
      * Default Destructor
      */
     ~GitKlientWindow() override;
+
+    QMenu *_branchMenu;
+    QMenu *_commitMenu;
 
 private Q_SLOTS:
     void settingsConfigure();

@@ -7,6 +7,7 @@
 
 class QSplitter;
 class QTreeView;
+class GitKlientWindow;
 
 namespace Git {
 class Manager;
@@ -15,11 +16,13 @@ class WidgetBase : public QWidget
 {
     Q_OBJECT
 
+protected:
     Git::Manager *_git{nullptr};
+    GitKlientWindow *_parent{nullptr};
 
 public:
     explicit WidgetBase(QWidget *parent = nullptr);
-    WidgetBase(Git::Manager *git, QWidget *parent = nullptr);
+    WidgetBase(Git::Manager *git, GitKlientWindow *parent = nullptr);
     Git::Manager *git() const;
     void setGit(Git::Manager *newGit);
 

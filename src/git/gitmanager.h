@@ -56,6 +56,8 @@ public:
 
     QString run(const AbstractCommand &cmd) const;
 
+    void init(const QString &path);
+
     bool isGitDir() const;
     QByteArray runGit(const QStringList &args) const;
     QStringList ls(const QString &place) const;
