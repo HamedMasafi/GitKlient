@@ -5,26 +5,20 @@
 #include <QDebug>
 #include <QDir>
 
-KlientDolphinOverlayPlugin::KlientDolphinOverlayPlugin(QObject *parent)
-    :
-#ifdef GK_TEST
-      QObject(parent)
-#else
-      KOverlayIconPlugin(parent)
-#endif
+KlientDolphinOverlayPlugin::KlientDolphinOverlayPlugin(QObject *parent) : KOverlayIconPlugin(parent)
 {}
 
 QString icon(const FileStatus::Status &status)
 {
     switch (status) {
     case FileStatus::Added:
-        return "git-status-add";
+        return "git-status-added";
     case FileStatus::Ignored:
         return "git-status-ignored";
     case FileStatus::Modified:
         return "git-status-modified";
     case FileStatus::Removed:
-        return "git-status-remove";
+        return "git-status-removed";
     case FileStatus::Renamed:
         return "git-status-renamed";
     case FileStatus::Unknown:
@@ -34,67 +28,25 @@ QString icon(const FileStatus::Status &status)
     case FileStatus::UpdatedButInmerged:
     case FileStatus::Unmodified:
         return "git-status-update";
+    case FileStatus::NoGit:
+        return "";
+    default:
+        qWarning() << "Unknown icon" << status;
     }
     return "git-status-update";
 }
 
-QString KlientDolphinOverlayPlugin::pathIcon(const QString &path)
-{
-    QSet<FileStatus::Status> statues;
-    for (auto i = _statusCache.begin(); i != _statusCache.end(); ++i) {
-        if (i.key().startsWith(path))
-            statues.insert(i.value());
-    }
-    if (!statues.size() )
-        return icon(FileStatus::Unknown);
-    else if (statues.size() == 1)
-        return icon (statues.values().first());
-    else {
-        return icon(FileStatus::Modified);
-    }
-}
-
 QStringList KlientDolphinOverlayPlugin::getOverlays(const QUrl &url)
 {
-    auto p = url.toLocalFile();
+    if (!url.isLocalFile())
+        return {icon(FileStatus::NoGit)};
 
-//    qDebug() << "init" << _lastDir << p ;
-    if (!_lastDir.isEmpty() && p.startsWith(_lastDir)) {
-        if (_statusCache.contains(p))
-            return {icon(_statusCache.value(p))};
-
-        QDir d;
-        if (d.exists(p))
-            return {pathIcon(p)};
-        //return {icon(_statusCache.value(p, FileStatus::Unmodified))};
+    QFileInfo fi(url.toLocalFile());
+    if (fi.isDir()) {
+        return {icon(_cache.pathStatus(fi.absoluteFilePath()))};
     }
 
-//    if (_statusCache.contains(p)) {
-//        qDebug() << "p found" << p;
-//        return {icon(_statusCache.value(p))};
-//    }
-
-    Git::Manager git(QFileInfo(p).absolutePath());
-
-//    qDebug() << "setpath=" << p << git.isValid() << git.path();
-
-    if (!git.isValid()) {
-        _lastDir = QString();
-        return {};
-    }
-
-    _lastDir = git.path();
-    auto statuses = git.repoFilesStatus();
-
-    for (auto &s: statuses) {
-        qDebug() << "insert" << s.name() << git.path() << s.status();
-        _statusCache.insert(git.path() + "/" + s.name(), s.status());
-        if (git.path() + "/" + s.name() == p) {
-            qDebug() <<"Found"<<s.status();
-            return {icon(s.status())};
-        }
-    }
-    return {};
+    return {icon(_cache.fileStatus(fi))};
 }
 
 #include "klientdolphinoverlayplugin.moc"

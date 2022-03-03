@@ -1,41 +1,25 @@
 #ifndef KLIENTDOLPHINOVERLAYPLUGIN_H
 #define KLIENTDOLPHINOVERLAYPLUGIN_H
 
-#ifdef GK_TEST
-#   include <QObject>
-#else
-#   include <KOverlayIconPlugin>
-#endif
+#include "../src/git/filestatus.h"
+#include "statuscache.h"
+#include <KOverlayIconPlugin>
 #include <QCache>
 #include <QMap>
-#include "../src/git/filestatus.h"
 
-class KlientDolphinOverlayPlugin : public
-#ifdef GK_TEST
-                                   QObject
-#else
-                                   KOverlayIconPlugin
-#endif
+class KlientDolphinOverlayPlugin : public KOverlayIconPlugin
 {
     Q_PLUGIN_METADATA(IID "com.owncloud.ovarlayiconplugin" FILE "klientdolphinoverlayplugin.json")
     Q_OBJECT
 
-    QMap<QString, FileStatus::Status> _statusCache;
-    QString _lastDir;
+    StatusCache _cache;
 
 public:
 
     KlientDolphinOverlayPlugin(QObject *parent = nullptr);
 
-    QStringList getOverlays(const QUrl &url)
-#ifdef GK_TEST
-        ;
-#else
-        override;
-#endif
+    QStringList getOverlays(const QUrl &url) override;
 
-private:
-    QString pathIcon(const QString &path);
 };
 
 #endif // KLIENTDOLPHINOVERLAYPLUGIN_H

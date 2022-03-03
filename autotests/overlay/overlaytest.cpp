@@ -1,6 +1,7 @@
 #include "../../dolphinplugins/klientdolphinoverlayplugin.h"
 #include "../../src/git/gitmanager.h"
 #include "../common/gittestmanager.h"
+#include "../../dolphinplugins/statuscache.h"
 
 #include <QtTest/QTest>
 #include <QDebug>
@@ -13,8 +14,6 @@ class OverlayTest : public QObject
 
 private Q_SLOTS:
     void test1();
-    void checkIcons();
-
 };
 
 
@@ -24,37 +23,23 @@ void OverlayTest::test1()
     Git::Manager m(p);
     m.init(p);
     GitKlientTest::touch(p + "/README.md");
+    GitKlientTest::touch(p + "/2");
     m.addFile(p + "/README.md");
+    m.addFile(p + "/2");
     m.commit("update readme");
     GitKlientTest::touch(p + "/sample");
+    GitKlientTest::touch(p + "/2");
     qDebug() << "p="<<p;
     QDir d(p);
     d.cd(p);
     auto list = d.entryInfoList(QDir::NoDotAndDotDot | QDir::Dirs | QDir::Files);
-    KlientDolphinOverlayPlugin plugin;
-    QMap<QString, QStringList> icons;
-    for (auto &fi: list) {
-        auto icon = plugin.getOverlays(QUrl::fromLocalFile(fi.absoluteFilePath()));
-        qDebug() << fi.absoluteFilePath() << icon;
-        icons.insert(fi.absoluteFilePath(), icon);
-    }
+    StatusCache cache;
 
-    QCOMPARE(icons.value(p + "/README.md"), {"git-status-update"});
-}
-
-void OverlayTest::checkIcons()
-{
-    QDir d("/doc/dev/gitklient/");
-    auto list = d.entryInfoList();
-    KlientDolphinOverlayPlugin plugin;
-
-    for (auto &fi: list) {
-        auto icon = plugin.getOverlays(QUrl::fromLocalFile(fi.absoluteFilePath()));
-        qDebug() << fi.absoluteFilePath() << icon;
-    }
+    QCOMPARE(cache.fileStatus(p + "/README.md"), FileStatus::Unmodified);
+    QCOMPARE(cache.fileStatus(p + "/sample"), FileStatus::Untracked);
+    QCOMPARE(cache.fileStatus(p + "/2"), FileStatus::Modified);
 }
 
 QTEST_MAIN(OverlayTest)
-
 
 #include "overlaytest.moc"

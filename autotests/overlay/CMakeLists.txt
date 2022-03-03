@@ -8,6 +8,7 @@ ecm_add_test(
     overlaytest.cpp
     ${GIT_SRC}
     ../common/gittestmanager.cpp
+    ../../dolphinplugins/statuscache.cpp
     ../../dolphinplugins/klientdolphinoverlayplugin.cpp
     LINK_LIBRARIES Qt::Test Qt::Core Qt::Gui KF5::KIOWidgets
     TEST_NAME OverlayTest

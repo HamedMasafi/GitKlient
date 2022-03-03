@@ -17,7 +17,8 @@ public:
         Copied,
         UpdatedButInmerged,
         Ignored,
-        Untracked
+        Untracked,
+        NoGit
     };
 
     FileStatus();

@@ -27,7 +27,7 @@ aux_source_directory(../src/git GIT_SRC)
 
 set(PLUGIN_SRC actionmanager.cpp ${GIT_SRC})
 kcoreaddons_add_plugin(${PLUGIN}
-    SOURCES ${PLUGIN_SRC}
+    SOURCES ${PLUGIN_SRC} statuscache.cpp
     JSON ${PLUGIN}.json
     INSTALL_NAMESPACE "kf5/kfileitemaction")
 
@@ -44,7 +44,7 @@ kcoreaddons_add_plugin(
     ${OVERLAY_PLUGIN}
     INSTALL_NAMESPACE "kf5/overlayicon"
     JSON ${OVERLAY_PLUGIN}.json
-    SOURCES ${OVERLAY_SRC}
+    SOURCES ${OVERLAY_SRC} statuscache.cpp
 )
 target_link_libraries(
     ${OVERLAY_PLUGIN}
