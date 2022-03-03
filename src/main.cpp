@@ -115,7 +115,7 @@ ArgParserReturn argsWidget() {
         d.exec();
         return 0;
     } else {
-        GitKlientWindow *window = new GitKlientWindow;
+        auto window = GitKlientWindow::instance();
         window->show();
         return ExecApp;
     }

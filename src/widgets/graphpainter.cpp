@@ -116,13 +116,47 @@ void GraphPainter::paint(QPainter *painter, const QStyleOptionViewItem &option, 
 //        painter->setBrush(l.color());
         paintLane(painter, l, x);
     }
+
     QRect rc(
         log->lanes().size() * HEIGHT,
         0,
         painter->fontMetrics().horizontalAdvance(log->subject()),
         HEIGHT
     );
+
     painter->setPen(option.palette.color(QPalette::Text));
+    if (!log->refLog().isEmpty()) {
+        auto ref = "ref: " + log->refLog();
+        QRect rcBox(
+            log->lanes().size() * HEIGHT,
+            0,
+            painter->fontMetrics().horizontalAdvance(ref) + 8,
+            painter->fontMetrics().height() + 4
+            );
+        rcBox.moveTop((HEIGHT - rcBox.height()) / 2);
+
+        QLinearGradient linearGrad(rcBox.topLeft(), rcBox.bottomRight());
+        linearGrad.setFinalStop(rcBox.bottomLeft());
+        linearGrad.setColorAt(0, Qt::white);
+        linearGrad.setColorAt(1, QColor(100, 100, 255));
+
+        painter->fillRect(rcBox.left(),
+                          rcBox.top(),
+                          painter->fontMetrics().horizontalAdvance("ref: ") + 2,
+                          rcBox.height(),
+                          QBrush(linearGrad));
+
+        painter->fillRect(rcBox.left()+painter->fontMetrics().horizontalAdvance("ref: ") + 2,
+                          rcBox.top(),
+                          rcBox.width() - painter->fontMetrics().horizontalAdvance("ref: ") - 2,
+                          rcBox.height(),
+                          Qt::white);
+
+        painter->setBrush(Qt::transparent);
+        painter->drawRoundedRect(rcBox, 5, 5);
+        painter->drawText(rcBox, Qt::AlignVCenter | Qt::AlignHCenter, ref);
+        rc.moveLeft(rc.left() + rcBox.width() + 6);
+    }
     painter->drawText(rc, Qt::AlignVCenter, log->subject());
 
     painter->restore();

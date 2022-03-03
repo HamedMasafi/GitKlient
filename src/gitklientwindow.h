@@ -54,6 +54,7 @@ public:
 
     QMenu *_branchMenu;
     QMenu *_commitMenu;
+    static GitKlientWindow *instance();
 
 private Q_SLOTS:
     void settingsConfigure();
@@ -79,6 +80,7 @@ private:
     void initActions();
     void initRecentFiles(const QString &newItem = QString());
     void loadRemotes();
+    void initContextMenus();
 
     template <class T>
     void addPage(const QString &actionName);

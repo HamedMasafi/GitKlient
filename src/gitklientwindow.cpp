@@ -90,6 +90,12 @@ GitKlientWindow::~GitKlientWindow()
         w->saveState(s);
 }
 
+GitKlientWindow *GitKlientWindow::instance()
+{
+    static GitKlientWindow *instance = new GitKlientWindow;
+    return instance;
+}
+
 void GitKlientWindow::settingsConfigure()
 {
     if (KConfigDialog::showDialog(QStringLiteral("settings"))) {
@@ -211,6 +217,15 @@ void GitKlientWindow::loadRemotes()
     auto remotes = git->remotes();
     for (auto &r: remotes)
         volatile auto remote = git->remoteDetails(r);
+}
+
+void GitKlientWindow::initContextMenus()
+{
+    _branchMenu = new QMenu(this);
+    _branchMenu->addAction(i18n("Browse"));
+    _branchMenu->addAction(i18n("Checkout"));
+    _branchMenu->addAction(i18n("Remove"));
+    _branchMenu->addAction(i18n("Diff"));
 }
 
 
