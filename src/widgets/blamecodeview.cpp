@@ -49,9 +49,9 @@ int BlameCodeView::sidebarWidth() const
         QString text = b.log ? b.log->authorName() : i18n("Uncommited");
 
 #if QT_VERSION >= QT_VERSION_CHECK(5, 11, 0)
-        max = qMax(max, fm.horizontalAdvance(QLatin1Char('9')) * text.length());
+        max = qMax(max, fm.horizontalAdvance(text));
 #else
-        max = qMax(max, fm.width(QLatin1Char('9')) * text.length());
+        max = qMax(max, fm.width(text));
 #endif
     }
 

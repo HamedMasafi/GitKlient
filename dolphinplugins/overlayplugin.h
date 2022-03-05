@@ -7,16 +7,16 @@
 #include <QCache>
 #include <QMap>
 
-class KlientDolphinOverlayPlugin : public KOverlayIconPlugin
+class OverlayPlugin : public KOverlayIconPlugin
 {
-    Q_PLUGIN_METADATA(IID "com.owncloud.ovarlayiconplugin" FILE "klientdolphinoverlayplugin.json")
+    Q_PLUGIN_METADATA(IID "org.kfe.gitklient.ovarlayiconplugin" FILE "gitklientoverlayplugin.json")
     Q_OBJECT
 
     StatusCache _cache;
 
 public:
 
-    KlientDolphinOverlayPlugin(QObject *parent = nullptr);
+    OverlayPlugin(QObject *parent = nullptr);
 
     QStringList getOverlays(const QUrl &url) override;
 

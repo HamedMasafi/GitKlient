@@ -34,7 +34,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "git/gitmanager.h"
 #include "gitklientdebug.h"
 #include "gitklientview.h"
-#include "mainwidget.h"
 #include "multipagewidget.h"
 #include "widgets/branchesstatuswidget.h"
 #include "widgets/commitswidget.h"

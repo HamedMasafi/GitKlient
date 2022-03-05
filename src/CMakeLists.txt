@@ -4,6 +4,7 @@ aux_source_directory(common COMMON_SRC)
 aux_source_directory(models MODELS_SRC)
 aux_source_directory(widgets WIDGETS_SRC)
 aux_source_directory(dialogs DIALOGS_SRC)
+aux_source_directory(actions ACTIONS_SRC)
 include_directories(${CMAKE_SOURCE_DIR}/core)
 
 
@@ -15,6 +16,7 @@ set(gitklient_SRCS
     ${WIDGETS_SRC}
     ${DIALOGS_SRC}
     ${COMMON_SRC}
+    ${ACTIONS_SRC}
 
     main.cpp
     gitklientwindow.cpp

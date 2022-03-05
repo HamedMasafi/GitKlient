@@ -5,6 +5,7 @@
 
 namespace Git {
 class Manager;
+class File;
 }
 
 class FileHistoryDialog : public QDialog, private Ui::FileHistoryDialog
@@ -16,6 +17,7 @@ class FileHistoryDialog : public QDialog, private Ui::FileHistoryDialog
 public:
     explicit FileHistoryDialog(QWidget *parent = nullptr);
     FileHistoryDialog(Git::Manager *git, const QString &fileName, QWidget *parent = nullptr);
+    FileHistoryDialog(Git::Manager *git, const Git::File &file, QWidget *parent = nullptr);
 
 private slots:
     void on_listWidget_itemClicked(QListWidgetItem *item);

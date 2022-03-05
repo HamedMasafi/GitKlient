@@ -20,16 +20,17 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 // application header
 #include "commandargsparser.h"
+#include "dialogs/changedfilesdialog.h"
+#include "dialogs/fileblamedialog.h"
+#include "dialogs/filehistorydialog.h"
 #include "dialogs/pulldialog.h"
 #include "dialogs/runnerdialog.h"
-#include "dialogs/changedfilesdialog.h"
+#include "diffwindow.h"
 #include "git/gitfile.h"
 #include "git/gitmanager.h"
-#include "diffwindow.h"
 #include "gitklientdebug.h"
-#include "gitklientwindow.h"
 #include "gitklientmergewindow.h"
-#include "dialogs/fileblamedialog.h"
+#include "gitklientwindow.h"
 
 // KF headers
 #include <KAboutData>
@@ -40,9 +41,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // Qt headers
 #include <QApplication>
 #include <QCommandLineParser>
+#include <QDebug>
+#include <QDir>
 #include <QFileInfo>
 #include <QIcon>
 #include <QLoggingCategory>
+
 
 enum ParseReturnType {
     ExecApp,
@@ -63,6 +67,8 @@ ArgParserReturn argsWidget() {
     p.add("pull", "pull <path>");
     p.add("changes", "changes <path>");
     p.add("diff", "diff <file>");
+    p.add("blame", "blame <file>");
+    p.add("history", "history <file>");
     p.add("merge", "merge <base> <local> <remote> <result>");
     p.add("diff1", "diff");
     p.add("merge1", "merge");
@@ -93,9 +99,27 @@ ArgParserReturn argsWidget() {
         diffWin->setWindowModality(Qt::ApplicationModal);
         diffWin->setAttribute(Qt::WA_DeleteOnClose, true);
         diffWin->show();
+        return ExecApp;
+    } else if (key == "blame") {
+        auto g = Git::Manager::instance();
+        g->setPath(p.param("path"));
+        Git::File f(g->currentBranch(), p.param("file"), g);
+        FileBlameDialog d(f);
+        d.exec();
+        return 0;
+    } else if (key == "history") {
+        QDir dir(git->path());
+        auto file = p.param("file");
+        git->setPath(file.mid(0, file.lastIndexOf("/")));
+        file = file.mid(git->path().size() + 1);
+        FileHistoryDialog d(git, file);
+        qDebug() << p.param("file") << file << QDir::currentPath() << git->path();
+        d.exec();
         return 0;
     } else if (key == "changes") {
-        git->setPath(p.param("path"));
+        QFileInfo fi(p.param("path"));
+
+        git->setPath(fi.isFile() ? fi.absoluteFilePath() : fi.absolutePath());
         ChangedFilesDialog d;
         d.exec();
         return 0;
@@ -154,7 +178,4 @@ int main(int argc, char **argv)
         return application.exec();
     }
     return w.code;
-
-
-
 }

@@ -178,6 +178,8 @@ struct LanesFactory {
 
         if (log->childs().size()) {
             fork(log->childs(), lanes, myIndex);
+        } else {
+            lanes[myIndex]._type = GraphLane::End;
         }
 
         return lanes;

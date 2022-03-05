@@ -1,11 +1,11 @@
-#include "klientdolphinoverlayplugin.h"
+#include "overlayplugin.h"
 
 #include "../src/git/gitmanager.h"
 #include <QUrl>
 #include <QDebug>
 #include <QDir>
 
-KlientDolphinOverlayPlugin::KlientDolphinOverlayPlugin(QObject *parent) : KOverlayIconPlugin(parent)
+OverlayPlugin::OverlayPlugin(QObject *parent) : KOverlayIconPlugin(parent)
 {}
 
 QString icon(const FileStatus::Status &status)
@@ -36,7 +36,7 @@ QString icon(const FileStatus::Status &status)
     return "git-status-update";
 }
 
-QStringList KlientDolphinOverlayPlugin::getOverlays(const QUrl &url)
+QStringList OverlayPlugin::getOverlays(const QUrl &url)
 {
     if (!url.isLocalFile())
         return {icon(FileStatus::NoGit)};
@@ -49,4 +49,4 @@ QStringList KlientDolphinOverlayPlugin::getOverlays(const QUrl &url)
     return {icon(_cache.fileStatus(fi))};
 }
 
-#include "klientdolphinoverlayplugin.moc"
+#include "overlayplugin.moc"
