@@ -10,6 +10,8 @@ class CommitActions : public AbstractActions
     QString _commitHash;
 
     DEFINE_ACTION(actionBrowse)
+    DEFINE_ACTION(actionCheckout)
+    DEFINE_ACTION(actionDiff)
 
 public:
     CommitActions(Git::Manager *git, QWidget *parent = nullptr);
@@ -19,6 +21,8 @@ public:
 
 private slots:
     void browse();
+    void checkout();
+    void diff();
 };
 
 #endif // COMMITACTIONS_H

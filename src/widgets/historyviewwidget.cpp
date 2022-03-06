@@ -6,6 +6,7 @@
 #include <QDebug>
 #include <QMenu>
 #include "widgets/graphpainter.h"
+#include "actions/commitactions.h"
 
 HistoryViewWidget::HistoryViewWidget(QWidget *parent) :
       WidgetBase(parent)
@@ -17,14 +18,12 @@ HistoryViewWidget::HistoryViewWidget(QWidget *parent) :
     _graphPainter = new GraphPainter(_historyModel, this);
     treeViewHistory->setItemDelegateForColumn(0, _graphPainter);
 
-    _commitMenu = new QMenu(this);
-    auto action = _commitMenu->addAction(tr("Browse"));
-    connect(action, &QAction::triggered, this, &HistoryViewWidget::browseCommit);
-
     connect(Git::Manager::instance(),
             &Git::Manager::pathChanged,
             this,
             &HistoryViewWidget::git_pathChanged);
+
+    _actions = new CommitActions(Git::Manager::instance(), this);
 }
 
 HistoryViewWidget::HistoryViewWidget(Git::Manager *git, GitKlientWindow *parent):
@@ -37,14 +36,12 @@ HistoryViewWidget::HistoryViewWidget(Git::Manager *git, GitKlientWindow *parent)
     _graphPainter = new GraphPainter(_historyModel, this);
     treeViewHistory->setItemDelegateForColumn(0, _graphPainter);
 
-    _commitMenu = new QMenu(this);
-    auto action = _commitMenu->addAction(tr("Browse"));
-    connect(action, &QAction::triggered, this, &HistoryViewWidget::browseCommit);
-
     connect(Git::Manager::instance(),
             &Git::Manager::pathChanged,
             this,
             &HistoryViewWidget::git_pathChanged);
+
+    _actions = new CommitActions(git, this);
 }
 
 void HistoryViewWidget::setBranch(const QString &branchName)
@@ -98,18 +95,14 @@ void HistoryViewWidget::on_textBrowser_fileClicked(const QString &file)
     diffWin->show();
 }
 
-void HistoryViewWidget::browseCommit()
+void HistoryViewWidget::on_treeViewHistory_customContextMenuRequested(const QPoint &pos)
 {
     auto log = _historyModel->log(treeViewHistory->currentIndex());
     if (!log)
         return;
-    FilesTreeDialog d(log->commitHash(), this);
-    d.exec();
-}
+    _actions->setCommitHash(log->commitHash());
 
-void HistoryViewWidget::on_treeViewHistory_customContextMenuRequested(const QPoint &pos)
-{
-    _commitMenu->popup(treeViewHistory->mapToGlobal(pos));
+    _actions->popup(treeViewHistory->mapToGlobal(pos));
 }
 
 void HistoryViewWidget::git_pathChanged()

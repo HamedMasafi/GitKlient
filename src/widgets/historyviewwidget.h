@@ -6,11 +6,12 @@
 
 class HistoryModel;
 class GraphPainter;
+class CommitActions;
 class HistoryViewWidget : public WidgetBase, private Ui::HistoryViewWidget
 {
     Q_OBJECT
+    CommitActions *_actions;
     HistoryModel *_historyModel;
-    QMenu *_commitMenu;
     GraphPainter *_graphPainter;
 
 public:
@@ -22,7 +23,6 @@ public:
     void restoreState(QSettings &settings) override;
 
 private slots:
-    void browseCommit();
     void on_treeViewHistory_itemActivated(const QModelIndex &index);
     void on_textBrowser_hashClicked(const QString &hash);
     void on_textBrowser_fileClicked(const QString &file);
