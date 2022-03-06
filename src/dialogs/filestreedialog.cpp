@@ -9,11 +9,15 @@
 #include "dialogs/filehistorydialog.h"
 #include "dialogs/fileblamedialog.h"
 #include "dialogs/searchdialog.h"
+#include "actions/fileactions.h"
 
 FilesTreeDialog::FilesTreeDialog(const QString &place, QWidget *parent) :
       QDialog(parent), _place(place)
 {
     setupUi(this);
+
+    _actions = new FileActions(Git::Manager::instance(), this);
+    _actions->setPlace(place);
 
     _treeModel = new TreeModel(this);
     _treeModel->setSeprator("/");
@@ -29,34 +33,6 @@ FilesTreeDialog::FilesTreeDialog(const QString &place, QWidget *parent) :
     setWindowTitle(QStringLiteral("Browse files: %1").arg(place));
 
     lineEditBranchName->setText(place);
-
-    _fileMenu = new QMenu(this);
-
-    auto actionCopy = new QAction(this);
-    actionCopy->setText(i18n("Copy"));
-    connect(actionCopy, &QAction::triggered, this, &FilesTreeDialog::copyFile);
-    _fileMenu->addAction(actionCopy);
-
-    auto actionView = new QAction(this);
-    actionView->setText(i18n("View"));
-    connect(actionView, &QAction::triggered, this, &FilesTreeDialog::viewFile);
-    _fileMenu->addAction(actionView);
-
-    auto actionHistory = new QAction(this);
-    actionHistory->setText(i18n("Log"));
-    connect(actionHistory, &QAction::triggered, this, &FilesTreeDialog::logFile);
-    _fileMenu->addAction(actionHistory);
-
-
-    auto actionBlame = new QAction(this);
-    actionBlame->setText(i18n("Blame"));
-    connect(actionBlame, &QAction::triggered, this, &FilesTreeDialog::blameFile);
-    _fileMenu->addAction(actionBlame);
-
-    auto actionSearch = new QAction(this);
-    actionSearch->setText(i18n("Search history"));
-    connect(actionSearch, &QAction::triggered, this, &FilesTreeDialog::search);
-    _fileMenu->addAction(actionSearch);
 
     listWidget->clear();
 
@@ -85,53 +61,15 @@ void FilesTreeDialog::on_treeView_clicked(const QModelIndex &index)
     }
 }
 
-void FilesTreeDialog::viewFile()
-{
-    QString path;
-    if (treeView->currentIndex().isValid())
-        path = _treeModel->fullPath(treeView->currentIndex()) + "/"
-               + listWidget->currentItem()->text();
-    else
-        path = listWidget->currentItem()->text();
-    qDebug() << "p=" << path;
-    FileViewerDialog d(_place, path);
-    d.exec();
-}
-
-void FilesTreeDialog::copyFile()
-{
-    auto path = _treeModel->fullPath(treeView->currentIndex()) + "/"
-                + listWidget->currentItem()->text();
-
-}
-
-void FilesTreeDialog::logFile()
-{
-    auto path = _treeModel->fullPath(treeView->currentIndex()) + "/"
-                + listWidget->currentItem()->text();
-    FileHistoryDialog d(Git::Manager::instance(), path, this);
-    d.exec();
-}
-
-void FilesTreeDialog::blameFile()
-{
-    auto path = _treeModel->fullPath(treeView->currentIndex()) + "/"
-                + listWidget->currentItem()->text();
-    Git::File file(_place, path, Git::Manager::instance());
-    FileBlameDialog d(file, this);
-    d.exec();
-}
-
-void FilesTreeDialog::search()
-{
-    auto path = _treeModel->fullPath(treeView->currentIndex()) + "/"
-                + listWidget->currentItem()->text();
-    SearchDialog d(path, Git::Manager::instance(), this);
-    d.exec();
-}
-
 void FilesTreeDialog::on_listWidget_customContextMenuRequested(const QPoint &pos)
 {
-    _fileMenu->popup(listWidget->mapToGlobal(pos));
-}
+    auto path = _treeModel->fullPath(treeView->currentIndex());
 
+    if (path=="/")
+        path = listWidget->currentItem()->text();
+    else
+        path += "/" + listWidget->currentItem()->text();
+
+    _actions->setFilePath(path);
+    _actions->popup(listWidget->mapToGlobal(pos));
+}

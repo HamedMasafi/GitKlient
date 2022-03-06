@@ -7,10 +7,12 @@
 namespace Git {
 class Manager;
 }
+class BranchActions;
 class BranchesStatusWidget : public WidgetBase, private Ui::BranchesStatusWidget
 {
     Q_OBJECT
     QStringList _branches;
+    BranchActions *_actions;
 
 public:
     explicit BranchesStatusWidget(QWidget *parent = nullptr);
@@ -24,6 +26,8 @@ private slots:
     void on_pushButtonRemoveSelected_clicked();
     void on_treeWidgetBranches_currentItemChanged(QTreeWidgetItem *current,
                                                   QTreeWidgetItem *previous);
+    void on_treeWidgetBranches_customContextMenuRequested(const QPoint &pos);
+
     void reload() override;
     void on_pushButtonBrowse_clicked();
     void on_pushButtonDiff_clicked();

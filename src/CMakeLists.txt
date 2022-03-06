@@ -92,8 +92,8 @@ target_link_libraries(gitklient
     KF5::KIOCore
     KF5::KIOWidgets
     KF5::TextWidgets
-    KF5SyntaxHighlighting
     KF5::TextEditor
+    KF5SyntaxHighlighting
 )
 
 install(TARGETS gitklient ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})

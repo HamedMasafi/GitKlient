@@ -178,7 +178,7 @@ struct LanesFactory {
 
         if (log->childs().size()) {
             fork(log->childs(), lanes, myIndex);
-        } else {
+        } else if (myIndex != -1) {
             lanes[myIndex]._type = GraphLane::End;
         }
 

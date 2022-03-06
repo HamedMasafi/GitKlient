@@ -1,14 +1,17 @@
 #include "branchesstatuswidget.h"
 
-#include "git/gitmanager.h"
+#include "actions/branchactions.h"
 #include "dialogs/filestreedialog.h"
 #include "dialogs/runnerdialog.h"
 #include "diffwindow.h"
+#include "git/gitmanager.h"
+
 #include <KMessageBox>
 
 BranchesStatusWidget::BranchesStatusWidget(QWidget *parent) : WidgetBase(parent)
 {
     setupUi(this);
+    _actions = new BranchActions(Git::Manager::instance(), this);
 }
 
 BranchesStatusWidget::BranchesStatusWidget(Git::Manager *git, GitKlientWindow *parent) :
@@ -16,6 +19,7 @@ BranchesStatusWidget::BranchesStatusWidget(Git::Manager *git, GitKlientWindow *p
 
 {
     setupUi(this);
+    _actions = new BranchActions(git, this);
 }
 
 void BranchesStatusWidget::saveState(QSettings &settings) const
@@ -40,6 +44,7 @@ void BranchesStatusWidget::on_comboBoxReferenceBranch_currentIndexChanged(const 
         item->setText(2, QString::number(commitsInfo.second));
         treeWidgetBranches->addTopLevelItem(item);
     }
+    _actions->setOtherBranch(comboBoxReferenceBranch->currentText());
 }
 
 void BranchesStatusWidget::on_pushButtonRemoveSelected_clicked()
@@ -67,6 +72,14 @@ void BranchesStatusWidget::on_treeWidgetBranches_currentItemChanged(QTreeWidgetI
     pushButtonCheckout->setEnabled(true);
     pushButtonDiff->setEnabled(true);
     pushButtonRemoveSelected->setEnabled(true);
+}
+
+void BranchesStatusWidget::on_treeWidgetBranches_customContextMenuRequested(const QPoint &pos)
+{
+    if (!treeWidgetBranches->currentItem())
+        return;
+    _actions->setBranchName(treeWidgetBranches->currentItem()->text(0));
+    _actions->popup(treeWidgetBranches->mapToGlobal(pos));
 }
 
 void BranchesStatusWidget::reload()

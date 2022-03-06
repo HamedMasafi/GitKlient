@@ -1,23 +1,12 @@
 #ifndef FILEACTIONS_H
 #define FILEACTIONS_H
 
-#include <QObject>
+#include "abstractactions.h"
 
-
-namespace Git {
-class Manager;
-};
-
-class QWidget;
-class QMenu;
-class QAction;
-class FileActions : public QObject
+class FileActions : public AbstractActions
 {
     Q_OBJECT
 
-    Git::Manager *_git;
-    QMenu *_fileMenu;
-    QWidget *_parent;
     QString _place;
     QString _filePath;
     QAction *actionSaveAs;
@@ -26,6 +15,13 @@ class FileActions : public QObject
 
 public:
     FileActions(Git::Manager *git, QWidget *parent = nullptr);
+    void popup(const QPoint &pos);
+
+    const QString &place() const;
+    void setPlace(const QString &newPlace);
+
+    const QString &filePath() const;
+    void setFilePath(const QString &newFilePath);
 
 private slots:
     void viewFile();

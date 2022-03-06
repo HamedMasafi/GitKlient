@@ -12,36 +12,59 @@
 #include <QFileDialog>
 #include <QMenu>
 
-FileActions::FileActions(Git::Manager *git, QWidget *parent)
-    : QObject(parent), _git{git}, _parent(parent)
+const QString &FileActions::place() const
 {
-    _fileMenu = new QMenu(parent);
+    return _place;
+}
 
+void FileActions::setPlace(const QString &newPlace)
+{
+    _place = newPlace;
+}
+
+const QString &FileActions::filePath() const
+{
+    return _filePath;
+}
+
+void FileActions::setFilePath(const QString &newFilePath)
+{
+    _filePath = newFilePath;
+}
+
+FileActions::FileActions(Git::Manager *git, QWidget *parent)
+    : AbstractActions(git, parent)
+{
     actionSaveAs = new QAction(this);
     actionSaveAs->setText(i18n("Save as..."));
     connect(actionSaveAs, &QAction::triggered, this, &FileActions::saveAsFile);
-    _fileMenu->addAction(actionSaveAs);
+    _menu->addAction(actionSaveAs);
 
     auto actionView = new QAction(this);
     actionView->setText(i18n("View..."));
     connect(actionView, &QAction::triggered, this, &FileActions::viewFile);
-    _fileMenu->addAction(actionView);
+    _menu->addAction(actionView);
 
     auto actionHistory = new QAction(this);
     actionHistory->setText(i18n("Log..."));
     connect(actionHistory, &QAction::triggered, this, &FileActions::logFile);
-    _fileMenu->addAction(actionHistory);
+    _menu->addAction(actionHistory);
 
 
     auto actionBlame = new QAction(this);
     actionBlame->setText(i18n("Blame..."));
     connect(actionBlame, &QAction::triggered, this, &FileActions::blameFile);
-    _fileMenu->addAction(actionBlame);
+    _menu->addAction(actionBlame);
 
     auto actionSearch = new QAction(this);
     actionSearch->setText(i18n("Search history..."));
     connect(actionSearch, &QAction::triggered, this, &FileActions::search);
-    _fileMenu->addAction(actionSearch);
+    _menu->addAction(actionSearch);
+}
+
+void FileActions::popup(const QPoint &pos)
+{
+    _menu->popup(pos);
 }
 
 void FileActions::viewFile()
