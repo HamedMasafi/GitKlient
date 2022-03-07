@@ -9,6 +9,7 @@ FileHistoryDialog::FileHistoryDialog(QWidget *parent) :
       QDialog(parent)
 {
     setupUi(this);
+    _git = Git::Manager::instance();
 }
 
 FileHistoryDialog::FileHistoryDialog(Git::Manager *git, const QString &fileName, QWidget *parent):

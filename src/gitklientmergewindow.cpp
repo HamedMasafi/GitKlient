@@ -29,6 +29,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <KActionCollection>
 #include <KConfigDialog>
+#include <KLocalizedString>
 #include <KMessageBox>
 
 #include <QDebug>

@@ -18,7 +18,7 @@ public:
     FileStatus::Status fileStatus(const QFileInfo &fileInfo);
 
 private:
-    void addPath(const QString &path);
+    bool addPath(const QString &path);
     bool isInDir(const QString &dirPath, const QString &filePath);
 };
 

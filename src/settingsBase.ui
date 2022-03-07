@@ -13,6 +13,12 @@
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
     <widget class="QGroupBox" name="groupBox">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
      <property name="title">
       <string>Startup</string>
      </property>
@@ -37,23 +43,7 @@
       </widget>
      </item>
      <item row="0" column="1">
-      <widget class="QComboBox" name="kcfg_calendarType">
-       <item>
-        <property name="text">
-         <string>Default</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Gregorian</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Persian</string>
-        </property>
-       </item>
-      </widget>
+      <widget class="QComboBox" name="kcfg_calendarType"/>
      </item>
      <item row="1" column="0">
       <widget class="QLabel" name="label_2">

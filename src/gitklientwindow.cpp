@@ -51,7 +51,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <QMenu>
 #include <QSettings>
 #include <QtConcurrent/QtConcurrent>
-
+#include <KLocalizedString>
 
 
 GitKlientWindow::GitKlientWindow()
@@ -105,6 +105,16 @@ void GitKlientWindow::settingsConfigure()
 
     QWidget *generalSettingsPage = new QWidget;
     settingsBase.setupUi(generalSettingsPage);
+//#ifndef QT_BOOTSTRAPPED
+//    settingsBase.kcfg_calendarType->addItem("Julian");
+//    settingsBase.kcfg_calendarType->addItem("Milankovic");
+//#endif
+//#if QT_CONFIG(jalalicalendar)
+//    settingsBase.kcfg_calendarType->addItem("Jalali");
+//#endif
+//#if QT_CONFIG(islamiccivilcalendar)
+//    settingsBase.kcfg_calendarType->addItem("IslamicCivil");
+//#endif
     dialog->addPage(generalSettingsPage, i18n("General"), QStringLiteral("package_setting"));
 
     auto diffSettingsPage = new QWidget;

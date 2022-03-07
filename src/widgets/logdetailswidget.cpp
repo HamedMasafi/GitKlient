@@ -4,7 +4,9 @@
 #include "GitKlientSettings.h"
 #include <KLocalizedString>
 
-//#include <QCalendar>
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
+#include <QCalendar>
+#endif
 
 LogDetailsWidget::LogDetailsWidget(QWidget *parent) : QTextBrowser(parent)
 {
@@ -64,22 +66,40 @@ void LogDetailsWidget::createText()
     for (auto &child: _log->childs())
         childsHashHtml.append(createHashLink(child));
 
-  /*  QCalendar::System system = QCalendar::System::Gregorian;
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
+    QString date;
+    QCalendar cal;
     switch (GitKlientSettings::calendarType()) {
+    case GitKlientSettings::EnumCalendarType::Default:
+        cal = QCalendar(QCalendar::System::Gregorian);
+        break;
     case GitKlientSettings::EnumCalendarType::Jalali:
-        system = QCalendar::System::Jalali;
+        cal = QCalendar(QCalendar::System::Julian);
+        break;
+    case GitKlientSettings::EnumCalendarType::Milankovic:
+        cal = QCalendar(QCalendar::System::Milankovic);
+        break;
+    case GitKlientSettings::EnumCalendarType::IslamicCivil:
+        cal = QCalendar(QCalendar::System::IslamicCivil);
+        break;
     }
-    auto cal = QCalendar(system);*/
-    auto date = _log->commitDate().toLocalTime().toString("yyyy-MM-dd");
+    if (cal.isValid())
+        date = _log->commitDate().toLocalTime().toString("yyyy-MM-dd HH:mm:ss", cal);
+    else
+        date = _log->commitDate().toLocalTime().toString();
+#else
+    auto date = _log->commitDate().toLocalTime().toString();
+#endif
 
     clear();
     QString html;
     appendParagraph(html, _log->subject());
-    appendParagraph(html, i18n("Branch"), _log->refLog());
+    if (_log->refLog() != QString())
+        appendParagraph(html, i18n("Ref"), _log->refLog());
     appendParagraph(html, i18n("Committer"), QStringLiteral("%1 &lt;%2&gt;").arg(_log->committerName(), _log->committerEmail()));
     appendParagraph(html, i18n("Author"), QStringLiteral("%1 &lt;%2&gt;").arg(_log->authorName(), _log->authorEmail()));
     appendParagraph(html, i18n("Date"), date);
-    appendParagraph(html, i18n("Hash"), createHashLink(_log->commitHash()));
+    appendParagraph(html, i18n("Hash"), _log->commitHash());
 
     if (_log->parents().size())
         appendParagraph(html,
@@ -89,38 +109,10 @@ void LogDetailsWidget::createText()
         appendParagraph(html,
                         _log->childs().size() == 1 ? i18n("Child") : i18n("Children"),
                         childsHashHtml);
-    appendParagraph(html, _log->body());
+
     appendParagraph(html, QStringLiteral("<b>Changed files:</b><ul>%1</ul>").arg(filesHtml));
 
     setHtml(html);
-
-   /* setHtml(
-        QStringLiteral(R"(
-        Extra--%12--(%13)<br />
-        <b>%1</b><br />
-        Branch: %11<br />
-        Committer: %4 &lt;%5&gt; <br />
-        Date: %9 <br />
-        Author: %6 &lt;%7&gt; <br />
-        <br />
-        Hash: <a href="%2">%2</a> <br />
-        Parent: %3 <br />
-        Childs: %14 <br />
-        <br />
-        %8
-        <br />
-        <b>Changed files:</b>
-        <ul>%10</ul>
-    )")
-            .arg(_log->subject(),
-                 _log->commitHash(),
-                 parentHashHtml,
-                 _log->committerName(),
-                 _log->committerEmail(),
-                 _log->authorName(),
-                 _log->authorEmail(),
-                 _log->body())
-            .arg(date, filesHtml, _log->branch(), _log->extraData(), _log->refLog(), childsHashHtml));*/
 }
 
 void LogDetailsWidget::appendParagraph(QString &html, const QString &text) const

@@ -9,11 +9,11 @@ StatusCache::StatusCache()
 {
 
 }
-void StatusCache::addPath(const QString &path)
+bool StatusCache::addPath(const QString &path)
 {
     Git::Manager git(path);
     if (!git.isValid())
-        return;
+        return false;
 
     auto statuses = git.repoFilesStatus();
 
@@ -22,6 +22,7 @@ void StatusCache::addPath(const QString &path)
 //        if (s.status() != FileStatus::Ignored)
 //            qDebug() << s.status() << git.path() << s.name();
     }
+    return true;
 }
 
 bool StatusCache::isInDir(const QString &dirPath, const QString &filePath)
@@ -43,7 +44,8 @@ FileStatus::Status StatusCache::fileStatus(const QFileInfo &fileInfo)
     }
 
 
-    addPath(fileInfo.absolutePath());
+    if (!addPath(fileInfo.absolutePath()))
+        return FileStatus::NoGit;
 
     if (_statuses.contains(filePath)) {
         return _statuses.value(filePath);
