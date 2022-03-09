@@ -140,6 +140,7 @@ KService::Ptr FileViewerDialog::getInternalViewer(const QString& mimeType)
 
     // Try to get a read-only kpart for the internal viewer
     KService::List offers = KMimeTypeTrader::self()->query(mimeType, QStringLiteral("KParts/ReadOnlyPart"));
+
     qDebug() << offers.size() << "offer(s) found for" << mimeType;
     for (const auto &offer: offers)
         qDebug() << " *" << offer->name() << offer->genericName();
@@ -192,10 +193,11 @@ bool FileViewerDialog::viewInInternalViewer(const KService::Ptr viewer, const QS
 //    m_commentLabel->setText(mimeType.comment());
 
     // Create the ReadOnlyPart instance.
-    m_part = viewer->createInstance<KParts::ReadOnlyPart>(widgetContainer, this);
+    QString error;
+    m_part = viewer->createInstance<KParts::ReadOnlyPart>(widgetContainer, widgetContainer, QVariantList(), &error);
 
     if (!m_part.data()) {
-        qDebug() << "m_part is null";
+        qDebug() << "m_part is null" << error;
         return false;
     }
 

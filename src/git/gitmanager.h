@@ -82,6 +82,7 @@ public:
 
     QList<Git::Submodule> submodules() const;
     bool addSubmodule(const Git::Submodule &module);
+    void revertFile(const QString &filePath);
 
     QMap<QString, Manager::ChangeStatus> changedFiles() const;
     void commit(const QString &message);
@@ -117,6 +118,7 @@ signals:
 
 private:
     QStringList readAllNonEmptyOutput(const QStringList &cmd) const;
+    QString escapeFileName(const QString& filePath) const;
 };
 
 } // namespace Git

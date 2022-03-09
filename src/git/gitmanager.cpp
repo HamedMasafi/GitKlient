@@ -215,6 +215,13 @@ QStringList Manager::readAllNonEmptyOutput(const QStringList &cmd) const
     return list;
 }
 
+QString Manager::escapeFileName(const QString &filePath) const
+{
+    if (filePath.contains(" "))
+        return " " + filePath + " ";
+    return filePath;
+}
+
 Manager::Manager() : QObject() {}
 
 Manager::Manager(const QString path) : QObject()
@@ -415,6 +422,11 @@ bool Manager::addSubmodule(const Submodule &module)
     Q_UNUSED(module)
     //TODO:
     return true;
+}
+
+void Manager::revertFile(const QString &filePath)
+{
+    runGit({"checkout", "--", filePath});
 }
 
 QMap<QString, Manager::ChangeStatus> Manager::changedFiles() const
