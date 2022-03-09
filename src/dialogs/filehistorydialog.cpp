@@ -36,9 +36,11 @@ FileHistoryDialog::FileHistoryDialog(Git::Manager *git, const QString &fileName,
 }
 
 FileHistoryDialog::FileHistoryDialog(Git::Manager *git, const Git::File &file, QWidget *parent)
+    : QDialog(parent), _git(git)
 {
     setupUi(this);
 
+    _fileName = file.fileName();
     auto hashes = git->fileLog(file.fileName());
 
     auto logs = git->logs();

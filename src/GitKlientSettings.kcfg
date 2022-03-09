@@ -35,7 +35,7 @@
             </choices>
         </entry>
         <entry name="openLastRepo" type="Bool">
-            <label>Open last repo as startup</label>
+            <label>Open last repo at startup</label>
             <default>false</default>
         </entry>
     </group>

@@ -59,8 +59,10 @@ void SearchDialog::on_treeView_doubleClicked(QModelIndex index)
     else
         place = branch.isEmpty() ? commit : branch;
 
-    FileViewerDialog d(place, file);
-    d.exec();
+    auto d = new FileViewerDialog(place, file);
+    d->setWindowModality(Qt::ApplicationModal);
+    d->setAttribute(Qt::WA_DeleteOnClose, true);
+    d->show();
 }
 
 void SearchDialog::beginSearch()

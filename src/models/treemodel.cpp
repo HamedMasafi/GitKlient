@@ -4,6 +4,8 @@
 #include <QModelIndex>
 #include <QDebug>
 
+#include <KLocalizedString>
+
 const QString &TreeModel::seprator() const
 {
     return _seprator;
@@ -130,9 +132,9 @@ QVariant TreeModel::headerData(int section, Qt::Orientation orientation, int rol
 
     if (orientation == Qt::Horizontal) {
         if (section == 0)
-            return "Name";
+            return i18n("Name");
         else
-            return "Status";
+            return i18n("Status");
     } else {
         return section + 1;
     }

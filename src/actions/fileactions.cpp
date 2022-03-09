@@ -69,8 +69,10 @@ void FileActions::popup(const QPoint &pos)
 
 void FileActions::viewFile()
 {
-    FileViewerDialog d(_place, _filePath, _parent);
-    d.exec();
+    auto d = new FileViewerDialog(_place, _filePath, _parent);
+    d->setWindowModality(Qt::ApplicationModal);
+    d->setAttribute(Qt::WA_DeleteOnClose, true);
+    d->show();
 }
 
 void FileActions::saveAsFile()
