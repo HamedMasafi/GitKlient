@@ -3,16 +3,28 @@
 
 #include "abstractactions.h"
 
+#include <KService>
+
 class FileActions : public AbstractActions
 {
     Q_OBJECT
 
     QString _place;
     QString _filePath;
-    QAction *actionSaveAs;
+
+    DEFINE_ACTION(actionSaveAs)
+    DEFINE_ACTION(actionView)
+    DEFINE_ACTION(actionHistory)
+    DEFINE_ACTION(actionBlame)
+    DEFINE_ACTION(actionSearch)
+    DEFINE_ACTION(actionOpenWith)
+
+    QMenu *_openWithMenu;
 //public:
 //    QAction *actionSaveAs();
 
+    KService::Ptr getExternalViewer(const QString &mimeType);
+    KService::Ptr getViewer(const QString &mimeType);
 public:
     FileActions(Git::Manager *git, QWidget *parent = nullptr);
     void popup(const QPoint &pos);
@@ -29,6 +41,7 @@ private slots:
     void logFile();
     void blameFile();
     void search();
+    void openWith();
 };
 
 #endif // FILEACTIONS_H

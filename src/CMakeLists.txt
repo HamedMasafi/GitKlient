@@ -86,13 +86,18 @@ target_link_libraries(gitklient
     KF5::ConfigWidgets
     KF5::DBusAddons
     KF5::Crash
+    KF5::KIOCore
+    KF5::KIOFileWidgets
+    KF5::KIOWidgets
+    KF5::KIONTLM
+    KF5::Parts
+
     Qt5::Core
     Qt5::Widgets
     Qt5::Concurrent
-    KF5::KIOCore
-    KF5::KIOWidgets
     KF5::TextWidgets
     KF5::TextEditor
+
     KF5SyntaxHighlighting
 )
 
