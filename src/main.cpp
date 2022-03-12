@@ -48,18 +48,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <QLoggingCategory>
 
 
-enum ParseReturnType {
-    ExecApp,
-    ReturnCode
-};
 
-struct ArgParserReturn {
-    ParseReturnType type;
-    int code{0};
-
-    ArgParserReturn(int code) : type{ReturnCode}, code{code} {}
-    ArgParserReturn(ParseReturnType type) : type{type}, code{0} {}
-};
 
 ArgParserReturn argsWidget() {
     auto git = Git::Manager::instance();
