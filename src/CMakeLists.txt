@@ -28,6 +28,7 @@ set(gitklient_SRCS
     diffwindow.cpp
     gitklientmergewindow.cpp
     commandargsparser.cpp
+    settingshelper.cpp
 )
 #add_subdirectory(merge)
 
@@ -111,3 +112,4 @@ install(FILES org.kde.gitklient.appdata.xml DESTINATION ${KDE_INSTALL_METAINFODI
 install(FILES gitklientui.rc      DESTINATION ${KDE_INSTALL_KXMLGUI5DIR}/gitklient)
 install(FILES gitklientdiffui.rc  DESTINATION ${KDE_INSTALL_KXMLGUI5DIR}/gitklient)
 install(FILES gitklientmergeui.rc DESTINATION ${KDE_INSTALL_KXMLGUI5DIR}/gitklient)
+install(FILES gitklientfileviewerui.rc DESTINATION ${KDE_INSTALL_KXMLGUI5DIR}/gitklient)

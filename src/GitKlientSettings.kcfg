@@ -24,15 +24,7 @@
         <entry name="gitBinPath" type="String">
             <label>age of the project</label>
         </entry>
-        <entry name="calendarType" type="Enum">
-            <choices>
-                <choice name="Default">
-                    <label>Default</label>
-                </choice>
-                <choice name="Jalali" />
-                <choice name="IslamicCivil" />
-                <choice name="Milankovic" />
-            </choices>
+        <entry name="calendarType" type="String">
         </entry>
         <entry name="openLastRepo" type="Bool">
             <label>Open last repo at startup</label>

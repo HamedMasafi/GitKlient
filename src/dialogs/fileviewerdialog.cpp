@@ -27,8 +27,7 @@ FileViewerDialog::FileViewerDialog(const QString &place, const QString &fileName
     restoreGeometry(s.value("FileViewerDialog_Geometry").toByteArray());
     KStandardAction::close(this, &QMainWindow::close, actionCollection());
 
-    setupGUI(StandardWindowOption::Default, "gitklientui.rc");
-    setXMLFile("gitklientui.rc");
+    setupGUI(ToolBar, "gitklientfileviewerui.rc");
 }
 
 FileViewerDialog::FileViewerDialog(Git::Manager *git, const Git::File &file, QWidget *parent)
@@ -40,14 +39,16 @@ FileViewerDialog::FileViewerDialog(Git::Manager *git, const Git::File &file, QWi
     restoreGeometry(s.value("FileViewerDialog_Geometry").toByteArray());
     KStandardAction::close(this, &QMainWindow::close, actionCollection());
 
-    setupGUI(ToolBar, "gitklientui.rc");
-    setXMLFile("gitklientui.rc");
+    setupGUI(ToolBar, "gitklientfileviewerui.rc");
 }
 
 FileViewerDialog::~FileViewerDialog()
 {
     QSettings s;
     s.setValue("FileViewerDialog_Geometry", saveGeometry());
+
+    if (_filePath != QString() && QFile::exists(_filePath))
+        QFile::remove(_filePath);
 
     if (m_part) {
         QProgressDialog progressDialog(this);
@@ -78,12 +79,22 @@ void FileViewerDialog::showFile(const Git::File &file)
     QMimeDatabase mimeDatabase;
     auto fn = file.fileName().mid(file.fileName().lastIndexOf("/") + 1);
     auto mime = mimeDatabase.mimeTypeForFile(fn, QMimeDatabase::MatchExtension);
+    _filePath = QStandardPaths::writableLocation(QStandardPaths::TempLocation) + "/"
+                + file.fileName();
+
+    lineEditBranchName->setText(file.place());
+    lineEditFileName->setText(file.fileName());
+    plainTextEdit->setReadOnly(true);
+    setWindowTitle(QStringLiteral("View file: %1").arg(file.fileName()));
+    setWindowFilePath(file.fileName());
+    labelFileIcon->setPixmap(
+        QIcon::fromTheme(mime.iconName())
+            .pixmap(style()->pixelMetric(QStyle::PixelMetric::PM_SmallIconSize)));
 
     auto ptr = getInternalViewer(mime.name());
     if (ptr && ptr->isValid()) {
-        auto p = QStandardPaths::writableLocation(QStandardPaths::TempLocation) + "/klient_img";
-        file.save(p);
-        if (viewInInternalViewer(ptr, p, mime))
+        file.save(_filePath);
+        if (viewInInternalViewer(ptr, _filePath, mime))
             return;
     }
 
@@ -96,23 +107,14 @@ void FileViewerDialog::showFile(const Git::File &file)
             showInEditor(file);
             qDebug() << "fallback to text mode";
         } else {
-            auto p = QStandardPaths::writableLocation(QStandardPaths::TempLocation) + "/klient_img";
-            file.save(p);
-            if (!viewInInternalViewer(ptr, p, mime))
+            file.save(_filePath);
+            if (!viewInInternalViewer(ptr, _filePath, mime))
                 showInEditor(file);
         }
     }
     qDebug() << "mime is" << mime.name() << fn << mimeDatabase.suffixForFileName(fn)
              << stackedWidget->currentIndex();
 
-    lineEditBranchName->setText(file.place());
-    lineEditFileName->setText(file.fileName());
-    plainTextEdit->setReadOnly(true);
-    setWindowTitle(QStringLiteral("View file: %1").arg(file.fileName()));
-    setWindowFilePath(file.fileName());
-    labelFileIcon->setPixmap(
-        QIcon::fromTheme(mime.iconName())
-            .pixmap(style()->pixelMetric(QStyle::PixelMetric::PM_SmallIconSize)));
 }
 
 void FileViewerDialog::showInEditor(const Git::File &file)
@@ -142,7 +144,7 @@ KService::Ptr FileViewerDialog::getInternalViewer(const QString& mimeType)
     KService::List offers = KMimeTypeTrader::self()->query(mimeType, QStringLiteral("KParts/ReadOnlyPart"));
 
     qDebug() << offers.size() << "offer(s) found for" << mimeType;
-    for (const auto &offer: offers)
+    for (const auto &offer: qAsConst(offers))
         qDebug() << " *" << offer->name() << offer->genericName();
     /*auto arkPartIt = std::find_if(offers.begin(), offers.end(), [](KService::Ptr service) {
         return service->storageId() == QLatin1String("ark_part.desktop");

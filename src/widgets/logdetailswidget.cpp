@@ -1,7 +1,9 @@
 #include "logdetailswidget.h"
+#include "GitKlientSettings.h"
 #include "git/gitlog.h"
 #include "git/gitmanager.h"
-#include "GitKlientSettings.h"
+#include "settingshelper.h"
+
 #include <KLocalizedString>
 
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
@@ -68,21 +70,22 @@ void LogDetailsWidget::createText()
 
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
     QString date;
-    QCalendar cal;
-    switch (GitKlientSettings::calendarType()) {
-    case GitKlientSettings::EnumCalendarType::Default:
+    qDebug() << "cal="<<GitKlientSettings::calendarType();
+    QCalendar cal(GitKlientSettings::calendarType());
+    /*switch (GitKlientSettings::calendarType()) {
+    case SettingsHelper::CalendarType::Gregorian:
         cal = QCalendar(QCalendar::System::Gregorian);
         break;
-    case GitKlientSettings::EnumCalendarType::Jalali:
+    case SettingsHelper::CalendarType::Jalali:
         cal = QCalendar(QCalendar::System::Julian);
         break;
-    case GitKlientSettings::EnumCalendarType::Milankovic:
+    case SettingsHelper::CalendarType::Milankovic:
         cal = QCalendar(QCalendar::System::Milankovic);
         break;
-    case GitKlientSettings::EnumCalendarType::IslamicCivil:
+    case SettingsHelper::CalendarType::IslamicCivil:
         cal = QCalendar(QCalendar::System::IslamicCivil);
         break;
-    }
+    }*/
     if (cal.isValid())
         date = _log->commitDate().toLocalTime().toString("yyyy-MM-dd HH:mm:ss", cal);
     else

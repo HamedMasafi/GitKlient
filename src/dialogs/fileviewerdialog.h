@@ -18,6 +18,7 @@ class FileViewerDialog : public KParts::MainWindow, private Ui::FileViewerDialog
 {
     Q_OBJECT
     Git::Manager *_git;
+    QString _filePath;
 
 public:
     explicit FileViewerDialog(const QString &place, const QString &fileName, QWidget *parent = nullptr);

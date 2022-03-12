@@ -105,16 +105,24 @@ void GitKlientWindow::settingsConfigure()
 
     QWidget *generalSettingsPage = new QWidget;
     settingsBase.setupUi(generalSettingsPage);
-//#ifndef QT_BOOTSTRAPPED
-//    settingsBase.kcfg_calendarType->addItem("Julian");
-//    settingsBase.kcfg_calendarType->addItem("Milankovic");
-//#endif
-//#if QT_CONFIG(jalalicalendar)
-//    settingsBase.kcfg_calendarType->addItem("Jalali");
-//#endif
-//#if QT_CONFIG(islamiccivilcalendar)
-//    settingsBase.kcfg_calendarType->addItem("IslamicCivil");
-//#endif
+
+#if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
+    settingsBase.kcfg_calendarType->addItems(QCalendar::availableCalendars());
+#else
+    settingsBase.labelDefaultCalendar->hide();
+    settingsBase.kcfg_calendarType->hide();
+#endif
+
+    //#ifndef QT_BOOTSTRAPPED
+    //    settingsBase.kcfg_calendarType->addItem("Julian");
+    //    settingsBase.kcfg_calendarType->addItem("Milankovic");
+    //#endif
+    //#if QT_CONFIG(jalalicalendar)
+    //    settingsBase.kcfg_calendarType->addItem("Jalali");
+    //#endif
+    //#if QT_CONFIG(islamiccivilcalendar)
+    //    settingsBase.kcfg_calendarType->addItem("IslamicCivil");
+    //#endif
     dialog->addPage(generalSettingsPage, i18n("General"), QStringLiteral("package_setting"));
 
     auto diffSettingsPage = new QWidget;
