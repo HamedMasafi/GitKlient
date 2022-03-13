@@ -82,7 +82,22 @@ CommitPushDialog::CommitPushDialog(QWidget *parent) :
 
 void CommitPushDialog::checkButtonsEnable()
 {
-    auto enable = checkBoxAmend->isChecked() || !textEditMessage->toPlainText().isEmpty();
+    bool enable{false};
+
+    for (auto i = 0; i < listWidget->count(); ++i) {
+        if (listWidget->item(i)->checkState() == Qt::Checked) {
+            enable = true;
+            break;
+        }
+    }
+
+    if (!enable) {
+        pushButtonCommit->setEnabled(false);
+        pushButtonPush->setEnabled(false);
+        return;
+    }
+
+    enable = checkBoxAmend->isChecked() || !textEditMessage->toPlainText().isEmpty();
     pushButtonCommit->setEnabled(enable);
     pushButtonPush->setEnabled(enable);
 }
@@ -163,6 +178,11 @@ void CommitPushDialog::on_listWidget_itemDoubleClicked(QListWidgetItem *item)
     Git::File changed{Git::Manager::instance()->path() + "/" + item->text()};
     DiffDialog d(original, changed, this);
     d.exec();
+}
+
+void CommitPushDialog::on_listWidget_itemClicked(QListWidgetItem *item)
+{
+    checkButtonsEnable();
 }
 
 

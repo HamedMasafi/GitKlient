@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>461</width>
-    <height>507</height>
+    <height>529</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -108,7 +108,7 @@
       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Replace the tip of the current branch by creating a new commit.&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;&lt;a href=&quot;https://git-scm.com/docs/git-commit#Documentation/git-commit.txt---amend&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#2980b9;&quot;&gt;More info&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
      </property>
      <property name="text">
-      <string>Ament to previous commit</string>
+      <string>Amend to previous commit</string>
      </property>
     </widget>
    </item>

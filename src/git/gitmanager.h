@@ -113,6 +113,9 @@ public:
 
     QString diff(const QString &from, const QString &to);
     QList<FileStatus> diffBranches(const QString &from, const QString &to);
+
+    QString config(const QString &name) const;
+    void setConfig(const QString &name, const QString &value) const;
 signals:
     void pathChanged();
 

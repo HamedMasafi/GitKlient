@@ -10,13 +10,6 @@
    <text>Repo</text>
     <Action name="open_repo"/>
     <Action name="recent" />
-    <Separator/>
-    <Action name="diff_branches"/>
-    <Action name="repo_status"/>
-    <Action name="repo_pull"/>
-    <Action name="repo_push"/>
-    <Action name="repo_merge"/>
-    <Action name="repo_search"/>
   </Menu>
   <Menu name="view">
     <Action name="view_overview"/>
@@ -27,18 +20,16 @@
     <Action name="view_remotes"/>
     <Action name="view_tags"/>
   </Menu>
-  <Menu name="branch">
-    <text>Branch</text>
-    <Action name="branch_status" />
+  <Menu name="repo">
+    <text>Repo</text>
+    <Action name="repo_status"/>
+    <Action name="repo_pull"/>
+    <Action name="repo_push"/>
+    <Action name="repo_merge"/>
+    <Action name="repo_settings"/>
     <Separator/>
-    <Action name="commit_or_push"/>
-    <Action name="branch_browse"/>
-    <Separator/>
-    <Action name="branch_fetch"/>
-    <Action name="branch_pull"/>
-    <Action name="branch_checkout"/>
-    <Separator/>
-    <Action name="branch_delete"/>
+    <Action name="diff_branches"/>
+    <Action name="repo_search"/>
   </Menu>
 </MenuBar>
 
@@ -46,14 +37,11 @@
     <text>Main Toolbar</text>
     <Action name="open_repo"/>
     <Separator/>
-    <Action name="commit_or_push"/>
     <Action name="repo_pull"/>
+    <Action name="repo_push"/>
 
 </ToolBar>
 
 <ActionProperties>
-    <Action name="file" text="Repo"/>
-    <Action name="view" text="View"/>
-    <Action accel="F11" icon="list-remove" name="branch" enabled="false" text="Remove"/>
 </ActionProperties>
 </gui>

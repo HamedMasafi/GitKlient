@@ -144,7 +144,7 @@ int main(int argc, char **argv)
     KAboutData aboutData( QStringLiteral("gitklient"),
                           i18n("GitKlient"),
                           QStringLiteral("0.1"),
-                          i18n("A Simple Application written with KDE Frameworks"),
+                          i18n("Git client gui for KDE"),
                           KAboutLicense::GPL,
                           i18n("Copyright 2021, Hamed Masafi <hamed.masafi@gmail.com>"));
 

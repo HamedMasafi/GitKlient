@@ -200,6 +200,20 @@ QList<FileStatus> Manager::diffBranches(const QString &from, const QString &to)
     return files;
 }
 
+QString Manager::config(const QString &name) const
+{
+    auto list = readAllNonEmptyOutput({"config", name});
+    if (list.size())
+        return list.first();
+
+    return QString();
+}
+
+void Manager::setConfig(const QString &name, const QString &value) const
+{
+    runGit({"config", name, value});
+}
+
 QStringList Manager::readAllNonEmptyOutput(const QStringList &cmd) const
 {
     QStringList list;

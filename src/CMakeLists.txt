@@ -76,6 +76,7 @@ ki18n_wrap_ui(gitklient_SRCS
     dialogs/filehistorydialog.ui
     dialogs/fileblamedialog.ui
     dialogs/searchdialog.ui
+    dialogs/reposettingsdialog.ui
 )
 
 add_executable(gitklient ${gitklient_SRCS})
