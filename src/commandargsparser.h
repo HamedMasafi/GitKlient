@@ -25,6 +25,7 @@ struct ArgParserReturn {
     ParseReturnType type;
     int code{0};
 
+    ArgParserReturn(){}
     ArgParserReturn(int code) : type{ReturnCode}, code{code} {}
     ArgParserReturn(ParseReturnType type) : type{type}, code{0} {}
 };
@@ -37,6 +38,8 @@ using CommandList = QList<Command>;
 
 class CommandArgsParser : public QObject
 {
+    Q_OBJECT
+
     QMap<QString, CommandList> _commands;
     QMap<QString, QString> _params;
     Git::Manager *git;
@@ -47,18 +50,22 @@ public:
     bool check(const CommandList &commands);
     QString checkAll();
     QString param(const QString &name) const;
-    void run(const QStringList &args);
+    ArgParserReturn run(const QStringList &args);
 
 public slots:
+    ArgParserReturn help();
     ArgParserReturn pull(const QString &path);
+    ArgParserReturn changes();
     ArgParserReturn changes(const QString &path);
     ArgParserReturn diff(const QString &file);
+    ArgParserReturn diff(const QString &file1, const QString &file2);
     ArgParserReturn blame(const QString &file);
     ArgParserReturn history(const QString &file);
     ArgParserReturn merge(const QString &base,
               const QString &local,
               const QString &remote,
               const QString &result);
+    ArgParserReturn main();
 };
 
 #endif // COMMANDARGSPARSER_H

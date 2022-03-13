@@ -162,7 +162,9 @@ int main(int argc, char **argv)
     aboutData.processCommandLine(&parser);
 
     KDBusService appDBusService(KDBusService::Multiple | KDBusService::NoExitOnFailure);
-    auto w = argsWidget();
+    CommandArgsParser p;
+//    auto w = argsWidget();
+    auto w = p.run(application.arguments());
     if (w.type == ExecApp) {
         return application.exec();
     }

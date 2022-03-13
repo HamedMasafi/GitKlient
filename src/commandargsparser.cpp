@@ -20,7 +20,7 @@
 
 CommandArgsParser::CommandArgsParser() : QObject()
 {
-
+    git = Git::Manager::instance();
 }
 
 void CommandArgsParser::add(const QString &name, const CommandList &list)
@@ -84,20 +84,58 @@ QString CommandArgsParser::param(const QString &name) const
     return _params.value(name);
 }
 
-void CommandArgsParser::run(const QStringList &args)
+ArgParserReturn CommandArgsParser::run(const QStringList &args)
 {
-    if (!args.size())
-        return;
-    auto name = args.first();
+#define GET_OP(x) params.size() > x ? Q_ARG(QString, params.at(x)) : QGenericArgument()
+    if (args.size() == 1)
+        return main();
+    auto name = args.at(1);
     auto c = metaObject()->methodCount();
     for(int i = 0; i < c; i++) {
         auto method = metaObject()->method(i);
 
         if (method.name() == name) {
-            if (method.parameterCount() != args.size() - 1)
+            if (method.parameterCount() != args.size() - 1) {
+                auto params = args.mid(2);
+                ArgParserReturn r;
+                qDebug() << "Running:" << method.name();
+                auto b = metaObject()->invokeMethod(this,
+                                                    method.name(),
+                                                    Q_RETURN_ARG(ArgParserReturn, r),
+                                                    GET_OP(0),
+                                                    GET_OP(1),
+                                                    GET_OP(2),
+                                                    GET_OP(3),
+                                                    GET_OP(4),
+                                                    GET_OP(5),
+                                                    GET_OP(6),
+                                                    GET_OP(7),
+                                                    GET_OP(8),
+                                                    GET_OP(9));
+
+                if (!b) {
+                    qDebug() << args.size() << method.parameterCount();
+                }
+
+                return r;
                 continue;
+            }
         }
     }
+#undef GET_OP
+    qWarning().noquote() << "Method not found" << args.at(1);
+    return main();
+}
+
+ArgParserReturn CommandArgsParser::help()
+{
+    auto c = metaObject()->methodCount();
+    qDebug() << "Git Klient command line interface help:";
+    for(int i = metaObject()->methodOffset(); i < c; i++) {
+        auto method = metaObject()->method(i);
+        qDebug().noquote() << "    " << method.name() << method.parameterNames().join(" ");
+    }
+    return 0;
 }
 
 ArgParserReturn CommandArgsParser::pull(const QString &path)
@@ -113,6 +151,15 @@ ArgParserReturn CommandArgsParser::pull(const QString &path)
     return 0;
 }
 
+ArgParserReturn CommandArgsParser::changes()
+{
+    QDir dir;
+    git->setPath(dir.currentPath());
+    ChangedFilesDialog d;
+    d.exec();
+    return 0;
+}
+
 ArgParserReturn CommandArgsParser::changes(const QString &path)
 {
     QFileInfo fi(path);
@@ -125,9 +172,35 @@ ArgParserReturn CommandArgsParser::changes(const QString &path)
 
 ArgParserReturn CommandArgsParser::diff(const QString &file)
 {
-    auto d = new DiffWindow;
-    d->show();
-    return ExecApp;
+    QFileInfo fi(file);
+
+    if (fi.isFile()) {
+        git->setPath(fi.absolutePath());
+        QDir dir(git->path());
+        Git::File headFile(file);
+        Git::File changedFile(git->currentBranch(), dir.relativeFilePath(file), git);
+        auto d = new DiffWindow(headFile, changedFile);
+        d->setWindowModality(Qt::ApplicationModal);
+        d->setAttribute(Qt::WA_DeleteOnClose, true);
+        d->show();
+        return ExecApp;
+    }
+    return 0;
+}
+
+ArgParserReturn CommandArgsParser::diff(const QString &file1, const QString &file2)
+{
+    QFileInfo fi1(file1);
+    QFileInfo fi2(file2);
+
+    if (fi1.isFile() && fi2.isFile()) {
+        auto d = new DiffWindow(fi1.absoluteFilePath(), fi2.absoluteFilePath());
+        d->setWindowModality(Qt::ApplicationModal);
+        d->setAttribute(Qt::WA_DeleteOnClose, true);
+        d->show();
+        return ExecApp;
+    }
+    return 0;
 }
 
 ArgParserReturn CommandArgsParser::blame(const QString &file)
@@ -152,6 +225,17 @@ ArgParserReturn CommandArgsParser::history(const QString &file)
 ArgParserReturn CommandArgsParser::merge(const QString &base, const QString &local, const QString &remote, const QString &result)
 {
     auto d = new GitKlientMergeWindow;
+    d->setFilePathLocal(local);
+    d->setFilePathBase(base);
+    d->setFilePathRemote(remote);
+    d->setFilePathResult(result);
     d->show();
+    return ExecApp;
+}
+
+ArgParserReturn CommandArgsParser::main()
+{
+    auto window = GitKlientWindow::instance();
+    window->show();
     return ExecApp;
 }
