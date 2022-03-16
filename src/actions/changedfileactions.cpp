@@ -11,7 +11,7 @@ ChangedFileActions::ChangedFileActions(Git::Manager *git, QWidget *parent)
     : AbstractActions(git, parent)
 {
     ADD_ACTION(actionDiff, "Diff...", &ChangedFileActions::diff);
-//    ADD_ACTION(actionRevert, "Revert...", &ChangedFileActions::revert);
+    ADD_ACTION(actionRevert, "Revert...", &ChangedFileActions::revert);
 
     auto f = _actionDiff->font();
     f.setBold(true);
@@ -42,4 +42,5 @@ void ChangedFileActions::diff()
 void ChangedFileActions::revert()
 {
     _git->revertFile(_filePath);
+    emit reloadNeeded();
 }

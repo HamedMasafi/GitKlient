@@ -21,6 +21,9 @@ public:
 public slots:
     void diff();
     void revert();
+
+signals:
+    void reloadNeeded();
 };
 
 #endif // CHANGEDFILEACTIONS_H
