@@ -28,9 +28,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "dialogs/filestreedialog.h"
 #include "dialogs/mergedialog.h"
 #include "dialogs/pulldialog.h"
+#include "dialogs/reposettingsdialog.h"
 #include "dialogs/runnerdialog.h"
-#include "dialogs/selectbranchestodiffdialog.h"
 #include "dialogs/searchdialog.h"
+#include "dialogs/selectbranchestodiffdialog.h"
 #include "git/gitmanager.h"
 #include "gitklientdebug.h"
 #include "gitklientview.h"
@@ -137,51 +138,25 @@ void GitKlientWindow::initActions()
 {
     KActionCollection* actionCollection = this->actionCollection();
 
-    auto branchBrowseAction = actionCollection->addAction(QStringLiteral("branch_browse"));
-    branchBrowseAction->setText(i18n("Browse..."));
-    connect(branchBrowseAction, &QAction::triggered, this, &GitKlientWindow::browseBranch);
-    {
-        auto repoStatusAction = actionCollection->addAction(QStringLiteral("repo_status"));
-        repoStatusAction->setText(i18n("Changed files..."));
-        connect(repoStatusAction, &QAction::triggered, this, &GitKlientWindow::repoStatus);
-        repoStatusAction->setIcon(QIcon::fromTheme(QStringLiteral("folder-open")));
-        actionCollection->setDefaultShortcut(repoStatusAction, QKeySequence("Ctrl+S"));
-    }
+    auto repoStatusAction = actionCollection->addAction(QStringLiteral("repo_status"),
+                                                        this,
+                                                        &GitKlientWindow::repoStatus);
+    repoStatusAction->setText(i18n("Changed files..."));
+    actionCollection->setDefaultShortcut(repoStatusAction, QKeySequence("Ctrl+S"));
+
     {
         recentAction = actionCollection->addAction("recent");
         recentAction->setText(i18n("Recent files"));
         recentAction->setMenu(new QMenu(this));
         initRecentFiles();
     }
-    {
-        auto commitOrPushAction =actionCollection->addAction("commit_or_push");
-        commitOrPushAction->setText(i18n("Commit/Push"));
-        connect(commitOrPushAction, &QAction::triggered, this, &GitKlientWindow::commitPushAction);
-    }
 
-    auto branchPullAction = actionCollection->addAction("branch_pull");
-    branchPullAction->setText(i18n("Pull..."));
-    connect(branchPullAction, &QAction::triggered, this, &GitKlientWindow::pull);
-
-    auto branchDeleteAction = actionCollection->addAction("branch_delete");
-    branchDeleteAction->setText(i18n("Delete"));
-    connect(branchDeleteAction, &QAction::triggered, this, &GitKlientWindow::deleteBranch);
-
-    auto branchCheckout = actionCollection->addAction(QStringLiteral("branch_checkout"));
-    branchCheckout->setText(i18n("Checkout..."));
-
-    auto file = actionCollection->addAction(QStringLiteral("file"));
-    file->setText(i18n("Repo"));
-
-    auto openRepoAction = actionCollection->addAction(QStringLiteral("open_repo"));
+    auto openRepoAction = actionCollection->addAction(QStringLiteral("open_repo"),
+                                                      this,
+                                                      &GitKlientWindow::openRepo);
     openRepoAction->setText(i18n("Open repo"));
     actionCollection->setDefaultShortcut(openRepoAction, QKeySequence("Ctrl+O"));
     openRepoAction->setIcon(QIcon::fromTheme(QStringLiteral("folder-open")));
-    connect(openRepoAction, &QAction::triggered, this, &GitKlientWindow::openRepo);
-
-    auto branchStatusAction = actionCollection->addAction("branch_status");
-    branchStatusAction->setText(i18n("Status..."));
-    //connect(branchStatusAction, &QAction::triggered, this, &GitKlientWindow::showBranchesStatus);
 
     auto repoPullAction = actionCollection->addAction("repo_pull", this, &GitKlientWindow::pull);
     repoPullAction->setText(i18n("Pull..."));
@@ -195,19 +170,12 @@ void GitKlientWindow::initActions()
     auto repoSearchAction = actionCollection->addAction("repo_search", this, &GitKlientWindow::search);
     repoSearchAction->setText(i18n("Search..."));
 
-    KStandardAction::quit(qApp, SLOT(closeAllWindows()), actionCollection);
-    KStandardAction::preferences(this, SLOT(settingsConfigure()), actionCollection);
+    auto repoSettingsAction = actionCollection->addAction("repo_settings", this, &GitKlientWindow::repoSettings);
+    repoSettingsAction->setText(i18n("Repo settings..."));
+
+    KStandardAction::quit(this, &QMainWindow::close, actionCollection);
+    KStandardAction::preferences(this, &GitKlientWindow::settingsConfigure, actionCollection);
     KStandardAction::openNew(this, &GitKlientWindow::clone, actionCollection);
-
-    auto branchesMenu = new QMenu(this);
-    branchesMenu->addAction(branchBrowseAction);
-    branchesMenu->addSeparator();
-    branchesMenu->addAction(branchPullAction);
-    branchesMenu->addAction(branchCheckout);
-    branchesMenu->addSeparator();
-    branchesMenu->addAction(branchDeleteAction);
-    //    m_kde_actionsView->setBranchesContextMenu(branchesMenu);
-
 }
 void GitKlientWindow::initRecentFiles(const QString &newItem)
 {
@@ -245,17 +213,6 @@ void GitKlientWindow::initContextMenus()
     _branchMenu->addAction(i18n("Diff"));
 }
 
-
-void GitKlientWindow::browseBranch()
-{
-    auto branch = "";//m_kde_actionsView->selectedBranch();
-    if (branch == QString())
-        return;
-
-    FilesTreeDialog d(branch, this);
-    d.exec();
-}
-
 void GitKlientWindow::repoStatus()
 {
     ChangedFilesDialog d(this);
@@ -291,17 +248,6 @@ void GitKlientWindow::commitPushAction()
 {
     CommitPushDialog d(this);
     d.exec();
-}
-
-void GitKlientWindow::deleteBranch()
-{
-    auto r = KMessageBox::warningYesNo(this,
-                                       i18n("Are you sure to delete the selected branch?"));
-
-    if (r == KMessageBox::No)
-        return;
-
-    //    qDebug() << "You choosed yes" << m_kde_actionsView->selectedBranch();
 }
 
 void GitKlientWindow::pull()
@@ -349,6 +295,12 @@ void GitKlientWindow::diffBranches()
 void GitKlientWindow::search()
 {
     SearchDialog d(Git::Manager::instance(), this);
+    d.exec();
+}
+
+void GitKlientWindow::repoSettings()
+{
+    RepoSettingsDialog d(Git::Manager::instance(), this);
     d.exec();
 }
 

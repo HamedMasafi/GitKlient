@@ -18,7 +18,7 @@ private Q_SLOTS:
     void on_toolButtonAddNone_clicked();
     void on_toolButtonAddIndexed_clicked();
     void on_listWidget_itemDoubleClicked(QListWidgetItem *item);
-
+    void on_listWidget_itemClicked(QListWidgetItem *item);
 
 private:
     void addFiles();

@@ -58,17 +58,16 @@ public:
 
 private Q_SLOTS:
     void settingsConfigure();
-    void browseBranch();
     void repoStatus();
     void openRepo();
     void recentActionTriggered();
     void commitPushAction();
-    void deleteBranch();
     void pull();
     void showBranchesStatus();
     void clone();
     void diffBranches();
     void search();
+    void repoSettings();
 
 private:
     Ui::settingsBase settingsBase;
