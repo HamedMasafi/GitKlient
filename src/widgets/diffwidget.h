@@ -36,6 +36,8 @@ public:
     bool sameSize() const;
     void setSameSize(bool newSameSize);
 
+    void scrollToTop();
+
 public slots:
     void showHiddenChars(bool show);
     void showFilesInfo(bool show);

@@ -71,6 +71,8 @@ void DiffWidget::compare()
             rightCodeEditor->append(s->newText, newBlockType, s);
         }
     }
+
+    scrollToTop();
 }
 
 void DiffWidget::showHiddenChars(bool show)
@@ -300,4 +302,13 @@ void DiffWidget::setSameSize(bool newSameSize)
         return;
     m_sameSize = newSameSize;
     emit sameSizeChanged();
+}
+
+void DiffWidget::scrollToTop()
+{
+    leftCodeEditor->setTextCursor(QTextCursor(leftCodeEditor->document()->findBlockByNumber(0)));
+    rightCodeEditor->setTextCursor(QTextCursor(rightCodeEditor->document()->findBlockByNumber(0)));
+//    leftCodeEditor->verticalScrollBar()->setValue(0);
+//    rightCodeEditor->verticalScrollBar()->setValue(0);
+    segmentConnector->update();
 }
