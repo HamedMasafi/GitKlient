@@ -13,6 +13,7 @@ ChangedFilesDialog::ChangedFilesDialog(QWidget *parent) :
     setupUi(this);
     reload();
     _actions = new ChangedFileActions(Git::Manager::instance(), this);
+    connect(_actions, &ChangedFileActions::reloadNeeded, this, &ChangedFilesDialog::reload);
 }
 
 void ChangedFilesDialog::on_pushButtonCommitPush_clicked()
@@ -44,16 +45,10 @@ void ChangedFilesDialog::reload()
 
 void ChangedFilesDialog::on_listWidget_itemDoubleClicked(QListWidgetItem *item)
 {
+    if (!item)
+        return;
     _actions->setFilePath(listWidget->currentItem()->text());
     _actions->diff();
-
-    /*Git::File original{Git::Manager::instance()->currentBranch(), item->text()};
-    Git::File changed{Git::Manager::instance()->path() + "/" + item->text()};
-
-    auto diffWin = new DiffWindow(original, changed);
-    diffWin->setWindowModality(Qt::ApplicationModal);
-    diffWin->setAttribute(Qt::WA_DeleteOnClose, true);
-    diffWin->show();*/
 }
 
 void ChangedFilesDialog::on_listWidget_customContextMenuRequested(const QPoint &pos)

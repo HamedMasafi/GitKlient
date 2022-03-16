@@ -79,8 +79,9 @@ void FileViewerDialog::showFile(const Git::File &file)
     QMimeDatabase mimeDatabase;
     auto fn = file.fileName().mid(file.fileName().lastIndexOf("/") + 1);
     auto mime = mimeDatabase.mimeTypeForFile(fn, QMimeDatabase::MatchExtension);
-    _filePath = QStandardPaths::writableLocation(QStandardPaths::TempLocation) + "/"
-                + file.fileName();
+    _filePath = file.fileName();
+    _filePath = _filePath.mid(_filePath.lastIndexOf("/") + 1);
+    _filePath.prepend(QStandardPaths::writableLocation(QStandardPaths::TempLocation) + "/");
 
     lineEditBranchName->setText(file.place());
     lineEditFileName->setText(file.fileName());

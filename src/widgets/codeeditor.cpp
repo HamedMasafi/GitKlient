@@ -69,6 +69,8 @@ CodeEditor::CodeEditor(QWidget *parent)
     _formats.insert(Removed, removedFormat);
     _formats.insert(Unchanged, normalFormat);
     _formats.insert(Edited, changedFormat);
+
+    setLineWrapMode(QPlainTextEdit::NoWrap);
 }
 
 CodeEditor::~CodeEditor() {}
