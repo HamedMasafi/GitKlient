@@ -78,8 +78,9 @@ void CommandPull::parseOutput(const QByteArray &output, const QByteArray &errorO
     if (output.contains("Already up to date.")) {
         _ui->labelStatus->setText("Already up to date.");
     }
-    if (output.startsWith("fatal:")) {
-        KMessageBox::error(_widget, output, i18n("Error"));
+    if (errorOutput.startsWith("fatal:")) {
+        _ui->labelStatus->setText(errorOutput.mid(6));
+        KMessageBox::error(_widget, errorOutput.mid(6), i18n("Error"));
     }
 #endif
 }
