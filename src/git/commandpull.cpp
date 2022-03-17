@@ -2,6 +2,8 @@
 
 #ifdef GIT_GUI
 #include "ui_commandpullwidget.h"
+#include <KMessageBox>
+#include <KLocalizedString>
 #endif
 
 #include <QDebug>
@@ -72,12 +74,14 @@ void CommandPull::setTags(bool newTags)
 void CommandPull::parseOutput(const QByteArray &output, const QByteArray &errorOutput)
 {
     Q_UNUSED(errorOutput)
-    if (output.contains("Already up to date.")) {
-        qDebug() << "*******************";
 #ifdef GIT_GUI
+    if (output.contains("Already up to date.")) {
         _ui->labelStatus->setText("Already up to date.");
-#endif
     }
+    if (output.startsWith("fatal:")) {
+        KMessageBox::error(_widget, output, i18n("Error"));
+    }
+#endif
 }
 
 bool CommandPull::supportWidget() const
@@ -142,6 +146,8 @@ CommandPull::~CommandPull()
 #ifdef GIT_GUI
     if (_widget)
         _widget->deleteLater();
+    if (_ui)
+        delete _ui;
 #endif
 }
 
