@@ -9,7 +9,6 @@ class MergeDialog : public QDialog, private Ui::MergeDialog
 public:
     explicit MergeDialog(QWidget *parent = nullptr);
     explicit MergeDialog(const QString &sourceBranch, QWidget *parent = nullptr);
-    bool event(QEvent *event) override;
 
 private:
     QString _sourceBranch;

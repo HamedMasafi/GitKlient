@@ -1,20 +1,25 @@
 #include "commitpushdialog.h"
-#include "runnerdialog.h"
-#include "git/gitmanager.h"
-#include "git/gitfile.h"
+#include "dialogs/diffdialog.h"
 #include "git/commandcommit.h"
 #include "git/commandpush.h"
-#include "dialogs/diffdialog.h"
+#include "git/gitfile.h"
+#include "git/gitmanager.h"
+#include "runnerdialog.h"
+#include "actions/changedfileactions.h"
+#include "core/whatsthislinkmanager.h"
+
+#include <KService>
+#include <KTextEditor/CodeCompletionModel>
 #include <KTextEditor/Document>
 #include <KTextEditor/Editor>
 #include <KTextEditor/View>
-#include <KTextEditor/CodeCompletionModel>
-#include <KService>
 
 CommitPushDialog::CommitPushDialog(QWidget *parent) :
       QDialog(parent)
 {
     setupUi(this);
+
+    WhatsThisLinkManager::instance()->install(this);
 
     auto git = Git::Manager::instance();
 
@@ -64,24 +69,16 @@ CommitPushDialog::CommitPushDialog(QWidget *parent) :
     textEditMessage->addWords(_words.values());
     textEditMessage->begin();
 
-//    KTextEditor::Editor *editor = KTextEditor::Editor::instance();
-//    // create a new document
-//    KTextEditor::Document *doc = editor->createDocument(this);
-//    // create a widget to display the document
-//    KTextEditor::View *view = doc->createView(widget_2);
-
-//    auto completionModel = new KTextEditor::CodeCompletionModel(this);
-    //    KService::Ptr service = KService::serviceByDesktopName("katepart");
-    //    if (service) {
-    //        auto m_part = service->createInstance<KParts::ReadWritePart>();
-    //        m_part->embed(widget_2);
-    //    }
-//    textEditMessage->hide();
-//    listWidget->hide();
+    _actions = new ChangedFileActions(Git::Manager::instance(), this);
 }
 
 void CommitPushDialog::checkButtonsEnable()
 {
+    if (!groupBoxMakeCommit->isChecked()) {
+        pushButtonCommit->setEnabled(false);
+        pushButtonPush->setEnabled(true);
+        return;
+    }
     bool enable{false};
 
     for (auto i = 0; i < listWidget->count(); ++i) {
@@ -171,18 +168,36 @@ void CommitPushDialog::on_toolButtonAddIndexed_clicked()
     }
 }
 
-
+/*
 void CommitPushDialog::on_listWidget_itemDoubleClicked(QListWidgetItem *item)
 {
     Git::File original{Git::Manager::instance()->currentBranch(), item->text()};
     Git::File changed{Git::Manager::instance()->path() + "/" + item->text()};
     DiffDialog d(original, changed, this);
     d.exec();
+}*/
+void CommitPushDialog::on_listWidget_itemDoubleClicked(QListWidgetItem *item)
+{
+    if (!item)
+        return;
+    _actions->setFilePath(listWidget->currentItem()->text());
+    _actions->diff();
 }
-
-void CommitPushDialog::on_listWidget_itemClicked(QListWidgetItem *item)
+void CommitPushDialog::on_listWidget_itemClicked(QListWidgetItem *)
 {
     checkButtonsEnable();
 }
 
+void CommitPushDialog::on_groupBoxMakeCommit_toggled(bool)
+{
+    checkButtonsEnable();
+}
 
+void CommitPushDialog::on_listWidget_customContextMenuRequested(const QPoint &pos)
+{
+    if (listWidget->currentRow() == -1)
+        return;
+
+    _actions->setFilePath(listWidget->currentItem()->text());
+    _actions->popup(listWidget->mapToGlobal(pos));
+}

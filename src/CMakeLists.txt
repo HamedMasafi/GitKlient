@@ -5,6 +5,7 @@ aux_source_directory(models MODELS_SRC)
 aux_source_directory(widgets WIDGETS_SRC)
 aux_source_directory(dialogs DIALOGS_SRC)
 aux_source_directory(actions ACTIONS_SRC)
+aux_source_directory(core CORE_SRC)
 include_directories(${CMAKE_SOURCE_DIR}/core)
 
 
@@ -17,11 +18,11 @@ set(gitklient_SRCS
     ${DIALOGS_SRC}
     ${COMMON_SRC}
     ${ACTIONS_SRC}
+    ${CORE_SRC}
 
     main.cpp
     gitklientwindow.cpp
     gitklientview.cpp
-#    widgetbase.cpp
     buttonsgroup.cpp
     multipagewidget.cpp
     argsparser.cpp
@@ -30,7 +31,6 @@ set(gitklient_SRCS
     commandargsparser.cpp
     settingshelper.cpp
 )
-#add_subdirectory(merge)
 
 ecm_qt_declare_logging_category(gitklient_SRCS
     HEADER gitklientdebug.h
@@ -38,12 +38,24 @@ ecm_qt_declare_logging_category(gitklient_SRCS
     CATEGORY_NAME "gitklient"
 )
 kconfig_add_kcfg_files(gitklient_SRCS GitKlientSettings.kcfgc)
-ki18n_wrap_ui(gitklient_SRCS
+
+#set(CMAKE_AUTOUIC ON)
+
+#qt5_wrap_ui(
+#    gitklient_SRCS
+#    widgets/commandpullwidget.ui
+#)
+
+add_compile_definitions(GIT_GUI)
+
+ki18n_wrap_ui(
+    gitklient_SRCS
     gitklientViewBase.ui
     settingsBase.ui
     diffsettings.ui
     multipagewidget.ui
     gitklientmergeview.ui
+    commandpullwidget.ui
 
     widgets/branchesstatuswidget.ui
     widgets/remotedetailswidget.ui
@@ -102,6 +114,9 @@ target_link_libraries(gitklient
 
     KF5SyntaxHighlighting
 )
+#set_property(TARGET KI18n APPEND PROPERTY
+#  INTERFACE_AUTOUIC_OPTIONS ${autouic_options}
+#)
 
 install(TARGETS gitklient ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
 install(PROGRAMS gitklientdiff.sh DESTINATION bin RENAME gitklientdiff)

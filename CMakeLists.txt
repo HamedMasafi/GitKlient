@@ -21,6 +21,8 @@ include(ECMAddAppIcon)
 include(ECMSetupVersion)
 include(ECMAddTests)
 
+set (CMAKE_CXX_STANDARD 14)
+
 set(QT_MIN_VERSION "5.5.0")
 find_package(
     Qt5 ${QT_MIN_VERSION}

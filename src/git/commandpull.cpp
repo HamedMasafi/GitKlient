@@ -1,5 +1,12 @@
 #include "commandpull.h"
 
+#ifdef GIT_GUI
+#include "ui_commandpullwidget.h"
+#endif
+
+#include <QDebug>
+#include <QLabel>
+
 namespace Git {
 
 bool CommandPull::squash() const
@@ -62,9 +69,57 @@ void CommandPull::setTags(bool newTags)
     _tags = newTags;
 }
 
+void CommandPull::parseOutput(const QByteArray &output, const QByteArray &errorOutput)
+{
+    Q_UNUSED(errorOutput)
+    if (output.contains("Already up to date.")) {
+        qDebug() << "*******************";
+#ifdef GIT_GUI
+        _ui->labelStatus->setText("Already up to date.");
+#endif
+    }
+}
+
+bool CommandPull::supportWidget() const
+{
+    return true;
+}
+
+QWidget *CommandPull::createWidget()
+{
+#ifdef GIT_GUI
+    _widget = new QWidget;
+    _ui = new Ui::CommandPullWidget;
+    _ui->setupUi(_widget);
+    return _widget;
+#else
+    return nullptr;
+#endif
+}
+
+const QString &CommandPull::remote() const
+{
+    return _remote;
+}
+
+void CommandPull::setRemote(const QString &newRemote)
+{
+    _remote = newRemote;
+}
+
+const QString &CommandPull::branch() const
+{
+    return _branch;
+}
+
+void CommandPull::setBranch(const QString &newBranch)
+{
+    _branch = newBranch;
+}
+
 QStringList CommandPull::generateArgs() const
 {
-    QStringList args{"pull"};
+    QStringList args{"pull", _remote, _branch};
     if (_squash)
         args.append("--squash");
     if (_noFf)
@@ -81,5 +136,13 @@ QStringList CommandPull::generateArgs() const
 }
 
 CommandPull::CommandPull() {}
+
+CommandPull::~CommandPull()
+{
+#ifdef GIT_GUI
+    if (_widget)
+        _widget->deleteLater();
+#endif
+}
 
 } // namespace Git

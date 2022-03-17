@@ -1,4 +1,5 @@
 #include "pulldialog.h"
+#include "runnerdialog.h"
 
 #include "git/gitmanager.h"
 #include "git/commandpull.h"
@@ -16,8 +17,15 @@ PullDialog::PullDialog(QWidget *parent, Git::Manager *git) :
 
     comboBoxRemote->setCurrentText(g->currentBranch());
 
+    //git pull --squash --no-ff --ff-only --no-commit --prune --tags
+}
+
+void PullDialog::on_buttonBox_accepted()
+{
     Git::CommandPull cmd;
 
+    cmd.setRemote(comboBoxRemote->currentText());
+    cmd.setBranch(comboBoxBranch->currentText());
     cmd.setSquash(checkBoxSquash->isChecked());
     cmd.setNoFf(checkBoxNoFastForward->isChecked());
     cmd.setFfOnly(checkBoxFastForwardOnly->isChecked());
@@ -25,5 +33,9 @@ PullDialog::PullDialog(QWidget *parent, Git::Manager *git) :
     cmd.setPrune(checkBoxPrune->isChecked());
     cmd.setTags(checkBoxTags->isChecked());
 
-    //git pull --squash --no-ff --ff-only --no-commit --prune --tags
+    RunnerDialog d(this);
+    d.run(&cmd);
+    d.exec();
+
+    accept();
 }

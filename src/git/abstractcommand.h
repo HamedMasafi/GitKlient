@@ -50,7 +50,7 @@ public:
 
     virtual bool supportWidget() const { return false; }
     virtual bool supportProgress() const { return false; }
-    QWidget *createWidget() const;
+    virtual QWidget *createWidget();
     int progress() const;
 signals:
     void progressChanged(int progress);

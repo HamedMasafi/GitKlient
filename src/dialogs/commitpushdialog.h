@@ -3,9 +3,11 @@
 
 #include "ui_commitpushdialog.h"
 
+class ChangedFileActions;
 class CommitPushDialog : public QDialog, private Ui::CommitPushDialog
 {
     Q_OBJECT
+    ChangedFileActions *_actions;
 
 public:
     explicit CommitPushDialog(QWidget *parent = nullptr);
@@ -19,6 +21,8 @@ private Q_SLOTS:
     void on_toolButtonAddIndexed_clicked();
     void on_listWidget_itemDoubleClicked(QListWidgetItem *item);
     void on_listWidget_itemClicked(QListWidgetItem *item);
+    void on_groupBoxMakeCommit_toggled(bool);
+    void on_listWidget_customContextMenuRequested(const QPoint &pos);
 
 private:
     void addFiles();

@@ -6,14 +6,14 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>461</width>
-    <height>529</height>
+    <width>514</width>
+    <height>573</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Commit/Push</string>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout_3">
+  <layout class="QVBoxLayout" name="verticalLayout_4">
    <item>
     <layout class="QFormLayout" name="formLayout_2">
      <item row="0" column="0">
@@ -83,19 +83,9 @@
     </widget>
    </item>
    <item>
-    <widget class="QCheckBox" name="checkBoxIncludeStatus">
-     <property name="whatsThis">
-      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Include the output of &amp;quot;git status&amp;quot; in the commit message template when using an editor to prepare the commit message. &lt;/p&gt;&lt;p&gt;&lt;a href=&quot;https://git-scm.com/docs/git-commit#Documentation/git-commit.txt---status&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#2980b9;&quot;&gt;More information&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-     </property>
-     <property name="text">
-      <string>Include status to the message</string>
-     </property>
-    </widget>
-   </item>
-   <item>
     <widget class="QCheckBox" name="checkBoxForce">
      <property name="whatsThis">
-      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Usually, the command refuses to update a remote ref that is not an ancestor of the local ref used to overwrite it. Also, when --force-with-lease option is used, the command refuses to update a remote ref whose current value does not match what is expected.&lt;/p&gt;&lt;p&gt;This flag disables these checks, and can cause the remote repository to lose commits; use it with care.&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;&lt;a href=&quot;https://git-scm.com/docs/git-push#Documentation/git-push.txt--f&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#007af4;&quot;&gt;More information...&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
      </property>
      <property name="text">
       <string>Force</string>
@@ -103,114 +93,140 @@
     </widget>
    </item>
    <item>
-    <widget class="QCheckBox" name="checkBoxAmend">
-     <property name="whatsThis">
-      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Replace the tip of the current branch by creating a new commit.&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;&lt;a href=&quot;https://git-scm.com/docs/git-commit#Documentation/git-commit.txt---amend&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#2980b9;&quot;&gt;More info&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+    <widget class="QGroupBox" name="groupBoxMakeCommit">
+     <property name="title">
+      <string>Create a commit</string>
      </property>
-     <property name="text">
-      <string>Amend to previous commit</string>
+     <property name="checkable">
+      <bool>true</bool>
      </property>
-    </widget>
-   </item>
-   <item>
-    <widget class="QSplitter" name="splitter">
-     <property name="orientation">
-      <enum>Qt::Vertical</enum>
-     </property>
-     <widget class="QWidget" name="widget" native="true">
-      <layout class="QVBoxLayout" name="verticalLayout_2">
-       <property name="leftMargin">
-        <number>0</number>
-       </property>
-       <property name="topMargin">
-        <number>0</number>
-       </property>
-       <property name="rightMargin">
-        <number>0</number>
-       </property>
-       <property name="bottomMargin">
-        <number>0</number>
-       </property>
-       <item>
-        <widget class="QLabel" name="label">
-         <property name="text">
-          <string>Message:</string>
-         </property>
+     <layout class="QVBoxLayout" name="verticalLayout_3">
+      <item>
+       <widget class="QCheckBox" name="checkBoxIncludeStatus">
+        <property name="whatsThis">
+         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Include the output of &amp;quot;git status&amp;quot; in the commit message template when using an editor to prepare the commit message. &lt;/p&gt;&lt;p&gt;&lt;a href=&quot;https://git-scm.com/docs/git-commit#Documentation/git-commit.txt---status&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#2980b9;&quot;&gt;More information&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+        </property>
+        <property name="text">
+         <string>Include status to the message</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QCheckBox" name="checkBoxAmend">
+        <property name="whatsThis">
+         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Replace the tip of the current branch by creating a new commit.&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;&lt;a href=&quot;https://git-scm.com/docs/git-commit#Documentation/git-commit.txt---amend&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#2980b9;&quot;&gt;More info&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+        </property>
+        <property name="text">
+         <string>Amend to previous commit</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QSplitter" name="splitter">
+        <property name="orientation">
+         <enum>Qt::Vertical</enum>
+        </property>
+        <widget class="QWidget" name="widget" native="true">
+         <layout class="QVBoxLayout" name="verticalLayout_2">
+          <property name="leftMargin">
+           <number>0</number>
+          </property>
+          <property name="topMargin">
+           <number>0</number>
+          </property>
+          <property name="rightMargin">
+           <number>0</number>
+          </property>
+          <property name="bottomMargin">
+           <number>0</number>
+          </property>
+          <item>
+           <widget class="QLabel" name="label">
+            <property name="text">
+             <string>Message:</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QWidget" name="widget_2" native="true"/>
+          </item>
+          <item>
+           <widget class="CompletionTextEdit" name="textEditMessage">
+            <property name="whatsThis">
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Use the given text as the commit message. &lt;/p&gt;&lt;p&gt;&lt;a href=&quot;https://git-scm.com/docs/git-commit#Documentation/git-commit.txt---messageltmsggt&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#2980b9;&quot;&gt;More information&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
         </widget>
-       </item>
-       <item>
-        <widget class="QWidget" name="widget_2" native="true"/>
-       </item>
-       <item>
-        <widget class="CompletionTextEdit" name="textEditMessage">
-         <property name="whatsThis">
-          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Use the given text as the commit message. &lt;/p&gt;&lt;p&gt;&lt;a href=&quot;https://git-scm.com/docs/git-commit#Documentation/git-commit.txt---messageltmsggt&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#2980b9;&quot;&gt;More information&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-         </property>
+        <widget class="QWidget" name="layoutWidget">
+         <layout class="QVBoxLayout" name="verticalLayout">
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_2">
+            <item>
+             <widget class="QLabel" name="label_2">
+              <property name="text">
+               <string>Files:</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <spacer name="horizontalSpacer_2">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>40</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item>
+             <widget class="QToolButton" name="toolButtonAddAll">
+              <property name="text">
+               <string>All</string>
+              </property>
+              <property name="autoRaise">
+               <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QToolButton" name="toolButtonAddIndexed">
+              <property name="text">
+               <string>Indexed</string>
+              </property>
+              <property name="autoRaise">
+               <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QToolButton" name="toolButtonAddNone">
+              <property name="text">
+               <string>None</string>
+              </property>
+              <property name="autoRaise">
+               <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <widget class="QListWidget" name="listWidget">
+            <property name="contextMenuPolicy">
+             <enum>Qt::CustomContextMenu</enum>
+            </property>
+           </widget>
+          </item>
+         </layout>
         </widget>
-       </item>
-      </layout>
-     </widget>
-     <widget class="QWidget" name="layoutWidget">
-      <layout class="QVBoxLayout" name="verticalLayout">
-       <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_2">
-         <item>
-          <widget class="QLabel" name="label_2">
-           <property name="text">
-            <string>Files:</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <spacer name="horizontalSpacer_2">
-           <property name="orientation">
-            <enum>Qt::Horizontal</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>40</width>
-             <height>20</height>
-            </size>
-           </property>
-          </spacer>
-         </item>
-         <item>
-          <widget class="QToolButton" name="toolButtonAddAll">
-           <property name="text">
-            <string>All</string>
-           </property>
-           <property name="autoRaise">
-            <bool>true</bool>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QToolButton" name="toolButtonAddIndexed">
-           <property name="text">
-            <string>Indexed</string>
-           </property>
-           <property name="autoRaise">
-            <bool>true</bool>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QToolButton" name="toolButtonAddNone">
-           <property name="text">
-            <string>None</string>
-           </property>
-           <property name="autoRaise">
-            <bool>true</bool>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
-       <item>
-        <widget class="QListWidget" name="listWidget"/>
-       </item>
-      </layout>
-     </widget>
+       </widget>
+      </item>
+     </layout>
     </widget>
    </item>
    <item>
@@ -266,7 +282,6 @@
   <tabstop>radioButtonNewBranch</tabstop>
   <tabstop>lineEditNewBranchName</tabstop>
   <tabstop>checkBoxIncludeStatus</tabstop>
-  <tabstop>checkBoxForce</tabstop>
   <tabstop>checkBoxAmend</tabstop>
   <tabstop>textEditMessage</tabstop>
   <tabstop>toolButtonAddAll</tabstop>

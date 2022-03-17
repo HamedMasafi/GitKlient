@@ -7,7 +7,7 @@ bool AbstractCommand::isValid() const
     return _isValid;
 }
 
-QWidget *AbstractCommand::createWidget() const
+QWidget *AbstractCommand::createWidget()
 {
     return nullptr;
 }

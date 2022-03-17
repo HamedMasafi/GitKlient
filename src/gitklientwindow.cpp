@@ -252,14 +252,14 @@ void GitKlientWindow::commitPushAction()
 
 void GitKlientWindow::pull()
 {
-    qDebug() << Q_FUNC_INFO;
     PullDialog d(this);
-    if (d.exec() == QDialog::Accepted) {
+    d.exec();
+    /*if (d.exec() == QDialog::Accepted) {
         RunnerDialog r(this);
         auto branch = Git::Manager::instance()->currentBranch();
         r.run({"pull", "origin", branch});
         r.exec();
-    }
+    }*/
 }
 
 void GitKlientWindow::showBranchesStatus()

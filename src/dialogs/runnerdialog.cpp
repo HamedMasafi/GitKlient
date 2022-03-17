@@ -1,8 +1,11 @@
 #include "runnerdialog.h"
 
-#include <QDebug>
-#include <QProcess>
 #include "git/gitmanager.h"
+
+#include <KLocalizedString>
+
+#include <QProcess>
+#include <QDebug>
 
 RunnerDialog::RunnerDialog(QWidget *parent) :
       QDialog(parent)
@@ -36,7 +39,8 @@ void RunnerDialog::run(Git::AbstractCommand *command)
     _mode = RunByCommand;
     if (command->supportWidget()) {
         auto w = command->createWidget();
-        tabWidget->addTab(w, i18n("View"));
+        tabWidget->insertTab(0, w, i18n("View"));
+        tabWidget->setCurrentIndex(0);
     }
 
     auto args = command->generateArgs();
@@ -50,22 +54,25 @@ void RunnerDialog::run(Git::AbstractCommand *command)
     }
     _git->setArguments(args);
     _git->start();
-    _cmd =command;
+    _cmd = command;
 }
 
 void RunnerDialog::git_readyReadStandardOutput()
 {
     auto buffer = _git->readAllStandardOutput();
     qDebug() << "OUT" << buffer;
-    textBrowser->setTextColor(Qt::black);
+//    textBrowser->setTextColor(Qt::black);
     textBrowser->append(buffer);
+
+    if (_cmd)
+        _cmd->parseOutput(buffer, QByteArray());
 }
 
 void RunnerDialog::git_readyReadStandardError()
 {
     auto buffer = _git->readAllStandardError();
     qDebug() << "ERROR" << buffer;
-    textBrowser->setTextColor(Qt::red);
+//    textBrowser->setTextColor(Qt::red);
     textBrowser->append(buffer);
 
     if (_cmd)
