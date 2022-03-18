@@ -23,6 +23,7 @@
   <Menu name="repo">
     <text>Repo</text>
     <Action name="repo_status"/>
+    <Action name="repo_fetch"/>
     <Action name="repo_pull"/>
     <Action name="repo_push"/>
     <Action name="repo_merge"/>
@@ -37,6 +38,7 @@
     <text>Main Toolbar</text>
     <Action name="open_repo"/>
     <Separator/>
+    <Action name="repo_fetch"/>
     <Action name="repo_pull"/>
     <Action name="repo_push"/>
 

@@ -63,6 +63,7 @@ private Q_SLOTS:
     void recentActionTriggered();
     void commitPushAction();
     void pull();
+    void fetch();
     void showBranchesStatus();
     void clone();
     void diffBranches();

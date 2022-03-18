@@ -6,6 +6,9 @@
      xsi:schemaLocation="http://www.kde.org/standards/kxmlgui/1.0
                          http://www.kde.org/standards/kxmlgui/1.0/kxmlgui.xsd">
 <MenuBar>
+    <merge />
+    <Menu name="help">
+    </Menu>
 </MenuBar>
 
 </gui>

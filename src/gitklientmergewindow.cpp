@@ -75,6 +75,10 @@ QStringList readFile(const QString &filePath)
 
 void GitKlientMergeWindow::load()
 {
+    m_ui.plainTextEditMine->clear();
+    m_ui.plainTextEditTheir->clear();
+    m_ui.plainTextEditResult->clear();
+
     auto baseList = readFile(_filePathBase);
     auto localList = readFile(_filePathLocal);
     auto remoteList = readFile(_filePathRemote);

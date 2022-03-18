@@ -18,6 +18,9 @@ class FileActions : public AbstractActions
     DEFINE_ACTION(actionBlame)
     DEFINE_ACTION(actionSearch)
     DEFINE_ACTION(actionOpenWith)
+    DEFINE_ACTION(actionDiffWithHead)
+    DEFINE_ACTION(actionMergeWithHead)
+
 
     QMenu *_openWithMenu;
 //public:
@@ -42,6 +45,8 @@ private slots:
     void blameFile();
     void search();
     void openWith();
+    void diffWithHead();
+    void mergeWithHead();
 };
 
 #endif // FILEACTIONS_H

@@ -5,6 +5,9 @@
 #include "dialogs/fileviewerdialog.h"
 #include "dialogs/searchdialog.h"
 #include "git/gitmanager.h"
+#include "git/gitfile.h"
+#include "gitklientmergewindow.h"
+#include "diffwindow.h"
 
 #include <KIO/AccessManager>
 #include <KLocalizedString>
@@ -57,7 +60,10 @@ FileActions::FileActions(Git::Manager *git, QWidget *parent)
 
     ADD_ACTION(actionView, "View...", &FileActions::viewFile);
     ADD_ACTION(actionOpenWith, "Open with...", &FileActions::openWith);
-//    _menu->addMenu(_openWithMenu);
+
+    ADD_ACTION(actionDiffWithHead, "Diff with HEAD...", &FileActions::diffWithHead);
+    ADD_ACTION(actionMergeWithHead, "Merge with HEAD...", &FileActions::mergeWithHead);
+
     ADD_ACTION(actionSaveAs, "Save as...", &FileActions::saveAsFile);
     ADD_ACTION(actionHistory, "Log...", &FileActions::logFile);
     ADD_ACTION(actionBlame, "Blame...", &FileActions::blameFile);
@@ -148,5 +154,35 @@ void FileActions::openWith()
 //    job->setUiDelegate(new KIO::JobUiDelegate(KJobUiDelegate::AutoHandlingEnabled, nullptr));
 //    // The temporary file will be removed when the viewer application exits.
 //    job->setRunFlags(KIO::ApplicationLauncherJob::DeleteTemporaryFiles);
-//    job->start();
+    //    job->start();
+}
+
+void FileActions::diffWithHead()
+{
+    Git::File oldFile{_place, _filePath};
+    Git::File newFile{_git->path() + "/" + _filePath};
+
+    auto d = new DiffWindow(oldFile, newFile);
+    d->setWindowModality(Qt::ApplicationModal);
+    d->setAttribute(Qt::WA_DeleteOnClose, true);
+    d->show();
+}
+
+void FileActions::mergeWithHead()
+{
+    auto d = new GitKlientMergeWindow(GitKlientMergeWindow::NoParams);
+
+    auto p = QStandardPaths::writableLocation(QStandardPaths::TempLocation) + "/ggggg";
+    Git::File f{_place, _filePath};
+    f.save(p);
+
+    d->setFilePathBase(p);
+    d->setFilePathLocal(_git->path() + "/" + _filePath);
+    d->setFilePathRemote(p);
+    d->setFilePathResult(_git->path() + "/" + _filePath);
+    d->load();
+
+    d->setWindowModality(Qt::ApplicationModal);
+    d->setAttribute(Qt::WA_DeleteOnClose, true);
+    d->show();
 }

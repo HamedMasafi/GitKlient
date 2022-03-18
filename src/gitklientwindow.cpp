@@ -20,6 +20,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 // application headers
 #include "diffwindow.h"
+#include "git/commandpull.h"
 #include "gitklientwindow.h"
 
 #include "dialogs/changedfilesdialog.h"
@@ -32,6 +33,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "dialogs/runnerdialog.h"
 #include "dialogs/searchdialog.h"
 #include "dialogs/selectbranchestodiffdialog.h"
+#include "dialogs/fetchdialog.h"
 #include "git/gitmanager.h"
 #include "gitklientdebug.h"
 #include "gitklientview.h"
@@ -161,6 +163,9 @@ void GitKlientWindow::initActions()
     auto repoPullAction = actionCollection->addAction("repo_pull", this, &GitKlientWindow::pull);
     repoPullAction->setText(i18n("Pull..."));
 
+    auto repoFetchAction = actionCollection->addAction("repo_fetch", this, &GitKlientWindow::fetch);
+    repoFetchAction->setText(i18n("Fetch..."));
+
     auto repoPushAction = actionCollection->addAction("repo_push", this, &GitKlientWindow::commitPushAction);
     repoPushAction->setText(i18n("Push..."));
 
@@ -254,12 +259,12 @@ void GitKlientWindow::pull()
 {
     PullDialog d(this);
     d.exec();
-    /*if (d.exec() == QDialog::Accepted) {
-        RunnerDialog r(this);
-        auto branch = Git::Manager::instance()->currentBranch();
-        r.run({"pull", "origin", branch});
-        r.exec();
-    }*/
+}
+
+void GitKlientWindow::fetch()
+{
+    FetchDialog d(Git::Manager::instance(), this);
+    d.exec();
 }
 
 void GitKlientWindow::showBranchesStatus()
