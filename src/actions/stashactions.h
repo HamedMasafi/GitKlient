@@ -20,6 +20,7 @@ public slots:
     void drop();
     void pop();
     void diff();
+    void create();
 
 private:
     QString _stashName;
@@ -27,6 +28,7 @@ private:
     DEFINE_ACTION(actionApply)
     DEFINE_ACTION(actionDrop)
     DEFINE_ACTION(actionDiff)
+    DEFINE_ACTION(actionNew)
 };
 
 #endif // STASHACTIONS_H

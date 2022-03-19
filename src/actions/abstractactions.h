@@ -5,9 +5,13 @@
 
 #define ADD_ACTION(name, text, slot)                                                               \
     _##name = new QAction(this);                                                                   \
-    _##name->setText(i18n(text));                                                                     \
-    connect(_##name, &QAction::triggered, this, slot);                                                \
+    _##name->setText(i18n(text));                                                                  \
+    connect(_##name, &QAction::triggered, this, slot);                                             \
     _menu->addAction(_##name);
+#define ADD_HIDDEN_ACTION(name, text, slot)                                                        \
+    _##name = new QAction(this);                                                                   \
+    _##name->setText(i18n(text));                                                                  \
+    connect(_##name, &QAction::triggered, this, slot);
 
 #define DEFINE_ACTION(name)                                                                        \
 private:                                                                                           \

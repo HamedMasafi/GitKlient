@@ -20,11 +20,6 @@ public:
 
     void reload() override;
 private slots:
-    void on_pushButtonCreateNew_clicked();
-    void on_pushButtonApply_clicked();
-    void on_pushButtonRemoveSelected_clicked();
-    void on_listWidget_itemActivated(QListWidgetItem *item);
-    void on_listWidget_customContextMenuRequested(const QPoint &pos);
     void on_treeView_customContextMenuRequested(const QPoint &pos);
 
     // WidgetBase interface

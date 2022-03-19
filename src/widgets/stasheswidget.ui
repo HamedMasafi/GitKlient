@@ -29,16 +29,6 @@
     </widget>
    </item>
    <item>
-    <widget class="QListWidget" name="listWidget">
-     <property name="contextMenuPolicy">
-      <enum>Qt::CustomContextMenu</enum>
-     </property>
-     <property name="whatsThis">
-      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Show git stashes&lt;/p&gt;&lt;p&gt;&lt;a href=&quot;https://git-scm.com/docs/git-stash&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#2980b9;&quot;&gt;More informations...&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-     </property>
-    </widget>
-   </item>
-   <item>
     <layout class="QHBoxLayout" name="horizontalLayout_5">
      <item>
       <spacer name="horizontalSpacer_4">
@@ -64,19 +54,19 @@
       </widget>
      </item>
      <item>
+      <widget class="PushButton" name="pushButtonRemoveSelected">
+       <property name="text">
+        <string>Remove selected</string>
+       </property>
+      </widget>
+     </item>
+     <item>
       <widget class="PushButton" name="pushButtonApply">
        <property name="whatsThis">
         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Apply stash to top of current working directory&lt;/p&gt;&lt;p&gt;&lt;a href=&quot;https://git-scm.com/docs/git-stash#Documentation/git-stash.txt-apply--index-q--quietltstashgt&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#2980b9;&quot;&gt;More informations...&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
        </property>
        <property name="text">
         <string>Apply selected</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="PushButton" name="pushButtonRemoveSelected">
-       <property name="text">
-        <string>Remove selected</string>
        </property>
       </widget>
      </item>
