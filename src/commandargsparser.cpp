@@ -180,9 +180,7 @@ ArgParserReturn CommandArgsParser::diff(const QString &file)
         Git::File headFile(file);
         Git::File changedFile(git->currentBranch(), dir.relativeFilePath(file), git);
         auto d = new DiffWindow(headFile, changedFile);
-        d->setWindowModality(Qt::ApplicationModal);
-        d->setAttribute(Qt::WA_DeleteOnClose, true);
-        d->show();
+        d->showModal();
         return ExecApp;
     }
     return 0;
@@ -195,9 +193,7 @@ ArgParserReturn CommandArgsParser::diff(const QString &file1, const QString &fil
 
     if (fi1.isFile() && fi2.isFile()) {
         auto d = new DiffWindow(fi1.absoluteFilePath(), fi2.absoluteFilePath());
-        d->setWindowModality(Qt::ApplicationModal);
-        d->setAttribute(Qt::WA_DeleteOnClose, true);
-        d->show();
+        d->showModal();
         return ExecApp;
     }
     return 0;

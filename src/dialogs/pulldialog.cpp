@@ -5,7 +5,7 @@
 #include "git/commandpull.h"
 
 PullDialog::PullDialog(QWidget *parent, Git::Manager *git) :
-      QDialog(parent)
+      Dialog(parent)
 {
     setupUi(this);
 

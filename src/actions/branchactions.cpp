@@ -66,7 +66,5 @@ void BranchActions::diff()
     }
 
     auto d = new DiffWindow(mainBranch, _branchName);
-    d->setWindowModality(Qt::ApplicationModal);
-    d->setAttribute(Qt::WA_DeleteOnClose, true);
-    d->show();
+    d->showModal();
 }

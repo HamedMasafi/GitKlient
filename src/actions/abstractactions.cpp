@@ -9,6 +9,11 @@ AbstractActions::AbstractActions(Git::Manager *git, QWidget *parent)
     _menu = new QMenu(parent);
 }
 
+void AbstractActions::popup()
+{
+    _menu->popup(QCursor::pos());
+}
+
 void AbstractActions::popup(const QPoint &pos)
 {
     _menu->popup(pos);

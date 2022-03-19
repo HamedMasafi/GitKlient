@@ -1,13 +1,14 @@
 #ifndef RUNNERDIALOG_H
 #define RUNNERDIALOG_H
 
+#include "../core/dialog.h"
 #include "ui_runnerdialog.h"
 
 namespace Git {
 class AbstractCommand;
 }
 class QProcess;
-class RunnerDialog : public QDialog, private Ui::RunnerDialog
+class RunnerDialog : public Dialog, private Ui::RunnerDialog
 {
     Q_OBJECT
 

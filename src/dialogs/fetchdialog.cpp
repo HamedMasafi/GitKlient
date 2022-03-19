@@ -4,7 +4,7 @@
 #include "git/commandfetch.h"
 #include "git/gitmanager.h"
 
-FetchDialog::FetchDialog(Git::Manager *git, QWidget *parent) : QDialog(parent)
+FetchDialog::FetchDialog(Git::Manager *git, QWidget *parent) : Dialog(parent)
 {
     setupUi(this);
 

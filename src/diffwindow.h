@@ -1,7 +1,7 @@
 #ifndef DIFFWINDOW_H
 #define DIFFWINDOW_H
 
-#include <KXmlGuiWindow>
+#include "core/mainwindow.h"
 #include <git/gitfile.h>
 #include <QObject>
 
@@ -9,7 +9,7 @@ class DiffTreeModel;
 class DiffWidget;
 class DiffTreeView;
 class FilesModel;
-class DiffWindow : public KXmlGuiWindow
+class DiffWindow : public MainWindow
 {
     Q_OBJECT
 

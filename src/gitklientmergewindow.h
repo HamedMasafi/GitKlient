@@ -21,7 +21,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef GitKlientMergeWindow_H
 #define GitKlientMergeWindow_H
 
-#include <KXmlGuiWindow>
+#include "core/mainwindow.h"
 
 #include <diff/diff.h>
 
@@ -39,7 +39,7 @@ class SegmentsMapper;
  * @author Hamed Masafi <hamed.masafi@gmail.com>
  * @version 0.1
  */
-class GitKlientMergeWindow : public KXmlGuiWindow
+class GitKlientMergeWindow : public MainWindow
 {
     Q_OBJECT
 public:

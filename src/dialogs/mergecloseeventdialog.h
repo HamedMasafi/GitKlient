@@ -1,9 +1,10 @@
 #ifndef CLOSEEVENTDIALOG_H
 #define CLOSEEVENTDIALOG_H
 
+#include "../core/dialog.h"
 #include "ui_mergecloseeventdialog.h"
 
-class MergeCloseEventDialog : public QDialog, private Ui::CloseEventDialog
+class MergeCloseEventDialog : public Dialog, private Ui::CloseEventDialog
 {
     Q_OBJECT
 

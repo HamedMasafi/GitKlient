@@ -1,11 +1,12 @@
 #ifndef DIFFDIALOG_H
 #define DIFFDIALOG_H
 
+#include "../core/dialog.h"
 #include "ui_diffdialog.h"
 #include <git/gitfile.h>
 
 class DiffTreeModel;
-class DiffDialog : public QDialog, private Ui::DiffDialog
+class DiffDialog : public Dialog, private Ui::DiffDialog
 {
     Q_OBJECT
     Git::File _oldFile;

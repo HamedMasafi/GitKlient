@@ -58,7 +58,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
 GitKlientWindow::GitKlientWindow()
-    : KXmlGuiWindow()
+    : MainWindow()
 {
     initActions();
     _mainWidget = new MultiPageWidget(this);
@@ -291,9 +291,7 @@ void GitKlientWindow::diffBranches()
     SelectBranchesToDiffDialog d(Git::Manager::instance(), this);
     if (d.exec() == QDialog::Accepted) {
         auto diffWin = new DiffWindow(d.oldBranch(), d.newBranch());
-        diffWin->setWindowModality(Qt::ApplicationModal);
-        diffWin->setAttribute(Qt::WA_DeleteOnClose, true);
-        diffWin->show();
+        diffWin->showModal();
     }
 }
 

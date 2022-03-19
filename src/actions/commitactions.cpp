@@ -44,7 +44,5 @@ void CommitActions::checkout()
 void CommitActions::diff()
 {
     auto d = new DiffWindow(_commitHash, "HEAD");
-    d->setWindowModality(Qt::ApplicationModal);
-    d->setAttribute(Qt::WA_DeleteOnClose, true);
-    d->show();
+    d->showModal();
 }

@@ -163,9 +163,7 @@ void FileActions::diffWithHead()
     Git::File newFile{_git->path() + "/" + _filePath};
 
     auto d = new DiffWindow(oldFile, newFile);
-    d->setWindowModality(Qt::ApplicationModal);
-    d->setAttribute(Qt::WA_DeleteOnClose, true);
-    d->show();
+    d->showModal();
 }
 
 void FileActions::mergeWithHead()
@@ -182,7 +180,5 @@ void FileActions::mergeWithHead()
     d->setFilePathResult(_git->path() + "/" + _filePath);
     d->load();
 
-    d->setWindowModality(Qt::ApplicationModal);
-    d->setAttribute(Qt::WA_DeleteOnClose, true);
-    d->show();
+    d->showModal();
 }

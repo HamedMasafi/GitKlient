@@ -8,6 +8,7 @@
 #include "gitsubmodule.h"
 #include "blamedata.h"
 #include "gitfile.h"
+#include "stash.h"
 
 #include <QString>
 #include <QObject>
@@ -70,7 +71,7 @@ public:
     QStringList tags() const;
     void createTag(const QString &name, const QString &message) const;
 
-    QStringList stashes() const;
+    QList<Stash> stashes();
     void createStash(const QString &name = QString()) const;
     bool removeStash(const QString &name) const;
     bool applyStash(const QString &name) const;
@@ -122,6 +123,8 @@ signals:
 private:
     QStringList readAllNonEmptyOutput(const QStringList &cmd) const;
     QString escapeFileName(const QString& filePath) const;
+
+    friend class Stash;
 };
 
 } // namespace Git

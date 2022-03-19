@@ -1,13 +1,14 @@
 #ifndef SELECTBRANCHESTODIFFDIALOG_H
 #define SELECTBRANCHESTODIFFDIALOG_H
 
+#include "../core/dialog.h"
 #include "ui_selectbranchestodiffdialog.h"
 
 namespace Git {
 class Manager;
 }
 
-class SelectBranchesToDiffDialog : public QDialog, private Ui::SelectBranchesToDiffDialog
+class SelectBranchesToDiffDialog : public Dialog, private Ui::SelectBranchesToDiffDialog
 {
     Q_OBJECT
 

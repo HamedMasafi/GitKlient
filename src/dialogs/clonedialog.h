@@ -1,11 +1,12 @@
 #ifndef CLONEDIALOG_H
 #define CLONEDIALOG_H
 
+#include "../core/dialog.h"
 #include "ui_clonedialog.h"
 
 #include <git/commandclone.h>
 
-class CloneDialog : public QDialog, private Ui::CloneDialog
+class CloneDialog : public Dialog, private Ui::CloneDialog
 {
     Q_OBJECT
     QString _fixedPath;

@@ -47,93 +47,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <QIcon>
 #include <QLoggingCategory>
 
-
-
-
-ArgParserReturn argsWidget() {
-    auto git = Git::Manager::instance();
-    CommandArgsParser p;
-    p.add("pull", "pull <path>");
-    p.add("changes", "changes <path>");
-    p.add("diff", "diff <file>");
-    p.add("blame", "blame <file>");
-    p.add("history", "history <file>");
-    p.add("merge", "merge <base> <local> <remote> <result>");
-    p.add("diff1", "diff");
-    p.add("merge1", "merge");
-    p.add("test", "test");
-
-    auto key = p.checkAll();
-
-    if (key == "pull"){
-        git->setPath(p.param("path"));
-        PullDialog d;
-        if (d.exec() == QDialog::Accepted) {
-            RunnerDialog r;
-            auto branch = git->currentBranch();
-            r.run({"pull", "origin", branch});
-            r.exec();
-        }
-        return 0;
-    } else if (key == "diff") {
-        auto filePath = p.param("file");
-        QFileInfo fi(filePath);
-        git->setPath(fi.absolutePath());
-        Git::File original{git->currentBranch(), filePath.replace(git->path() + "/", "")};
-        Git::File changed{fi.absoluteFilePath()};
-        qDebug() << "[DIFF]" << git->currentBranch() + ":" + filePath.replace(git->path() + "/", "")
-                 << filePath;
-
-        auto diffWin = new DiffWindow(original, changed);
-        diffWin->setWindowModality(Qt::ApplicationModal);
-        diffWin->setAttribute(Qt::WA_DeleteOnClose, true);
-        diffWin->show();
-        return ExecApp;
-    } else if (key == "blame") {
-        auto g = Git::Manager::instance();
-        g->setPath(p.param("path"));
-        Git::File f(g->currentBranch(), p.param("file"), g);
-        FileBlameDialog d(f);
-        d.exec();
-        return 0;
-    } else if (key == "history") {
-        QDir dir(git->path());
-        auto file = p.param("file");
-        git->setPath(file.mid(0, file.lastIndexOf("/")));
-        file = file.mid(git->path().size() + 1);
-        FileHistoryDialog d(git, file);
-        qDebug() << p.param("file") << file << QDir::currentPath() << git->path();
-        d.exec();
-        return 0;
-    } else if (key == "changes") {
-        QFileInfo fi(p.param("path"));
-
-        git->setPath(fi.isFile() ? fi.absoluteFilePath() : fi.absolutePath());
-        ChangedFilesDialog d;
-        d.exec();
-        return 0;
-    } else if (key == "diff1") {
-        auto d = new DiffWindow;
-        d->show();
-        return ExecApp;
-    } else if (key == "merge1") {
-        auto d = new GitKlientMergeWindow;
-        d->show();
-        return ExecApp;
-    } else if (key == "test") {
-        auto g = Git::Manager::instance();
-        g->setPath("/doc/dev/gitklient");
-        Git::File f("alpha", "src/widgets/blamecodeview.cpp", g);
-        FileBlameDialog d(f);
-        d.exec();
-        return 0;
-    } else {
-        auto window = GitKlientWindow::instance();
-        window->show();
-        return ExecApp;
-    }
-    return 0;
-}
 int main(int argc, char **argv)
 {
     QApplication application(argc, argv);
@@ -163,10 +76,10 @@ int main(int argc, char **argv)
 
     KDBusService appDBusService(KDBusService::Multiple | KDBusService::NoExitOnFailure);
     CommandArgsParser p;
-//    auto w = argsWidget();
+
     auto w = p.run(application.arguments());
-    if (w.type == ExecApp) {
+    if (w.type == ExecApp)
         return application.exec();
-    }
+
     return w.code;
 }

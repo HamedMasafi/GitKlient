@@ -50,13 +50,13 @@ void DiffWindow::init(bool showSideBar)
     }
 }
 
-DiffWindow::DiffWindow() : KXmlGuiWindow()
+DiffWindow::DiffWindow() : MainWindow()
 {
     init(true);
 }
 
 DiffWindow::DiffWindow(const Git::File &oldFile, const Git::File &newFile)
-    : KXmlGuiWindow(), _oldFile(oldFile), _newFile(newFile)
+    : MainWindow(), _oldFile(oldFile), _newFile(newFile)
 {
     init(false);
 
@@ -66,7 +66,7 @@ DiffWindow::DiffWindow(const Git::File &oldFile, const Git::File &newFile)
 }
 
 DiffWindow::DiffWindow(const QString &oldBranch, const QString &newBranch)
-    : KXmlGuiWindow(), _oldBranch(oldBranch), _newBranch(newBranch)
+    : MainWindow(), _oldBranch(oldBranch), _newBranch(newBranch)
 {
     init(true);
 

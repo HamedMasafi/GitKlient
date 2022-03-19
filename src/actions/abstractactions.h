@@ -10,7 +10,10 @@
     _menu->addAction(_##name);
 
 #define DEFINE_ACTION(name)                                                                        \
+private:                                                                                           \
     QAction *_##name;                                                                              \
+                                                                                                   \
+public:                                                                                            \
     QAction *name() const { return _##name; }
 
 namespace Git {
@@ -31,6 +34,7 @@ protected:
 
 public:
     explicit AbstractActions(Git::Manager *git, QWidget *parent);
+    void popup();
     void popup(const QPoint &pos);
 signals:
 };

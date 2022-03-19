@@ -49,7 +49,7 @@ void SubmoduleInfoDialog::setBranch(const QString &newBranch)
 }
 
 SubmoduleInfoDialog::SubmoduleInfoDialog(QWidget *parent) :
-      QDialog(parent)
+      Dialog(parent)
 {
     setupUi(this);
 }

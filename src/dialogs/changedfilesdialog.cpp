@@ -8,7 +8,7 @@
 #include <QDebug>
 
 ChangedFilesDialog::ChangedFilesDialog(QWidget *parent) :
-      QDialog(parent)
+      Dialog(parent)
 {
     setupUi(this);
     reload();

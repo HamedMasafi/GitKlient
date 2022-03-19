@@ -21,7 +21,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef GITKLIENTWINDOW_H
 #define GITKLIENTWINDOW_H
 
-#include <KXmlGuiWindow>
+#include "core/mainwindow.h"
 
 #include "ui_settingsBase.h"
 #include "ui_diffsettings.h"
@@ -38,7 +38,7 @@ class WidgetBase;
  * @author Hamed Masafi <hamed.masafi@gmail.com>
  * @version 0.1
  */
-class GitKlientWindow : public KXmlGuiWindow
+class GitKlientWindow : public MainWindow
 {
     Q_OBJECT
 public:

@@ -2,7 +2,7 @@
 #include "git/gitmanager.h"
 
 ModificationsDialog::ModificationsDialog(QWidget *parent) :
-      QDialog(parent)
+      Dialog(parent)
 {
     setupUi(this);
 

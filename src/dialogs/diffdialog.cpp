@@ -6,12 +6,12 @@
 #include "models/difftreemodel.h"
 
 DiffDialog::DiffDialog(QWidget *parent) :
-      QDialog(parent)
+      Dialog(parent)
 {
     setupUi(this);
 }
 
-DiffDialog::DiffDialog(const Git::File &oldFile, const Git::File &newFile, QWidget *parent) : QDialog(parent),
+DiffDialog::DiffDialog(const Git::File &oldFile, const Git::File &newFile, QWidget *parent) : Dialog(parent),
       _oldFile(oldFile),
       _newFile(newFile)
 {
@@ -27,7 +27,7 @@ DiffDialog::DiffDialog(const Git::File &oldFile, const Git::File &newFile, QWidg
     treeView->hide();
 }
 
-DiffDialog::DiffDialog(const QString &oldBranch, const QString &newBranch, QWidget *parent) : QDialog(parent)
+DiffDialog::DiffDialog(const QString &oldBranch, const QString &newBranch, QWidget *parent) : Dialog(parent)
       , _oldBranch(oldBranch), _newBranch(newBranch)
 {
     setupUi(this);

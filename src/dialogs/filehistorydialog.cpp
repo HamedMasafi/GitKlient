@@ -6,14 +6,14 @@
 #include <KLocalizedString>
 
 FileHistoryDialog::FileHistoryDialog(QWidget *parent) :
-      QDialog(parent)
+      Dialog(parent)
 {
     setupUi(this);
     _git = Git::Manager::instance();
 }
 
 FileHistoryDialog::FileHistoryDialog(Git::Manager *git, const QString &fileName, QWidget *parent):
-      QDialog(parent), _git(git), _fileName(fileName)
+      Dialog(parent), _git(git), _fileName(fileName)
 {
     setupUi(this);
 
@@ -36,7 +36,7 @@ FileHistoryDialog::FileHistoryDialog(Git::Manager *git, const QString &fileName,
 }
 
 FileHistoryDialog::FileHistoryDialog(Git::Manager *git, const Git::File &file, QWidget *parent)
-    : QDialog(parent), _git(git)
+    : Dialog(parent), _git(git)
 {
     setupUi(this);
 

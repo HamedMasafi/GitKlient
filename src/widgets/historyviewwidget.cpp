@@ -90,9 +90,7 @@ void HistoryViewWidget::on_textBrowser_fileClicked(const QString &file)
         oldFile = {log->parents().first(), file};
     }
     auto diffWin = new DiffWindow(oldFile, newFile);
-    diffWin->setWindowModality(Qt::ApplicationModal);
-    diffWin->setAttribute(Qt::WA_DeleteOnClose, true);
-    diffWin->show();
+    diffWin->showModal();
 }
 
 void HistoryViewWidget::on_treeViewHistory_customContextMenuRequested(const QPoint &pos)

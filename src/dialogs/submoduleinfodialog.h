@@ -1,9 +1,10 @@
 #ifndef SUBMODULEINFODIALOG_H
 #define SUBMODULEINFODIALOG_H
 
+#include "../core/dialog.h"
 #include "ui_submoduleinfodialog.h"
 
-class SubmoduleInfoDialog : public QDialog, private Ui::SubmoduleInfoDialog
+class SubmoduleInfoDialog : public Dialog, private Ui::SubmoduleInfoDialog
 {
     Q_OBJECT
 

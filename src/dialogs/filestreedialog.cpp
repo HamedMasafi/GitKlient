@@ -12,7 +12,7 @@
 #include "actions/fileactions.h"
 
 FilesTreeDialog::FilesTreeDialog(const QString &place, QWidget *parent) :
-      QDialog(parent), _place(place)
+      Dialog(parent), _place(place)
 {
     setupUi(this);
 

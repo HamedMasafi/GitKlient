@@ -1,13 +1,14 @@
 #ifndef REPOSETTINGSDIALOG_H
 #define REPOSETTINGSDIALOG_H
 
+#include "../core/dialog.h"
 #include "ui_reposettingsdialog.h"
 
 namespace Git {
 class Manager;
 };
 
-class RepoSettingsDialog : public QDialog, private Ui::RepoSettingsDialog
+class RepoSettingsDialog : public Dialog, private Ui::RepoSettingsDialog
 {
     Q_OBJECT
 

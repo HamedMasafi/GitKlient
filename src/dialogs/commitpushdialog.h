@@ -1,10 +1,11 @@
 #ifndef COMMITPUSHDIALOG_H
 #define COMMITPUSHDIALOG_H
 
+#include "../core/dialog.h"
 #include "ui_commitpushdialog.h"
 
 class ChangedFileActions;
-class CommitPushDialog : public QDialog, private Ui::CommitPushDialog
+class CommitPushDialog : public Dialog, private Ui::CommitPushDialog
 {
     Q_OBJECT
     ChangedFileActions *_actions;

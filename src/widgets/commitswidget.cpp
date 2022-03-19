@@ -70,9 +70,7 @@ void CommitsWidget::on_actionDiffWithMain_triggered()
     auto branchName = _repoModel->fullPath(treeViewRepo->currentIndex());
 
     auto diffWin = new DiffWindow(branchName, _mainBranch);
-    diffWin->setWindowModality(Qt::ApplicationModal);
-    diffWin->setAttribute(Qt::WA_DeleteOnClose, true);
-    diffWin->show();
+    diffWin->showModal();
 }
 
 void CommitsWidget::init()

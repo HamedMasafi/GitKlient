@@ -1,12 +1,13 @@
 #ifndef PULLDIALOG_H
 #define PULLDIALOG_H
 
+#include "../core/dialog.h"
 #include "ui_pulldialog.h"
 
 namespace Git {
 class Manager;
 }
-class PullDialog : public QDialog, private Ui::PullDialog
+class PullDialog : public Dialog, private Ui::PullDialog
 {
     Q_OBJECT
 

@@ -5,7 +5,7 @@
 #include <QSettings>
 
 DiffOpenDialog::DiffOpenDialog(QWidget *parent) :
-      QDialog(parent)
+      Dialog(parent)
 {
     setupUi(this);
     radioButtonCompareFiles->setChecked(true);

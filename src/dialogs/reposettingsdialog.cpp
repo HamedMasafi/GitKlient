@@ -3,7 +3,7 @@
 #include "git/gitmanager.h"
 
 RepoSettingsDialog::RepoSettingsDialog(Git::Manager *git, QWidget *parent) :
-      QDialog(parent), _git(git)
+      Dialog(parent), _git(git)
 {
     setupUi(this);
 

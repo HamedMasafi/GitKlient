@@ -3,7 +3,7 @@
 #include "git/gitmanager.h"
 
 FileBlameDialog::FileBlameDialog(Git::Manager *git, const QString &fileName, QWidget *parent)
-    : QDialog(parent), _git(git), _fileName(fileName)
+    : Dialog(parent), _git(git), _fileName(fileName)
 {
     setupUi(this);
 
@@ -15,7 +15,7 @@ FileBlameDialog::FileBlameDialog(Git::Manager *git, const QString &fileName, QWi
 }
 
 FileBlameDialog::FileBlameDialog(const Git::File &file, QWidget *parent)
-    : QDialog(parent), _file(file)
+    : Dialog(parent), _file(file)
 {
     setupUi(this);
     plainTextEdit->setHighlighting(file.fileName());

@@ -149,9 +149,7 @@ void MainWidget::on_actionDiffBranch_triggered()
     auto branchName = _repoModel->fullPath(treeViewRepo->currentIndex());
 
     auto diffWin = new DiffWindow(branchName, "master");
-    diffWin->setWindowModality(Qt::ApplicationModal);
-    diffWin->setAttribute(Qt::WA_DeleteOnClose, true);
-    diffWin->show();
+    diffWin->showModal();
 }
 
 

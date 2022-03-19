@@ -120,9 +120,7 @@ void BranchesStatusWidget::on_pushButtonDiff_clicked()
     d.exec();*/
     auto d = new DiffWindow(treeWidgetBranches->currentItem()->text(0),
                             comboBoxReferenceBranch->currentText());
-    d->setWindowModality(Qt::ApplicationModal);
-    d->setAttribute(Qt::WA_DeleteOnClose, true);
-    d->show();
+    d->showModal();
 }
 
 

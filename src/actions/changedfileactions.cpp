@@ -34,9 +34,7 @@ void ChangedFileActions::diff()
     Git::File changed{_git->path() + "/" + _filePath};
 
     auto diffWin = new DiffWindow(original, changed);
-    diffWin->setWindowModality(Qt::ApplicationModal);
-    diffWin->setAttribute(Qt::WA_DeleteOnClose, true);
-    diffWin->show();
+    diffWin->showModal();
 }
 
 void ChangedFileActions::revert()

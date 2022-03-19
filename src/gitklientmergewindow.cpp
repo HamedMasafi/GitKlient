@@ -149,7 +149,7 @@ void GitKlientMergeWindow::load()
     setWindowModified(true);
 }
 
-GitKlientMergeWindow::GitKlientMergeWindow(Mode mode, QWidget *parent) : KXmlGuiWindow(parent)
+GitKlientMergeWindow::GitKlientMergeWindow(Mode mode, QWidget *parent) : MainWindow(parent)
 {
     Q_UNUSED(mode)
 

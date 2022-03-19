@@ -1,10 +1,11 @@
 #ifndef CHANGEDFILESDIALOG_H
 #define CHANGEDFILESDIALOG_H
 
+#include "../core/dialog.h"
 #include "ui_changedfilesdialog.h"
 
 class ChangedFileActions;
-class ChangedFilesDialog : public QDialog, private Ui::ChangedFilesDialog
+class ChangedFilesDialog : public Dialog, private Ui::ChangedFilesDialog
 {
     Q_OBJECT
     ChangedFileActions *_actions;

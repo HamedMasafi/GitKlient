@@ -6,7 +6,6 @@
 #include "git/gitmanager.h"
 #include "runnerdialog.h"
 #include "actions/changedfileactions.h"
-#include "core/whatsthislinkmanager.h"
 
 #include <KService>
 #include <KTextEditor/CodeCompletionModel>
@@ -15,11 +14,9 @@
 #include <KTextEditor/View>
 
 CommitPushDialog::CommitPushDialog(QWidget *parent) :
-      QDialog(parent)
+      Dialog(parent)
 {
     setupUi(this);
-
-    WhatsThisLinkManager::instance()->install(this);
 
     auto git = Git::Manager::instance();
 

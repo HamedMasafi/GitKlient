@@ -1,11 +1,12 @@
 #ifndef FILESTREEDIALOG_H
 #define FILESTREEDIALOG_H
 
+#include "../core/dialog.h"
 #include "ui_filestreedialog.h"
 
 class FileActions;
 class TreeModel;
-class FilesTreeDialog : public QDialog, private Ui::FilesTreeDialog
+class FilesTreeDialog : public Dialog, private Ui::FilesTreeDialog
 {
     Q_OBJECT
     TreeModel *_treeModel;

@@ -8,7 +8,7 @@
 #include <QDebug>
 
 RunnerDialog::RunnerDialog(QWidget *parent) :
-      QDialog(parent)
+      Dialog(parent)
 {
     setupUi(this);
 

@@ -1,9 +1,10 @@
 #ifndef MERGEDIALOG_H
 #define MERGEDIALOG_H
 
+#include "../core/dialog.h"
 #include "ui_mergedialog.h"
 
-class MergeDialog : public QDialog, private Ui::MergeDialog
+class MergeDialog : public Dialog, private Ui::MergeDialog
 {
     Q_OBJECT
 public:
