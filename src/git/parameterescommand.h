@@ -1,7 +1,7 @@
 #ifndef PARAMETERESCOMMAND_H
 #define PARAMETERESCOMMAND_H
 
-#include "abstractcommand.h"
+#include "git/commands/abstractcommand.h"
 
 namespace Git {
 

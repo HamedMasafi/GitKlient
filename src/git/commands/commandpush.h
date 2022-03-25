@@ -1,7 +1,7 @@
 #ifndef COMMANDPUSH_H
 #define COMMANDPUSH_H
 
-#include "abstractcommand.h"
+#include "git/commands/abstractcommand.h"
 
 namespace Git {
 

@@ -1,4 +1,4 @@
-aux_source_directory(git GIT_SRC)
+#aux_source_directory(git GIT_SRC)
 aux_source_directory(diff DIFF_SRC)
 aux_source_directory(common COMMON_SRC)
 aux_source_directory(models MODELS_SRC)
@@ -8,9 +8,8 @@ aux_source_directory(actions ACTIONS_SRC)
 aux_source_directory(core CORE_SRC)
 include_directories(${CMAKE_SOURCE_DIR}/core)
 
-
 set(gitklient_SRCS
-    ${GIT_SRC}
+#    ${GIT_SRC}
     ${DIFF_SRC}
     ${CORE_WIDGETS_SRC}
     ${MODELS_SRC}
@@ -93,6 +92,7 @@ ki18n_wrap_ui(
 )
 
 add_executable(gitklient ${gitklient_SRCS})
+add_subdirectory(git)
 
 target_link_libraries(gitklient
     KF5::CoreAddons

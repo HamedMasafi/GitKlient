@@ -4,7 +4,7 @@
 #include "../core/dialog.h"
 #include "ui_clonedialog.h"
 
-#include <git/commandclone.h>
+#include <git/commands/commandclone.h>
 
 class CloneDialog : public Dialog, private Ui::CloneDialog
 {

@@ -1,10 +1,11 @@
 #include "gitloglist.h"
-#include "gitlog.h"
-#include "gitmanager.h"
-#include "gitgraphlane.h"
+#include "git/gitlog.h"
+#include "git/gitmanager.h"
+#include "git/gitgraphlane.h"
 
 #include <QDateTime>
 #include <QDebug>
+#include <utility>
 
 namespace Git {
 
@@ -36,10 +37,10 @@ struct LanesFactory {
 
     QVector<GraphLane> initLanes(const QString &myHash, int &myIndex)
     {
-        if (!_hashes.size())
+        if (_hashes.empty())
             return QVector<GraphLane>();
 
-        while (_hashes.size() && _hashes.last() == QString())
+        while (!_hashes.empty() && _hashes.last() == QString())
             _hashes.removeLast();
 
         int index{0};
@@ -64,7 +65,7 @@ struct LanesFactory {
     QList<int> setHashes(const QStringList &children, const int &myIndex)
     {
         QList<int> ret;
-        bool myIndexSet{myIndex == -1 ? true : false};
+        bool myIndexSet{myIndex == -1};
         int index{-1};
 
         for (const auto &h : children) {
@@ -138,12 +139,12 @@ struct LanesFactory {
 
             return;
         }
-        for (auto i = list.begin(); i != list.end(); ++i) {
-            if (lanes.size() <= *i)
-                lanes.resize((*i) + 1);
+        for (int & i : list) {
+            if (lanes.size() <= i)
+                lanes.resize(i + 1);
 
-            auto &l = lanes[*i];
-            if (*i == myInedx) {
+            auto &l = lanes[i];
+            if (i == myInedx) {
                 l._type = GraphLane::Node;
             } else {
                 if (l.type() == GraphLane::None)
@@ -153,7 +154,7 @@ struct LanesFactory {
 
                 l._upJoins.append(myInedx);
             }
-            _hashes.replace(*i, children.takeFirst());
+            _hashes.replace(i, children.takeFirst());
         }
     }
 
@@ -169,14 +170,14 @@ struct LanesFactory {
         int myIndex = -1;
         QVector<GraphLane> lanes = initLanes(log->commitHash(), myIndex);
 
-        if (log->parents().size())
+        if (!log->parents().empty())
             join(log->commitHash(), lanes, myIndex);
-        else if (log->childs().size()) {
+        else if (!log->childs().empty()) {
             start(log->childs().first(), lanes);
             myIndex = _hashes.size() - 1;
         }
 
-        if (log->childs().size()) {
+        if (!log->childs().empty()) {
             fork(log->childs(), lanes, myIndex);
         } else if (myIndex != -1) {
             lanes[myIndex]._type = GraphLane::End;
@@ -251,7 +252,7 @@ Log *LogList::findByHash(const QString &hash, int *index) const
 
 LogList::LogList() : QList<Log *>() {}
 
-LogList::LogList(const QString &branch) : QList<Log *>(), _branch(branch) {}
+LogList::LogList(QString branch) : QList<Log *>(), _branch(std::move(branch)) {}
 
 void LogList::load()
 {

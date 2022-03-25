@@ -20,7 +20,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 // application headers
 #include "diffwindow.h"
-#include "git/commandpull.h"
+#include "git/commands/commandpull.h"
 #include "gitklientwindow.h"
 
 #include "dialogs/changedfilesdialog.h"

@@ -1,7 +1,7 @@
 #include "fetchdialog.h"
 
 #include "runnerdialog.h"
-#include "git/commandfetch.h"
+#include "git/commands/commandfetch.h"
 #include "git/gitmanager.h"
 
 FetchDialog::FetchDialog(Git::Manager *git, QWidget *parent) : Dialog(parent)

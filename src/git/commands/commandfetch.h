@@ -1,21 +1,15 @@
-#ifndef COMMANDPULL_H
-#define COMMANDPULL_H
+#ifndef CommandFetch_H
+#define CommandFetch_H
 
-#include "abstractcommand.h"
-
-#ifdef GIT_GUI
-namespace Ui{
-class CommandPullWidget;
-};
-#endif
+#include "git/commands/abstractcommand.h"
 
 namespace Git {
 
-class CommandPull : public AbstractCommand
-{    
+class CommandFetch : public AbstractCommand
+{
 public:
-    CommandPull();
-    ~CommandPull();
+    CommandFetch();
+
     QStringList generateArgs() const override;
 
     bool squash() const;
@@ -37,8 +31,6 @@ public:
     void setTags(bool newTags);
 
     void parseOutput(const QByteArray &output, const QByteArray &errorOutput) override;
-    bool supportWidget() const override;
-    QWidget *createWidget() override;
 
     const QString &remote() const;
     void setRemote(const QString &newRemote);
@@ -55,12 +47,8 @@ private:
     bool _tags{false};
     QString _remote;
     QString _branch;
-#ifdef GIT_GUI
-    QWidget *_widget;
-    Ui::CommandPullWidget *_ui;
-#endif
 };
 
 } // namespace Git
 
-#endif // COMMANDPULL_H
+#endif // CommandFetch_H

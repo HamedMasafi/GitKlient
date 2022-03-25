@@ -2,7 +2,7 @@
 #include "runnerdialog.h"
 
 #include "git/gitmanager.h"
-#include "git/commandpull.h"
+#include "git/commands/commandpull.h"
 
 PullDialog::PullDialog(QWidget *parent, Git::Manager *git) :
       Dialog(parent)
