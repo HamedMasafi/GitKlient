@@ -9,21 +9,31 @@
 
 namespace Git {
 
-    class Cache : public QObject {
-        Q_OBJECT
+class Manager;
+class Cache : public QObject
+{
+    Q_OBJECT
+    Q_PROPERTY(Status status READ status WRITE setStatus NOTIFY statusChanged)
 
-    public:
-        bool isLoaded() const;
+public:
+    Cache(Manager *git);
+    enum Status { NotLoaded, Loading, Loaded };
+    Q_ENUM(Status)
+    bool isLoaded() const;
+    Status status() const;
 
-    protected:
-        void setLoaded(bool loaded);
 
-    signals:
-        void loaded();
+protected:
+    void setStatus(Status newStatus);
 
-    private:
-        bool _isLoaded{false};
-    };
-}
+signals:
+    void loaded();
+    void statusChanged();
+
+private:
+    Status m_status{NotLoaded};
+    Manager *_git{nullptr};
+};
+} // namespace Git
 
 #endif //GITKLIENT_CACHE_H

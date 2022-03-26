@@ -91,8 +91,8 @@ ki18n_wrap_ui(
     dialogs/fetchdialog.ui
 )
 
-add_executable(gitklient ${gitklient_SRCS})
-add_subdirectory(git)
+include(git/CMakeLists.txt)
+add_executable(gitklient ${gitklient_SRCS} ${GIT_SOURCE})
 
 target_link_libraries(gitklient
     KF5::CoreAddons

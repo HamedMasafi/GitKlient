@@ -6,7 +6,7 @@
 #include "../gitremote.h"
 
 namespace Git {
-
+/*
 int RemotesCache::columnCount(const QModelIndex &parent) const
 {
     Q_UNUSED(parent)
@@ -34,5 +34,5 @@ QVariant RemotesCache::data(const QModelIndex &index, int role) const
     }
     return QVariant();
 }
-
+*/
 }

@@ -1,20 +1,32 @@
-//
-// Created by hamed on 25.03.22.
-//
-
 #include "cache.h"
 
 namespace Git {
 
-    bool Cache::isLoaded() const {
-        return _isLoaded;
-    }
-
-    void Cache::setLoaded(bool loadedValue) {
-        if (_isLoaded == loadedValue)
-            return;
-        _isLoaded = loadedValue;
-        emit loaded();
-    }
+Cache::Cache(Manager *git) : _git(git)
+{
 
 }
+
+bool Cache::isLoaded() const
+{
+    return m_status == Loaded;
+}
+
+Cache::Status Cache::status() const
+{
+    return m_status;
+}
+
+void Cache::setStatus(Status newStatus)
+{
+    if (m_status == newStatus)
+        return;
+    m_status = newStatus;
+
+    if (m_status == Loaded)
+        emit loaded();
+
+    emit statusChanged();
+}
+
+} // namespace Git

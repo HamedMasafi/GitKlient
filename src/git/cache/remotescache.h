@@ -11,14 +11,14 @@
 namespace Git {
     class Remote;
 
-    class RemotesCache : public Cache, public QAbstractListModel {
+    class RemotesCache :/* public QAbstractListModel, */public Cache {
         Q_OBJECT
         QList<Remote*> _data;
 
     public:
-        int columnCount(const QModelIndex &parent) const override;
-        int rowCount(const QModelIndex &parent) const override;
-        QVariant data(const QModelIndex &index, int role) const override;
+//        int columnCount(const QModelIndex &parent) const override;
+//        int rowCount(const QModelIndex &parent) const override;
+//        QVariant data(const QModelIndex &index, int role) const override;
     };
 }
 
