@@ -125,6 +125,7 @@ private:
     QString escapeFileName(const QString& filePath) const;
 
     friend class Stash;
+    friend class RemotesCache;
 };
 
 } // namespace Git

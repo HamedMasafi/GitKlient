@@ -10,9 +10,9 @@
 
 namespace Git {
 
-    class LogsCache : public Cache, public QAbstractListModel {
+    /*class LogsCache : public Cache {
 
-    };
+    };*/
 
 }
 

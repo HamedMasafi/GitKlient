@@ -5,18 +5,18 @@
 #ifndef GITKLIENT_CACHE_H
 #define GITKLIENT_CACHE_H
 
-#include <QObject>
+#include <QAbstractListModel>>
 
 namespace Git {
 
 class Manager;
-class Cache : public QObject
+class Cache : public QAbstractListModel
 {
     Q_OBJECT
     Q_PROPERTY(Status status READ status WRITE setStatus NOTIFY statusChanged)
 
 public:
-    Cache(Manager *git);
+    Cache(Manager *git, QObject *parent = nullptr);
     enum Status { NotLoaded, Loading, Loaded };
     Q_ENUM(Status)
     bool isLoaded() const;
@@ -25,6 +25,8 @@ public:
 
 protected:
     void setStatus(Status newStatus);
+    Manager *_git{nullptr};
+    virtual void load() = 0;
 
 signals:
     void loaded();
@@ -32,7 +34,6 @@ signals:
 
 private:
     Status m_status{NotLoaded};
-    Manager *_git{nullptr};
 };
 } // namespace Git
 
