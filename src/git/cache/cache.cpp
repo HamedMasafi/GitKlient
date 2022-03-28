@@ -2,7 +2,7 @@
 
 namespace Git {
 
-Cache::Cache(Manager *git) : _git(git)
+Cache::Cache(Manager *git, QObject *parent) : QAbstractListModel(parent), _git(git)
 {
 
 }
