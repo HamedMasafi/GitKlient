@@ -1,6 +1,7 @@
 #include "dialogs/submoduleinfodialog.h"
 #include "submoduleswidget.h"
 #include "git/gitmanager.h"
+#include "actions/submoduleactions.h"
 
 #include <QDebug>
 
@@ -8,12 +9,20 @@ SubmodulesWidget::SubmodulesWidget(QWidget *parent) :
       WidgetBase(parent)
 {
     setupUi(this);
+    _actions = new SubmoduleActions(Git::Manager::instance(), this);
+
+    pushButtonAddNew->setAction(_actions->actionCreate());
+    pushButtonUpdate->setAction(_actions->actionUpdate());
 }
 
 SubmodulesWidget::SubmodulesWidget(Git::Manager *git, GitKlientWindow *parent) :
       WidgetBase(git, parent)
 {
     setupUi(this);
+    _actions = new SubmoduleActions(git, this);
+
+    pushButtonAddNew->setAction(_actions->actionCreate());
+    pushButtonUpdate->setAction(_actions->actionUpdate());
 }
 
 void SubmodulesWidget::saveState(QSettings &settings) const
@@ -34,7 +43,7 @@ void SubmodulesWidget::reload()
 
     for (auto &m: modulesList) {
         auto item = new QTreeWidgetItem(treeWidget);
-        item->setText(0,m.path());
+        item->setText(0, m.path());
         item->setText(1, m.refName());
 
         auto status = changedFiles.value(m.path());
@@ -44,10 +53,8 @@ void SubmodulesWidget::reload()
     }
 }
 
-void SubmodulesWidget::on_pushButtonAddNew_clicked()
+void SubmodulesWidget::on_treeWidget_customContextMenuRequested(const QPoint &pos)
 {
-    SubmoduleInfoDialog d(this);
-    if (d.exec() == QDialog::Accepted) {
-    }
+    Q_UNUSED(pos)
+    _actions->popup();
 }
-

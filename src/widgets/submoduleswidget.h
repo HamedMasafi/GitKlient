@@ -4,9 +4,11 @@
 #include "ui_submoduleswidget.h"
 #include "widgetbase.h"
 
+class SubmoduleActions;
 class SubmodulesWidget : public WidgetBase, private Ui::SubmodulesWidget
 {
     Q_OBJECT
+    SubmoduleActions *_actions;
 
 public:
     explicit SubmodulesWidget(QWidget *parent = nullptr);
@@ -18,7 +20,7 @@ public:
 
     void reload() override;
 private slots:
-    void on_pushButtonAddNew_clicked();
+    void on_treeWidget_customContextMenuRequested(const QPoint &pos);
 };
 
 #endif // SUBMODULESWIDGET_H
