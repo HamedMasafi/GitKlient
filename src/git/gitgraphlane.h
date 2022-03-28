@@ -5,6 +5,10 @@
 
 namespace Git {
 
+namespace Impl {
+struct LanesFactory;
+}
+
 class GraphLane
 {
 
@@ -36,6 +40,7 @@ private:
 
     friend class LogList;
     friend struct LanesFactory;
+    friend struct Impl::LanesFactory;
 };
 bool operator==(const GraphLane &, const GraphLane &);
 

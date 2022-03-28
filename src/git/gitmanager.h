@@ -15,6 +15,11 @@
 
 namespace Git {
 
+class RemotesCache;
+class SubmodulesCache;
+class BranchesCache;
+class LogsCache;
+class StashesCache;
 class Manager : public QObject
 {
     Q_OBJECT
@@ -117,6 +122,16 @@ public:
 
     QString config(const QString &name) const;
     void setConfig(const QString &name, const QString &value) const;
+    RemotesCache *remotesModel() const;
+
+    SubmodulesCache *submodulesModel() const;
+
+    BranchesCache *branchesModel() const;
+
+    LogsCache *logsCache() const;
+
+    StashesCache *stashesCache() const;
+
 signals:
     void pathChanged();
 
@@ -124,8 +139,18 @@ private:
     QStringList readAllNonEmptyOutput(const QStringList &cmd) const;
     QString escapeFileName(const QString& filePath) const;
 
+    RemotesCache *const _remotesModel;
+    SubmodulesCache *const _submodulesModel;
+    BranchesCache *const _branchesModel;
+    LogsCache *const _logsCache;
+    StashesCache *const _stashesCache;
+
     friend class Stash;
     friend class RemotesCache;
+    friend class SubmodulesCache;
+    friend class BranchesCache;
+    friend class LogsCache;
+    friend class StashesCache;
 };
 
 } // namespace Git

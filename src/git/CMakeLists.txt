@@ -16,9 +16,12 @@ set(
     ${CMAKE_CURRENT_LIST_DIR}/gitremote.cpp
     ${CMAKE_CURRENT_LIST_DIR}/parameterescommand.cpp
 
-    ${CMAKE_CURRENT_LIST_DIR}/cache/logs.cpp
     ${CMAKE_CURRENT_LIST_DIR}/cache/cache.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/cache/logscache.cpp
     ${CMAKE_CURRENT_LIST_DIR}/cache/remotescache.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/cache/submodulescache.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/cache/branchescache.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/cache/stashescache.cpp
 
     ${CMAKE_CURRENT_LIST_DIR}/commands/abstractcommand.cpp
     ${CMAKE_CURRENT_LIST_DIR}/commands/commandchangedfiles.cpp

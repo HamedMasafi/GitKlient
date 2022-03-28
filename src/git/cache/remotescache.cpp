@@ -41,7 +41,7 @@ QVariant RemotesCache::data(const QModelIndex &index, int role) const
     return QVariant();
 }
 
-void RemotesCache::load()
+void RemotesCache::fill()
 {
     qDeleteAll(_data.begin(), _data.end());
     _data.clear();

@@ -5,7 +5,7 @@
 #ifndef GITKLIENT_CACHE_H
 #define GITKLIENT_CACHE_H
 
-#include <QAbstractListModel>>
+#include <QAbstractListModel>
 
 namespace Git {
 
@@ -22,11 +22,12 @@ public:
     bool isLoaded() const;
     Status status() const;
 
+    void load();
 
 protected:
     void setStatus(Status newStatus);
     Manager *_git{nullptr};
-    virtual void load() = 0;
+    virtual void fill() = 0;
 
 signals:
     void loaded();

@@ -1,4 +1,5 @@
 #include "cache.h"
+#include "../gitmanager.h"
 
 namespace Git {
 
@@ -15,6 +16,18 @@ bool Cache::isLoaded() const
 Cache::Status Cache::status() const
 {
     return m_status;
+}
+
+void Cache::load()
+{
+    if (!_git->isValid())
+        return;
+
+    setStatus(Loading);
+    beginResetModel();
+    fill();
+    endResetModel();
+    setStatus(Loaded);
 }
 
 void Cache::setStatus(Status newStatus)

@@ -1,6 +1,12 @@
 #include "gitmanager.h"
 #include "filestatus.h"
 
+#include "cache/remotescache.h"
+#include "cache/submodulescache.h"
+#include "cache/branchescache.h"
+#include "cache/logscache.h"
+#include "cache/stashescache.h"
+
 #include <QDebug>
 #include <QProcess>
 #include <QRegularExpression>
@@ -33,6 +39,9 @@ void Manager::setPath(const QString &newPath)
         _path = ret.replace("\n", "");
         _isValid = true;
         _logs.load();
+
+
+        _stashesCache->load();
     }
 
     Q_EMIT pathChanged();
@@ -236,9 +245,47 @@ QString Manager::escapeFileName(const QString &filePath) const
     return filePath;
 }
 
-Manager::Manager() : QObject() {}
+StashesCache *Manager::stashesCache() const
+{
+    return _stashesCache;
+}
 
-Manager::Manager(const QString path) : QObject()
+LogsCache *Manager::logsCache() const
+{
+    return _logsCache;
+}
+
+BranchesCache *Manager::branchesModel() const
+{
+    return _branchesModel;
+}
+
+SubmodulesCache *Manager::submodulesModel() const
+{
+    return _submodulesModel;
+}
+
+RemotesCache *Manager::remotesModel() const
+{
+    return _remotesModel;
+}
+
+Manager::Manager()
+    : QObject()
+      , _remotesModel{new RemotesCache(this)}
+      , _submodulesModel{new SubmodulesCache(this)}
+      , _branchesModel{new BranchesCache(this)}
+      , _logsCache{new LogsCache(this)}
+      , _stashesCache{new StashesCache(this)}
+{}
+
+Manager::Manager(const QString path)
+    : QObject()
+      , _remotesModel{new RemotesCache(this)}
+      , _submodulesModel{new SubmodulesCache(this)}
+      , _branchesModel{new BranchesCache(this)}
+      , _logsCache{new LogsCache(this)}
+      , _stashesCache{new StashesCache(this)}
 {
     setPath(path);
 }

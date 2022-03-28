@@ -9,23 +9,22 @@
 #include <QAbstractListModel>
 
 namespace Git {
-    class Remote;
+class Remote;
 
-    class RemotesCache : public Cache
-    {
-        Q_OBJECT
-        QList<Remote*> _data;
+class RemotesCache : public Cache
+{
+    Q_OBJECT
+    QList<Remote *> _data;
 
-    public:
-        RemotesCache(Manager *git, QObject *parent = nullptr);
-        int columnCount(const QModelIndex &parent) const override;
-        int rowCount(const QModelIndex &parent) const override;
-        QVariant data(const QModelIndex &index, int role) const override;
+public:
+    RemotesCache(Manager *git, QObject *parent = nullptr);
+    int columnCount(const QModelIndex &parent) const override;
+    int rowCount(const QModelIndex &parent) const override;
+    QVariant data(const QModelIndex &index, int role) const override;
 
-        // Cache interface
-    protected:
-        void load() override;
-    };
-}
+protected:
+    void fill() override;
+};
+} // namespace Git
 
 #endif //GITKLIENT_REMOTESCACHE_H

@@ -6,29 +6,30 @@
 #include "models/historymodel.h"
 #include "git/gitlog.h"
 
-#define HEIGHT 30
+#define HEIGHT 25
+#define WIDTH 18
 
 
 QPoint center(int x) {
-    return {(x * HEIGHT) + (HEIGHT / 2), HEIGHT / 2};
+    return {(x * WIDTH) + (WIDTH / 2), HEIGHT / 2};
 }
 QPoint centerEdge(int x, const Qt::Edge &edge) {
     switch (edge) {
     case Qt::TopEdge:
-        return {(x * HEIGHT) + (HEIGHT / 2), 0};
+        return {(x * WIDTH) + (WIDTH / 2), 0};
     case Qt::LeftEdge:
-        return {(x * HEIGHT), HEIGHT / 2};
+        return {(x * WIDTH), HEIGHT / 2};
     case Qt::RightEdge:
-        return {(x + 1) * HEIGHT, HEIGHT / 2};
+        return {(x + 1) * WIDTH, HEIGHT / 2};
     case Qt::BottomEdge:
-        return {(x * HEIGHT) + (HEIGHT / 2), HEIGHT};
+        return {(x * WIDTH) + (WIDTH / 2), HEIGHT};
     }
     return QPoint();
 }
 
 QPoint point(int col, const Qt::Alignment &align = Qt::AlignCenter) {
     int y;
-    int x = col * HEIGHT;
+    int x = col * WIDTH;
 
     if (align & Qt::AlignTop)
         y = 0;
@@ -40,9 +41,9 @@ QPoint point(int col, const Qt::Alignment &align = Qt::AlignCenter) {
     if (align & Qt::AlignLeft)
         x += 0;
     else if (align & Qt::AlignRight)
-        x += HEIGHT;
+        x += WIDTH;
     else
-        x += HEIGHT / 2;
+        x += WIDTH / 2;
 
     return {x, y};
 }
@@ -118,7 +119,7 @@ void GraphPainter::paint(QPainter *painter, const QStyleOptionViewItem &option, 
     }
 
     QRect rc(
-        log->lanes().size() * HEIGHT,
+        log->lanes().size() * WIDTH,
         0,
         painter->fontMetrics().horizontalAdvance(log->subject()),
         HEIGHT
@@ -128,7 +129,7 @@ void GraphPainter::paint(QPainter *painter, const QStyleOptionViewItem &option, 
     if (!log->refLog().isEmpty()) {
         auto ref = "ref: " + log->refLog();
         QRect rcBox(
-            log->lanes().size() * HEIGHT,
+            log->lanes().size() * WIDTH,
             0,
             painter->fontMetrics().horizontalAdvance(ref) + 8,
             painter->fontMetrics().height() + 4
@@ -223,7 +224,7 @@ void GraphPainter::paintLane(QPainter *painter, const Git::GraphLane &lane, int 
 
 int GraphPainter::colX(const int &col) const
 {
-    return col * HEIGHT;
+    return col * WIDTH;
 }
 
 QSize GraphPainter::sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const
