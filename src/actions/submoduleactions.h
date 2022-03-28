@@ -6,6 +6,7 @@
 class SubmoduleActions: public AbstractActions
 {
     Q_OBJECT
+        QString _subModuleName;
 
 public:
     SubmoduleActions(Git::Manager *git, QWidget *parent = nullptr);
@@ -15,6 +16,9 @@ public:
     void create();
     void deinit();
     void sync();
+
+    const QString &subModuleName() const;
+    void setSubModuleName(const QString &newSubModuleName);
 
 private:
     QString _submoduleName;

@@ -492,7 +492,9 @@ QList<Submodule> Manager::submodules() const
         m.setCommitHash(line.mid(0, 40));
         auto n = line.lastIndexOf(" ");
         m.setPath(line.mid(41, n - 41));
-        m.setRefName(line.mid(n));
+
+        if (line.count(' ') == 2)
+            m.setRefName(line.mid(n));
         modules.append(m);
     }
     return modules;

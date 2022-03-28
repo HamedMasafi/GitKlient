@@ -30,6 +30,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 class GitKlientView;
 class MultiPageWidget;
 class WidgetBase;
+
+namespace Git {
+class Manager;
+}
 /**
  * This class serves as the main window for gitklient.  It handles the
  * menus, toolbars and status bars.
@@ -41,6 +45,8 @@ class WidgetBase;
 class GitKlientWindow : public MainWindow
 {
     Q_OBJECT
+    Git::Manager *_git;
+
 public:
     /**
      * Default Constructor
@@ -57,6 +63,7 @@ public:
     static GitKlientWindow *instance();
 
 private Q_SLOTS:
+    void git_pathChanged();
     void settingsConfigure();
     void repoStatus();
     void openRepo();

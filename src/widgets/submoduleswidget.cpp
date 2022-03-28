@@ -4,6 +4,7 @@
 #include "actions/submoduleactions.h"
 
 #include <QDebug>
+#include <QListWidgetItem>
 
 SubmodulesWidget::SubmodulesWidget(QWidget *parent) :
       WidgetBase(parent)
@@ -37,6 +38,7 @@ void SubmodulesWidget::restoreState(QSettings &settings)
 
 void SubmodulesWidget::reload()
 {
+    treeWidget->clear();
     auto modulesList = git()->submodules();
 
     auto changedFiles = git()->changedFiles();
@@ -56,5 +58,16 @@ void SubmodulesWidget::reload()
 void SubmodulesWidget::on_treeWidget_customContextMenuRequested(const QPoint &pos)
 {
     Q_UNUSED(pos)
+
+    if (!treeWidget->currentItem())
+        return;
+
+    _actions->setSubModuleName(treeWidget->currentItem()->text(0));
     _actions->popup();
+}
+
+void SubmodulesWidget::on_treeWidget_itemActivated(QTreeWidgetItem *item, int)
+{
+    qDebug() << item->text(0);
+    _actions->setSubModuleName(item->text(0));
 }

@@ -60,9 +60,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 GitKlientWindow::GitKlientWindow()
     : MainWindow()
 {
+    _git = Git::Manager::instance();
+    connect(_git, &Git::Manager::pathChanged, this, &GitKlientWindow::git_pathChanged);
+
     initActions();
     _mainWidget = new MultiPageWidget(this);
-    _mainWidget->setDefaultGitManager(Git::Manager::instance());
+    _mainWidget->setDefaultGitManager(_git);
     addPage<HistoryViewWidget>("view_overview");
     addPage<BranchesStatusWidget>("view_branches");
     addPage<CommitsWidget>("view_commits");
@@ -79,7 +82,7 @@ GitKlientWindow::GitKlientWindow()
     if (GitKlientSettings::openLastRepo()) {
         QSettings s;
         auto p = s.value("last_repo").toString();
-        Git::Manager::instance()->setPath(p);
+        _git->setPath(p);
         initRecentFiles(p);
         QtConcurrent::run(this, &GitKlientWindow::loadRemotes);
     }
@@ -96,6 +99,12 @@ GitKlientWindow *GitKlientWindow::instance()
 {
     static GitKlientWindow *instance = new GitKlientWindow;
     return instance;
+}
+
+void GitKlientWindow::git_pathChanged()
+{
+    setWindowFilePath(_git->path());
+//    setWindowTitle(_git->path());
 }
 
 void GitKlientWindow::settingsConfigure()
@@ -203,10 +212,9 @@ void GitKlientWindow::initRecentFiles(const QString &newItem)
 
 void GitKlientWindow::loadRemotes()
 {
-    auto git = Git::Manager::instance();
-    auto remotes = git->remotes();
+    auto remotes = _git->remotes();
     for (auto &r: remotes)
-        volatile auto remote = git->remoteDetails(r);
+        volatile auto remote = _git->remoteDetails(r);
 }
 
 void GitKlientWindow::initContextMenus()
@@ -229,7 +237,7 @@ void GitKlientWindow::openRepo()
     QFileDialog d;
     d.setFileMode(QFileDialog::Directory);
     if (d.exec()==QDialog::Accepted) {
-        Git::Manager::instance()->setPath(d.directoryUrl().toLocalFile());
+        _git->setPath(d.directoryUrl().toLocalFile());
         //        m_kde_actionsView->reload();
         initRecentFiles(d.directoryUrl().toLocalFile());
     }
@@ -242,7 +250,7 @@ void GitKlientWindow::recentActionTriggered()
         return;
 
     auto p = action->data().toString();
-    Git::Manager::instance()->setPath(p);
+    _git->setPath(p);
 
     initRecentFiles(p);
 
@@ -263,7 +271,7 @@ void GitKlientWindow::pull()
 
 void GitKlientWindow::fetch()
 {
-    FetchDialog d(Git::Manager::instance(), this);
+    FetchDialog d(_git, this);
     d.exec();
 }
 
@@ -278,7 +286,7 @@ void GitKlientWindow::clone()
     CloneDialog d(this);
     if (d.exec() == QDialog::Accepted) {
         RunnerDialog r(this);
-        auto branch = Git::Manager::instance()->currentBranch();
+        auto branch = _git->currentBranch();
         auto cmd = d.command();;
         r.run(cmd);
         r.exec();
@@ -288,7 +296,7 @@ void GitKlientWindow::clone()
 
 void GitKlientWindow::diffBranches()
 {
-    SelectBranchesToDiffDialog d(Git::Manager::instance(), this);
+    SelectBranchesToDiffDialog d(_git, this);
     if (d.exec() == QDialog::Accepted) {
         auto diffWin = new DiffWindow(d.oldBranch(), d.newBranch());
         diffWin->showModal();
@@ -297,13 +305,13 @@ void GitKlientWindow::diffBranches()
 
 void GitKlientWindow::search()
 {
-    SearchDialog d(Git::Manager::instance(), this);
+    SearchDialog d(_git, this);
     d.exec();
 }
 
 void GitKlientWindow::repoSettings()
 {
-    RepoSettingsDialog d(Git::Manager::instance(), this);
+    RepoSettingsDialog d(_git, this);
     d.exec();
 }
 
@@ -323,7 +331,7 @@ void GitKlientWindow::addPage(const QString &actionName)
         Qt::Key_9
     };
     auto action = actionCollection()->addAction(actionName);
-    auto w = new T(Git::Manager::instance(), this);
+    auto w = new T(_git, this);
     action->setText(w->windowTitle());
     action->setIcon(QIcon::fromTheme(actionName));
     if (_mainWidget->count() < 10)
