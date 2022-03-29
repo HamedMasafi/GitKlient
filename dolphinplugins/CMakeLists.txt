@@ -29,7 +29,6 @@ target_link_libraries(
     KF5::KIOWidgets
 )
 
-
 #---OVERLAY PLUGIN---
 set(OVERLAY_PLUGIN gitklientoverlayplugin)
 set(

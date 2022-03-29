@@ -155,7 +155,7 @@ ArgParserReturn CommandArgsParser::changes()
 {
     QDir dir;
     git->setPath(dir.currentPath());
-    ChangedFilesDialog d;
+    ChangedFilesDialog d(git);
     d.exec();
     return 0;
 }
@@ -165,7 +165,7 @@ ArgParserReturn CommandArgsParser::changes(const QString &path)
     QFileInfo fi(path);
 
     git->setPath(fi.isFile() ? fi.absoluteFilePath() : fi.absolutePath());
-    ChangedFilesDialog d;
+    ChangedFilesDialog d(git);
     d.exec();
     return 0;
 }

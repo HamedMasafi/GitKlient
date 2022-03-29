@@ -55,7 +55,7 @@ void ArgsParser::run_diff(const QString &f1, const QString &f2)
 void ArgsParser::run_changes(const QString &path)
 {
     git->setPath(path);
-    ChangedFilesDialog d;
+    ChangedFilesDialog d(git);
     d.exec();
 }
 

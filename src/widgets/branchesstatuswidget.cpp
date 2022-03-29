@@ -12,7 +12,7 @@
 BranchesStatusWidget::BranchesStatusWidget(QWidget *parent) : WidgetBase(parent)
 {
     setupUi(this);
-    initGit(Git::Manager::instance());
+    init(Git::Manager::instance());
 }
 
 
@@ -21,14 +21,16 @@ BranchesStatusWidget::BranchesStatusWidget(Git::Manager *git, GitKlientWindow *p
 
 {
     setupUi(this);
-    initGit(git);
+    init(git);
 }
 
-void BranchesStatusWidget::initGit(Git::Manager *git)
+void BranchesStatusWidget::init(Git::Manager *git)
 {
     _actions = new BranchActions(git, this);
     _model = git->branchesModel();
     treeView->setModel(_model);
+
+    comboBoxReferenceBranch->setModel(_model);
 
     pushButtonBrowse->setAction(_actions->actionBrowse());
     pushButtonCheckout->setAction(_actions->actionCheckout());
@@ -49,17 +51,7 @@ void BranchesStatusWidget::restoreState(QSettings &settings)
 void BranchesStatusWidget::on_comboBoxReferenceBranch_currentIndexChanged(const QString &selectedBranch)
 {
     _model->setReferenceBranch(selectedBranch);
-//    treeWidgetBranches->clear();
-//    for (auto &branch : _branches) {
-//        auto commitsInfo = git()->uniqueCommiteOnBranches(selectedBranch, branch);
-
-//        auto item = new QTreeWidgetItem;
-//        item->setText(0, branch);
-//        item->setText(1, QString::number(commitsInfo.first));
-//        item->setText(2, QString::number(commitsInfo.second));
-//        treeWidgetBranches->addTopLevelItem(item);
-//    }
-//    _actions->setOtherBranch(comboBoxReferenceBranch->currentText());
+    _actions->setOtherBranch(selectedBranch);
 }
 
 void BranchesStatusWidget::on_pushButtonRemoveSelected_clicked()
@@ -90,7 +82,7 @@ void BranchesStatusWidget::on_treeView_customContextMenuRequested(const QPoint &
 
 void BranchesStatusWidget::reload()
 {
-    comboBoxReferenceBranch->clear();
+    /*comboBoxReferenceBranch->clear();
 
     _branches = this->git()->branches();
     comboBoxReferenceBranch->addItems(_branches);
@@ -101,45 +93,5 @@ void BranchesStatusWidget::reload()
         index = _branches.indexOf("main");
         if (index != -1)
             comboBoxReferenceBranch->setCurrentIndex(index);
-    }
+    }*/
 }
-
-
-void BranchesStatusWidget::on_pushButtonBrowse_clicked()
-{
-//    if (!treeWidgetBranches->currentItem())
-//        return;
-
-//    FilesTreeDialog d(treeWidgetBranches->currentItem()->text(0), this);
-//    d.exec();
-}
-
-
-void BranchesStatusWidget::on_pushButtonDiff_clicked()
-{
-//    if (!treeWidgetBranches->currentItem())
-//        return;
-
-//    /*DiffDialog d(treeWidgetBranches->currentItem()->text(0),
-//                 comboBoxReferenceBranch->currentText(),
-//                 this);
-//    d.exec();*/
-//    auto d = new DiffWindow(treeWidgetBranches->currentItem()->text(0),
-//                            comboBoxReferenceBranch->currentText());
-//    d->showModal();
-}
-
-
-void BranchesStatusWidget::on_pushButtonCheckout_clicked()
-{
-//    RunnerDialog d(this);
-//    d.run({"checkout", treeWidgetBranches->currentItem()->text(0)});
-//    d.exec();
-}
-
-
-void BranchesStatusWidget::on_pushButtonNew_clicked()
-{
-
-}
-

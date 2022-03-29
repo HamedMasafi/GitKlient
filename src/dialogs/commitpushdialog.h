@@ -4,14 +4,18 @@
 #include "../core/dialog.h"
 #include "ui_commitpushdialog.h"
 
+namespace Git {
+class Manager;
+}
 class ChangedFileActions;
 class CommitPushDialog : public Dialog, private Ui::CommitPushDialog
 {
     Q_OBJECT
     ChangedFileActions *_actions;
+    Git::Manager *_git;
 
 public:
-    explicit CommitPushDialog(QWidget *parent = nullptr);
+    explicit CommitPushDialog(Git::Manager *git, QWidget *parent = nullptr);
 
 private Q_SLOTS:
     void checkButtonsEnable();

@@ -14,7 +14,8 @@ HistoryViewWidget::HistoryViewWidget(QWidget *parent) :
       WidgetBase(parent)
 {
     setupUi(this);
-    _historyModel = Git::Manager::instance()->logsCache();
+    _historyModel = new Git::LogsCache(Git::Manager::instance(), this);
+//        Git::Manager::instance()->logsCache();
     treeViewHistory->setModel(_historyModel);
 
     _graphPainter = new GraphPainter(_historyModel, this);

@@ -38,12 +38,14 @@ void CommitsWidget::saveState(QSettings &settings) const
 {
     save(settings, splitter);
     save(settings, treeViewRepo);
+    widgetCommitsView->saveState(settings);
 }
 
 void CommitsWidget::restoreState(QSettings &settings)
 {
     restore(settings, splitter);
     restore(settings, treeViewRepo);
+    widgetCommitsView->restoreState(settings);
 }
 
 void CommitsWidget::on_treeViewRepo_itemActivated(const QModelIndex &index)

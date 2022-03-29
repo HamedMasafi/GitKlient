@@ -5,14 +5,16 @@
 #include "widgetbase.h"
 #include "git/stash.h"
 
+namespace Git {
+class StashesCache;
+}
 class QStandardItemModel;
 class StashActions;
 class StashesWidget : public WidgetBase, private Ui::StashesWidget
 {
     Q_OBJECT
-    QList<Git::Stash> _stashes;
     StashActions *_actions;
-    QStandardItemModel *model;
+    Git::StashesCache *_model;
 
 public:
     explicit StashesWidget(QWidget *parent = nullptr);
@@ -26,6 +28,8 @@ private slots:
 public:
     void saveState(QSettings &settings) const override;
     void restoreState(QSettings &settings) override;
+private:
+    void init(Git::Manager *git);
 };
 
 #endif // STASHESWIDGET_H

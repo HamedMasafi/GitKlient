@@ -1,10 +1,17 @@
 #include "dialog.h"
 
+#include "git/gitmanager.h"
 #include <QEvent>
 #include <QWhatsThisClickedEvent>
 #include <QDesktopServices>
 
-Dialog::Dialog(QWidget *parent, Qt::WindowFlags f) : QDialog(parent, f) {}
+Dialog::Dialog(QWidget *parent, Qt::WindowFlags f)
+    : QDialog(parent, f), _git(Git::Manager::instance())
+{}
+
+Dialog::Dialog(Git::Manager *git, QWidget *parent, Qt::WindowFlags f)
+    : QDialog(parent, f), _git(git)
+{}
 
 bool Dialog::event(QEvent *event)
 {

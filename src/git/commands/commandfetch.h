@@ -1,7 +1,7 @@
 #ifndef CommandFetch_H
 #define CommandFetch_H
 
-#include "git/commands/abstractcommand.h"
+#include "abstractcommand.h"
 
 namespace Git {
 

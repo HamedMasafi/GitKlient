@@ -58,8 +58,6 @@ public:
      */
     ~GitKlientWindow() override;
 
-    QMenu *_branchMenu;
-    QMenu *_commitMenu;
     static GitKlientWindow *instance();
 
 private Q_SLOTS:
@@ -87,7 +85,6 @@ private:
     void initActions();
     void initRecentFiles(const QString &newItem = QString());
     void loadRemotes();
-    void initContextMenus();
 
     template <class T>
     void addPage(const QString &actionName);

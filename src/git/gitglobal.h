@@ -1,7 +1,7 @@
 #ifndef GITGLOBAL_H
 #define GITGLOBAL_H
 
-#include "git/commands/abstractcommand.h"
+#include "commands/abstractcommand.h"
 
 #include <QStringList>
 

@@ -1,5 +1,5 @@
 #include "commandchangedfiles.h"
-#include "git/gitmanager.h"
+#include "../gitmanager.h"
 
 namespace Git {
 

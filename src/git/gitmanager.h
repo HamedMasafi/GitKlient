@@ -2,7 +2,7 @@
 #define GITMANAGER_H
 
 #include "gitloglist.h"
-#include "git/commands/abstractcommand.h"
+#include "commands/abstractcommand.h"
 #include "filestatus.h"
 #include "gitremote.h"
 #include "gitsubmodule.h"

@@ -1,7 +1,7 @@
 #include "gitglobal.h"
 
 #include <QProcess>
-#include "git/commands/abstractcommand.h"
+#include "commands/abstractcommand.h"
 
 namespace Git {
 

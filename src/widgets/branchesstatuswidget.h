@@ -12,6 +12,7 @@ class BranchActions;
 class BranchesStatusWidget : public WidgetBase, private Ui::BranchesStatusWidget
 {
     Q_OBJECT
+
     QStringList _branches;
     BranchActions *_actions;
     Git::BranchesCache *_model;
@@ -23,7 +24,7 @@ public:
     void saveState(QSettings &settings) const override;
     void restoreState(QSettings &settings) override;
 
-    void initGit(Git::Manager *git);
+    void init(Git::Manager *git);
 
 private slots:
     void on_comboBoxReferenceBranch_currentIndexChanged(const QString &selectedBranch);
@@ -31,10 +32,6 @@ private slots:
     void on_treeView_customContextMenuRequested(const QPoint &pos);
 
     void reload() override;
-    void on_pushButtonBrowse_clicked();
-    void on_pushButtonDiff_clicked();
-    void on_pushButtonCheckout_clicked();
-    void on_pushButtonNew_clicked();
 };
 
 #endif // BRANCHESSTATUSWIDGET_H

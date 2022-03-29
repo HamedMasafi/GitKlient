@@ -1,7 +1,7 @@
 #ifndef COMMANDMESSAGE_H
 #define COMMANDMESSAGE_H
 
-#include "git/commands/abstractcommand.h"
+#include "abstractcommand.h"
 
 namespace Git {
 

@@ -26,6 +26,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "dialogs/changedfilesdialog.h"
 #include "dialogs/clonedialog.h"
 #include "dialogs/commitpushdialog.h"
+#include "dialogs/fetchdialog.h"
 #include "dialogs/filestreedialog.h"
 #include "dialogs/mergedialog.h"
 #include "dialogs/pulldialog.h"
@@ -33,8 +34,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "dialogs/runnerdialog.h"
 #include "dialogs/searchdialog.h"
 #include "dialogs/selectbranchestodiffdialog.h"
-#include "dialogs/fetchdialog.h"
 #include "git/gitmanager.h"
+#include "git/models/logscache.h"
 #include "gitklientdebug.h"
 #include "gitklientview.h"
 #include "multipagewidget.h"
@@ -217,18 +218,9 @@ void GitKlientWindow::loadRemotes()
         volatile auto remote = _git->remoteDetails(r);
 }
 
-void GitKlientWindow::initContextMenus()
-{
-    _branchMenu = new QMenu(this);
-    _branchMenu->addAction(i18n("Browse"));
-    _branchMenu->addAction(i18n("Checkout"));
-    _branchMenu->addAction(i18n("Remove"));
-    _branchMenu->addAction(i18n("Diff"));
-}
-
 void GitKlientWindow::repoStatus()
 {
-    ChangedFilesDialog d(this);
+    ChangedFilesDialog d(_git, this);
     d.exec();
 }
 
@@ -259,8 +251,9 @@ void GitKlientWindow::recentActionTriggered()
 
 void GitKlientWindow::commitPushAction()
 {
-    CommitPushDialog d(this);
-    d.exec();
+    CommitPushDialog d(_git, this);
+    if (d.exec() == QDialog::Accepted)
+        _git->logsCache()->load();
 }
 
 void GitKlientWindow::pull()

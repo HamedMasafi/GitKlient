@@ -62,6 +62,14 @@ QVariant StashesCache::headerData(int section, Qt::Orientation orientation, int 
     return QVariant();
 }
 
+Stash *StashesCache::fromIndex(const QModelIndex &index) const
+{
+    if (!index.isValid() || index.row() < 0 || index.row() >= _data.size())
+        return nullptr;
+
+    return _data.at(index.row());
+}
+
 void StashesCache::fill()
 {
     qDeleteAll(_data);
@@ -81,7 +89,6 @@ void StashesCache::fill()
         stash->_authorName = parts.at(1);
         stash->_authorEmail = parts.at(2);
         stash->_pushTime = QDateTime::fromString(parts.at(3), Qt::RFC2822Date);
-        qDebug() << "Stash" << item << subject << stash->_pushTime;
 
         _data.append(stash);
         id++;

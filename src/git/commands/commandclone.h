@@ -1,7 +1,7 @@
 #ifndef CLONECOMMAND_H
 #define CLONECOMMAND_H
 
-#include "git/commands/abstractcommand.h"
+#include "abstractcommand.h"
 
 namespace Git {
 

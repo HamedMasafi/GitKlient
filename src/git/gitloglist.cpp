@@ -1,7 +1,7 @@
 #include "gitloglist.h"
-#include "git/gitlog.h"
-#include "git/gitmanager.h"
-#include "git/gitgraphlane.h"
+#include "gitlog.h"
+#include "gitmanager.h"
+#include "gitgraphlane.h"
 
 #include <QDateTime>
 #include <QDebug>

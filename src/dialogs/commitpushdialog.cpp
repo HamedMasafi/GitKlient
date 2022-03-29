@@ -13,12 +13,10 @@
 #include <KTextEditor/Editor>
 #include <KTextEditor/View>
 
-CommitPushDialog::CommitPushDialog(QWidget *parent) :
-      Dialog(parent)
+CommitPushDialog::CommitPushDialog(Git::Manager *git, QWidget *parent) :
+      Dialog(parent), _git(git)
 {
     setupUi(this);
-
-    auto git = Git::Manager::instance();
 
     auto files = git->changedFiles();
 
@@ -66,7 +64,7 @@ CommitPushDialog::CommitPushDialog(QWidget *parent) :
     textEditMessage->addWords(_words.values());
     textEditMessage->begin();
 
-    _actions = new ChangedFileActions(Git::Manager::instance(), this);
+    _actions = new ChangedFileActions(_git, this);
 }
 
 void CommitPushDialog::checkButtonsEnable()
@@ -104,8 +102,9 @@ void CommitPushDialog::on_pushButtonCommit_clicked()
     cmd.setMessage(textEditMessage->toPlainText());
     cmd.setIncludeStatus(checkBoxIncludeStatus->isChecked());
 
-//    Git::Manager::instance()->commit(textEditMessage->toPlainText());
-    Git::Manager::instance()->run(cmd);
+//    _git->commit(textEditMessage->toPlainText());
+    _git->run(cmd);
+    accept();
 }
 
 void CommitPushDialog::on_pushButtonPush_clicked()
@@ -123,11 +122,11 @@ void CommitPushDialog::on_pushButtonPush_clicked()
         cmd.setLocalBranch(lineEditNewBranchName->text());
     cmd.setForce(checkBoxForce->isChecked());
 
-    Git::Manager::instance()->commit(textEditMessage->toPlainText());
+    _git->commit(textEditMessage->toPlainText());
     RunnerDialog d(this);
     d.run(&cmd);
     d.exec();
-    close();
+    accept();
 }
 
 void CommitPushDialog::on_toolButtonAddAll_clicked()
@@ -140,11 +139,10 @@ void CommitPushDialog::on_toolButtonAddAll_clicked()
 
 void CommitPushDialog::addFiles()
 {
-    auto git = Git::Manager::instance();
     for (auto i = 0; i < listWidget->count(); ++i) {
         auto item = listWidget->item(i);
         if (item->checkState() == Qt::Checked)
-            git->addFile(item->text());
+            _git->addFile(item->text());
     }
 }
 
@@ -165,14 +163,6 @@ void CommitPushDialog::on_toolButtonAddIndexed_clicked()
     }
 }
 
-/*
-void CommitPushDialog::on_listWidget_itemDoubleClicked(QListWidgetItem *item)
-{
-    Git::File original{Git::Manager::instance()->currentBranch(), item->text()};
-    Git::File changed{Git::Manager::instance()->path() + "/" + item->text()};
-    DiffDialog d(original, changed, this);
-    d.exec();
-}*/
 void CommitPushDialog::on_listWidget_itemDoubleClicked(QListWidgetItem *item)
 {
     if (!item)

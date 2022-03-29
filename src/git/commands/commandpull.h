@@ -1,7 +1,7 @@
 #ifndef COMMANDPULL_H
 #define COMMANDPULL_H
 
-#include "git/commands/abstractcommand.h"
+#include "abstractcommand.h"
 
 #ifdef GIT_GUI
 namespace Ui{

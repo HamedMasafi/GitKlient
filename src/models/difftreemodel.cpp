@@ -83,11 +83,11 @@ QColor DiffTreeModel::statusColor(const Diff::DiffType &status) const
     case Diff::DiffType::Unchanged:
         return Qt::black;
     case Diff::DiffType::Added:
-        return Qt::green;
+        return GitKlientSettings::diffAddedColor();
     case Diff::DiffType::Removed:
-        return Qt::red;
+        return GitKlientSettings::diffRemovedColor();
     case Diff::DiffType::Modified:
-        return Qt::blue;
+        return GitKlientSettings::diffModifiedColor();
     }
     return QColor();
 }
@@ -95,6 +95,7 @@ QColor DiffTreeModel::statusColor(const Diff::DiffType &status) const
 Diff::DiffType DiffTreeModel::toDiffType(const FileStatus::Status &status)
 {
     switch (status) {
+    case FileStatus::NoGit:
     case FileStatus::Unknown:
     case FileStatus::Unmodified:
         return Diff::DiffType::Unchanged;

@@ -11,7 +11,7 @@ class ChangedFilesDialog : public Dialog, private Ui::ChangedFilesDialog
     ChangedFileActions *_actions;
 
 public:
-    explicit ChangedFilesDialog(QWidget *parent = nullptr);
+    explicit ChangedFilesDialog(Git::Manager *git, QWidget *parent = nullptr);
 
 private Q_SLOTS:
     void on_pushButtonCommitPush_clicked();

@@ -13,27 +13,26 @@ StashesWidget::StashesWidget(QWidget *parent) :
       WidgetBase(parent)
 {
     setupUi(this);
-    _actions = new StashActions(Git::Manager::instance(), this);
-
-    model = new QStandardItemModel(this);
-    model->setColumnCount(4);
-    treeView->setModel(model);
+    init(Git::Manager::instance());
 }
+
 
 StashesWidget::StashesWidget(Git::Manager *git, GitKlientWindow *parent) : WidgetBase(git, parent)
 {
     setupUi(this);
+    init(git);
+}
+
+void StashesWidget::init(Git::Manager *git)
+{
     _actions = new StashActions(git, this);
 
     pushButtonApply->setAction(_actions->actionApply());
     pushButtonRemoveSelected->setAction(_actions->actionDrop());
     pushButtonCreateNew->setAction(_actions->actionNew());
 
-    model = new QStandardItemModel(this);
-//    model->setColumnCount(4);
-//    treeView->setModel(model);
-    auto m = git->stashesCache();
-    treeView->setModel(m);
+    _model = git->stashesCache();
+    treeView->setModel(_model);
 }
 
 void StashesWidget::reload()
@@ -63,9 +62,12 @@ void StashesWidget::on_treeView_customContextMenuRequested(const QPoint &pos)
 {
     Q_UNUSED(pos)
 
-    auto stash = _stashes.at(treeView->currentIndex().row());
+    auto stash = _model->fromIndex(treeView->currentIndex());
 
-    _actions->setStashName(stash.name());
+    if (!stash)
+        return;
+
+    _actions->setStashName(stash->name());
     _actions->popup();
 }
 

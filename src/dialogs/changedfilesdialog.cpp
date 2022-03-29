@@ -7,18 +7,18 @@
 
 #include <QDebug>
 
-ChangedFilesDialog::ChangedFilesDialog(QWidget *parent) :
-      Dialog(parent)
+ChangedFilesDialog::ChangedFilesDialog(Git::Manager *git, QWidget *parent) :
+      Dialog(git, parent)
 {
     setupUi(this);
     reload();
-    _actions = new ChangedFileActions(Git::Manager::instance(), this);
+    _actions = new ChangedFileActions(git, this);
     connect(_actions, &ChangedFileActions::reloadNeeded, this, &ChangedFilesDialog::reload);
 }
 
 void ChangedFilesDialog::on_pushButtonCommitPush_clicked()
 {
-    CommitPushDialog d(this);
+    CommitPushDialog d(_git, this);
     d.exec();
     reload();
 }
@@ -26,7 +26,7 @@ void ChangedFilesDialog::on_pushButtonCommitPush_clicked()
 void ChangedFilesDialog::reload()
 {
     listWidget->clear();
-    auto files = Git::Manager::instance()->changedFiles();
+    auto files = _git->changedFiles();
 
     for (auto i = files.begin(); i != files.end(); ++i) {
         auto item = new QListWidgetItem(listWidget);

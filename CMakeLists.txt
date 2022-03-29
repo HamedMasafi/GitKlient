@@ -60,6 +60,8 @@ endif()
 
 add_subdirectory(icons)
 add_subdirectory(src)
-#add_subdirectory(gitklientmerge)
 #add_subdirectory(autotests)
-add_subdirectory(dolphinplugins)
+
+if (UNIX)
+    add_subdirectory(dolphinplugins)
+endif (UNIX)

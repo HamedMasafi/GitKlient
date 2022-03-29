@@ -1,4 +1,3 @@
-#include "../../dolphinplugins/klientdolphinoverlayplugin.h"
 #include "../../src/git/gitmanager.h"
 #include "../common/gittestmanager.h"
 #include "../../dolphinplugins/statuscache.h"

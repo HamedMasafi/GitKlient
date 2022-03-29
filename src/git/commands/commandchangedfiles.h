@@ -1,8 +1,8 @@
 #ifndef COMMANDCHANGEDFILES_H
 #define COMMANDCHANGEDFILES_H
 
-#include "git/commands/abstractcommand.h"
-#include "git/filestatus.h"
+#include "abstractcommand.h"
+#include "../filestatus.h"
 
 #include <QList>
 
