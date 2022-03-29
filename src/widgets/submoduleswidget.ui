@@ -19,25 +19,10 @@
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
-    <widget class="QTreeWidget" name="treeWidget">
+    <widget class="QTreeView" name="treeView">
      <property name="contextMenuPolicy">
       <enum>Qt::CustomContextMenu</enum>
      </property>
-     <column>
-      <property name="text">
-       <string>Path</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>Head</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>Status</string>
-      </property>
-     </column>
     </widget>
    </item>
    <item>

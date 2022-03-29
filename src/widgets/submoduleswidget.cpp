@@ -1,6 +1,7 @@
 #include "dialogs/submoduleinfodialog.h"
 #include "submoduleswidget.h"
 #include "git/gitmanager.h"
+#include "git/models/submodulescache.h"
 #include "actions/submoduleactions.h"
 
 #include <QDebug>
@@ -14,6 +15,9 @@ SubmodulesWidget::SubmodulesWidget(QWidget *parent) :
 
     pushButtonAddNew->setAction(_actions->actionCreate());
     pushButtonUpdate->setAction(_actions->actionUpdate());
+
+    _model = Git::Manager::instance()->submodulesModel();
+    treeView->setModel(_model);
 }
 
 SubmodulesWidget::SubmodulesWidget(Git::Manager *git, GitKlientWindow *parent) :
@@ -24,50 +28,44 @@ SubmodulesWidget::SubmodulesWidget(Git::Manager *git, GitKlientWindow *parent) :
 
     pushButtonAddNew->setAction(_actions->actionCreate());
     pushButtonUpdate->setAction(_actions->actionUpdate());
+
+    _model = git->submodulesModel();
+    treeView->setModel(_model);
 }
 
 void SubmodulesWidget::saveState(QSettings &settings) const
 {
-    save(settings, treeWidget);
+    save(settings, treeView);
 }
 
 void SubmodulesWidget::restoreState(QSettings &settings)
 {
-    restore(settings, treeWidget);
+    restore(settings, treeView);
 }
 
 void SubmodulesWidget::reload()
 {
-    treeWidget->clear();
-    auto modulesList = git()->submodules();
 
-    auto changedFiles = git()->changedFiles();
-
-    for (auto &m: modulesList) {
-        auto item = new QTreeWidgetItem(treeWidget);
-        item->setText(0, m.path());
-        item->setText(1, m.refName());
-
-        auto status = changedFiles.value(m.path());
-        qDebug() << "status for" << m.path() << status;
-
-        treeWidget->addTopLevelItem(item);
-    }
 }
 
-void SubmodulesWidget::on_treeWidget_customContextMenuRequested(const QPoint &pos)
+void SubmodulesWidget::on_treeView_customContextMenuRequested(const QPoint &pos)
 {
     Q_UNUSED(pos)
 
-    if (!treeWidget->currentItem())
+    if (!treeView->currentIndex().isValid())
         return;
 
-    _actions->setSubModuleName(treeWidget->currentItem()->text(0));
+    auto s = _model->fromIndex(treeView->currentIndex());
+    if (!s)
+        return;
+    _actions->setSubModuleName(s->path());
     _actions->popup();
 }
 
-void SubmodulesWidget::on_treeWidget_itemActivated(QTreeWidgetItem *item, int)
+void SubmodulesWidget::on_treeView_activated(const QModelIndex &index)
 {
-    qDebug() << item->text(0);
-    _actions->setSubModuleName(item->text(0));
+    auto s = _model->fromIndex(index);
+    if (!s)
+        return;
+    _actions->setSubModuleName(s->path());
 }

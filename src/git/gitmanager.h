@@ -15,6 +15,7 @@
 
 namespace Git {
 
+class Cache;
 class RemotesCache;
 class SubmodulesCache;
 class BranchesCache;
@@ -138,6 +139,7 @@ signals:
 private:
     QStringList readAllNonEmptyOutput(const QStringList &cmd) const;
     QString escapeFileName(const QString& filePath) const;
+    void loadAsync();
 
     RemotesCache *const _remotesModel;
     SubmodulesCache *const _submodulesModel;

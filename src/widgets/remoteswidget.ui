@@ -14,7 +14,8 @@
    <string>Remotes</string>
   </property>
   <property name="windowIcon">
-   <iconset theme="git-remote"/>
+   <iconset theme="git-remote">
+    <normaloff>.</normaloff>.</iconset>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_3">
    <item>
@@ -25,7 +26,7 @@
      <widget class="QWidget" name="layoutWidget">
       <layout class="QVBoxLayout" name="verticalLayout_2">
        <item>
-        <widget class="QListWidget" name="listWidget"/>
+        <widget class="QListView" name="listView"/>
        </item>
        <item>
         <layout class="QHBoxLayout" name="horizontalLayout">

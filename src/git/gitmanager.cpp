@@ -1,16 +1,17 @@
 #include "gitmanager.h"
 #include "filestatus.h"
 
-#include "cache/remotescache.h"
-#include "cache/submodulescache.h"
-#include "cache/branchescache.h"
-#include "cache/logscache.h"
-#include "cache/stashescache.h"
+#include "models/remotescache.h"
+#include "models/submodulescache.h"
+#include "models/branchescache.h"
+#include "models/logscache.h"
+#include "models/stashescache.h"
 
 #include <QDebug>
 #include <QProcess>
 #include <QRegularExpression>
-#include <qfile.h>
+#include <QFile>
+#include <QtConcurrent>
 
 namespace Git {
 
@@ -39,9 +40,7 @@ void Manager::setPath(const QString &newPath)
         _path = ret.replace("\n", "");
         _isValid = true;
         _logs.load();
-
-
-        _stashesCache->load();
+        loadAsync();
     }
 
     Q_EMIT pathChanged();
@@ -244,6 +243,23 @@ QString Manager::escapeFileName(const QString &filePath) const
         return " " + filePath + " ";
     return filePath;
 }
+
+bool load(Cache *cache)
+{
+    cache->load();
+    return true;
+}
+void Manager::loadAsync()
+{
+    QList<Cache *> models = {_remotesModel,
+                             _submodulesModel,
+                             _branchesModel,
+                             _logsCache,
+                             _stashesCache};
+
+    QtConcurrent::mapped(models, load);
+}
+
 
 StashesCache *Manager::stashesCache() const
 {

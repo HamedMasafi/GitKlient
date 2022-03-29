@@ -16,12 +16,12 @@ set(
     ${CMAKE_CURRENT_LIST_DIR}/gitremote.cpp
     ${CMAKE_CURRENT_LIST_DIR}/parameterescommand.cpp
 
-    ${CMAKE_CURRENT_LIST_DIR}/cache/cache.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/cache/logscache.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/cache/remotescache.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/cache/submodulescache.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/cache/branchescache.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/cache/stashescache.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/models/cache.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/models/logscache.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/models/remotescache.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/models/submodulescache.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/models/branchescache.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/models/stashescache.cpp
 
     ${CMAKE_CURRENT_LIST_DIR}/commands/abstractcommand.cpp
     ${CMAKE_CURRENT_LIST_DIR}/commands/commandchangedfiles.cpp
@@ -32,7 +32,7 @@ set(
     ${CMAKE_CURRENT_LIST_DIR}/commands/commandpush.cpp
 )
 
-#include(${CMAKE_CURRENT_LIST_DIR}/cache/CMakeLists.txt)
+#include(${CMAKE_CURRENT_LIST_DIR}/models/CMakeLists.txt)
 #include(${CMAKE_CURRENT_LIST_DIR}/commands/CMakeLists.txt)
 
 #set(gitklient_SRCS ${SOURCE} PARENT_SCOPE)

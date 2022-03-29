@@ -4,15 +4,17 @@
 #include <QStyledItemDelegate>
 #include "git/gitgraphlane.h"
 
-class HistoryModel;
+namespace Git {
+class LogsCache;
+};
 class GraphPainter : public QStyledItemDelegate
 {
     Q_OBJECT
-    HistoryModel *_model;
+    Git::LogsCache *_model;
     QVector<QColor> _colors;
 
 public:
-    GraphPainter(HistoryModel *model, QObject *parent = nullptr);
+    GraphPainter(Git::LogsCache *model, QObject *parent = nullptr);
 
     void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const override;
     void paintLane(QPainter *painter, const Git::GraphLane &lane, int index) const;

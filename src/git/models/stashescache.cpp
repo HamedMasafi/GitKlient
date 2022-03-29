@@ -35,7 +35,7 @@ QVariant StashesCache::data(const QModelIndex &index, int role) const
 
     switch (index.column()) {
     case 0:
-        return remote->name();
+        return remote->subject();
     case 1:
         return remote->authorName();
     case 2:

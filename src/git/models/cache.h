@@ -22,6 +22,7 @@ public:
     bool isLoaded() const;
     Status status() const;
 
+public slots:
     void load();
 
 protected:

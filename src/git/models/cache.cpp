@@ -5,7 +5,7 @@ namespace Git {
 
 Cache::Cache(Manager *git, QObject *parent) : QAbstractListModel(parent), _git(git)
 {
-
+//    connect(git, &Manager::pathChanged, this, &Cache::load);
 }
 
 bool Cache::isLoaded() const

@@ -1,18 +1,20 @@
 #include "historyviewwidget.h"
-#include "diffwindow.h"
-#include "models/historymodel.h"
+#include "actions/commitactions.h"
 #include "dialogs/filestreedialog.h"
+#include "diffwindow.h"
 #include "git/gitlog.h"
+#include "git/models/logscache.h"
+#include "models/historymodel.h"
+#include "widgets/graphpainter.h"
+
 #include <QDebug>
 #include <QMenu>
-#include "widgets/graphpainter.h"
-#include "actions/commitactions.h"
 
 HistoryViewWidget::HistoryViewWidget(QWidget *parent) :
       WidgetBase(parent)
 {
     setupUi(this);
-    _historyModel = new HistoryModel(this);
+    _historyModel = Git::Manager::instance()->logsCache();
     treeViewHistory->setModel(_historyModel);
 
     _graphPainter = new GraphPainter(_historyModel, this);
@@ -30,7 +32,7 @@ HistoryViewWidget::HistoryViewWidget(Git::Manager *git, GitKlientWindow *parent)
       WidgetBase(git, parent)
 {
     setupUi(this);
-    _historyModel = new HistoryModel(this);
+    _historyModel = git->logsCache();
     treeViewHistory->setModel(_historyModel);
 
     _graphPainter = new GraphPainter(_historyModel, this);
@@ -64,7 +66,7 @@ void HistoryViewWidget::restoreState(QSettings &settings)
 
 void HistoryViewWidget::on_treeViewHistory_itemActivated(const QModelIndex &index)
 {
-    auto log = _historyModel->log(index);
+    auto log = _historyModel->fromIndex(index);
     if (!log)
         return;
 
@@ -95,7 +97,7 @@ void HistoryViewWidget::on_textBrowser_fileClicked(const QString &file)
 
 void HistoryViewWidget::on_treeViewHistory_customContextMenuRequested(const QPoint &pos)
 {
-    auto log = _historyModel->log(treeViewHistory->currentIndex());
+    auto log = _historyModel->fromIndex(treeViewHistory->currentIndex());
     if (!log)
         return;
     _actions->setCommitHash(log->commitHash());
@@ -105,8 +107,8 @@ void HistoryViewWidget::on_treeViewHistory_customContextMenuRequested(const QPoi
 
 void HistoryViewWidget::git_pathChanged()
 {
-    _historyModel->reload();
-    if (_historyModel->rowCount(QModelIndex()))
-        treeViewHistory->setCurrentIndex(_historyModel->index(0));
+//    _historyModel->reload();
+//    if (_historyModel->rowCount(QModelIndex()))
+//        treeViewHistory->setCurrentIndex(_historyModel->index(0));
 }
 

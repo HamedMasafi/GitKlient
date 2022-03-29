@@ -1,6 +1,7 @@
 #include "branchactions.h"
 
 #include <KLocalizedString>
+#include <kmessagebox.h>
 
 #include <QAction>
 #include <QFileDialog>
@@ -31,11 +32,18 @@ void BranchActions::setOtherBranch(const QString &newOtherBranch)
     _otherBranch = newOtherBranch;
 }
 
+void BranchActions::create()
+{
+
+}
+
 BranchActions::BranchActions(Git::Manager *git, QWidget *parent) : AbstractActions(git, parent)
 {
     ADD_ACTION(actionBrowse, "Browse...", &BranchActions::browse);
     ADD_ACTION(actionCheckout, "Checkout...", &BranchActions::checkout);
     ADD_ACTION(actionDiff, "Diff...", &BranchActions::diff);
+    ADD_ACTION(actionRemove, "Remove...", &BranchActions::remove);
+    ADD_HIDDEN_ACTION(actionCreate, "Create...", &BranchActions::create);
 }
 
 void BranchActions::browse()
@@ -67,4 +75,14 @@ void BranchActions::diff()
 
     auto d = new DiffWindow(mainBranch, _branchName);
     d->showModal();
+}
+
+void BranchActions::remove()
+{
+    auto r = KMessageBox::questionYesNo(_parent, i18n("Are you sure to remove the selected branch?"));
+
+    if (r == KMessageBox::No)
+        return;
+
+    _git->removeBranch(_branchName);
 }

@@ -15,6 +15,8 @@ class BranchActions : public AbstractActions
     DEFINE_ACTION(actionBrowse)
     DEFINE_ACTION(actionCheckout)
     DEFINE_ACTION(actionDiff)
+    DEFINE_ACTION(actionCreate)
+    DEFINE_ACTION(actionRemove)
 
 public:
     BranchActions(Git::Manager *git, QWidget *parent = nullptr);
@@ -26,9 +28,11 @@ public:
     void setOtherBranch(const QString &newOtherBranch);
 
 private slots:
+    void create();
     void browse();
     void checkout();
     void diff();
+    void remove();
 };
 
 #endif // BRANCHACTIONS_H

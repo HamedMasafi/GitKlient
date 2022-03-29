@@ -21,6 +21,7 @@ public:
     int columnCount(const QModelIndex &parent) const override;
     int rowCount(const QModelIndex &parent) const override;
     QVariant data(const QModelIndex &index, int role) const override;
+    Remote *fromIndex(const QModelIndex &index);
 
 protected:
     void fill() override;

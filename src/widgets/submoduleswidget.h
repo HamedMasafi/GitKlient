@@ -6,10 +6,16 @@
 
 class QTreeWidgetItem;
 class SubmoduleActions;
+
+namespace Git {
+class SubmodulesCache;
+}
+
 class SubmodulesWidget : public WidgetBase, private Ui::SubmodulesWidget
 {
     Q_OBJECT
     SubmoduleActions *_actions;
+    Git::SubmodulesCache *_model;
 
 public:
     explicit SubmodulesWidget(QWidget *parent = nullptr);
@@ -21,8 +27,8 @@ public:
 
     void reload() override;
 private slots:
-    void on_treeWidget_customContextMenuRequested(const QPoint &pos);
-    void on_treeWidget_itemActivated(QTreeWidgetItem *item, int);
+    void on_treeView_customContextMenuRequested(const QPoint &pos);
+    void on_treeView_activated(const QModelIndex &index);
 };
 
 #endif // SUBMODULESWIDGET_H

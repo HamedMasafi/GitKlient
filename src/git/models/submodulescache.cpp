@@ -19,7 +19,7 @@ int SubmodulesCache::rowCount(const QModelIndex &parent) const
 int SubmodulesCache::columnCount(const QModelIndex &parent) const
 {
     Q_UNUSED(parent)
-    return 3;
+    return 2;
 }
 
 QVariant SubmodulesCache::data(const QModelIndex &index, int role) const
@@ -31,10 +31,33 @@ QVariant SubmodulesCache::data(const QModelIndex &index, int role) const
     auto submodule = _data.at(index.row());
 
     switch (index.column()) {
-    case PathRole:
+    case 0:
         return submodule->path();
         break;
+    case 1:
+        return submodule->refName();
+        break;
+    case 2:
+        return "submodule->";
+        break;
     }
+    return QVariant();
+}
+
+QVariant SubmodulesCache::headerData(int section, Qt::Orientation orientation, int role) const
+{
+    if (orientation != Qt::Horizontal || role != Qt::DisplayRole)
+        return QVariant();
+
+    switch (section) {
+    case 0:
+        return "Path";
+    case 1:
+        return "Head";
+    case 2:
+        return "Status";
+    }
+
     return QVariant();
 }
 
@@ -44,6 +67,14 @@ bool SubmodulesCache::append(Submodule *module)
     _data.append(module);
     endInsertRows();
     return true;
+}
+
+Submodule *SubmodulesCache::fromIndex(const QModelIndex &index)
+{
+    if (!index.isValid() || index.row() < 0 || index.row() >= _data.size())
+        return nullptr;
+
+    return _data.at(index.row());
 }
 
 void SubmodulesCache::fill()
@@ -56,7 +87,9 @@ void SubmodulesCache::fill()
         m->setCommitHash(line.mid(0, 40));
         auto n = line.lastIndexOf(" ");
         m->setPath(line.mid(41, n - 41));
-        m->setRefName(line.mid(n));
+
+        if (line.count(' ') == 2)
+            m->setRefName(line.mid(n));
         _data.append(m);
     }
 }

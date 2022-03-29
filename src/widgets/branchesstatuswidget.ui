@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>567</width>
+    <width>664</width>
     <height>445</height>
    </rect>
   </property>
@@ -46,28 +46,10 @@
     </layout>
    </item>
    <item>
-    <widget class="QTreeWidget" name="treeWidgetBranches">
-     <property name="enabled">
-      <bool>true</bool>
-     </property>
+    <widget class="QTreeView" name="treeView">
      <property name="contextMenuPolicy">
       <enum>Qt::CustomContextMenu</enum>
      </property>
-     <column>
-      <property name="text">
-       <string>Name</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>Commit(s) behind</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>Commit(s) ahead</string>
-      </property>
-     </column>
     </widget>
    </item>
    <item>
@@ -86,7 +68,7 @@
       </spacer>
      </item>
      <item>
-      <widget class="QPushButton" name="pushButtonNew">
+      <widget class="PushButton" name="pushButtonNew">
        <property name="enabled">
         <bool>true</bool>
        </property>
@@ -100,7 +82,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="pushButtonCheckout">
+      <widget class="PushButton" name="pushButtonCheckout">
        <property name="enabled">
         <bool>false</bool>
        </property>
@@ -110,7 +92,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="pushButtonRemoveSelected">
+      <widget class="PushButton" name="pushButtonRemoveSelected">
        <property name="enabled">
         <bool>false</bool>
        </property>
@@ -120,7 +102,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="pushButtonBrowse">
+      <widget class="PushButton" name="pushButtonBrowse">
        <property name="enabled">
         <bool>false</bool>
        </property>
@@ -130,7 +112,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="pushButtonDiff">
+      <widget class="PushButton" name="pushButtonDiff">
        <property name="enabled">
         <bool>false</bool>
        </property>
@@ -143,9 +125,15 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>PushButton</class>
+   <extends>QPushButton</extends>
+   <header>core/pushbutton.h</header>
+  </customwidget>
+ </customwidgets>
  <tabstops>
   <tabstop>comboBoxReferenceBranch</tabstop>
-  <tabstop>treeWidgetBranches</tabstop>
   <tabstop>pushButtonNew</tabstop>
   <tabstop>pushButtonCheckout</tabstop>
   <tabstop>pushButtonRemoveSelected</tabstop>

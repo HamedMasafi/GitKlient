@@ -3,7 +3,7 @@
 #include <QPainter>
 #include <QDebug>
 #include <QPainterPath>
-#include "models/historymodel.h"
+#include "git/models/logscache.h"
 #include "git/gitlog.h"
 
 #define HEIGHT 25
@@ -69,7 +69,7 @@ QPoint centerGuide(int x, const Qt::Edge &edge) {
 }
 
 
-GraphPainter::GraphPainter(HistoryModel *model, QObject *parent)
+GraphPainter::GraphPainter(Git::LogsCache *model, QObject *parent)
     : QStyledItemDelegate(parent), _model(model)
 {
     _colors = {
@@ -81,7 +81,7 @@ GraphPainter::GraphPainter(HistoryModel *model, QObject *parent)
 void GraphPainter::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
 
-    auto log = _model->log(index);
+    auto log = _model->fromIndex(index);
 
 
     painter->setRenderHints(QPainter::Antialiasing);

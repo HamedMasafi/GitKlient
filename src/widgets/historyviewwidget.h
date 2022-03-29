@@ -4,14 +4,16 @@
 #include "ui_historyviewwidget.h"
 #include "widgetbase.h"
 
-class HistoryModel;
 class GraphPainter;
 class CommitActions;
+namespace Git {
+class LogsCache;
+}
 class HistoryViewWidget : public WidgetBase, private Ui::HistoryViewWidget
 {
     Q_OBJECT
     CommitActions *_actions;
-    HistoryModel *_historyModel;
+    Git::LogsCache *_historyModel;
     GraphPainter *_graphPainter;
 
 public:

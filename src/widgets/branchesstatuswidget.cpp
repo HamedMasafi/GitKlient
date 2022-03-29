@@ -5,81 +5,87 @@
 #include "dialogs/runnerdialog.h"
 #include "diffwindow.h"
 #include "git/gitmanager.h"
+#include "git/models/branchescache.h"
 
 #include <KMessageBox>
 
 BranchesStatusWidget::BranchesStatusWidget(QWidget *parent) : WidgetBase(parent)
 {
     setupUi(this);
-    _actions = new BranchActions(Git::Manager::instance(), this);
+    initGit(Git::Manager::instance());
 }
+
 
 BranchesStatusWidget::BranchesStatusWidget(Git::Manager *git, GitKlientWindow *parent) :
       WidgetBase(git, parent)
 
 {
     setupUi(this);
+    initGit(git);
+}
+
+void BranchesStatusWidget::initGit(Git::Manager *git)
+{
     _actions = new BranchActions(git, this);
+    _model = git->branchesModel();
+    treeView->setModel(_model);
+
+    pushButtonBrowse->setAction(_actions->actionBrowse());
+    pushButtonCheckout->setAction(_actions->actionCheckout());
+    pushButtonDiff->setAction(_actions->actionDiff());
+    pushButtonRemoveSelected->setAction(_actions->actionRemove());
 }
 
 void BranchesStatusWidget::saveState(QSettings &settings) const
 {
-    save(settings, treeWidgetBranches);
+    save(settings, treeView);
 }
 
 void BranchesStatusWidget::restoreState(QSettings &settings)
 {
-    restore(settings, treeWidgetBranches);
+    restore(settings, treeView);
 }
 
 void BranchesStatusWidget::on_comboBoxReferenceBranch_currentIndexChanged(const QString &selectedBranch)
 {
-    treeWidgetBranches->clear();
-    for (auto &branch : _branches) {
-        auto commitsInfo = git()->uniqueCommiteOnBranches(selectedBranch, branch);
+    _model->setReferenceBranch(selectedBranch);
+//    treeWidgetBranches->clear();
+//    for (auto &branch : _branches) {
+//        auto commitsInfo = git()->uniqueCommiteOnBranches(selectedBranch, branch);
 
-        auto item = new QTreeWidgetItem;
-        item->setText(0, branch);
-        item->setText(1, QString::number(commitsInfo.first));
-        item->setText(2, QString::number(commitsInfo.second));
-        treeWidgetBranches->addTopLevelItem(item);
-    }
-    _actions->setOtherBranch(comboBoxReferenceBranch->currentText());
+//        auto item = new QTreeWidgetItem;
+//        item->setText(0, branch);
+//        item->setText(1, QString::number(commitsInfo.first));
+//        item->setText(2, QString::number(commitsInfo.second));
+//        treeWidgetBranches->addTopLevelItem(item);
+//    }
+//    _actions->setOtherBranch(comboBoxReferenceBranch->currentText());
 }
 
 void BranchesStatusWidget::on_pushButtonRemoveSelected_clicked()
 {
-    if (!treeWidgetBranches->currentItem())
-        return;
+//    if (!treeWidgetBranches->currentItem())
+//        return;
 
-    auto r = KMessageBox::questionYesNo(this, i18n("Are you sure to remove the selected branch?"));
+//    auto r = KMessageBox::questionYesNo(this, i18n("Are you sure to remove the selected branch?"));
 
-    if (r == KMessageBox::No)
-        return;
+//    if (r == KMessageBox::No)
+//        return;
 
-    git()->removeBranch(treeWidgetBranches->currentItem()->text(0));
-    auto tmp = treeWidgetBranches->takeTopLevelItem(treeWidgetBranches->currentIndex().row());
-    if (tmp)
-        delete tmp;
+//    git()->removeBranch(treeWidgetBranches->currentItem()->text(0));
+//    auto tmp = treeWidgetBranches->takeTopLevelItem(treeWidgetBranches->currentIndex().row());
+//    if (tmp)
+//        delete tmp;
 }
 
-void BranchesStatusWidget::on_treeWidgetBranches_currentItemChanged(QTreeWidgetItem *current, QTreeWidgetItem *previous)
+void BranchesStatusWidget::on_treeView_customContextMenuRequested(const QPoint &pos)
 {
-    Q_UNUSED(current)
-    Q_UNUSED(previous)
-
-    pushButtonBrowse->setEnabled(true);
-    pushButtonCheckout->setEnabled(true);
-    pushButtonDiff->setEnabled(true);
-    pushButtonRemoveSelected->setEnabled(true);
-}
-
-void BranchesStatusWidget::on_treeWidgetBranches_customContextMenuRequested(const QPoint &pos)
-{
-    if (!treeWidgetBranches->currentItem())
+    Q_UNUSED(pos)
+    auto b = _model->fromindex(treeView->currentIndex());
+    if (!b)
         return;
-    _actions->setBranchName(treeWidgetBranches->currentItem()->text(0));
-    _actions->popup(treeWidgetBranches->mapToGlobal(pos));
+    _actions->setBranchName(b->name);
+    _actions->popup();
 }
 
 void BranchesStatusWidget::reload()
@@ -101,34 +107,34 @@ void BranchesStatusWidget::reload()
 
 void BranchesStatusWidget::on_pushButtonBrowse_clicked()
 {
-    if (!treeWidgetBranches->currentItem())
-        return;
+//    if (!treeWidgetBranches->currentItem())
+//        return;
 
-    FilesTreeDialog d(treeWidgetBranches->currentItem()->text(0), this);
-    d.exec();
+//    FilesTreeDialog d(treeWidgetBranches->currentItem()->text(0), this);
+//    d.exec();
 }
 
 
 void BranchesStatusWidget::on_pushButtonDiff_clicked()
 {
-    if (!treeWidgetBranches->currentItem())
-        return;
+//    if (!treeWidgetBranches->currentItem())
+//        return;
 
-    /*DiffDialog d(treeWidgetBranches->currentItem()->text(0),
-                 comboBoxReferenceBranch->currentText(),
-                 this);
-    d.exec();*/
-    auto d = new DiffWindow(treeWidgetBranches->currentItem()->text(0),
-                            comboBoxReferenceBranch->currentText());
-    d->showModal();
+//    /*DiffDialog d(treeWidgetBranches->currentItem()->text(0),
+//                 comboBoxReferenceBranch->currentText(),
+//                 this);
+//    d.exec();*/
+//    auto d = new DiffWindow(treeWidgetBranches->currentItem()->text(0),
+//                            comboBoxReferenceBranch->currentText());
+//    d->showModal();
 }
 
 
 void BranchesStatusWidget::on_pushButtonCheckout_clicked()
 {
-    RunnerDialog d(this);
-    d.run({"checkout", treeWidgetBranches->currentItem()->text(0)});
-    d.exec();
+//    RunnerDialog d(this);
+//    d.run({"checkout", treeWidgetBranches->currentItem()->text(0)});
+//    d.exec();
 }
 
 

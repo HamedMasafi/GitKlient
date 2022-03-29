@@ -204,21 +204,118 @@ Git::LogsCache::LogsCache(Manager *git, QObject *parent) : Cache(git, parent)
 {
 
 }
+
+const QString &LogsCache::branch() const
+{
+    return _branch;
+}
+
+void LogsCache::setBranch(const QString &newBranch)
+{
+    _branch = newBranch;
+
+    beginResetModel();
+    fill();
+    endResetModel();
+}
+
 int LogsCache::rowCount(const QModelIndex &parent) const
 {
     Q_UNUSED(parent)
-    return 1;
+    return _data.size();
 }
 
 int LogsCache::columnCount(const QModelIndex &parent) const
 {
     Q_UNUSED(parent)
-    return 1;
+    return _branch.isEmpty() ? 1 : 3;
+}
+
+QVariant LogsCache::headerData(int section, Qt::Orientation orientation, int role) const
+{
+    if (role != Qt::DisplayRole)
+        return QVariant();
+
+    if (orientation == Qt::Vertical)
+        return section + 1;
+
+    if (_branch.isEmpty()) {
+        switch (section) {
+        case 0:
+            return tr("Graph");
+        case 1:
+            return tr("Message");
+        }
+    } else {
+        switch (section) {
+        case 0:
+            return tr("Message");
+        case 1:
+            return tr("Date");
+        case 2:
+            return tr("Author");
+        }
+    }
+    return QVariant();
 }
 
 QVariant LogsCache::data(const QModelIndex &index, int role) const
 {
+    if (role != Qt::DisplayRole)
+        return QVariant();
+    auto log = fromIndex(index);
+    if (!log)
+        return QVariant();
+
+    if (_branch.isEmpty()) {
+        switch (index.column()) {
+        case 0:
+            return "";
+        case 1:
+            return log->subject();
+        }
+    } else {
+        switch (index.column()) {
+        case 0:
+            return log->subject();
+        case 1:
+            return log->commitDate();
+        case 2:
+            return log->authorName();
+        }
+    }
+
     return QVariant();
+}
+
+Log *LogsCache::fromIndex(const QModelIndex &index) const
+{
+    if (!index.isValid() || index.row() < 0 || index.row() >= _data.size())
+        return nullptr;
+
+    return _data.at(index.row());
+}
+
+QModelIndex LogsCache::findIndexByHash(const QString &hash) const
+{
+    int idx{0};
+    for (auto &log : _data)
+        if (log->commitHash() == hash)
+            return index(idx);
+        else
+            idx++;
+    return QModelIndex();
+}
+
+Log *LogsCache::findLogByHash(const QString &hash) const
+{
+    int idx{0};
+    for (auto &log : _data)
+        if (log->commitHash() == hash)
+            return log;
+        else
+            idx++;
+    return nullptr;
 }
 
 void LogsCache::fill()

@@ -41,6 +41,14 @@ QVariant RemotesCache::data(const QModelIndex &index, int role) const
     return QVariant();
 }
 
+Remote *RemotesCache::fromIndex(const QModelIndex &index)
+{
+    if (!index.isValid() || index.row() < 0 || index.row() >= _data.size())
+        return nullptr;
+
+    return _data.at(index.row());
+}
+
 void RemotesCache::fill()
 {
     qDeleteAll(_data.begin(), _data.end());

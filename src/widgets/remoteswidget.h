@@ -4,9 +4,13 @@
 #include "ui_remoteswidget.h"
 #include "widgetbase.h"
 
+namespace Git {
+class RemotesCache;
+}
 class RemotesWidget : public WidgetBase, private Ui::RemotesWidget
 {
     Q_OBJECT
+    Git::RemotesCache *_model;
 
 public:
     explicit RemotesWidget(QWidget *parent = nullptr);
@@ -20,8 +24,9 @@ public:
 
 private slots:
     void on_toolButtonAdd_clicked();
-    void on_listWidget_currentItemChanged(QListWidgetItem *current, QListWidgetItem *previous);
-    void on_toolButtonRemove_clicked();
+    void on_listView_activated(const QModelIndex &index);
+//    void on_listWidget_currentItemChanged(QListWidgetItem *current, QListWidgetItem *previous);
+//    void on_toolButtonRemove_clicked();
 };
 
 #endif // REMOTESWIDGET_H

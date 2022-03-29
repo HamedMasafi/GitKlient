@@ -5,7 +5,7 @@
 #ifndef GITKLIENT_LOGS_H
 #define GITKLIENT_LOGS_H
 
-#include "git/cache/cache.h"
+#include "cache.h"
 #include <QAbstractListModel>
 
 namespace Git {
@@ -28,6 +28,14 @@ public:
     int rowCount(const QModelIndex &parent) const override;
     int columnCount(const QModelIndex &parent) const override;
     QVariant data(const QModelIndex &index, int role) const override;
+    QVariant headerData(int section, Qt::Orientation orientation, int role) const override;
+
+    Log* fromIndex(const QModelIndex &index) const;
+    QModelIndex findIndexByHash(const QString &hash) const;
+    Git::Log *findLogByHash(const QString &hash) const;
+
+    const QString &branch() const;
+    void setBranch(const QString &newBranch);
 
 protected:
     void fill() override;
