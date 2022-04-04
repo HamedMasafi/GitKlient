@@ -1,5 +1,6 @@
 #include "statuscache.h"
 
+#include "manager.h"
 #include <QFileInfo>
 #include <QUrl>
 #include <QDebug>
@@ -11,7 +12,7 @@ StatusCache::StatusCache()
 }
 bool StatusCache::addPath(const QString &path)
 {
-    Git::Manager git(path);
+    Git::MiniManager git(path);
     if (!git.isValid())
         return false;
 
@@ -61,7 +62,7 @@ FileStatus::Status StatusCache::fileStatus(const QString &filePath)
 
 FileStatus::Status StatusCache::pathStatus(const QString &path)
 {
-    Git::Manager git(path);
+    Git::MiniManager git(path);
     if (!git.isValid())
         return FileStatus::NoGit;
 

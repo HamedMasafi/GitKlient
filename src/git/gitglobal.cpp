@@ -30,4 +30,35 @@ void run(const QString &workingDir, AbstractCommand &cmd)
     //    return ret;
 }
 
+QByteArray runGit(const QString &workingDir, const QStringList &args)
+{
+    //    qDebug().noquote() << "Running: git " << args.join(" ");
+
+    QProcess p;
+    p.setProgram("git");
+    p.setArguments(args);
+    p.setWorkingDirectory(workingDir);
+    p.start();
+    p.waitForFinished();
+    auto out = p.readAllStandardOutput();
+    auto err = p.readAllStandardError();
+
+    return out; // + err;
+}
+
+QStringList readAllNonEmptyOutput(const QString &workingDir, const QStringList &cmd)
+{
+    QStringList list;
+    auto out = QString(runGit(workingDir, cmd)).split("\n");
+
+    for (auto &line : out) {
+        auto b = line.trimmed();
+        if (b.isEmpty())
+            continue;
+
+        list.append(b.trimmed());
+    }
+    return list;
+}
+
 } // namespace Git

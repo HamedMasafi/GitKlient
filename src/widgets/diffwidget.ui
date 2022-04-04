@@ -157,11 +157,6 @@
       <enum>Qt::Horizontal</enum>
      </property>
      <widget class="CodeEditor" name="leftCodeEditor">
-      <property name="font">
-       <font>
-        <family>Source Code Pro</family>
-       </font>
-      </property>
       <property name="contextMenuPolicy">
        <enum>Qt::CustomContextMenu</enum>
       </property>

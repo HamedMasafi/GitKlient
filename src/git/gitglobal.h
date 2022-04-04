@@ -8,6 +8,9 @@
 namespace Git {
 void run(const QString &workingDir, const QStringList& args);
 void run(const QString &workingDir, AbstractCommand& cmd);
+
+QByteArray runGit(const QString &workingDir, const QStringList &args);
+QStringList readAllNonEmptyOutput(const QString &workingDir, const QStringList &cmd);
 } // namespace Git
 
 #endif // GITGLOBAL_H

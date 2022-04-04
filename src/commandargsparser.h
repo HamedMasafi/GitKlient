@@ -57,6 +57,8 @@ public slots:
     ArgParserReturn pull(const QString &path);
     ArgParserReturn changes();
     ArgParserReturn changes(const QString &path);
+
+    ArgParserReturn diff();
     ArgParserReturn diff(const QString &file);
     ArgParserReturn diff(const QString &file1, const QString &file2);
     ArgParserReturn blame(const QString &file);

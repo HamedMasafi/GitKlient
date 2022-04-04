@@ -170,6 +170,13 @@ ArgParserReturn CommandArgsParser::changes(const QString &path)
     return 0;
 }
 
+ArgParserReturn CommandArgsParser::diff()
+{
+    auto d = new DiffWindow();
+    d->showModal();
+    return ExecApp;
+}
+
 ArgParserReturn CommandArgsParser::diff(const QString &file)
 {
     QFileInfo fi(file);

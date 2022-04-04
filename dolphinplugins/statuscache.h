@@ -1,7 +1,8 @@
 #ifndef STATUSCACHE_H
 #define STATUSCACHE_H
 
-#include "../src/git/gitmanager.h"
+#include <QMap>
+#include <filestatus.h>
 
 class QUrl;
 class QFileInfo ;

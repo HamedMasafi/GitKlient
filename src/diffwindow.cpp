@@ -91,6 +91,9 @@ void DiffWindow::fileOpen()
         _newDir = d.newDir();
         compareDirs();
     } else {
+        _diffWidget->setOldFile({d.oldFile()});
+        _diffWidget->setNewFile({d.newFile()});
+        _diffWidget->compare();
     }
 }
 
@@ -122,7 +125,6 @@ void DiffWindow::compareDirs()
     auto map = Diff::diffDirs(_oldDir, _newDir);
     for (auto i = map.begin(); i != map.end(); ++i) {
         _diffModel->addFile(i.key(), i.value());
-        qDebug() << i.key() << diffTypeText(i.value());
     }
     _diffModel->emitAll();
 }

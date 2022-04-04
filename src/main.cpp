@@ -61,7 +61,9 @@ int main(int argc, char **argv)
                           KAboutLicense::GPL,
                           i18n("Copyright 2021, Hamed Masafi <hamed.masafi@gmail.com>"));
 
-    aboutData.addAuthor(i18n("Hamed Masafi"),i18n("Author"), QStringLiteral("hamed.masafi@gmail.com"));
+    aboutData.addAuthor(i18n("Hamed Masafi"),
+                        i18n("Author"),
+                        QStringLiteral("hamed.masafi@gmail.com"));
     aboutData.setOrganizationDomain("kde.org");
     aboutData.setDesktopFileName(QStringLiteral("org.kde.gitklient"));
 
@@ -75,8 +77,8 @@ int main(int argc, char **argv)
     aboutData.processCommandLine(&parser);
 
     KDBusService appDBusService(KDBusService::Multiple | KDBusService::NoExitOnFailure);
-    CommandArgsParser p;
 
+    CommandArgsParser p;
     auto w = p.run(application.arguments());
     if (w.type == ExecApp)
         return application.exec();

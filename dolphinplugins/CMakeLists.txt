@@ -1,19 +1,22 @@
 find_package(KF5 ${KF5_MIN_VERSION} REQUIRED COMPONENTS KIO)
-include_directories(../src)
-#aux_source_directory(../src/git GIT_SRC)
+include_directories(../src ../src/git)
 include(../src/git/CMakeLists.txt)
-#file(GLOB_RECURSE GIT_SOURCE ../src/git *.cpp)
 
+set(
+    GIT_EXTRA_SOURCE
+    ../src/git/filestatus.cpp
+    ../src/git/gitglobal.cpp
+)
 
 #---ACTION PLUGIN---
 set(ACTIONS_PLUGIN gitklientitemaction)
-
 
 set(
     ACTIONS_PLUGIN_SRC
     actionmanager.cpp
     statuscache.cpp
-    ${GIT_SOURCE}
+    manager.cpp
+    ${GIT_EXTRA_SOURCE}
 )
 kcoreaddons_add_plugin(
     ${ACTIONS_PLUGIN}
@@ -35,7 +38,8 @@ set(
     OVERLAY_SRC
     overlayplugin.cpp
     statuscache.cpp
-    ${GIT_SOURCE}
+    manager.cpp
+    ${GIT_EXTRA_SOURCE}
 )
 
 kcoreaddons_add_plugin(

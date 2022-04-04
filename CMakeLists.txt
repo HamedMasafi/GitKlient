@@ -36,17 +36,19 @@ find_package(
 
 set(REQUIRED_KF5_VERSION "5.37.0")
 find_package(KF5KIO)
-find_package(KF5 ${REQUIRED_KF5_VERSION} REQUIRED COMPONENTS
-    ConfigWidgets
-    CoreAddons
-    Crash
-    DBusAddons
-    DocTools
-    I18n
-    XmlGui
-    KIO
-    TextWidgets
-    TextEditor
+find_package(
+    KF5 ${REQUIRED_KF5_VERSION}
+    REQUIRED COMPONENTS
+        ConfigWidgets
+        CoreAddons
+        Crash
+        DBusAddons
+        DocTools
+        I18n
+        XmlGui
+        KIO
+        TextWidgets
+        TextEditor
 )
 
 feature_summary(WHAT ALL INCLUDE_QUIET_PACKAGES FATAL_ON_MISSING_REQUIRED_PACKAGES)

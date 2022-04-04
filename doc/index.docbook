@@ -85,72 +85,72 @@ thanks ;-).
 as Authors, publish date, the abstract, and Keywords -->
 
 <bookinfo>
-<title>The &kmyapplication; Handbook</title>
+    <title>The &kmyapplication; Handbook</title>
 
-<authorgroup>
-<author>
-<!-- This is just put in as an example.  For real documentation, please
-     define a general entity in entities/contributor.entities, e.g.
-<!ENTITY George.N.Ugnacious "<personname><firstname>George</firstname><othername>N.</othername><surname>Ugnacious</surname></personname>">
-<!ENTITY George.N.Ugnacious.mail "<email>gnu@kde.org</email>">
-and use `&George.N.Ugnacious; &George.N.Ugnacious.mail;' in the author element.
- -->
-<personname>
-<firstname>George</firstname>
-<othername>N.</othername>
-<surname>Ugnacious</surname>
-</personname>
-<email>gnu@kde.org</email>
-</author>
-<!-- TRANS:ROLES_OF_TRANSLATORS -->
-</authorgroup>
+    <authorgroup>
+        <author>
+        <!-- This is just put in as an example.  For real documentation, please
+             define a general entity in entities/contributor.entities, e.g.
+        <!ENTITY George.N.Ugnacious "<personname><firstname>George</firstname><othername>N.</othername><surname>Ugnacious</surname></personname>">
+        <!ENTITY George.N.Ugnacious.mail "<email>gnu@kde.org</email>">
+        and use `&George.N.Ugnacious; &George.N.Ugnacious.mail;' in the author element.
+         -->
+            <personname>
+                <firstname>Hamed</firstname>
+                <othername></othername>
+                <surname>Masafi</surname>
+            </personname>
+            <email>hamed.masafi@gmail.com</email>
+        </author>
+        <!-- TRANS:ROLES_OF_TRANSLATORS -->
+    </authorgroup>
 
-<copyright>
-<year>2015</year>
-<holder>George N. Ugnacious</holder>
-</copyright>
-<legalnotice>&CCBYSA4Notice;</legalnotice>
+    <copyright>
+        <year>2021</year>
+        <holder>Hamed Masafi</holder>
+    </copyright>
 
-<!-- Date of the documentation
-Change date/releaseinfo only if
-   docbook is updated and verified to be valid for the current app version
-   or
-   docbook is proofread and verified to be valid for the current app version
-Don't forget to include this last date.
-Please respect the format of the date (YYYY-MM-DD),it is used by scripts.
--->
-<date>2016-04-23</date>
+    <legalnotice>&CCBYSA4Notice;</legalnotice>
 
-<!--version information of Frameworks/Plasma/Applications this documentation is valid for.
-Example:
-Frameworks xx.yy for docbooks in frameworks
-Plasma xx.yy for docbooks in plasma workspace
-Applications xx.yy for docbooks released as Applications
-xx.yy (Applications xx.yy) for docbooks with own version released as Applications
-$applicationname xx.yy for applications with independent release schedule (extragear/playground)
--->
-<releaseinfo>Frameworks xx.yy or Plasma xx.yy or Applications xx.yy or xx.yy (Applications xx.yy) or $applicationname xx.yy</releaseinfo>
+    <!-- Date of the documentation
+    Change date/releaseinfo only if
+       docbook is updated and verified to be valid for the current app version
+       or
+       docbook is proofread and verified to be valid for the current app version
+    Don't forget to include this last date.
+    Please respect the format of the date (YYYY-MM-DD),it is used by scripts.
+    -->
+    <date>2021-04-23</date>
 
-<!-- Abstract about this handbook -->
+    <!--version information of Frameworks/Plasma/Applications this documentation is valid for.
+    Example:
+    Frameworks xx.yy for docbooks in frameworks
+    Plasma xx.yy for docbooks in plasma workspace
+    Applications xx.yy for docbooks released as Applications
+    xx.yy (Applications xx.yy) for docbooks with own version released as Applications
+    $applicationname xx.yy for applications with independent release schedule (extragear/playground)
+    -->
+    <releaseinfo>
+        gitklient 0.1
+    </releaseinfo>
 
-<abstract>
-<para>
-&kmyapplication; is an application specially designed to do nothing you would
-ever want.
-</para>
-</abstract>
+    <!-- Abstract about this handbook -->
 
-<!-- This is a set of Keywords for indexing by search engines.
-Please at least include KDE, the KDE section it is in, the name
- of your application, and a few relevant keywords. -->
+    <abstract>
+        <para>
+            &kmyapplication; is an application specially designed to aim user to doing git command bu gui.
+        </para>
+    </abstract>
 
-<keywordset>
-<keyword>KDE</keyword>
-<keyword>kdeutils</keyword>
-<keyword>Kapp</keyword>
-<keyword>nothing</keyword>
-<keyword>nothing else</keyword>
-</keywordset>
+    <!-- This is a set of Keywords for indexing by search engines.
+    Please at least include KDE, the KDE section it is in, the name
+     of your application, and a few relevant keywords. -->
+
+    <keywordset>
+        <keyword>KDE</keyword>
+        <keyword>Git</keyword>
+        <keyword>Git gui</keyword>
+    </keywordset>
 
 </bookinfo>
 
@@ -211,7 +211,7 @@ patent issues. -->
 <screeninfo>Here's a screenshot of &kmyapplication;</screeninfo>
 	<mediaobject>
 	  <imageobject>
-	    <imagedata fileref="screenshot.png" format="PNG"/>
+            <imagedata fileref="screenshot_main.png" format="PNG"/>
 	  </imageobject>
 	  <textobject>
 	    <phrase>Screenshot</phrase>
@@ -546,5 +546,5 @@ sgml-indent-data:nil
 End:
 
 vim:tabstop=2:shiftwidth=2:expandtab
-kate: space-indent on; indent-width 2; tab-width 2; indent-mode none;
+kate: space-indent on; indent-width 4; tab-width 4; indent-mode none;
 -->
