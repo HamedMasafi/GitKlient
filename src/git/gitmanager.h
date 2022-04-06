@@ -121,8 +121,13 @@ public:
     QString diff(const QString &from, const QString &to);
     QList<FileStatus> diffBranches(const QString &from, const QString &to);
 
-    QString config(const QString &name) const;
-    void setConfig(const QString &name, const QString &value) const;
+    enum ConfigType {
+        ConfigGlobal,
+        ConfigLocal
+    };
+
+    QString config(const QString &name, ConfigType type = ConfigLocal) const;
+    void setConfig(const QString &name, const QString &value, ConfigType type = ConfigLocal) const;
     RemotesCache *remotesModel() const;
 
     SubmodulesCache *submodulesModel() const;

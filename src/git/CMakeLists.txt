@@ -30,6 +30,7 @@ set(
     ${CMAKE_CURRENT_LIST_DIR}/commands/commandfetch.cpp
     ${CMAKE_CURRENT_LIST_DIR}/commands/commandpull.cpp
     ${CMAKE_CURRENT_LIST_DIR}/commands/commandpush.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/commands/commandswitchbranch.cpp
 )
 
 #include(${CMAKE_CURRENT_LIST_DIR}/models/CMakeLists.txt)

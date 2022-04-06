@@ -208,18 +208,37 @@ QList<FileStatus> Manager::diffBranches(const QString &from, const QString &to)
     return files;
 }
 
-QString Manager::config(const QString &name) const
+QString Manager::config(const QString &name, ConfigType type) const
 {
-    auto list = readAllNonEmptyOutput({"config", name});
+    QStringList cmd;
+    switch (type) {
+    case ConfigLocal:
+        cmd = QStringList{"config", name};
+        break;
+    case ConfigGlobal:
+        cmd = QStringList{"config", "--global", name};
+        break;
+    }
+    auto list = readAllNonEmptyOutput(cmd);
     if (list.size())
         return list.first();
 
     return QString();
 }
 
-void Manager::setConfig(const QString &name, const QString &value) const
+void Manager::setConfig(const QString &name, const QString &value, ConfigType type) const
 {
-    runGit({"config", name, value});
+    QStringList cmd;
+    switch (type) {
+    case ConfigLocal:
+        cmd = QStringList{"config", name, value};
+        break;
+    case ConfigGlobal:
+        cmd = QStringList{"config", "--global", name, value};
+        break;
+    }
+
+    runGit(cmd);
 }
 
 QStringList Manager::readAllNonEmptyOutput(const QStringList &cmd) const

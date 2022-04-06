@@ -29,6 +29,7 @@ set(gitklient_SRCS
     gitklientmergewindow.cpp
     commandargsparser.cpp
     settingshelper.cpp
+    gitklientconfig.cpp
 )
 
 ecm_qt_declare_logging_category(gitklient_SRCS
@@ -89,6 +90,7 @@ ki18n_wrap_ui(
     dialogs/searchdialog.ui
     dialogs/reposettingsdialog.ui
     dialogs/fetchdialog.ui
+    dialogs/switchbranchdialog.ui
 )
 
 include(git/CMakeLists.txt)
