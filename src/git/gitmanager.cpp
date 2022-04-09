@@ -1,11 +1,12 @@
 #include "gitmanager.h"
 #include "filestatus.h"
 
-#include "models/remotescache.h"
-#include "models/submodulescache.h"
 #include "models/branchescache.h"
 #include "models/logscache.h"
+#include "models/remotescache.h"
 #include "models/stashescache.h"
+#include "models/submodulescache.h"
+#include "models/tagsmodel.h"
 
 #include <QDebug>
 #include <QProcess>
@@ -274,9 +275,15 @@ void Manager::loadAsync()
                              _submodulesModel,
                              _branchesModel,
                              _logsCache,
-                             _stashesCache};
+                             _stashesCache,
+                             _tagsModel};
 
     QtConcurrent::mapped(models, load);
+}
+
+TagsModel *Manager::tagsModel() const
+{
+    return _tagsModel;
 }
 
 
@@ -312,6 +319,7 @@ Manager::Manager()
       , _branchesModel{new BranchesCache(this)}
       , _logsCache{new LogsCache(this)}
       , _stashesCache{new StashesCache(this)}
+      , _tagsModel{new TagsModel(this)}
 {}
 
 Manager::Manager(const QString path)
@@ -321,6 +329,7 @@ Manager::Manager(const QString path)
       , _branchesModel{new BranchesCache(this)}
       , _logsCache{new LogsCache(this)}
       , _stashesCache{new StashesCache(this)}
+      , _tagsModel{new TagsModel(this)}
 {
     setPath(path);
 }

@@ -15,6 +15,7 @@ set(
     ${CMAKE_CURRENT_LIST_DIR}/gitlog.cpp
     ${CMAKE_CURRENT_LIST_DIR}/gitremote.cpp
     ${CMAKE_CURRENT_LIST_DIR}/parameterescommand.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/gittag.cpp
 
     ${CMAKE_CURRENT_LIST_DIR}/models/cache.cpp
     ${CMAKE_CURRENT_LIST_DIR}/models/logscache.cpp
@@ -22,6 +23,7 @@ set(
     ${CMAKE_CURRENT_LIST_DIR}/models/submodulescache.cpp
     ${CMAKE_CURRENT_LIST_DIR}/models/branchescache.cpp
     ${CMAKE_CURRENT_LIST_DIR}/models/stashescache.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/models/tagsmodel.cpp
 
     ${CMAKE_CURRENT_LIST_DIR}/commands/abstractcommand.cpp
     ${CMAKE_CURRENT_LIST_DIR}/commands/commandchangedfiles.cpp
@@ -31,6 +33,7 @@ set(
     ${CMAKE_CURRENT_LIST_DIR}/commands/commandpull.cpp
     ${CMAKE_CURRENT_LIST_DIR}/commands/commandpush.cpp
     ${CMAKE_CURRENT_LIST_DIR}/commands/commandswitchbranch.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/commands/commandmerge.cpp
 )
 
 #include(${CMAKE_CURRENT_LIST_DIR}/models/CMakeLists.txt)

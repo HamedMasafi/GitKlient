@@ -14,11 +14,16 @@
    <string>Tags</string>
   </property>
   <property name="windowIcon">
-   <iconset theme="git-tag"/>
+   <iconset theme="git-tag">
+    <normaloff>.</normaloff>.</iconset>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
-    <widget class="QListWidget" name="listWidgetTags"/>
+    <widget class="QTreeView" name="treeViewTags">
+     <property name="contextMenuPolicy">
+      <enum>Qt::CustomContextMenu</enum>
+     </property>
+    </widget>
    </item>
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout_4">
@@ -36,21 +41,21 @@
       </spacer>
      </item>
      <item>
-      <widget class="QPushButton" name="pushButtonAddTag">
+      <widget class="PushButton" name="pushButtonAddTag">
        <property name="text">
         <string>Add</string>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="pushButtonAddTag_2">
+      <widget class="PushButton" name="pushButtonRemove">
        <property name="text">
         <string>Remove selected</string>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="pushButtonCheckoutToSelected">
+      <widget class="PushButton" name="pushButtonCheckout">
        <property name="text">
         <string>Checkout to selected</string>
        </property>
@@ -60,6 +65,13 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>PushButton</class>
+   <extends>QPushButton</extends>
+   <header>core/pushbutton.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

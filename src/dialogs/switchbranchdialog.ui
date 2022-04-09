@@ -11,7 +11,10 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Dialog</string>
+   <string>Switch/Checkout</string>
+  </property>
+  <property name="windowIcon">
+   <iconset theme="gitklient"/>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
@@ -38,6 +41,20 @@
      </item>
      <item row="1" column="1">
       <widget class="QLineEdit" name="lineEditNewBranchName">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="0">
+      <widget class="QRadioButton" name="radioButtonTag">
+       <property name="text">
+        <string>Tag</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="1">
+      <widget class="QComboBox" name="comboBoxTags">
        <property name="enabled">
         <bool>false</bool>
        </property>
@@ -133,6 +150,22 @@
     <hint type="destinationlabel">
      <x>174</x>
      <y>55</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>radioButtonTag</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>comboBoxTags</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>48</x>
+     <y>84</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>223</x>
+     <y>87</y>
     </hint>
    </hints>
   </connection>

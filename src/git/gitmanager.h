@@ -21,6 +21,7 @@ class SubmodulesCache;
 class BranchesCache;
 class LogsCache;
 class StashesCache;
+class TagsModel;
 class Manager : public QObject
 {
     Q_OBJECT
@@ -129,14 +130,12 @@ public:
     QString config(const QString &name, ConfigType type = ConfigLocal) const;
     void setConfig(const QString &name, const QString &value, ConfigType type = ConfigLocal) const;
     RemotesCache *remotesModel() const;
-
     SubmodulesCache *submodulesModel() const;
-
     BranchesCache *branchesModel() const;
-
     LogsCache *logsCache() const;
-
     StashesCache *stashesCache() const;
+
+    TagsModel *tagsModel() const;
 
 signals:
     void pathChanged();
@@ -151,6 +150,7 @@ private:
     BranchesCache *const _branchesModel;
     LogsCache *const _logsCache;
     StashesCache *const _stashesCache;
+    TagsModel *const _tagsModel;
 
     friend class Stash;
     friend class RemotesCache;
@@ -158,6 +158,7 @@ private:
     friend class BranchesCache;
     friend class LogsCache;
     friend class StashesCache;
+    friend class TagsModel;
 };
 
 } // namespace Git

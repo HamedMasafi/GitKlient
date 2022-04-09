@@ -29,6 +29,8 @@
     <Action name="repo_merge"/>
     <Action name="repo_settings"/>
     <Separator/>
+    <Action name="repo_switch"/>
+    <Separator/>
     <Action name="diff_branches"/>
     <Action name="repo_search"/>
   </Menu>

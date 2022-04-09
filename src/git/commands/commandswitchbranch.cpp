@@ -29,7 +29,20 @@ void CommandSwitchBranch::setMode(Mode newMode)
 
 QStringList CommandSwitchBranch::generateArgs() const
 {
-    return {"switch", _target};
+    QStringList cmd{"switch", _target};
+    if (_force)
+        cmd.append("--force");
+    return cmd;
+}
+
+bool CommandSwitchBranch::force() const
+{
+    return _force;
+}
+
+void CommandSwitchBranch::setForce(bool newForce)
+{
+    _force = newForce;
 }
 
 } // namespace Git

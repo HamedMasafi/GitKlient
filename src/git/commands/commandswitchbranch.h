@@ -21,9 +21,13 @@ public:
 
     QStringList generateArgs() const override;
 
+    bool force() const;
+    void setForce(bool newForce);
+
 private:
     Mode _mode;
     QString _target;
+    bool _force{false};
 
 };
 

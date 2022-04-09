@@ -41,5 +41,27 @@ void AbstractCommand::setProgress(int newProgress)
     emit progressChanged(newProgress);
 }
 
+void AbstractCommand::appendBool(OptionalBool b, QStringList &cmd, const QString &name) const
+{
+    switch (b) {
+    case OptionalBool::True:
+        cmd.append("--" + name);
+        break;
+    case OptionalBool::False:
+        cmd.append("--no-" + name);
+        break;
+    case OptionalBool::Unset:
+        break;
+    }
+}
+
+void AbstractCommand::appendBool(bool b, QStringList &cmd, const QString &name) const
+{
+    if (b)
+        cmd.append("--" + name);
+    else
+        cmd.append("--no-" + name);
+}
+
 
 } // namespace Git

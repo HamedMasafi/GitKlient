@@ -34,6 +34,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "dialogs/runnerdialog.h"
 #include "dialogs/searchdialog.h"
 #include "dialogs/selectbranchestodiffdialog.h"
+#include "dialogs/switchbranchdialog.h"
 #include "git/gitmanager.h"
 #include "git/models/logscache.h"
 #include "gitklientdebug.h"
@@ -188,6 +189,9 @@ void GitKlientWindow::initActions()
     auto repoSettingsAction = actionCollection->addAction("repo_settings", this, &GitKlientWindow::repoSettings);
     repoSettingsAction->setText(i18n("Repo settings..."));
 
+    auto repoSwitchAction = actionCollection->addAction("repo_switch", this, &GitKlientWindow::repoSwitch);
+    repoSwitchAction->setText(i18n("Switch/Checkout..."));
+
     KStandardAction::quit(this, &QMainWindow::close, actionCollection);
     KStandardAction::preferences(this, &GitKlientWindow::settingsConfigure, actionCollection);
     KStandardAction::openNew(this, &GitKlientWindow::clone, actionCollection);
@@ -305,6 +309,12 @@ void GitKlientWindow::search()
 void GitKlientWindow::repoSettings()
 {
     RepoSettingsDialog d(_git, this);
+    d.exec();
+}
+
+void GitKlientWindow::repoSwitch()
+{
+    SwitchBranchDialog d(_git, this);
     d.exec();
 }
 

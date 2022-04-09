@@ -40,7 +40,8 @@ void BranchActions::create()
 BranchActions::BranchActions(Git::Manager *git, QWidget *parent) : AbstractActions(git, parent)
 {
     ADD_ACTION(actionBrowse, "Browse...", &BranchActions::browse);
-    ADD_ACTION(actionCheckout, "Checkout...", &BranchActions::checkout);
+    ADD_ACTION(actionCheckout, "Switch...", &BranchActions::checkout);
+    ADD_ACTION(actionMerge, "Merge...", &BranchActions::merge);
     ADD_ACTION(actionDiff, "Diff...", &BranchActions::diff);
     ADD_ACTION(actionRemove, "Remove...", &BranchActions::remove);
     ADD_HIDDEN_ACTION(actionCreate, "Create...", &BranchActions::create);
@@ -85,4 +86,9 @@ void BranchActions::remove()
         return;
 
     _git->removeBranch(_branchName);
+}
+
+void BranchActions::merge()
+{
+
 }

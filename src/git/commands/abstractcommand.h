@@ -12,6 +12,19 @@ class QWidget;
 
 namespace Git {
 
+enum class OptionalBool {
+    Unset,
+    True,
+    False
+};
+
+enum class FastForwardType {
+    Unset,
+    Yes,
+    No,
+    OnlyFastForward
+};
+
 class Manager;
 class AbstractCommand : public QObject
 {
@@ -26,6 +39,8 @@ protected:
     QStringList _args;
     Manager *_git;
     void setProgress(int newProgress);
+    void appendBool(OptionalBool b, QStringList &cmd, const QString &name) const;
+    void appendBool(bool b, QStringList &cmd, const QString &name) const;
 
 public:
     enum Status {

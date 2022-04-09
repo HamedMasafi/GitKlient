@@ -15,6 +15,7 @@ class BranchActions : public AbstractActions
     DEFINE_ACTION(actionBrowse)
     DEFINE_ACTION(actionCheckout)
     DEFINE_ACTION(actionDiff)
+    DEFINE_ACTION(actionMerge)
     DEFINE_ACTION(actionCreate)
     DEFINE_ACTION(actionRemove)
 
@@ -33,6 +34,7 @@ private slots:
     void checkout();
     void diff();
     void remove();
+    void merge();
 };
 
 #endif // BRANCHACTIONS_H
