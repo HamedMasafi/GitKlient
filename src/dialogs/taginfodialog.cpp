@@ -25,3 +25,8 @@ void TagInfoDialog::setMessage(const QString &newMessage)
 {
     lineEditMessage->setText(newMessage);
 }
+
+void TagInfoDialog::on_lineEditTagName_textChanged(QString s)
+{
+    lineEditMessage->setText(s);
+}

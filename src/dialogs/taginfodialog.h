@@ -14,6 +14,9 @@ public:
     void setTagName(const QString &newTagName);
     QString message() const;
     void setMessage(const QString &newMessage);
+
+private slots:
+    void on_lineEditTagName_textChanged(QString s);
 };
 
 #endif // TAGINFODIALOG_H

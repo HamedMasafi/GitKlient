@@ -1,5 +1,6 @@
 #include "tagswidget.h"
 
+#include "git/gittag.h"
 #include "git/gitmanager.h"
 #include "git/models/tagsmodel.h"
 
@@ -10,8 +11,8 @@ TagsWidget::TagsWidget(QWidget *parent) :
       WidgetBase(parent)
 {
     setupUi(this);
-    treeViewTags->setModel(Git::Manager::instance()->tagsModel());
-
+    _model = Git::Manager::instance()->tagsModel();
+    treeViewTags->setModel(_model);
     _actions = new TagsActions(Git::Manager::instance(), this);
     pushButtonAddTag->setAction(_actions->actionCreate());
     pushButtonRemove->setAction(_actions->actionRemove());
@@ -22,26 +23,12 @@ TagsWidget::TagsWidget(Git::Manager *git, GitKlientWindow *parent):
       WidgetBase(git, parent)
 {
     setupUi(this);
-    treeViewTags->setModel(git->tagsModel());
+    _model = git->tagsModel();
+    treeViewTags->setModel(_model);
     _actions = new TagsActions(git, this);
     pushButtonAddTag->setAction(_actions->actionCreate());
     pushButtonRemove->setAction(_actions->actionRemove());
     pushButtonCheckout->setAction(_actions->actionCheckout());
-}
-
-void TagsWidget::reload()
-{
-//    listWidgetTags->clear();
-//    listWidgetTags->addItems(git()->tags());
-}
-
-void TagsWidget::on_pushButtonAddTag_clicked()
-{
-    TagInfoDialog d(this);
-    d.setWindowTitle(i18n("New tag"));
-    if (d.exec() == QDialog::Accepted) {
-        git()->createTag(d.tagName(), d.message());
-    }
 }
 
 void TagsWidget::saveState(QSettings &settings) const
@@ -56,6 +43,18 @@ void TagsWidget::restoreState(QSettings &settings)
 
 void TagsWidget::on_treeViewTags_customContextMenuRequested(const QPoint &pos)
 {
-    _actions->popup();
+    Q_UNUSED(pos)
+    auto item = _model->fromindex(treeViewTags->currentIndex());
+    if (item) {
+        _actions->setTagName(item->name());
+        _actions->popup();
+    }
+}
+
+void TagsWidget::on_treeViewTags_itemActivated(const QModelIndex &index)
+{
+    auto item = _model->fromindex(index);
+    if (item)
+        _actions->setTagName(item->name());
 }
 

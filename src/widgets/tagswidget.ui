@@ -19,7 +19,7 @@
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
-    <widget class="QTreeView" name="treeViewTags">
+    <widget class="TreeView" name="treeViewTags">
      <property name="contextMenuPolicy">
       <enum>Qt::CustomContextMenu</enum>
      </property>
@@ -70,6 +70,11 @@
    <class>PushButton</class>
    <extends>QPushButton</extends>
    <header>core/pushbutton.h</header>
+  </customwidget>
+  <customwidget>
+   <class>TreeView</class>
+   <extends>QTreeView</extends>
+   <header>widgets/treeview.h</header>
   </customwidget>
  </customwidgets>
  <resources/>
