@@ -1,13 +1,14 @@
-#ifndef TREEVIEW_H
-#define TREEVIEW_H
+#ifndef LISTVIEW_H
+#define LISTVIEW_H
 
-#include <QTreeView>
+#include <QListView>
 
-class TreeView : public QTreeView
+class ListView : public QListView
 {
     Q_OBJECT
+
 public:
-    TreeView(QWidget *parent = nullptr);
+    ListView(QWidget *parent = nullptr);
 
 protected slots:
     void currentChanged(const QModelIndex &current, const QModelIndex &previous) override;
@@ -16,4 +17,4 @@ signals:
     void itemActivated(const QModelIndex &index);
 };
 
-#endif // TREEVIEW_H
+#endif // LISTVIEW_H
