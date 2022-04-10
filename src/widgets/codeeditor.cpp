@@ -182,7 +182,7 @@ void CodeEditor::sidebarPaintEvent(QPaintEvent *event)
 
 void CodeEditor::updateSidebarGeometry()
 {
-    setViewportMargins(sidebarWidth(), 0, 0, 0);
+    setViewportMargins(this->sidebarWidth(), 0, 0, 0);
     const auto r = contentsRect();
     m_sideBar->setGeometry(QRect(r.left(), r.top(), sidebarWidth(), r.height()));
 }

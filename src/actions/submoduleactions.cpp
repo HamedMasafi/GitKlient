@@ -18,25 +18,20 @@ void SubmoduleActions::setSubModuleName(const QString &newSubModuleName)
 {
     _subModuleName = newSubModuleName;
 
-    _actionInit->setEnabled(true);
-    _actionUpdate->setEnabled(true);
-    _actionDeinit->setEnabled(true);
-    _actionSync->setEnabled(true);
+    setActionEnabled(_actionInit, true);
+    setActionEnabled(_actionUpdate, true);
+    setActionEnabled(_actionDeinit, true);
+    setActionEnabled(_actionSync, true);
 }
 
 SubmoduleActions::SubmoduleActions(Git::Manager *git, QWidget *parent)
     : AbstractActions(git, parent)
 {
-    ADD_HIDDEN_ACTION(actionCreate, "Create...", &SubmoduleActions::create);
-    ADD_ACTION(actionInit, "Init...", &SubmoduleActions::init);
-    ADD_ACTION(actionUpdate, "Update...", &SubmoduleActions::update);
-    ADD_ACTION(actionDeinit, "Deinit...", &SubmoduleActions::deinit);
-    ADD_ACTION(actionSync, "Sync...", &SubmoduleActions::sync);
-
-    _actionInit->setEnabled(false);
-    _actionUpdate->setEnabled(false);
-    _actionDeinit->setEnabled(false);
-    _actionSync->setEnabled(false);
+    _actionCreate = addActionHidden(i18n("Create..."), this, &SubmoduleActions::create);
+    _actionInit = addAction(i18n("Init..."),this, &SubmoduleActions::init,  false, true);
+    _actionUpdate = addAction(i18n("Update..."),this, &SubmoduleActions::update,  false, true);
+    _actionDeinit = addAction(i18n("Deinit..."),this, &SubmoduleActions::deinit,  false, true);
+    _actionSync = addAction(i18n("Sync..."),this, &SubmoduleActions::sync,  false, true);
 
     _actionCreate->setIcon(QIcon::fromTheme("list-add"));
 }

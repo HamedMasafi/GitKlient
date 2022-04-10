@@ -2,13 +2,13 @@
 #include "remoteswidget.h"
 #include "git/gitmanager.h"
 #include "git/models/remotescache.h"
+#include "actions/remotesactions.h"
+
 
 RemotesWidget::RemotesWidget(QWidget *parent) : WidgetBase(parent)
 {
     setupUi(this);
-    _model = Git::Manager::instance()->remotesModel();
-    listView->setModelColumn(0);
-    listView->setModel(_model);
+    init(Git::Manager::instance());
 }
 
 RemotesWidget::RemotesWidget(Git::Manager *git, GitKlientWindow *parent) :
@@ -16,9 +16,7 @@ RemotesWidget::RemotesWidget(Git::Manager *git, GitKlientWindow *parent) :
 {
     setupUi(this);
 
-    _model = git->remotesModel();
-    listView->setModelColumn(0);
-    listView->setModel(_model);
+    init(git);
 }
 
 void RemotesWidget::saveState(QSettings &settings) const
@@ -33,27 +31,13 @@ void RemotesWidget::restoreState(QSettings &settings)
     restore(settings, treeWidget);
 }
 
-void RemotesWidget::reload()
-{
-//    listWidget->clear();
-//    listWidget->addItems(git()->remotes());
-}
-
-void RemotesWidget::on_toolButtonAdd_clicked()
-{
-    RemoteInfoDialog d{this};
-    if (d.exec() == QDialog::Accepted) {
-        git()->addRemote(d.remoteName(), d.remoteUrl());
-        reload();
-    }
-}
-
-void RemotesWidget::on_listView_activated(const QModelIndex &index)
+void RemotesWidget::on_listView_itemActivated(const QModelIndex &index)
 {
     auto remote = _model->fromIndex(index);
     if (!remote)
         return;
 
+    _actions->setRemoteName(remote->name);
     labelRemoteName->setText(remote->name);
     labelFetchUrl->setText(remote->fetchUrl);
     labelPushUrl->setText(remote->pushUrl);
@@ -72,41 +56,24 @@ void RemotesWidget::on_listView_activated(const QModelIndex &index)
     }
 }
 
+void RemotesWidget::on_listView_customContextMenuRequested(const QPoint &pos)
+{
+    Q_UNUSED(pos)
+    auto remote = _model->fromIndex(listView->currentIndex());
+    if (!remote)
+        return;
 
-//void RemotesWidget::on_listWidget_currentItemChanged(QListWidgetItem *current, QListWidgetItem *previous)
-//{
-//    Q_UNUSED(previous)
+    _actions->setRemoteName(remote->name);
+    _actions->popup();
+}
 
-//    toolButtonRemove->setEnabled(true);
+void RemotesWidget::init(Git::Manager *git)
+{
+    _model = git->remotesModel();
+    listView->setModelColumn(0);
+    listView->setModel(_model);
 
-//    auto info = git()->remoteDetails(current->text());
-
-//    labelRemoteName->setText(info.name);
-//    labelFetchUrl->setText(info.fetchUrl);
-//    labelPushUrl->setText(info.pushUrl);
-//    labelDefaultBranch->setText(info.headBranch);
-//    treeWidget->clear();
-
-//    for (auto &rb: info.branches) {
-//        auto item = new QTreeWidgetItem(treeWidget);
-
-//        item->setText(0, rb.name);
-//        item->setText(1, rb.remotePushBranch);
-//        item->setText(2, rb.remotePullBranch);
-//        item->setText(3, rb.statusText());
-
-//        treeWidget->addTopLevelItem(item);
-//    }
-//}
-
-
-//void RemotesWidget::on_toolButtonRemove_clicked()
-//{
-//    if (!listWidget->currentIndex().isValid())
-//        return;
-
-//    git()->removeRemote(listWidget->currentItem()->text());
-//    reload();
-//    toolButtonRemove->setEnabled(false);
-//}
-
+    _actions = new RemotesActions(git, this);
+    pushButtonAdd->setAction(_actions->actionCreate());
+    pushButtonRemove->setAction(_actions->actionRemove());
+}

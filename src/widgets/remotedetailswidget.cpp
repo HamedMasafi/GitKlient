@@ -1,6 +1,7 @@
 #include "remotedetailswidget.h"
 #include "git/gitmanager.h"
 #include "git/gitremote.h"
+#include "git/models/remotescache.h"
 
 #include <QDebug>
 
@@ -13,20 +14,20 @@ void RemoteDetailsWidget::setGit(Git::Manager *newGit)
 {
     _git = newGit;
 //    listWidget->clear();
-
+    listView->setModel(_git->remotesModel());
 }
 
 void RemoteDetailsWidget::reload()
 {
-    listWidget->clear();
-    listWidget->addItems(_git->remotes());
+//    listWidget->clear();
+//    listWidget->addItems(_git->remotes());
 }
 
-void RemoteDetailsWidget::on_listWidget_currentItemChanged(QListWidgetItem *current, QListWidgetItem *previous)
-{
-    Q_UNUSED(previous)
-    setBranch(current->text());
-}
+//void RemoteDetailsWidget::on_listWidget_currentItemChanged(QListWidgetItem *current, QListWidgetItem *previous)
+//{
+//    Q_UNUSED(previous)
+//    setBranch(current->text());
+//}
 
 RemoteDetailsWidget::RemoteDetailsWidget(QWidget *parent) :
       QWidget(parent)

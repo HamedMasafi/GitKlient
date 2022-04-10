@@ -32,6 +32,7 @@ void BranchesStatusWidget::init(Git::Manager *git)
 
     comboBoxReferenceBranch->setModel(_model);
 
+    pushButtonNew->setAction(_actions->actionCreate());
     pushButtonBrowse->setAction(_actions->actionBrowse());
     pushButtonCheckout->setAction(_actions->actionCheckout());
     pushButtonDiff->setAction(_actions->actionDiff());

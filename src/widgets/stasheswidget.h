@@ -20,14 +20,13 @@ public:
     explicit StashesWidget(QWidget *parent = nullptr);
     StashesWidget(Git::Manager *git, GitKlientWindow *parent = nullptr);
 
-    void reload() override;
-private slots:
-    void on_treeView_customContextMenuRequested(const QPoint &pos);
-
-    // WidgetBase interface
-public:
     void saveState(QSettings &settings) const override;
     void restoreState(QSettings &settings) override;
+
+private slots:
+    void on_treeView_customContextMenuRequested(const QPoint &pos);
+    void on_treeView_itemActivated(const QModelIndex &index);
+
 private:
     void init(Git::Manager *git);
 };

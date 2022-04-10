@@ -283,7 +283,7 @@ void GitKlientWindow::clone()
     CloneDialog d(this);
     if (d.exec() == QDialog::Accepted) {
         RunnerDialog r(this);
-        auto branch = _git->currentBranch();
+
         auto cmd = d.command();;
         r.run(cmd);
         r.exec();

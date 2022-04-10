@@ -68,6 +68,7 @@ public slots:
               const QString &remote,
               const QString &result);
     ArgParserReturn main();
+    ArgParserReturn main(const QString &path);
 };
 
 #endif // COMMANDARGSPARSER_H

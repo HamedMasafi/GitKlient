@@ -33,17 +33,23 @@ void Remote::parse(const QString &output)
     wip/video_import      pushes to wip/video_import      (up to date)
     wip/video_trimmer     pushes to wip/video_trimmer     (up to date)
 */
-    int mode{0};
+    enum ParseMode {
+        None,
+        GitPull,
+        GitPush
+    };
+
+    ParseMode mode{None};
     auto lines = output.split('\n');
-    QRegularExpression regexPush{R"((\S+)\s+pushes to (\S+)\s+\(([^)]*)\))"};
     QRegularExpression regexPull{R"((\S+)\s+merges with remote\s+(\S+))"};
+    QRegularExpression regexPush{R"((\S+)\s+pushes to (\S+)\s+\(([^)]*)\))"};
 
 
     for (auto &line: lines) {
         line = line.trimmed();
 
-        if (mode == 1) {
-            auto match = regexPull.match(line);
+        if (mode == GitPull) {
+            auto match = regexPull.match(line); // clazy:exclude=use-static-qregularexpression
             if (match.hasMatch()) {
                 RemoteBranch branch;
                 branch.configuredPull = true;
@@ -51,8 +57,8 @@ void Remote::parse(const QString &output)
                 branch.remotePullBranch = match.captured(2);
                 branches.append(branch);
             }
-        } else if (mode == 2) {
-            auto match = regexPush.match(line);
+        } else if (mode == GitPush) {
+            auto match = regexPush.match(line); // clazy:exclude=use-static-qregularexpression
             if (match.hasMatch()) {
                 int index{-1};
                 RemoteBranch branch;
@@ -90,10 +96,10 @@ void Remote::parse(const QString &output)
         } else if (line.startsWith("Fetch URL:")) {
             fetchUrl = line.replace("Fetch URL:", "").trimmed();
         } else if (line == "Local branches configured for 'git pull':") {
-            mode = 1;
+            mode = GitPull;
             continue;
         } else if (line == "Local refs configured for 'git push':") {
-            mode = 2;
+            mode = GitPush;
             continue;
         }
     }

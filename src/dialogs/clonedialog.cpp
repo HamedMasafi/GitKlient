@@ -40,7 +40,7 @@ void CloneDialog::on_lineEditUrl_textChanged(QString text)
     auto parts = text.split("/");
     if (parts.size()) {
         auto local = parts.last();
-        if (local.toLower().endsWith(".git"))
+        if (local.endsWith(".git", Qt::CaseInsensitive))
             local = local.mid(0, local.size() - 4);
 
         lineEditPath->setText(_fixedPath + "/" + local);

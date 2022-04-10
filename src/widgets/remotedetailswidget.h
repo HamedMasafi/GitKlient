@@ -7,6 +7,7 @@ namespace Git {
 class Manager;
 }
 
+//TODO: delete me
 class RemoteDetailsWidget : public QWidget, private Ui::RemoteDetailsWidget
 {
     Q_OBJECT
@@ -22,7 +23,7 @@ public:
 
 private slots:
     void reload();
-    void on_listWidget_currentItemChanged(QListWidgetItem *current, QListWidgetItem *previous);
+//    void on_listWidget_currentItemChanged(QListWidgetItem *current, QListWidgetItem *previous);
 };
 
 #endif // REMOTEDETAILSWIDGET_H

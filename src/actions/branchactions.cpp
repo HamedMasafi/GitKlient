@@ -20,6 +20,12 @@ const QString &BranchActions::branchName() const
 void BranchActions::setBranchName(const QString &newBranchName)
 {
     _branchName = newBranchName;
+
+    setActionEnabled(_actionBrowse, true);
+    setActionEnabled(_actionCheckout, true);
+    setActionEnabled(_actionMerge, true);
+    setActionEnabled(_actionDiff, true);
+    setActionEnabled(_actionRemove, true);
 }
 
 const QString &BranchActions::otherBranch() const
@@ -30,6 +36,7 @@ const QString &BranchActions::otherBranch() const
 void BranchActions::setOtherBranch(const QString &newOtherBranch)
 {
     _otherBranch = newOtherBranch;
+
 }
 
 void BranchActions::create()
@@ -39,12 +46,14 @@ void BranchActions::create()
 
 BranchActions::BranchActions(Git::Manager *git, QWidget *parent) : AbstractActions(git, parent)
 {
-    ADD_ACTION(actionBrowse, "Browse...", &BranchActions::browse);
-    ADD_ACTION(actionCheckout, "Switch...", &BranchActions::checkout);
-    ADD_ACTION(actionMerge, "Merge...", &BranchActions::merge);
-    ADD_ACTION(actionDiff, "Diff...", &BranchActions::diff);
-    ADD_ACTION(actionRemove, "Remove...", &BranchActions::remove);
-    ADD_HIDDEN_ACTION(actionCreate, "Create...", &BranchActions::create);
+    _actionCreate = addActionHidden(i18n("Create..."), this, &BranchActions::create);
+    _actionCreate->setIcon(QIcon::fromTheme("document-new"));
+
+    _actionBrowse = addActionDisabled("Browse...", this, &BranchActions::browse);
+    _actionCheckout = addActionDisabled("Switch...", this, &BranchActions::checkout);
+    _actionMerge = addActionDisabled("Merge...", this, &BranchActions::merge);
+    _actionDiff = addActionDisabled("Diff...", this, &BranchActions::diff);
+    _actionRemove = addActionDisabled("Remove...", this, &BranchActions::remove);
 }
 
 void BranchActions::browse()

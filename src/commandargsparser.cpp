@@ -242,3 +242,11 @@ ArgParserReturn CommandArgsParser::main()
     window->show();
     return ExecApp;
 }
+
+ArgParserReturn CommandArgsParser::main(const QString &path)
+{
+    Git::Manager::instance()->setPath(path);
+    auto window = GitKlientWindow::instance();
+    window->show();
+    return ExecApp;
+}

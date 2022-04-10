@@ -4,13 +4,16 @@
 #include "ui_remoteswidget.h"
 #include "widgetbase.h"
 
+class RemotesActions;
 namespace Git {
 class RemotesCache;
+class Manager;
 }
 class RemotesWidget : public WidgetBase, private Ui::RemotesWidget
 {
     Q_OBJECT
     Git::RemotesCache *_model;
+    RemotesActions *_actions;
 
 public:
     explicit RemotesWidget(QWidget *parent = nullptr);
@@ -20,13 +23,13 @@ public:
     void saveState(QSettings &settings) const override;
     void restoreState(QSettings &settings) override;
 
-    void reload() override;
 
 private slots:
-    void on_toolButtonAdd_clicked();
-    void on_listView_activated(const QModelIndex &index);
-//    void on_listWidget_currentItemChanged(QListWidgetItem *current, QListWidgetItem *previous);
-//    void on_toolButtonRemove_clicked();
+    void on_listView_itemActivated(const QModelIndex &index);
+    void on_listView_customContextMenuRequested(const QPoint &pos);
+
+private:
+    void init(Git::Manager *git);
 };
 
 #endif // REMOTESWIDGET_H

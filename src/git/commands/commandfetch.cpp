@@ -67,6 +67,7 @@ void CommandFetch::setTags(bool newTags)
 
 void CommandFetch::parseOutput(const QByteArray &output, const QByteArray &errorOutput)
 {
+    Q_UNUSED(output)
     Q_UNUSED(errorOutput)
 }
 

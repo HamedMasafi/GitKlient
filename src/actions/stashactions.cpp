@@ -12,15 +12,11 @@
 
 StashActions::StashActions(Git::Manager *git, QWidget *parent) : AbstractActions(git, parent)
 {
-    ADD_ACTION(actionDiff, "Diff with HEAD...", &StashActions::diff);
-    ADD_ACTION(actionPop, "Pop...", &StashActions::pop);
-    ADD_ACTION(actionApply, "Apply...", &StashActions::apply);
-    ADD_ACTION(actionDrop, "Remove...", &StashActions::drop);
-    ADD_HIDDEN_ACTION(actionNew, "New stash...", &StashActions::create);
-
-    _actionApply->setEnabled(false);
-    _actionDiff->setEnabled(false);
-    _actionDrop->setEnabled(false);
+    _actionNew = addActionHidden(i18n("New stash..."), this, &StashActions::create);
+    _actionDiff = addAction(i18n("Diff with HEAD..."),this, &StashActions::diff,  false, true);
+    _actionPop = addAction(i18n("Pop..."),this, &StashActions::pop,  false, true);
+    _actionApply = addAction(i18n("Apply..."),this, &StashActions::apply,  false, true);
+    _actionDrop = addAction(i18n("Remove..."),this, &StashActions::drop,  false, true);
 
     _actionDrop->setIcon(QIcon::fromTheme("list-remove"));
     _actionNew->setIcon(QIcon::fromTheme("list-add"));
@@ -35,9 +31,9 @@ void StashActions::setStashName(const QString &newStashName)
 {
     _stashName = newStashName;
 
-    _actionApply->setEnabled(true);
-    _actionDiff->setEnabled(true);
-    _actionDrop->setEnabled(true);
+    setActionEnabled(_actionApply, true);
+    setActionEnabled(_actionDiff, true);
+    setActionEnabled(_actionDrop, true);
 }
 
 void StashActions::apply()

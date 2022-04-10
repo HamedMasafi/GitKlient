@@ -24,6 +24,7 @@ set(
     ${CMAKE_CURRENT_LIST_DIR}/models/branchescache.cpp
     ${CMAKE_CURRENT_LIST_DIR}/models/stashescache.cpp
     ${CMAKE_CURRENT_LIST_DIR}/models/tagsmodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/models/authorsmodel.cpp
 
     ${CMAKE_CURRENT_LIST_DIR}/commands/abstractcommand.cpp
     ${CMAKE_CURRENT_LIST_DIR}/commands/commandchangedfiles.cpp

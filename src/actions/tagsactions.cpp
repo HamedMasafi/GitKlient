@@ -14,14 +14,10 @@
 
 TagsActions::TagsActions(Git::Manager *git, QWidget *parent) : AbstractActions(git, parent)
 {
-    ADD_HIDDEN_ACTION(actionCreate, "New tag...", &TagsActions::create);
-    ADD_ACTION(actionRemove, "Remove...", &TagsActions::remove);
-    ADD_ACTION(actionCheckout, "Checkout...", &TagsActions::checkout);
-    ADD_ACTION(actionDiff, "Diff with HEAD...", &TagsActions::diff);
-
-    _actionRemove->setEnabled(false);
-    _actionCheckout->setEnabled(false);
-    _actionDiff->setEnabled(false);
+    _actionCreate = addActionHidden(i18n("New tag..."), this, &TagsActions::create);
+    _actionRemove = addActionDisabled(i18n("Remove..."), this, &TagsActions::remove);
+    _actionCheckout = addActionDisabled(i18n("Checkout..."), this, &TagsActions::checkout);
+    _actionDiff = addActionDisabled(i18n("Diff with HEAD..."), this, &TagsActions::diff);
 }
 
 const QString &TagsActions::tagName() const
@@ -33,9 +29,9 @@ void TagsActions::setTagName(const QString &newTagName)
 {
     _tagName = newTagName;
 
-    _actionRemove->setEnabled(true);
-    _actionCheckout->setEnabled(true);
-    _actionDiff->setEnabled(true);
+    setActionEnabled(_actionRemove, true);
+    setActionEnabled(_actionCheckout, true);
+    setActionEnabled(_actionDiff, true);
 }
 
 void TagsActions::create()

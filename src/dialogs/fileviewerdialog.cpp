@@ -191,6 +191,7 @@ KService::Ptr FileViewerDialog::getExternalViewer(const QString &mimeType)
 
 bool FileViewerDialog::viewInInternalViewer(const KService::Ptr viewer, const QString& fileName, const QMimeType &mimeType)
 {
+    Q_UNUSED(mimeType)
     // Set icon and comment for the mimetype.
 //    m_iconLabel->setPixmap(QIcon::fromTheme(mimeType.iconName()).pixmap(style()->pixelMetric(QStyle::PixelMetric::PM_SmallIconSize)));
 //    m_commentLabel->setText(mimeType.comment());

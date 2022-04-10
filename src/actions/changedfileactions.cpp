@@ -10,8 +10,8 @@
 ChangedFileActions::ChangedFileActions(Git::Manager *git, QWidget *parent)
     : AbstractActions(git, parent)
 {
-    ADD_ACTION(actionDiff, "Diff...", &ChangedFileActions::diff);
-    ADD_ACTION(actionRevert, "Revert...", &ChangedFileActions::revert);
+    _actionDiff = addAction(i18n("Diff..."),this, &ChangedFileActions::diff,  false, true);
+    _actionRevert = addAction(i18n("Revert..."),this, &ChangedFileActions::revert,  false, true);
 
     auto f = _actionDiff->font();
     f.setBold(true);
@@ -26,6 +26,9 @@ const QString &ChangedFileActions::filePath() const
 void ChangedFileActions::setFilePath(const QString &newFilePath)
 {
     _filePath = newFilePath;
+
+    setActionEnabled(_actionDiff, true);
+    setActionEnabled(_actionRevert, true);
 }
 
 void ChangedFileActions::diff()

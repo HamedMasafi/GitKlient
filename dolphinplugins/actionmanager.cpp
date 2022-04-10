@@ -50,8 +50,9 @@ QList<QAction *> ActionManager::actions(const KFileItemListProperties &fileItemI
 
 }*/
 
-    if (fileItemInfos.items().size() == 1) {
-        KFileItem &item = fileItemInfos.items().first();
+    auto items = fileItemInfos.items();
+    if (items.size() == 1) {
+        KFileItem &item = items.first();
         auto path = item.url().toLocalFile();
         FileStatus::Status status;
         if (item.isFile())
@@ -63,6 +64,7 @@ QList<QAction *> ActionManager::actions(const KFileItemListProperties &fileItemI
             addMenu(menu, i18n("Clone"), QStringList() << "--clone");
             addMenu(menu, i18n("Init"), QStringList() << "--init");
         } else {
+            addMenu(menu, i18n("Open"), {path});
             addMenu(menu, i18n("Pull"), {"pull", path});
             addMenu(menu, i18n("Push"), {"push", path});
             addMenu(menu, i18n("Modifications"), {"changes", path});

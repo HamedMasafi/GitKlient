@@ -18,14 +18,18 @@ const QString &CommitActions::commitHash() const
 void CommitActions::setCommitHash(const QString &newCommitHash)
 {
     _commitHash = newCommitHash;
+
+    setActionEnabled(_actionBrowse, true);
+    setActionEnabled(_actionCheckout, true);
+    setActionEnabled(_actionDiff, true);
 }
 
 CommitActions::CommitActions(Git::Manager *git, QWidget *parent)
 : AbstractActions(git, parent)
 {
-    ADD_ACTION(actionBrowse, "Browse...", &CommitActions::browse);
-    ADD_ACTION(actionCheckout, "Checkout...", &CommitActions::checkout);
-    ADD_ACTION(actionDiff, "Diff with HEAD...", &CommitActions::diff);
+    _actionBrowse = addAction(i18n("Browse..."),this, &CommitActions::browse,  false, true);
+    _actionCheckout = addAction(i18n("Checkout..."),this, &CommitActions::checkout,  false, true);
+    _actionDiff = addAction(i18n("Diff with HEAD..."),this, &CommitActions::diff,  false, true);
 }
 
 void CommitActions::browse()

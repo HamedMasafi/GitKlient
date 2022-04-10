@@ -4,10 +4,10 @@
 #include "dialogs/filehistorydialog.h"
 #include "dialogs/fileviewerdialog.h"
 #include "dialogs/searchdialog.h"
-#include "git/gitmanager.h"
-#include "git/gitfile.h"
-#include "gitklientmergewindow.h"
 #include "diffwindow.h"
+#include "git/gitfile.h"
+#include "git/gitmanager.h"
+#include "gitklientmergewindow.h"
 
 #include <KIO/AccessManager>
 #include <KLocalizedString>
@@ -30,7 +30,6 @@ KService::Ptr FileActions::getExternalViewer(const QString &mimeType)
     }
 }
 
-
 const QString &FileActions::place() const
 {
     return _place;
@@ -39,6 +38,15 @@ const QString &FileActions::place() const
 void FileActions::setPlace(const QString &newPlace)
 {
     _place = newPlace;
+
+    setActionEnabled(_actionView, !_filePath.isEmpty());
+    setActionEnabled(_actionOpenWith, !_filePath.isEmpty());
+    setActionEnabled(_actionDiffWithHead, !_filePath.isEmpty());
+    setActionEnabled(_actionMergeWithHead, !_filePath.isEmpty());
+    setActionEnabled(_actionSaveAs, !_filePath.isEmpty());
+    setActionEnabled(_actionHistory, !_filePath.isEmpty());
+    setActionEnabled(_actionBlame, !_filePath.isEmpty());
+    setActionEnabled(_actionSearch, !_filePath.isEmpty());
 }
 
 const QString &FileActions::filePath() const
@@ -50,24 +58,30 @@ void FileActions::setFilePath(const QString &newFilePath)
 {
     _filePath = newFilePath;
 
-
+    setActionEnabled(_actionView, !_place.isEmpty());
+    setActionEnabled(_actionOpenWith, !_place.isEmpty());
+    setActionEnabled(_actionDiffWithHead, !_place.isEmpty());
+    setActionEnabled(_actionMergeWithHead, !_place.isEmpty());
+    setActionEnabled(_actionSaveAs, !_place.isEmpty());
+    setActionEnabled(_actionHistory, !_place.isEmpty());
+    setActionEnabled(_actionBlame, !_place.isEmpty());
+    setActionEnabled(_actionSearch, !_place.isEmpty());
 }
 
-FileActions::FileActions(Git::Manager *git, QWidget *parent)
-    : AbstractActions(git, parent)
+FileActions::FileActions(Git::Manager *git, QWidget *parent) : AbstractActions(git, parent)
 {
     _openWithMenu = new QMenu(parent);
 
-    ADD_ACTION(actionView, "View...", &FileActions::viewFile);
-    ADD_ACTION(actionOpenWith, "Open with...", &FileActions::openWith);
+    _actionView = addAction(i18n("View..."),this, &FileActions::viewFile,  false, true);
+    _actionOpenWith = addAction(i18n("Open with..."),this, &FileActions::openWith,  false, true);
 
-    ADD_ACTION(actionDiffWithHead, "Diff with HEAD...", &FileActions::diffWithHead);
-    ADD_ACTION(actionMergeWithHead, "Merge with HEAD...", &FileActions::mergeWithHead);
+    _actionDiffWithHead = addAction(i18n("Diff with HEAD..."),this, &FileActions::diffWithHead,  false, true);
+    _actionMergeWithHead = addAction(i18n("Merge with HEAD..."),this, &FileActions::mergeWithHead,  false, true);
 
-    ADD_ACTION(actionSaveAs, "Save as...", &FileActions::saveAsFile);
-    ADD_ACTION(actionHistory, "Log...", &FileActions::logFile);
-    ADD_ACTION(actionBlame, "Blame...", &FileActions::blameFile);
-    ADD_ACTION(actionSearch, "Search...", &FileActions::search);
+    _actionSaveAs = addAction(i18n("Save as..."),this, &FileActions::saveAsFile,  false, true);
+    _actionHistory = addAction(i18n("Log..."),this, &FileActions::logFile,  false, true);
+    _actionBlame = addAction(i18n("Blame..."),this, &FileActions::blameFile,  false, true);
+    _actionSearch = addAction(i18n("Search..."),this, &FileActions::search,  false, true);
 }
 
 void FileActions::popup(const QPoint &pos)
@@ -102,8 +116,8 @@ void FileActions::logFile()
 
 void FileActions::blameFile()
 {
-//    auto path = _treeModel->fullPath(treeView->currentIndex()) + "/"
-//                + listWidget->currentItem()->text();
+    //    auto path = _treeModel->fullPath(treeView->currentIndex()) + "/"
+    //                + listWidget->currentItem()->text();
     Git::File file(_place, _filePath, _git);
     FileBlameDialog d(file, _parent);
     d.exec();
@@ -111,12 +125,11 @@ void FileActions::blameFile()
 
 void FileActions::search()
 {
-//    auto path = _treeModel->fullPath(treeView->currentIndex()) + "/"
-//                + listWidget->currentItem()->text();
+    //    auto path = _treeModel->fullPath(treeView->currentIndex()) + "/"
+    //                + listWidget->currentItem()->text();
     SearchDialog d(_filePath, Git::Manager::instance(), _parent);
-d.exec();
+    d.exec();
 }
-
 
 KService::Ptr FileActions::getViewer(const QString &mimeType)
 {
@@ -126,7 +139,8 @@ KService::Ptr FileActions::getViewer(const QString &mimeType)
     }
 
     // Try to get a read-only kpart for the internal viewer
-    KService::List offers = KMimeTypeTrader::self()->query(mimeType, QStringLiteral("KParts/ReadOnlyPart"));
+    KService::List offers = KMimeTypeTrader::self()->query(mimeType,
+                                                           QStringLiteral("KParts/ReadOnlyPart"));
 
     // If we can't find a kpart, try to get an external application
     if (offers.isEmpty()) {
@@ -149,11 +163,11 @@ void FileActions::openWith()
     auto viewer = getViewer(mimeType.name());
     KRun::runService(*viewer, fileUrlList, nullptr, true);
 
-//    KIO::ApplicationLauncherJob *job = new KIO::ApplicationLauncherJob(viewer);
-//    job->setUrls(fileUrlList);
-//    job->setUiDelegate(new KIO::JobUiDelegate(KJobUiDelegate::AutoHandlingEnabled, nullptr));
-//    // The temporary file will be removed when the viewer application exits.
-//    job->setRunFlags(KIO::ApplicationLauncherJob::DeleteTemporaryFiles);
+    //    KIO::ApplicationLauncherJob *job = new KIO::ApplicationLauncherJob(viewer);
+    //    job->setUrls(fileUrlList);
+    //    job->setUiDelegate(new KIO::JobUiDelegate(KJobUiDelegate::AutoHandlingEnabled, nullptr));
+    //    // The temporary file will be removed when the viewer application exits.
+    //    job->setRunFlags(KIO::ApplicationLauncherJob::DeleteTemporaryFiles);
     //    job->start();
 }
 

@@ -328,8 +328,8 @@ QList<DiffPart> diff_match_patch::diff_lineMode(QString text1, QString text2,
     QString text_insert = "";
 
     QMutableListIterator<DiffPart> pointer(diffs);
-    DiffPart *thisDiff = pointer.hasNext() ? &pointer.next() : NULL;
-    while (thisDiff != NULL) {
+    DiffPart *thisDiff = pointer.hasNext() ? &pointer.next() : nullptr;
+    while (thisDiff != nullptr) {
         switch (thisDiff->operation) {
         case INSERT:
             count_insert++;
@@ -359,7 +359,7 @@ QList<DiffPart> diff_match_patch::diff_lineMode(QString text1, QString text2,
             text_insert = "";
             break;
         }
-        thisDiff = pointer.hasNext() ? &pointer.next() : NULL;
+        thisDiff = pointer.hasNext() ? &pointer.next() : nullptr;
     }
     diffs.removeLast();  // Remove the dummy entry at the end.
 
@@ -725,8 +725,8 @@ void diff_match_patch::diff_cleanupSemantic(QList<DiffPart> &diffs) {
     // Number of characters that changed after the equality.
     int length_insertions2 = 0;
     int length_deletions2 = 0;
-    DiffPart *thisDiff = pointer.hasNext() ? &pointer.next() : NULL;
-    while (thisDiff != NULL) {
+    DiffPart *thisDiff = pointer.hasNext() ? &pointer.next() : nullptr;
+    while (thisDiff != nullptr) {
         if (thisDiff->operation == EQUAL) {
             // Equality found.
             equalities.push(*thisDiff);
@@ -787,7 +787,7 @@ void diff_match_patch::diff_cleanupSemantic(QList<DiffPart> &diffs) {
                 changes = true;
             }
         }
-        thisDiff = pointer.hasNext() ? &pointer.next() : NULL;
+        thisDiff = pointer.hasNext() ? &pointer.next() : nullptr;
     }
 
     // Normalize the diff.
@@ -803,15 +803,15 @@ void diff_match_patch::diff_cleanupSemantic(QList<DiffPart> &diffs) {
     //   -> <ins>def</ins>xxx<del>abc</del>
     // Only extract an overlap if it is as big as the edit ahead or behind it.
     pointer.toFront();
-    DiffPart *prevDiff = NULL;
-    thisDiff = NULL;
+    DiffPart *prevDiff = nullptr;
+    thisDiff = nullptr;
     if (pointer.hasNext()) {
         prevDiff = &pointer.next();
         if (pointer.hasNext()) {
             thisDiff = &pointer.next();
         }
     }
-    while (thisDiff != NULL) {
+    while (thisDiff != nullptr) {
         if (prevDiff->operation == DELETE &&
             thisDiff->operation == INSERT) {
             QString deletion = prevDiff->text;
@@ -846,10 +846,10 @@ void diff_match_patch::diff_cleanupSemantic(QList<DiffPart> &diffs) {
                     // no need to step past the new element.
                 }
             }
-            thisDiff = pointer.hasNext() ? &pointer.next() : NULL;
+            thisDiff = pointer.hasNext() ? &pointer.next() : nullptr;
         }
         prevDiff = thisDiff;
-        thisDiff = pointer.hasNext() ? &pointer.next() : NULL;
+        thisDiff = pointer.hasNext() ? &pointer.next() : nullptr;
     }
 }
 
@@ -862,12 +862,12 @@ void diff_match_patch::diff_cleanupSemanticLossless(QList<DiffPart> &diffs) {
     QString bestEquality1, bestEdit, bestEquality2;
     // Create a new iterator at the start.
     QMutableListIterator<DiffPart> pointer(diffs);
-    DiffPart *prevDiff = pointer.hasNext() ? &pointer.next() : NULL;
-    DiffPart *thisDiff = pointer.hasNext() ? &pointer.next() : NULL;
-    DiffPart *nextDiff = pointer.hasNext() ? &pointer.next() : NULL;
+    DiffPart *prevDiff = pointer.hasNext() ? &pointer.next() : nullptr;
+    DiffPart *thisDiff = pointer.hasNext() ? &pointer.next() : nullptr;
+    DiffPart *nextDiff = pointer.hasNext() ? &pointer.next() : nullptr;
 
     // Intentionally ignore the first and last element (don't need checking).
-    while (nextDiff != NULL) {
+    while (nextDiff != nullptr) {
         if (prevDiff->operation == EQUAL &&
             nextDiff->operation == EQUAL) {
             // This is a single edit surrounded by equalities.
@@ -930,7 +930,7 @@ void diff_match_patch::diff_cleanupSemanticLossless(QList<DiffPart> &diffs) {
         }
         prevDiff = thisDiff;
         thisDiff = nextDiff;
-        nextDiff = pointer.hasNext() ? &pointer.next() : NULL;
+        nextDiff = pointer.hasNext() ? &pointer.next() : nullptr;
     }
 }
 
@@ -1000,10 +1000,10 @@ void diff_match_patch::diff_cleanupEfficiency(QList<DiffPart> &diffs) {
     // Is there a deletion operation after the last equality.
     bool post_del = false;
 
-    DiffPart *thisDiff = pointer.hasNext() ? &pointer.next() : NULL;
+    DiffPart *thisDiff = pointer.hasNext() ? &pointer.next() : nullptr;
     DiffPart *safeDiff = thisDiff;
 
-    while (thisDiff != NULL) {
+    while (thisDiff != nullptr) {
         if (thisDiff->operation == EQUAL) {
             // Equality found.
             if (thisDiff->text.length() < Diff_EditCost && (post_ins || post_del)) {
@@ -1082,7 +1082,7 @@ void diff_match_patch::diff_cleanupEfficiency(QList<DiffPart> &diffs) {
                 changes = true;
             }
         }
-        thisDiff = pointer.hasNext() ? &pointer.next() : NULL;
+        thisDiff = pointer.hasNext() ? &pointer.next() : nullptr;
     }
 
     if (changes) {
@@ -1098,20 +1098,20 @@ void diff_match_patch::diff_cleanupMerge(QList<DiffPart> &diffs) {
     int count_insert = 0;
     QString text_delete = "";
     QString text_insert = "";
-    DiffPart *thisDiff = pointer.hasNext() ? &pointer.next() : NULL;
-    DiffPart *prevEqual = NULL;
+    DiffPart *thisDiff = pointer.hasNext() ? &pointer.next() : nullptr;
+    DiffPart *prevEqual = nullptr;
     int commonlength;
-    while (thisDiff != NULL) {
+    while (thisDiff != nullptr) {
         switch (thisDiff->operation) {
         case INSERT:
             count_insert++;
             text_insert += thisDiff->text;
-            prevEqual = NULL;
+            prevEqual = nullptr;
             break;
         case DELETE:
             count_delete++;
             text_delete += thisDiff->text;
-            prevEqual = NULL;
+            prevEqual = nullptr;
             break;
         case EQUAL:
             if (count_delete + count_insert > 1) {
@@ -1135,7 +1135,7 @@ void diff_match_patch::diff_cleanupMerge(QList<DiffPart> &diffs) {
                             if (thisDiff->operation != EQUAL) {
                                 //throw "Previous diff should have been an equality.";
                             }
-                            thisDiff->text += text_insert.left(commonlength);
+                            thisDiff->text += text_insert.leftRef(commonlength);
                             pointer.next();
                         } else {
                             pointer.insert(DiffPart(EQUAL, text_insert.left(commonlength)));
@@ -1164,9 +1164,9 @@ void diff_match_patch::diff_cleanupMerge(QList<DiffPart> &diffs) {
                     pointer.insert(DiffPart(INSERT, text_insert));
                 }
                 // Step forward to the equality.
-                thisDiff = pointer.hasNext() ? &pointer.next() : NULL;
+                thisDiff = pointer.hasNext() ? &pointer.next() : nullptr;
 
-            } else if (prevEqual != NULL) {
+            } else if (prevEqual != nullptr) {
                 // Merge this equality with the previous one.
                 prevEqual->text += thisDiff->text;
                 pointer.remove();
@@ -1180,7 +1180,7 @@ void diff_match_patch::diff_cleanupMerge(QList<DiffPart> &diffs) {
             prevEqual = thisDiff;
             break;
         }
-        thisDiff = pointer.hasNext() ? &pointer.next() : NULL;
+        thisDiff = pointer.hasNext() ? &pointer.next() : nullptr;
     }
     if (diffs.back().text.isEmpty()) {
         diffs.removeLast();  // Remove the dummy entry at the end.
@@ -1195,12 +1195,12 @@ void diff_match_patch::diff_cleanupMerge(QList<DiffPart> &diffs) {
     // Create a new iterator at the start.
     // (As opposed to walking the current one back.)
     pointer.toFront();
-    DiffPart *prevDiff = pointer.hasNext() ? &pointer.next() : NULL;
-    thisDiff = pointer.hasNext() ? &pointer.next() : NULL;
-    DiffPart *nextDiff = pointer.hasNext() ? &pointer.next() : NULL;
+    DiffPart *prevDiff = pointer.hasNext() ? &pointer.next() : nullptr;
+    thisDiff = pointer.hasNext() ? &pointer.next() : nullptr;
+    DiffPart *nextDiff = pointer.hasNext() ? &pointer.next() : nullptr;
 
     // Intentionally ignore the first and last element (don't need checking).
-    while (nextDiff != NULL) {
+    while (nextDiff != nullptr) {
         if (prevDiff->operation == EQUAL &&
             nextDiff->operation == EQUAL) {
             // This is a single edit surrounded by equalities.
@@ -1216,7 +1216,7 @@ void diff_match_patch::diff_cleanupMerge(QList<DiffPart> &diffs) {
                 pointer.remove();  // Delete prevDiff.
                 pointer.next();  // Walk past thisDiff.
                 thisDiff = &pointer.next();  // Walk past nextDiff.
-                nextDiff = pointer.hasNext() ? &pointer.next() : NULL;
+                nextDiff = pointer.hasNext() ? &pointer.next() : nullptr;
                 changes = true;
             } else if (thisDiff->text.startsWith(nextDiff->text)) {
                 // Shift the edit over the next equality.
@@ -1224,13 +1224,13 @@ void diff_match_patch::diff_cleanupMerge(QList<DiffPart> &diffs) {
                 thisDiff->text = safeMid(thisDiff->text, nextDiff->text.length())
                                  + nextDiff->text;
                 pointer.remove(); // Delete nextDiff.
-                nextDiff = pointer.hasNext() ? &pointer.next() : NULL;
+                nextDiff = pointer.hasNext() ? &pointer.next() : nullptr;
                 changes = true;
             }
         }
         prevDiff = thisDiff;
         thisDiff = nextDiff;
-        nextDiff = pointer.hasNext() ? &pointer.next() : NULL;
+        nextDiff = pointer.hasNext() ? &pointer.next() : nullptr;
     }
     // If shifts were made, the diff needs reordering and another shift sweep.
     if (changes) {
@@ -1480,7 +1480,7 @@ int diff_match_patch::match_bitap(const QString &text, const QString &pattern,
     int bin_min, bin_mid;
     int bin_max = pattern.length() + text.length();
     int *rd;
-    int *last_rd = NULL;
+    int *last_rd = nullptr;
     for (int d = 0; d < pattern.length(); d++) {
         // Scan for the best match; each iteration allows for one more error.
         // Run a binary search to determine how far from 'loc' we can stray at

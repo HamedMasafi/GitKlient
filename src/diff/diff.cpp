@@ -139,7 +139,7 @@ Solution3 longestCommonSubsequence(const QStringList &source,
     int j = target.count();
     int k = target2.count();
     int index = l[source.count()][target.count()][target2.count()];
-    QString longestCommonSubsequence;
+//    QString longestCommonSubsequence;
     Solution3 r;
     while (i > 0 && j > 0 && k > 0) {
         if (source.at(i - 1) == target.at(j - 1) && source.at(i - 1) == target2.at(k - 1)) {
@@ -198,7 +198,7 @@ Solution longestCommonSubsequence(const QStringList &source, const QStringList &
     int i = source.count();
     int j = target.count();
     int index = l[source.count()][target.count()];
-    QString longestCommonSubsequence;
+//    QString longestCommonSubsequence;
     Solution r;
     while (i > 0 && j > 0) {
         if (source.at(i - 1) == target.at(j - 1)) {
