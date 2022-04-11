@@ -36,7 +36,8 @@ jobs:
 
       - name: Install required packages
         run: |
-          sudo apt install libkf5config-dev libkf5configwidgets5 libkf5configwidgets-dev libkf5coreaddons-dev libkf5crash-dev libkf5dbusaddons-dev libkf5doctools-dev libkf5i18n-dev libkf5xmlgui-dev libkf5kio-dev libkf5kiocore5 libkf5kiogui5 libkf5kiowidgets5 libkf5textwidgets-dev libkf5texteditor-dev cmake make 
+          sudo apt install libkf5config-dev libkf5configwidgets5 libkf5configwidgets-dev libkf5coreaddons-dev libkf5crash-dev libkf5dbusaddons-dev libkf5doctools-dev libkf5i18n-dev libkf5xmlgui-dev libkf5kio-dev libkf5kiocore5 libkf5kiogui5 libkf5kiowidgets5 libkf5textwidgets-dev libkf5texteditor-dev cmake make extra-cmake-modules
+
           
       - name: Build with CMake
         run: |
