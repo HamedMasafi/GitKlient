@@ -9,6 +9,9 @@ class RemotesActions: public AbstractActions
 
     DEFINE_ACTION(actionCreate)
     DEFINE_ACTION(actionRemove)
+    DEFINE_ACTION(actionRename)
+    DEFINE_ACTION(actionUpdate)
+    DEFINE_ACTION(actionChangeUrl)
 
 public:
     RemotesActions(Git::Manager *git, QWidget *parent = nullptr);
@@ -19,6 +22,9 @@ public:
 private slots:
     void create();
     void remove();
+    void changeUrl();
+    void rename();
+    void update();
 
 private:
     QString _remoteName;

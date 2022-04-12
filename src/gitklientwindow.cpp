@@ -51,13 +51,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // KF headers
 #include <KActionCollection>
 #include <KConfigDialog>
+#include <KLocalizedString>
 #include <KMessageBox>
 #include <QFileDialog>
 #include <QMenu>
 #include <QSettings>
+#include <QStatusBar>
 #include <QtConcurrent/QtConcurrent>
-#include <KLocalizedString>
-
 
 GitKlientWindow::GitKlientWindow()
     : MainWindow()
@@ -81,12 +81,17 @@ GitKlientWindow::GitKlientWindow()
 
     setCentralWidget(_mainWidget);
 
+    _statusCurrentBranchLabel = new QLabel(statusBar());
+    statusBar()->addPermanentWidget(_statusCurrentBranchLabel);
+    _statusCurrentBranchLabel->setText(i18n("No repo selected"));
+
     if (GitKlientSettings::openLastRepo()) {
         QSettings s;
         auto p = s.value("last_repo").toString();
         _git->setPath(p);
         initRecentFiles(p);
         QtConcurrent::run(this, &GitKlientWindow::loadRemotes);
+
     }
 }
 
@@ -107,6 +112,8 @@ void GitKlientWindow::git_pathChanged()
 {
     setWindowFilePath(_git->path());
 //    setWindowTitle(_git->path());
+
+    _statusCurrentBranchLabel->setText(i18n("Current branch: %1", _git->currentBranch()));
 }
 
 void GitKlientWindow::settingsConfigure()
@@ -155,6 +162,7 @@ void GitKlientWindow::initActions()
                                                         this,
                                                         &GitKlientWindow::repoStatus);
     repoStatusAction->setText(i18n("Changed files..."));
+    repoStatusAction->setIcon(QIcon::fromTheme("gitklient-changedfiles"));
     actionCollection->setDefaultShortcut(repoStatusAction, QKeySequence("Ctrl+S"));
 
     {
@@ -274,7 +282,7 @@ void GitKlientWindow::fetch()
 
 void GitKlientWindow::showBranchesStatus()
 {
-    MergeDialog d(this);
+    MergeDialog d(_git, this);
     d.exec();
 }
 

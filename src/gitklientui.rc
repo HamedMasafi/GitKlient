@@ -7,8 +7,10 @@
                          http://www.kde.org/standards/kxmlgui/1.0/kxmlgui.xsd">
 <MenuBar>
   <Menu name="file">
-   <text>Repo</text>
+    <text>Repo</text>
+    <Action name="repo_new"/>
     <Action name="open_repo"/>
+    <Action name="repo_clone"/>
     <Action name="recent" />
   </Menu>
   <Menu name="view">
@@ -22,23 +24,27 @@
   </Menu>
   <Menu name="repo">
     <text>Repo</text>
-    <Action name="repo_status"/>
     <Action name="repo_fetch"/>
     <Action name="repo_pull"/>
     <Action name="repo_push"/>
     <Action name="repo_merge"/>
-    <Action name="repo_settings"/>
     <Separator/>
     <Action name="repo_switch"/>
     <Separator/>
     <Action name="diff_branches"/>
     <Action name="repo_search"/>
+    <Separator/>
+    <Action name="repo_status"/>
+    <Action name="repo_settings"/>
   </Menu>
 </MenuBar>
 
 <ToolBar name="mainToolBar" noMerge="1">
     <text>Main Toolbar</text>
     <Action name="open_repo"/>
+    <Separator/>
+    <Action name="repo_status"/>
+    <Action name="repo_settings"/>
     <Separator/>
     <Action name="repo_fetch"/>
     <Action name="repo_pull"/>

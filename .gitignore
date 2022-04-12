@@ -100,3 +100,4 @@ doxygen_log.txt
 *.kdev4
 
 build2
+_packages/

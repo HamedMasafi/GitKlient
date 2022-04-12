@@ -29,6 +29,9 @@ QStringList CommandMerge::generateArgs() const
     appendBool(_squash, cmd, "squash");
     appendBool(_allowUnrelatedHistories, cmd, "allow-unrelated-histories");
 
+    if (_strategy != QString())
+        cmd.append("--strategy=" + _strategy);
+
     return cmd;
 }
 
@@ -80,6 +83,16 @@ const QString &CommandMerge::fromBranch() const
 void CommandMerge::setFromBranch(const QString &newFromBranch)
 {
     _fromBranch = newFromBranch;
+}
+
+const QString &CommandMerge::strategy() const
+{
+    return _strategy;
+}
+
+void CommandMerge::setStrategy(const QString &newStrategy)
+{
+    _strategy = newStrategy;
 }
 
 } // namespace Git

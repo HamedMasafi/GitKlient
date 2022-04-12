@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>422</width>
-    <height>385</height>
+    <width>436</width>
+    <height>362</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -24,7 +24,7 @@
       </widget>
      </item>
      <item row="0" column="1">
-      <widget class="QComboBox" name="comboBox_2"/>
+      <widget class="QComboBox" name="comboBoxBranchName"/>
      </item>
      <item row="2" column="0">
       <widget class="QLabel" name="label">
@@ -34,18 +34,13 @@
       </widget>
      </item>
      <item row="2" column="1">
-      <widget class="QComboBox" name="comboBox">
+      <widget class="QComboBox" name="comboBoxStrategy">
        <property name="whatsThis">
-        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-family:'Adelle','Roboto Slab','DejaVu Serif','Georgia','Times New Roman','sans-serif'; font-size:14px; color:#4e443c; background-color:#fcfcfa;&quot;&gt;The merge mechanism (&lt;/span&gt;&lt;span style=&quot; font-family:'Courier','monospace'; font-size:14px; color:#f14e32; background-color:#ffffff;&quot;&gt;git merge&lt;/span&gt;&lt;span style=&quot; font-family:'Adelle','Roboto Slab','DejaVu Serif','Georgia','Times New Roman','sans-serif'; font-size:14px; color:#4e443c; background-color:#fcfcfa;&quot;&gt; and &lt;/span&gt;&lt;span style=&quot; font-family:'Courier','monospace'; font-size:14px; color:#f14e32; background-color:#ffffff;&quot;&gt;git pull&lt;/span&gt;&lt;span style=&quot; font-family:'Adelle','Roboto Slab','DejaVu Serif','Georgia','Times New Roman','sans-serif'; font-size:14px; color:#4e443c; background-color:#fcfcfa;&quot;&gt; commands) allows the backend &lt;/span&gt;&lt;span style=&quot; font-family:'Courier','monospace'; font-size:14px; font-weight:600; color:#4e443c; background-color:#fcfcfa;&quot;&gt;merge strategies&lt;/span&gt;&lt;span style=&quot; font-family:'Adelle','Roboto Slab','DejaVu Serif','Georgia','Times New Roman','sans-serif'; font-size:14px; color:#4e443c; background-color:#fcfcfa;&quot;&gt; to be chosen with &lt;/span&gt;&lt;span style=&quot; font-family:'Courier','monospace'; font-size:14px; color:#f14e32; background-color:#ffffff;&quot;&gt;-s&lt;/span&gt;&lt;span style=&quot; font-family:'Adelle','Roboto Slab','DejaVu Serif','Georgia','Times New Roman','sans-serif'; font-size:14px; color:#4e443c; background-color:#fcfcfa;&quot;&gt; option. Some strategies can also take their own options, which can be passed by giving &lt;/span&gt;&lt;span style=&quot; font-family:'Courier','monospace'; font-size:14px; color:#f14e32; background-color:#ffffff;&quot;&gt;-X&amp;lt;option&amp;gt;&lt;/span&gt;&lt;span style=&quot; font-family:'Adelle','Roboto Slab','DejaVu Serif','Georgia','Times New Roman','sans-serif'; font-size:14px; color:#4e443c; background-color:#fcfcfa;&quot;&gt; arguments to &lt;/span&gt;&lt;span style=&quot; font-family:'Courier','monospace'; font-size:14px; color:#f14e32; background-color:#ffffff;&quot;&gt;git merge&lt;/span&gt;&lt;span style=&quot; font-family:'Adelle','Roboto Slab','DejaVu Serif','Georgia','Times New Roman','sans-serif'; font-size:14px; color:#4e443c; background-color:#fcfcfa;&quot;&gt; and/or &lt;/span&gt;&lt;span style=&quot; font-family:'Courier','monospace'; font-size:14px; color:#f14e32; background-color:#ffffff;&quot;&gt;git pull&lt;/span&gt;&lt;span style=&quot; font-family:'Adelle','Roboto Slab','DejaVu Serif','Georgia','Times New Roman','sans-serif'; font-size:14px; color:#4e443c; background-color:#fcfcfa;&quot;&gt;.&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;a href=&quot;https://git-scm.com/docs/merge-strategies&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#2980b9;&quot;&gt;More informations&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;The merge mechanism (git merge and git pull commands) allows the backend merge strategies to be chosen with -s option. Some strategies can also take their own options, which can be passed by giving -X&amp;lt;option&amp;gt; arguments to git merge and/or git pull.&lt;/p&gt;&lt;p&gt;&lt;a href=&quot;https://git-scm.com/docs/merge-strategies&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#2980b9;&quot;&gt;More informations&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
        </property>
        <item>
         <property name="text">
-         <string>Octopus</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Ours</string>
+         <string>(Default)</string>
         </property>
        </item>
        <item>
@@ -56,6 +51,16 @@
        <item>
         <property name="text">
          <string>Resolve</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Octopus</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Ours</string>
         </property>
        </item>
        <item>
@@ -73,7 +78,7 @@
       </widget>
      </item>
      <item row="1" column="1">
-      <widget class="QLabel" name="label_4">
+      <widget class="QLabel" name="labelToBranchName">
        <property name="text">
         <string>-</string>
        </property>
@@ -92,12 +97,15 @@
         <property name="text">
          <string>Default</string>
         </property>
+        <property name="checked">
+         <bool>true</bool>
+        </property>
        </widget>
       </item>
       <item>
-       <widget class="QRadioButton" name="radioButton_4">
+       <widget class="QRadioButton" name="radioButtonAllowFastForward">
         <property name="whatsThis">
-         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;https://git-scm.com/docs/git-merge#Documentation/git-merge.txt---ff&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#2980b9;&quot;&gt;More informations&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;when possible resolve the merge as a fast-forward (only update the branch pointer to match the merged branch; do not create a merge commit). When not possible (when the merged-in history is not a descendant of the current history), create a merge commit.&lt;/p&gt;&lt;p&gt;&lt;a href=&quot;https://git-scm.com/docs/git-merge#Documentation/git-merge.txt---ff&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#007af4;&quot;&gt;More informations&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
         </property>
         <property name="text">
          <string>Allow fast forward</string>
@@ -105,9 +113,9 @@
        </widget>
       </item>
       <item>
-       <widget class="QRadioButton" name="radioButton_2">
+       <widget class="QRadioButton" name="radioButtonFastForwardOnly">
         <property name="whatsThis">
-         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;https://git-scm.com/docs/git-merge#Documentation/git-merge.txt---ff-only&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#2980b9;&quot;&gt;More informations&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;resolve the merge as a fast-forward when possible. When not possible, refuse to merge and exit with a non-zero status.&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;&lt;a href=&quot;https://git-scm.com/docs/git-merge#Documentation/git-merge.txt---ff-only&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#007af4;&quot;&gt;More informations&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
         </property>
         <property name="text">
          <string>Fast forward only</string>
@@ -115,9 +123,9 @@
        </widget>
       </item>
       <item>
-       <widget class="QRadioButton" name="radioButton_3">
+       <widget class="QRadioButton" name="radioButtonNofastForward">
         <property name="whatsThis">
-         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;https://git-scm.com/docs/git-merge#Documentation/git-merge.txt---no-ff&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#2980b9;&quot;&gt;More informations&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;create a merge commit in all cases, even when the merge could instead be resolved as a fast-forward.&lt;/p&gt;&lt;p&gt;&lt;a href=&quot;https://git-scm.com/docs/git-merge#Documentation/git-merge.txt---no-ff&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#007af4;&quot;&gt;More informations&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
         </property>
         <property name="text">
          <string>No fast forward</string>
@@ -128,16 +136,28 @@
     </widget>
    </item>
    <item>
-    <widget class="QCheckBox" name="checkBoxNoFastForward_2">
+    <widget class="QCheckBox" name="checkBoxAllowUnrelatedHistories">
+     <property name="whatsThis">
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;By default, git merge command refuses to merge histories that do not share a common ancestor. This option can be used to override this safety when merging histories of two projects that started their lives independently. As that is a very rare occasion, no configuration variable to enable this by default exists and will not be added.&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;&lt;a href=&quot;https://git-scm.com/docs/git-merge#Documentation/git-merge.txt---allow-unrelated-histories&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#007af4;&quot;&gt;More information&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     </property>
      <property name="text">
       <string>Allow unrelated histories</string>
+     </property>
+     <property name="tristate">
+      <bool>true</bool>
      </property>
     </widget>
    </item>
    <item>
-    <widget class="QCheckBox" name="checkBoxNoFastForward_3">
+    <widget class="QCheckBox" name="checkBoxSquash">
+     <property name="whatsThis">
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Produce the working tree and index state as if a real merge happened (except for the merge information), but do not actually make a commit, move the HEAD, or record $GIT_DIR/MERGE_HEAD (to cause the next git commit command to create a merge commit). This allows you to create a single commit on top of the current branch whose effect is the same as merging another branch (or more in case of an octopus).&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;&lt;a href=&quot;https://git-scm.com/docs/git-merge#Documentation/git-merge.txt---squash&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#007af4;&quot;&gt;More information&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     </property>
      <property name="text">
       <string>Squash</string>
+     </property>
+     <property name="tristate">
+      <bool>true</bool>
      </property>
     </widget>
    </item>
@@ -164,14 +184,47 @@
   </layout>
  </widget>
  <tabstops>
-  <tabstop>comboBox_2</tabstop>
-  <tabstop>comboBox</tabstop>
+  <tabstop>comboBoxBranchName</tabstop>
+  <tabstop>comboBoxStrategy</tabstop>
   <tabstop>radioButton</tabstop>
-  <tabstop>radioButton_2</tabstop>
-  <tabstop>radioButton_3</tabstop>
-  <tabstop>checkBoxNoFastForward_2</tabstop>
-  <tabstop>checkBoxNoFastForward_3</tabstop>
+  <tabstop>radioButtonFastForwardOnly</tabstop>
+  <tabstop>radioButtonNofastForward</tabstop>
+  <tabstop>checkBoxAllowUnrelatedHistories</tabstop>
+  <tabstop>checkBoxSquash</tabstop>
  </tabstops>
  <resources/>
- <connections/>
+ <connections>
+  <connection>
+   <sender>buttonBox</sender>
+   <signal>rejected()</signal>
+   <receiver>MergeDialog</receiver>
+   <slot>reject()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>192</x>
+     <y>337</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>227</x>
+     <y>333</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>buttonBox</sender>
+   <signal>accepted()</signal>
+   <receiver>MergeDialog</receiver>
+   <slot>accept()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>51</x>
+     <y>348</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>25</x>
+     <y>319</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
 </ui>

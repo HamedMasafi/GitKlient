@@ -13,9 +13,9 @@ class QWidget;
 namespace Git {
 
 enum class OptionalBool {
+    False,
     Unset,
     True,
-    False
 };
 
 enum class FastForwardType {
@@ -24,6 +24,8 @@ enum class FastForwardType {
     No,
     OnlyFastForward
 };
+
+OptionalBool checkStateToOptionalBool(Qt::CheckState checkState);
 
 class Manager;
 class AbstractCommand : public QObject

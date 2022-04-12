@@ -63,5 +63,18 @@ void AbstractCommand::appendBool(bool b, QStringList &cmd, const QString &name) 
         cmd.append("--no-" + name);
 }
 
+OptionalBool checkStateToOptionalBool(Qt::CheckState checkState)
+{
+    switch (checkState) {
+    case Qt::Unchecked:
+        return OptionalBool::False;
+    case Qt::PartiallyChecked:
+        return OptionalBool::Unset;
+    case Qt::Checked:
+        return OptionalBool::True;
+    }
+    return OptionalBool::Unset;
+}
+
 
 } // namespace Git

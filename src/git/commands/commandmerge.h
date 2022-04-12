@@ -28,12 +28,16 @@ public:
     const QString &fromBranch() const;
     void setFromBranch(const QString &newFromBranch);
 
+    const QString &strategy() const;
+    void setStrategy(const QString &newStrategy);
+
 private:
     OptionalBool _commit{OptionalBool::Unset};
     OptionalBool _allowUnrelatedHistories{OptionalBool::Unset};
-    FastForwardType _ff;
+    FastForwardType _ff{FastForwardType::Unset};
     bool _squash{false};
     QString _fromBranch;
+    QString _strategy;
 };
 
 }

@@ -22,6 +22,9 @@ public:
     int rowCount(const QModelIndex &parent) const override;
     QVariant data(const QModelIndex &index, int role) const override;
     Remote *fromIndex(const QModelIndex &index);
+    Remote *findByName(const QString &name);
+
+    void rename(const QString &oldName, const QString &newName);
 
 protected:
     void fill() override;

@@ -49,6 +49,20 @@ Remote *RemotesCache::fromIndex(const QModelIndex &index)
     return _data.at(index.row());
 }
 
+Remote *RemotesCache::findByName(const QString &name)
+{
+    for(const auto &d: qAsConst(_data))
+        if (d->name == name)
+            return d;
+    return nullptr;
+}
+
+void RemotesCache::rename(const QString &oldName, const QString &newName)
+{
+    _git->runGit({"remote", "rename", oldName, newName});
+    load();
+}
+
 void RemotesCache::fill()
 {
     qDeleteAll(_data.begin(), _data.end());

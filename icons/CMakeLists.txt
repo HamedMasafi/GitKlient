@@ -39,6 +39,8 @@ set(GIT_KLIENT_ICONS
   sc-actions-git-tag.svg
   sc-actions-git-stash.svg
   sc-actions-git-submodules.svg
+
+  sc-actions-gitklient-changedfiles.svg
 )
 
 ecm_install_icons(ICONS ${GIT_KLIENT_ICONS} DESTINATION ${KDE_INSTALL_ICONDIR} THEME hicolor)

@@ -82,6 +82,7 @@ private:
     QAction *recentAction;
     MultiPageWidget *_mainWidget;
     QList<WidgetBase*> _baseWidgets;
+    QLabel *_statusCurrentBranchLabel;
 
     void initActions();
     void initRecentFiles(const QString &newItem = QString());

@@ -17,11 +17,15 @@ SelectBranchesToDiffDialog::SelectBranchesToDiffDialog(Git::Manager *git, QWidge
 
 QString SelectBranchesToDiffDialog::oldBranch() const
 {
+    if (radioButtonLeftIsHead->isChecked())
+        return "HEAD";
     return comboBoxOldBranch->currentText();
 }
 
 QString SelectBranchesToDiffDialog::newBranch() const
 {
+    if (radioButtonRightIsHead->isChecked())
+        return "HEAD";
     return comboBoxNewBranch->currentText();
 }
 

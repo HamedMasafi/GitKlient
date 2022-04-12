@@ -8,9 +8,11 @@
 #include <QMenu>
 
 #include "dialogs/filestreedialog.h"
+#include "dialogs/mergedialog.h"
 #include "dialogs/runnerdialog.h"
 #include "diffwindow.h"
 #include "git/gitmanager.h"
+#include "git/commands/commandmerge.h"
 
 const QString &BranchActions::branchName() const
 {
@@ -99,5 +101,11 @@ void BranchActions::remove()
 
 void BranchActions::merge()
 {
-
+    MergeDialog d{_git, _branchName, _parent};
+    if (d.exec() == QDialog::Accepted) {
+        auto cmd = d.command();
+        RunnerDialog runner(_parent);
+        runner.run(cmd);
+        runner.exec();
+    }
 }

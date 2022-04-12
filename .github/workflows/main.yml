@@ -15,7 +15,6 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        qt_version: [5.15.2]
         platform: [ubuntu-20.04]
 
     runs-on: ${{ matrix.platform }}
@@ -41,24 +40,34 @@ jobs:
       - name: Build with CMake
         run: |
           mkdir build-cmake
-          cd build-cmake
           cmake .. ${{ matrix.additional_arguments }}  ${{ matrix.cmake_params }}
           cmake --build .
+          
+      - name: Build deb package
+        if: startsWith(github.ref, 'refs/tags/')
+        run: |
+          sudo cpack -G DEB
 
-  deploy:
-    if: startsWith(github.ref, 'refs/tags/')
-    needs: build
-    runs-on: ubuntu-20.04
-    steps:
-      - uses: actions/checkout@v1
+      - name: Create Release
+        id: create_release
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          submodules: recursive
-          path: source
-      - uses: actions/setup-python@v1
-      - uses: Skycoder42/action-deploy-qt@master
+          tag_name: ${{ github.ref }}
+          release_name: Release ${{ github.ref }}
+          draft: false
+          prerelease: false
+          
+      - name: Upload Release Asset
+        id: upload-release-asset 
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          token: ${{secrets.GITHUB_TOKEN}}
-          version: 5.15.2
-          host: ${{secrets.SSHFS_HOST}}
-          key: ${{secrets.SSHFS_KEY}}
-          port: ${{secrets.SSHFS_PORT}} 
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./my-artifact.zip
+          asset_name: my-artifact.zip
+          asset_content_type: application/vnd.debian.binary-package

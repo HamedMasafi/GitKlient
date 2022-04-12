@@ -6,38 +6,77 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>246</width>
-    <height>141</height>
+    <width>541</width>
+    <height>182</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Select branches</string>
   </property>
   <property name="windowIcon">
-   <iconset theme="gitklient"/>
+   <iconset theme="gitklient">
+    <normaloff>.</normaloff>.</iconset>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
-    <layout class="QFormLayout" name="formLayout">
-     <item row="0" column="0">
-      <widget class="QLabel" name="label">
-       <property name="text">
-        <string>Old branch:</string>
+    <layout class="QHBoxLayout" name="horizontalLayout">
+     <item>
+      <widget class="QGroupBox" name="groupBox">
+       <property name="title">
+        <string>Left</string>
        </property>
+       <layout class="QFormLayout" name="formLayout_2">
+        <item row="0" column="0">
+         <widget class="QRadioButton" name="radioButtonSelectLeftBranch">
+          <property name="text">
+           <string>Select branch</string>
+          </property>
+          <property name="checked">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="1">
+         <widget class="QComboBox" name="comboBoxOldBranch"/>
+        </item>
+        <item row="1" column="0">
+         <widget class="QRadioButton" name="radioButtonLeftIsHead">
+          <property name="text">
+           <string>HEAD</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
       </widget>
      </item>
-     <item row="0" column="1">
-      <widget class="QComboBox" name="comboBoxOldBranch"/>
-     </item>
-     <item row="1" column="0">
-      <widget class="QLabel" name="label_2">
-       <property name="text">
-        <string>New branch:</string>
+     <item>
+      <widget class="QGroupBox" name="groupBox_2">
+       <property name="title">
+        <string>Right</string>
        </property>
+       <layout class="QFormLayout" name="formLayout">
+        <item row="0" column="0">
+         <widget class="QRadioButton" name="radioButtonSelectRightBranch">
+          <property name="text">
+           <string>Select branch</string>
+          </property>
+          <property name="checked">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="1">
+         <widget class="QComboBox" name="comboBoxNewBranch"/>
+        </item>
+        <item row="1" column="0">
+         <widget class="QRadioButton" name="radioButtonRightIsHead">
+          <property name="text">
+           <string>HEAD</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
       </widget>
-     </item>
-     <item row="1" column="1">
-      <widget class="QComboBox" name="comboBoxNewBranch"/>
      </item>
     </layout>
    </item>
@@ -75,12 +114,44 @@
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>236</x>
-     <y>131</y>
+     <x>245</x>
+     <y>172</y>
     </hint>
     <hint type="destinationlabel">
      <x>286</x>
-     <y>274</y>
+     <y>181</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>radioButtonSelectLeftBranch</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>comboBoxOldBranch</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>70</x>
+     <y>57</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>171</x>
+     <y>57</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>radioButtonSelectRightBranch</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>comboBoxNewBranch</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>359</x>
+     <y>55</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>441</x>
+     <y>56</y>
     </hint>
    </hints>
   </connection>
