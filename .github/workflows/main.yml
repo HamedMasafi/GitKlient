@@ -40,11 +40,12 @@ jobs:
       - name: Build with CMake
         run: |
           mkdir build-cmake
+          cd build-cmake
           cmake .. ${{ matrix.additional_arguments }}  ${{ matrix.cmake_params }}
           cmake --build .
           
       - name: Build deb package
-        if: startsWith(github.ref, 'refs/tags/')
+        #if: startsWith(github.ref, 'refs/tags/')
         run: |
           sudo cpack -G DEB
 
