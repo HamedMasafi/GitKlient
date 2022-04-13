@@ -34,7 +34,13 @@ find_package(
         Gui
         Widgets
         Concurrent
-        Test
+)
+
+find_package(Qt5Test ${QT_MIN_VERSION} CONFIG QUIET)
+set_package_properties(
+    Qt5Test PROPERTIES
+    PURPOSE "Required for tests"
+    TYPE OPTIONAL
 )
 
 set(REQUIRED_KF5_VERSION "5.37.0")

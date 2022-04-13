@@ -65,7 +65,7 @@ DiffWindow::DiffWindow(const Git::File &oldFile, const Git::File &newFile)
     _diffWidget->compare();
 }
 
-DiffWindow::DiffWindow(const QString &oldBranch, const QString &newBranch)
+DiffWindow::DiffWindow(Git::Manager *git, const QString &oldBranch, const QString &newBranch)
     : MainWindow(), _oldBranch(oldBranch), _newBranch(newBranch)
 {
     init(true);
@@ -77,6 +77,17 @@ DiffWindow::DiffWindow(const QString &oldBranch, const QString &newBranch)
         _filesModel->append(f.name());
     }
     _storage = Git;
+}
+
+DiffWindow::DiffWindow(const QString &oldDir, const QString &newDir)
+{
+    init(true);
+
+    _oldDir = oldDir;
+    _newDir = newDir;
+    compareDirs();
+
+    _storage = FileSystem;
 }
 
 void DiffWindow::fileOpen()

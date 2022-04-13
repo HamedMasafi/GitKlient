@@ -46,7 +46,8 @@ class DiffWindow : public MainWindow
 public:
     explicit DiffWindow();
     DiffWindow(const Git::File &oldFile, const Git::File &newFile);
-    DiffWindow(const QString &oldBranch, const QString &newBranch);
+    DiffWindow(Git::Manager *git, const QString &oldBranch, const QString &newBranch);
+    DiffWindow(const QString &oldDir, const QString &newDir);
 
 private slots:
     void fileOpen();

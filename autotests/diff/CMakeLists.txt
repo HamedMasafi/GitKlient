@@ -4,6 +4,7 @@ ecm_add_test(
     difftest.cpp
     ../../src/diff/diff.cpp
     ../common/gittestmanager.cpp
-    LINK_LIBRARIES Qt::Test Qt::Core
+    LINK_LIBRARIES KF5::CoreAddons Qt::Test Qt::Core KF5::I18n
     TEST_NAME DiffTest
-    NAME_PREFIX app-)
+    NAME_PREFIX app-
+)

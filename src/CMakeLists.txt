@@ -97,6 +97,10 @@ include(git/CMakeLists.txt)
 add_executable(gitklient ${gitklient_SRCS} ${GIT_SOURCE})
 
 target_link_libraries(gitklient
+    Qt5::Core
+    Qt5::Widgets
+    Qt5::Concurrent
+
     KF5::CoreAddons
     KF5::I18n
     KF5::XmlGui
@@ -108,10 +112,6 @@ target_link_libraries(gitklient
     KF5::KIOWidgets
     KF5::KIONTLM
     KF5::Parts
-
-    Qt5::Core
-    Qt5::Widgets
-    Qt5::Concurrent
     KF5::TextWidgets
     KF5::TextEditor
 

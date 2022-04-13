@@ -2,7 +2,7 @@
 #define STATUSCACHE_H
 
 #include <QMap>
-#include <filestatus.h>
+#include "../../src/git/filestatus.h"
 
 class QUrl;
 class QFileInfo ;

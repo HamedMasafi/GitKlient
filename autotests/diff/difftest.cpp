@@ -1,7 +1,7 @@
 #include "../../src/diff/diff.h"
 #include <QtTest/QTest>
 #include <QDebug>
-
+#include <QTextStream>
 
 class DiffTest : public QObject
 {
@@ -30,13 +30,13 @@ void print(Diff::Segment *segment)
         typeString = "Modified";
         break;
     }
-    qDebug().noquote() << "==================";
-    qDebug().noquote() << "Segment" << typeString;
-    qDebug() << "Old:";
-    qDebug().noquote() << segment->oldText;
-    qDebug() << "New:";
-    qDebug().noquote() << segment->newText;
-    qDebug() << Qt::flush;
+//    qDebug().noquote() << "==================";
+//    qDebug().noquote() << "Segment" << typeString;
+//    qDebug() << "Old:";
+//    qDebug().noquote() << segment->oldText;
+//    qDebug() << "New:";
+//    qDebug().noquote() << segment->newText;
+//    qDebug() << Qt::flush;
 }
 
 void DiffTest::diff()

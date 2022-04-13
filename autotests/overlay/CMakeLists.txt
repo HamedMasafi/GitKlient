@@ -5,8 +5,8 @@ include(../../src/git/CMakeLists.txt)
 add_definitions(-DGK_TEST)
 
 ecm_add_test(
-    overlaytest.cpp
     ${GIT_SOURCE}
+    overlaytest.cpp
     ../common/gittestmanager.cpp
     ../../dolphinplugins/statuscache.cpp
     LINK_LIBRARIES Qt::Test Qt::Core Qt::Gui KF5::KIOWidgets

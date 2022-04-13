@@ -195,14 +195,24 @@ ArgParserReturn CommandArgsParser::diff(const QString &file)
 
 ArgParserReturn CommandArgsParser::diff(const QString &file1, const QString &file2)
 {
+    qDebug() << file1 << file2;
     QFileInfo fi1(file1);
     QFileInfo fi2(file2);
 
     if (fi1.isFile() && fi2.isFile()) {
+        qDebug() << fi1.absoluteFilePath() << fi2.absoluteFilePath();
+        Git::File fileLeft(fi1.absoluteFilePath());
+        Git::File fileRight(fi2.absoluteFilePath());
+        auto d = new DiffWindow(fileLeft, fileRight);
+        d->showModal();
+        return ExecApp;
+    }
+    if (fi1.isDir() && fi2.isDir()) {
         auto d = new DiffWindow(fi1.absoluteFilePath(), fi2.absoluteFilePath());
         d->showModal();
         return ExecApp;
     }
+
     return 0;
 }
 
