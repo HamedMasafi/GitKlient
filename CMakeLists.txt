@@ -1,6 +1,9 @@
 cmake_minimum_required(VERSION 2.8.12)
 
 project(gitklient)
+set(PROJECT_VERSION_MAJOR 0)
+set(PROJECT_VERSION_MINOR 1)
+set(PROJECT_VERSION_PATCH 0)
 
 find_package(ECM 1.0.0 REQUIRED NO_MODULE)
 set(
@@ -63,11 +66,15 @@ endif()
 add_subdirectory(icons)
 add_subdirectory(src)
 #add_subdirectory(autotests)
-
 if (UNIX)
     add_subdirectory(dolphinplugins)
 endif (UNIX)
 
+
+if (GITKLIENT_BUILD_DIR)
+    file(WRITE ${GITKLIENT_BUILD_DIR}/version "${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}.${PROJECT_VERSION_PATCH}")
+    message("-- Version in file ${GITKLIENT_BUILD_DIR}/version saved")
+endif()
 
 #CPack
 set(CPACK_PACKAGE_NAME ${PROJECT_NAME}
@@ -77,9 +84,7 @@ set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "KDE git gui client"
     CACHE STRING "Package description for the package metadata"
 )
 set(CPACK_PACKAGE_VENDOR "KDE")
-
 set(CPACK_VERBATIM_VARIABLES YES)
-
 set(CPACK_PACKAGE_INSTALL_DIRECTORY ${CPACK_PACKAGE_NAME})
 #SET(CPACK_OUTPUT_FILE_PREFIX "${CMAKE_SOURCE_DIR}/_packages")
 
@@ -99,7 +104,11 @@ set(CPACK_DEBIAN_PACKAGE_MAINTAINER "Hamed Masafi")
 # package name for deb
 # if set, then instead of some-application-0.9.2-Linux.deb
 # you'll get some-application_0.9.2_amd64.deb (note the underscores too)
-set(CPACK_DEBIAN_FILE_NAME DEB-DEFAULT)
+if (GITKLIENT_BUILD_DIR)
+    set(CPACK_DEBIAN_FILE_NAME "gitklient.deb")
+else()
+    set(CPACK_DEBIAN_FILE_NAME DEB-DEFAULT)
+endif()
 # if you want every group to have its own package,
 # although the same happens if this is not sent (so it defaults to ONE_PER_GROUP)
 # and CPACK_DEB_COMPONENT_INSTALL is set to YES
