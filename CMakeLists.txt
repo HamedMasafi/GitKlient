@@ -105,7 +105,7 @@ set(CPACK_DEBIAN_PACKAGE_MAINTAINER "Hamed Masafi")
 # if set, then instead of some-application-0.9.2-Linux.deb
 # you'll get some-application_0.9.2_amd64.deb (note the underscores too)
 if (GITKLIENT_BUILD_DIR)
-    set(CPACK_DEBIAN_FILE_NAME "gitklient.deb")
+    set(CPACK_PACKAGE_FILE_NAME "gitklient.deb")
 else()
     set(CPACK_DEBIAN_FILE_NAME DEB-DEFAULT)
 endif()
@@ -115,5 +115,6 @@ endif()
 set(CPACK_COMPONENTS_GROUPING ALL_COMPONENTS_IN_ONE)#ONE_PER_GROUP)
 # without this you won't be able to pack only specified component
 set(CPACK_DEB_COMPONENT_INSTALL YES)
+set(CPACK_DEBIAN_PACKAGE_SHLIBDEPS ON)
 
 include(CPack)

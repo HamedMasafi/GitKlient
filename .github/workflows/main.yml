@@ -33,7 +33,7 @@ jobs:
 
       - name: Install required packages
         run: |
-          sudo apt install libkf5config-dev libkf5configwidgets5 libkf5configwidgets-dev libkf5coreaddons-dev libkf5crash-dev libkf5dbusaddons-dev libkf5doctools-dev kdoctools-dev libkf5i18n-dev libkf5xmlgui-dev libkf5kio-dev libkf5kiocore5 libkf5kiogui5 libkf5kiowidgets5 libkf5textwidgets-dev libkf5texteditor-dev cmake make extra-cmake-modules gettext libkf5syntaxhighlighting-dev libkf5syntaxhighlighting-data libkf5syntaxhighlighting-tools 
+          sudo apt install libkf5config-dev libkf5configwidgets5 libkf5configwidgets-dev libkf5coreaddons-dev libkf5crash-dev libkf5dbusaddons-dev libkf5doctools-dev kdoctools-dev libkf5i18n-dev libkf5xmlgui-dev libkf5kio-dev libkf5kiocore5 libkf5kiogui5 libkf5kiowidgets5 libkf5textwidgets-dev libkf5texteditor-dev cmake make extra-cmake-modules gettext libkf5syntaxhighlighting-dev libkf5syntaxhighlighting-data libkf5syntaxhighlighting-tools rpm
           
       - name: Build with CMake
         run: |
@@ -48,7 +48,13 @@ jobs:
         #if: startsWith(github.ref, 'refs/tags/')
         run: |
           cd build-cmake
-          sudo cpack -G DEB -P gitklient.deb
+          sudo cpack -G DEB
+          
+      - name: Build rpm package
+        #if: startsWith(github.ref, 'refs/tags/')
+        run: |
+          cd build-cmake
+          sudo cpack -G RPM
 
       - name: Create Release
         id: create_release
@@ -62,7 +68,7 @@ jobs:
           draft: false
           prerelease: false
           
-      - name: Upload Release Asset
+      - name: Upload debian package
         id: upload-release-asset 
         #if: startsWith(github.ref, 'refs/tags/')
         uses: actions/upload-release-asset@v1
@@ -73,3 +79,15 @@ jobs:
           asset_path: ./build-cmake/gitklient.deb
           asset_name: gitklient_${{env.version}}_amd64.deb
           asset_content_type: application/vnd.debian.binary-package
+
+      - name: Upload rpm package
+        id: upload-release-asset 
+        #if: startsWith(github.ref, 'refs/tags/')
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./build-cmake/gitklient.rpm
+          asset_name: gitklient-${{env.version}}-Linux.rpm
+          asset_content_type: application/x-rpm
