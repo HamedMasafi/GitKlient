@@ -41,8 +41,8 @@ jobs:
         run: |
           mkdir build-cmake
           cd build-cmake
-          cmake .. ${{ matrix.additional_arguments }}  ${{ matrix.cmake_params }}
-          cmake --build .
+          cmake .. ${{ matrix.additional_arguments }}  ${{ matrix.cmake_params }} -DGITKLIENT_BUILD_DIR=build-cmake
+          make -j 4
           VAR=`cat version`
           echo "vecrion=${VAR}" >> $GITHUB_ENV
           
