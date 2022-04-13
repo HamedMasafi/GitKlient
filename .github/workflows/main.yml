@@ -44,7 +44,7 @@ jobs:
           cmake .. ${{ matrix.additional_arguments }}  ${{ matrix.cmake_params }} -DGITKLIENT_BUILD_DIR=build-cmake
           make -j 4
           VAR=`cat version`
-          echo "vecrion=${VAR}" >> $GITHUB_ENV
+          echo "version=${VAR}" >> $GITHUB_ENV
           
       - name: Build deb package
         #if: startsWith(github.ref, 'refs/tags/')
