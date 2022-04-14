@@ -63,6 +63,7 @@ public slots:
     ArgParserReturn diff(const QString &file1, const QString &file2);
     ArgParserReturn blame(const QString &file);
     ArgParserReturn history(const QString &file);
+    ArgParserReturn merge();
     ArgParserReturn merge(const QString &base,
               const QString &local,
               const QString &remote,

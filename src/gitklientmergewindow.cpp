@@ -78,11 +78,13 @@ void GitKlientMergeWindow::load()
     m_ui.plainTextEditMine->clear();
     m_ui.plainTextEditTheir->clear();
     m_ui.plainTextEditResult->clear();
+    m_ui.plainTextEditBase->clear();
 
     auto baseList = readFile(_filePathBase);
     auto localList = readFile(_filePathLocal);
     auto remoteList = readFile(_filePathRemote);
 
+    m_ui.plainTextEditBase->setHighlighting(_filePathBase);
     m_ui.plainTextEditMine->setHighlighting(_filePathLocal);
     m_ui.plainTextEditTheir->setHighlighting(_filePathRemote);
     m_ui.plainTextEditResult->setHighlighting(_filePathResult);
@@ -105,6 +107,7 @@ void GitKlientMergeWindow::load()
         case Diff::SegmentType::SameOnBoth: {
             m_ui.plainTextEditMine->append(d->base, CodeEditor::Unchanged, d);
             m_ui.plainTextEditTheir->append(d->base, CodeEditor::Unchanged, d);
+            m_ui.plainTextEditBase->append(d->base, CodeEditor::Unchanged, d);
             d->mergeType = Diff::KeepLocal;
             break;
         }
@@ -112,11 +115,13 @@ void GitKlientMergeWindow::load()
         case Diff::SegmentType::OnlyOnRight:
             m_ui.plainTextEditMine->append(d->local, CodeEditor::Removed, d);
             m_ui.plainTextEditTheir->append(d->remote, CodeEditor::Added, d);
+            m_ui.plainTextEditBase->append(d->base, CodeEditor::Unchanged, d);
             d->mergeType = Diff::KeepRemote;
             break;
         case Diff::SegmentType::OnlyOnLeft:
             m_ui.plainTextEditMine->append(d->local, CodeEditor::Added, d);
             m_ui.plainTextEditTheir->append(d->remote, CodeEditor::Removed, d);
+            m_ui.plainTextEditBase->append(d->base, CodeEditor::Unchanged, d);
             d->mergeType = Diff::KeepLocal;
             break;
 
@@ -133,6 +138,7 @@ void GitKlientMergeWindow::load()
                 m_ui.plainTextEditMine->append(d->local, CodeEditor::Edited, d);
                 m_ui.plainTextEditTheir->append(d->remote, CodeEditor::Edited, d);
             }
+            m_ui.plainTextEditBase->append(d->base, CodeEditor::Unchanged, d);
             d->mergeType = Diff::None;
             break;
         }

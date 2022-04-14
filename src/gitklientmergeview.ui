@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>428</width>
+    <width>654</width>
     <height>393</height>
    </rect>
   </property>
@@ -26,11 +26,19 @@
        </property>
        <item>
         <widget class="CodeEditor" name="plainTextEditMine">
-         <property name="font">
-          <font>
-           <family>Source Code Pro</family>
-          </font>
+         <property name="contextMenuPolicy">
+          <enum>Qt::CustomContextMenu</enum>
          </property>
+         <property name="lineWrapMode">
+          <enum>QPlainTextEdit::NoWrap</enum>
+         </property>
+         <property name="readOnly">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="CodeEditor" name="plainTextEditBase">
          <property name="contextMenuPolicy">
           <enum>Qt::CustomContextMenu</enum>
          </property>

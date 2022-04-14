@@ -91,6 +91,7 @@ ArgParserReturn CommandArgsParser::run(const QStringList &args)
         return main();
     auto name = args.at(1);
     auto c = metaObject()->methodCount();
+    qDebug() << "Running" << args;
     for(int i = 0; i < c; i++) {
         auto method = metaObject()->method(i);
 
@@ -235,6 +236,13 @@ ArgParserReturn CommandArgsParser::history(const QString &file)
     return 0;
 }
 
+ArgParserReturn CommandArgsParser::merge()
+{
+    auto d = new GitKlientMergeWindow;
+    d->showModal();
+    return ExecApp;
+}
+
 ArgParserReturn CommandArgsParser::merge(const QString &base, const QString &local, const QString &remote, const QString &result)
 {
     auto d = new GitKlientMergeWindow;
@@ -242,7 +250,8 @@ ArgParserReturn CommandArgsParser::merge(const QString &base, const QString &loc
     d->setFilePathBase(base);
     d->setFilePathRemote(remote);
     d->setFilePathResult(result);
-    d->show();
+    d->load();
+    d->showModal();
     return ExecApp;
 }
 
