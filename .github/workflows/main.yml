@@ -52,4 +52,5 @@ jobs:
  
       - name: Create Release
         run: |
-          hub release create -a build-cmake/gitklient.deb#gitklient_${{env.version}}_amd64.deb -a build-cmake/gitklient.rpm#gitklient-${{env.version}}-Linux.rpm -m v${{ env.version }} v${{ env.version }}
+          cd build-cmake
+          hub release create -a gitklient.deb#gitklient_${{env.version}}_amd64.deb -a gitklient.rpm#gitklient-${{env.version}}-Linux.rpm -m v${{ env.version }} v${{ env.version }}
