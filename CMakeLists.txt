@@ -111,7 +111,7 @@ set(CPACK_DEBIAN_PACKAGE_MAINTAINER "Hamed Masafi")
 # if set, then instead of some-application-0.9.2-Linux.deb
 # you'll get some-application_0.9.2_amd64.deb (note the underscores too)
 if (GITKLIENT_BUILD_DIR)
-    set(CPACK_PACKAGE_FILE_NAME "gitklient.deb")
+    set(CPACK_PACKAGE_FILE_NAME "gitklient")
 else()
     set(CPACK_DEBIAN_FILE_NAME DEB-DEFAULT)
 endif()
