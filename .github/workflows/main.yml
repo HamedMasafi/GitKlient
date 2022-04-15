@@ -51,6 +51,9 @@ jobs:
           sudo cpack -G RPM
  
       - name: Create Release
+        env:
+          GITHUB_USER: ${{ secrets.GITHUB_USER }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           cd build-cmake
           hub release create -a gitklient.deb#gitklient_${{env.version}}_amd64.deb -a gitklient.rpm#gitklient-${{env.version}}-Linux.rpm -m v${{ env.version }} v${{ env.version }}
