@@ -3,7 +3,7 @@ name: CI Build
 on:
   push:
     branches:
-      - master
+      - '*'
   pull_request:
     paths-ignore:
       - "**.md"
@@ -45,17 +45,16 @@ jobs:
           echo "version=${VAR}" >> $GITHUB_ENV
           
       - name: Build deb package
-        #if: startsWith(github.ref, 'refs/tags/')
         run: |
           cd build-cmake
           sudo cpack -G DEB
           
       - name: Build rpm package
-        #if: startsWith(github.ref, 'refs/tags/')
         run: |
           cd build-cmake
           sudo cpack -G RPM
-
+  
       - name: Create Release
+        if: '$CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "master"'
         run: |
           hub release create -a ./build-cmake/gitklient.deb#gitklient_${{env.version}}_amd64.deb -a ./build-cmake/gitklient.rpm#gitklient-${{env.version}}-Linux.rpm -m v${{ env.version }} v${{ env.version }}

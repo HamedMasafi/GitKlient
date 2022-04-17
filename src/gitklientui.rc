@@ -35,6 +35,7 @@
     <Action name="repo_search"/>
     <Separator/>
     <Action name="repo_status"/>
+    <Action name="repo_diff_tree"/>
     <Action name="repo_settings"/>
   </Menu>
 </MenuBar>

@@ -38,7 +38,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "git/gitmanager.h"
 #include "git/models/logscache.h"
 #include "gitklientdebug.h"
-#include "gitklientview.h"
 #include "multipagewidget.h"
 #include "widgets/branchesstatuswidget.h"
 #include "widgets/commitswidget.h"
@@ -47,6 +46,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "widgets/stasheswidget.h"
 #include "widgets/submoduleswidget.h"
 #include "widgets/tagswidget.h"
+#include "settingsmanager.h"
 
 // KF headers
 #include <KActionCollection>
@@ -200,8 +200,11 @@ void GitKlientWindow::initActions()
     auto repoSwitchAction = actionCollection->addAction("repo_switch", this, &GitKlientWindow::repoSwitch);
     repoSwitchAction->setText(i18n("Switch/Checkout..."));
 
+    auto repoDiffTreeAction = actionCollection->addAction("repo_diff_tree", this, &GitKlientWindow::repoDiffTree);
+    repoDiffTreeAction->setText(i18n("Diff tree"));
+
     KStandardAction::quit(this, &QMainWindow::close, actionCollection);
-    KStandardAction::preferences(this, &GitKlientWindow::settingsConfigure, actionCollection);
+    KStandardAction::preferences(SettingsManager::instance(), &SettingsManager::show, actionCollection);
     KStandardAction::openNew(this, &GitKlientWindow::clone, actionCollection);
 }
 void GitKlientWindow::initRecentFiles(const QString &newItem)
@@ -324,6 +327,12 @@ void GitKlientWindow::repoSwitch()
 {
     SwitchBranchDialog d(_git, this);
     d.exec();
+}
+
+void GitKlientWindow::repoDiffTree()
+{
+    auto w = new DiffWindow(_git);
+    w->showModal();
 }
 
 template<class T>

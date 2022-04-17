@@ -5,6 +5,7 @@ set(PROJECT_VERSION_MAJOR 0)
 set(PROJECT_VERSION_MINOR 1)
 set(PROJECT_VERSION_PATCH 0)
 
+add_definitions(-DGK_VERSION="${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}.${PROJECT_VERSION_PATCH}")
 find_package(ECM 1.0.0 REQUIRED NO_MODULE)
 set(
     CMAKE_MODULE_PATH
@@ -71,7 +72,7 @@ endif()
 
 add_subdirectory(icons)
 add_subdirectory(src)
-#add_subdirectory(autotests)
+add_subdirectory(autotests)
 if (UNIX)
     add_subdirectory(dolphinplugins)
 endif (UNIX)

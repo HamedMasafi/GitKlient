@@ -21,6 +21,7 @@
             <label>color of the foreground</label>
             <default>yellow</default>
         </entry>
+
         <entry name="gitBinPath" type="String">
             <label>age of the project</label>
         </entry>
@@ -30,5 +31,7 @@
             <label>Open last repo at startup</label>
             <default>false</default>
         </entry>
+
+
     </group>
 </kcfg>

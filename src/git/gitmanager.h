@@ -120,6 +120,7 @@ public:
     QStringList fileLog(const QString &fileName) const;
 
     QString diff(const QString &from, const QString &to);
+    QList<FileStatus> diffBranch(const QString &from);
     QList<FileStatus> diffBranches(const QString &from, const QString &to);
 
     enum ConfigType {

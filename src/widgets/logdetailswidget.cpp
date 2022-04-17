@@ -39,13 +39,13 @@ void LogDetailsWidget::createText()
         switch (i.value()) {
 
         case Git::Manager::Modified:
-            color = "blue";
+            color = GitKlientSettings::diffModifiedColor().name();
             break;
         case Git::Manager::Added:
-            color = "green";
+            color = GitKlientSettings::diffAddedColor().name();
             break;
         case Git::Manager::Removed:
-            color = "red";
+            color = GitKlientSettings::diffRemovedColor().name();
             break;
 
         case Git::Manager::Unknown:

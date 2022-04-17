@@ -55,6 +55,23 @@ DiffWindow::DiffWindow() : MainWindow()
     init(true);
 }
 
+DiffWindow::DiffWindow(Git::Manager *git) : MainWindow()
+{
+    init(true);
+
+    _oldBranch = git->currentBranch();
+    auto diffs = git->diffBranch(_oldBranch);
+
+    for (auto &f: diffs) {
+        _diffModel->addFile(f);
+        _filesModel->append(f.name());
+    }
+    _leftStorage = Git;
+    _rightStorage =  FileSystem;
+    _rightDir = git->path();
+    qDebug() << "right dir" << _rightDir;
+}
+
 DiffWindow::DiffWindow(const Git::File &oldFile, const Git::File &newFile)
     : MainWindow(), _oldFile(oldFile), _newFile(newFile)
 {
@@ -70,24 +87,24 @@ DiffWindow::DiffWindow(Git::Manager *git, const QString &oldBranch, const QStrin
 {
     init(true);
 
-    auto diffs = Git::Manager::instance()->diffBranches(oldBranch, newBranch);
+    auto diffs = git->diffBranches(oldBranch, newBranch);
 
     for (auto &f: diffs) {
         _diffModel->addFile(f);
         _filesModel->append(f.name());
     }
-    _storage = Git;
+    _leftStorage = _rightStorage = Git;
 }
 
 DiffWindow::DiffWindow(const QString &oldDir, const QString &newDir)
 {
     init(true);
 
-    _oldDir = oldDir;
-    _newDir = newDir;
+    _leftDir = oldDir;
+    _rightDir = newDir;
     compareDirs();
 
-    _storage = FileSystem;
+    _leftStorage = _rightStorage = FileSystem;
 }
 
 void DiffWindow::fileOpen()
@@ -96,10 +113,10 @@ void DiffWindow::fileOpen()
     if (d.exec() != QDialog::Accepted)
         return;
 
-    _storage = FileSystem;
+    _leftStorage = _rightStorage = FileSystem;
     if (d.mode() == DiffOpenDialog::Dirs) {
-        _oldDir = d.oldDir();
-        _newDir = d.newDir();
+        _leftDir = d.oldDir();
+        _rightDir = d.newDir();
         compareDirs();
     } else {
         _diffWidget->setOldFile({d.oldFile()});
@@ -110,12 +127,25 @@ void DiffWindow::fileOpen()
 
 void DiffWindow::on_treeView_fileSelected(const QString &file)
 {
-    if (_storage == FileSystem) {
-        _diffWidget->setOldFile({_oldDir + "/" + file});
-        _diffWidget->setNewFile({_newDir + "/" + file});
-    } else if (_storage == Git) {
+    switch (_leftStorage) {
+    case FileSystem:
+        _diffWidget->setOldFile({_leftDir + "/" + file});
+        break;
+    case Git:
         _diffWidget->setOldFile({_oldBranch, file});
+        break;
+    case NoStorage:
+        return;
+    }
+    switch (_rightStorage) {
+    case FileSystem:
+        _diffWidget->setNewFile({_rightDir + "/" + file});
+        break;
+    case Git:
         _diffWidget->setNewFile({_newBranch, file});
+        break;
+    case NoStorage:
+        return;
     }
     _diffWidget->compare();
 }
@@ -133,7 +163,7 @@ QString diffTypeText(const Diff::DiffType type)
 
 void DiffWindow::compareDirs()
 {
-    auto map = Diff::diffDirs(_oldDir, _newDir);
+    auto map = Diff::diffDirs(_leftDir, _rightDir);
     for (auto i = map.begin(); i != map.end(); ++i) {
         _diffModel->addFile(i.key(), i.value());
     }

@@ -75,6 +75,7 @@ private Q_SLOTS:
     void search();
     void repoSettings();
     void repoSwitch();
+    void repoDiffTree();
 
 private:
     Ui::settingsBase settingsBase;

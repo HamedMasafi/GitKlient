@@ -11,6 +11,7 @@ namespace Diff
 
 namespace Impl {
 
+typedef QPair<int, int> Pair2;
 struct Pair3 {
     int first;
     int second;
@@ -26,7 +27,7 @@ struct Pair3 {
         return first == other.first && second == other.second && third == other.third;
     }
 };
-typedef QList<QPair<int, int>> Solution;
+typedef QList<Pair2> Solution;
 typedef QList<Pair3> Solution3;
 
 QSet<Solution> findLCS(QStringList first, QStringList second, int m, int n)
@@ -154,15 +155,18 @@ Solution3 longestCommonSubsequence(const QStringList &source,
 ////        } else if (l[i][j][k - 1] > l[i][j - 1][k] && l[i][j][k - 1] > l[i - 1][j][k]) {
 ////            k--;
         } else {
-            int n = maxIn(l[i - 1][j][k], l[i][j - 1][k], l[i][j][k - 1]);
+            int n = maxIn(l[i - 1][j - 1][k], l[i][j - 1][k - 1], l[i - 1][j][k - 1]);
             switch (n) {
             case 1:
                 i--;
+                j--;
                 break;
             case 2:
                 j--;
+                k--;
                 break;
             case 3:
+                i--;
                 k--;
                 break;
             default:
@@ -231,7 +235,7 @@ Solution longestCommonSubsequence(const QStringList &source, const QStringList &
         }
     }
 
-    qDebug() << r;
+    qDebug() << r << l[source.count()][target.count()];
     return r;
 }
 
@@ -666,6 +670,19 @@ QMap<QString, DiffType> diffDirs(const QString &dir1, const QString &dir2)
         map.insert(file, DiffType::Added);
 
     return map;
+}
+
+QList<MergeSegment *> diff3(const QString &base, const QString &local, const QString &remote)
+{
+    QStringList baseList, localList, remoteList;
+    if (!base.isEmpty())
+        baseList = base.split("\n");
+    if (!local.isEmpty())
+        localList = local.split("\n");
+    if (!remote.isEmpty())
+        remoteList = remote.split("\n");
+
+    return diff3(baseList, localList, remoteList);
 }
 
 }

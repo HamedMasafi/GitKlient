@@ -190,6 +190,11 @@ ArgParserReturn CommandArgsParser::diff(const QString &file)
         auto d = new DiffWindow(headFile, changedFile);
         d->showModal();
         return ExecApp;
+    } else if (fi.isDir()) {
+        git->setPath(fi.absolutePath());
+        auto d = new DiffWindow(git, git->currentBranch(), "HEAD");
+        d->showModal();
+        return ExecApp;
     }
     return 0;
 }
