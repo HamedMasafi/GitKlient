@@ -65,9 +65,14 @@ void compare(QTextEdit *e1, QTextEdit *e2)
 
 QStringList readFile(const QString &filePath)
 {
+//    QStringList buffer;
     QFile f{filePath};
     if (!f.open(QIODevice::ReadOnly))
         return QStringList();
+
+//    while (!f.atEnd()) {
+//        buffer << f.readLine();
+//    }
     auto buf = QString(f.readAll()).split('\n');
     f.close();
     return buf;

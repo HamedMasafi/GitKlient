@@ -12,32 +12,44 @@ private Q_SLOTS:
     void diff2();
     void files();
     void merge();
+
+    void mergeSqlModel();
 };
+
+
+auto segmentTypeText(Diff::SegmentType type) -> QString
+{
+    switch (type) {
+    case Diff::SegmentType::OnlyOnRight:
+        return "Added";
+    case Diff::SegmentType::OnlyOnLeft:
+        return "Removed";
+    case Diff::SegmentType::SameOnBoth:
+        return "Unchanged";
+    case Diff::SegmentType::DifferentOnBoth:
+        return "Modified";
+    default:
+        return "Unknown";
+    }
+}
 
 void print(Diff::Segment *segment)
 {
-    QString typeString;
-    switch (segment->type) {
-    case Diff::SegmentType::OnlyOnRight:
-        typeString = "Added";
-        break;
-    case Diff::SegmentType::OnlyOnLeft:
-        typeString = "Removed";
-        break;
-    case Diff::SegmentType::SameOnBoth:
-        typeString = "Unchanged";
-        break;
-    case Diff::SegmentType::DifferentOnBoth:
-        typeString = "Modified";
-        break;
-    }
 //    qDebug().noquote() << "==================";
-//    qDebug().noquote() << "Segment" << typeString;
+//    qDebug().noquote() << "Segment" << segmentTypeText(segment->type);
 //    qDebug() << "Old:";
 //    qDebug().noquote() << segment->oldText;
 //    qDebug() << "New:";
 //    qDebug().noquote() << segment->newText;
-//    qDebug() << Qt::flush;
+}
+
+void print(Diff::MergeSegment *segment)
+{
+    qDebug().noquote() << "==================";
+    qDebug().noquote() << "* Segment" << segmentTypeText(segment->type);
+    qDebug().noquote() << "  Base:" << segment->base;
+    qDebug().noquote() << "  Local:" << segment->local;
+    qDebug().noquote() << "  Remote:" << segment->remote;
 }
 
 void DiffTest::diff()
@@ -152,12 +164,30 @@ five
 
     auto segments = Diff::diff3(base, mine, their);
 
-    //    qDebug() <<lcs .size();
-    //    print(segments.at(0));
-    QCOMPARE(segments.size(), 3);
-    //    QCOMPARE(segments.at(0)->type, Diff::SegmentType::SameOnBoth);
-    //    QCOMPARE(segments.at(1)->type, Diff::SegmentType::DifferentOnBoth);
+    for (auto &s: segments)
+        print(s);
 
+    //    qDebug() <<lcs .size();
+//        print(segments.at(0));
+//    print(segments.at(1));
+//    print(segments.at(2));
+
+//    QCOMPARE(segments.size(), 3);
+//    QCOMPARE(segments.at(0)->type, Diff::SegmentType::SameOnBoth);
+//    QCOMPARE(segments.at(1)->type, Diff::SegmentType::DifferentOnBoth);
+    //    QCOMPARE(segments.at(2)->type, Diff::SegmentType::SameOnBoth);
+}
+
+void DiffTest::mergeSqlModel()
+{
+    auto base = Diff::readFileLines("/home/hamed/tmp/merge-test/sqlmodel_BASE_32623.h");
+    auto local= Diff::readFileLines("/home/hamed/tmp/merge-test/sqlmodel_LOCAL_32623.h");
+    auto remote = Diff::readFileLines("/home/hamed/tmp/merge-test/sqlmodel_REMOTE_32623.h");
+
+    auto segments = Diff::diff3(base, local, remote);
+
+    for (auto &s: segments)
+        print(s);
 }
 
 QTEST_MAIN(DiffTest)

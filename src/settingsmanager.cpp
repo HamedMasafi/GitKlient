@@ -3,7 +3,9 @@
 #include "GitKlientSettings.h"
 #include "gitklientwindow.h"
 
+#if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
 #include <QCalendar>
+#endif
 
 #include <KConfigDialog>
 #include <QWidget>
