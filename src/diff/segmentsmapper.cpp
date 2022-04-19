@@ -1,6 +1,27 @@
 #include "segmentsmapper.h"
 
-SegmentsMapper::SegmentsMapper() {}
+#include <QScrollBar>
+#include "widgets/codeeditor.h"
+
+SegmentsMapper::SegmentsMapper(QObject *parent) : QObject(parent)
+{
+
+}
+
+void SegmentsMapper::addEditor(CodeEditor *editor)
+{
+    _editors.append(editor);
+
+    connect(editor,
+            &CodeEditor::blockSelected,
+            this,
+            &SegmentsMapper::codeEditor_blockSelected);
+
+    connect(editor->verticalScrollBar(),
+            &QScrollBar::valueChanged,
+            this,
+            &SegmentsMapper::codeEditor_scroll);
+}
 
 const QList<Diff::MergeSegment *> &SegmentsMapper::segments() const
 {
@@ -65,4 +86,26 @@ int SegmentsMapper::map(int from, int to, int index) const
         offset3 += s->remote.size();
     }
     return -1;
+}
+
+void SegmentsMapper::codeEditor_blockSelected()
+{
+    auto l = qobject_cast<CodeEditor*>(sender())->currentLineNumber();
+    auto n = map(2, 1, l);
+//    if (n != -1)
+//        m_ui.plainTextEditMine->gotoLineNumber(n);
+}
+
+void SegmentsMapper::codeEditor_scroll(int value)
+{
+    auto s = /*find others*/ qobject_cast<CodeEditor *>(sender());
+    static bool b{false};
+    if (b)
+        return;
+    b = true;
+    s->verticalScrollBar()->setValue(
+        (int) (((float) value / (float) s->verticalScrollBar()->maximum())
+               * (float) s->verticalScrollBar()->maximum()));
+    b = false;
+//    m_ui.widgetSegmentsConnector->update();
 }
