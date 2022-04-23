@@ -2,6 +2,7 @@
 
 #include "commandargsparser.h"
 #include "dialogs/changedfilesdialog.h"
+#include "dialogs/clonedialog.h"
 #include "dialogs/fileblamedialog.h"
 #include "dialogs/filehistorydialog.h"
 #include "dialogs/pulldialog.h"
@@ -17,6 +18,7 @@
 #include <QDir>
 #include <QFileInfo>
 #include <QMetaMethod>
+
 
 CommandArgsParser::CommandArgsParser() : QObject()
 {
@@ -136,6 +138,25 @@ ArgParserReturn CommandArgsParser::help()
         auto method = metaObject()->method(i);
         qDebug().noquote() << "    " << method.name() << method.parameterNames().join(" ");
     }
+    return 0;
+}
+
+ArgParserReturn CommandArgsParser::clone(const QString &path)
+{
+    CloneDialog d;
+    if (d.exec() == QDialog::Accepted) {
+        RunnerDialog r;
+
+        auto cmd = d.command();;
+        r.run(cmd);
+        r.exec();
+        cmd->deleteLater();
+    }
+    return 0;
+}
+
+ArgParserReturn CommandArgsParser::init(const QString &path)
+{
     return 0;
 }
 

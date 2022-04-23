@@ -72,7 +72,7 @@ endif()
 
 add_subdirectory(icons)
 add_subdirectory(src)
-add_subdirectory(autotests)
+#add_subdirectory(autotests)
 if (UNIX)
     add_subdirectory(dolphinplugins)
 endif (UNIX)

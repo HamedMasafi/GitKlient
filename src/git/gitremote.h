@@ -20,7 +20,8 @@ public:
     {
         Unknown,
         UpToDate,
-        FastForwardable
+        FastForwardable,
+        LocalOutOfDate
     };
     Status status{Status::Unknown};
 
