@@ -1,6 +1,9 @@
 #include "submoduleactions.h"
 #include "dialogs/submoduleinfodialog.h"
 #include "dialogs/runnerdialog.h"
+#include "git/commands/addsubmodulecommand.h"
+#include "git/models/submodulescache.h"
+#include "git/gitmanager.h"
 
 #include <QAction>
 #include <QMenu>
@@ -27,11 +30,11 @@ void SubmoduleActions::setSubModuleName(const QString &newSubModuleName)
 SubmoduleActions::SubmoduleActions(Git::Manager *git, QWidget *parent)
     : AbstractActions(git, parent)
 {
-    _actionCreate = addActionHidden(i18n("Create..."), this, &SubmoduleActions::create);
-    _actionInit = addAction(i18n("Init..."),this, &SubmoduleActions::init,  false, true);
-    _actionUpdate = addAction(i18n("Update..."),this, &SubmoduleActions::update,  false, true);
-    _actionDeinit = addAction(i18n("Deinit..."),this, &SubmoduleActions::deinit,  false, true);
-    _actionSync = addAction(i18n("Sync..."),this, &SubmoduleActions::sync,  false, true);
+    _actionCreate = addActionHidden(i18n("Add..."), this, &SubmoduleActions::create);
+    _actionInit = addAction(i18n("Init..."), this, &SubmoduleActions::init, false);
+    _actionUpdate = addAction(i18n("Update..."), this, &SubmoduleActions::update, false);
+    _actionDeinit = addAction(i18n("Deinit..."), this, &SubmoduleActions::deinit, false);
+    _actionSync = addAction(i18n("Sync..."), this, &SubmoduleActions::sync, false);
 
     _actionCreate->setIcon(QIcon::fromTheme("list-add"));
 }
@@ -54,6 +57,10 @@ void SubmoduleActions::create()
 {
     SubmoduleInfoDialog d(_parent);
     if (d.exec() == QDialog::Accepted) {
+        RunnerDialog runner;
+        runner.run(d.command());
+        runner.exec();
+        _git->submodulesModel()->load();
     }
 }
 

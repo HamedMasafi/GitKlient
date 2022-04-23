@@ -21,7 +21,7 @@ public:
 
 private slots:
     void codeEditor_blockSelected();
-    void codeEditor__scroll();
+    void codeEditor_scroll(int value);
 
 private:
     QList<Diff::MergeSegment *> _segments;
