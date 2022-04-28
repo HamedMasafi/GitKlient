@@ -134,7 +134,19 @@ QVariant DiffTreeModel::data(const QModelIndex &index, int role) const
         Node *item = static_cast<Node*>(index.internalPointer());
 
         //        return statusColor(item->metaData);
-        qDebug() << "icon" << item->title << QIcon::fromTheme(icon(item->metaData)).isNull();
+        qDebug() << "icon" << item->title << icon(item->metaData) << QIcon::fromTheme(icon(item->metaData)).isNull();
+
+//        switch (item->metaData) {
+//        case Diff::DiffType::Added:
+//            return QColor(Qt::green);
+//        case Diff::DiffType::Removed:
+//            return QColor(Qt::red);
+//        case Diff::DiffType::Modified:
+//            return QColor(Qt::blue);
+//        case Diff::DiffType::Unchanged:
+//            return QColor(Qt::black);
+//        }
+
         return QIcon::fromTheme(icon(item->metaData));
     } else if (role == Qt::ForegroundRole) {
         Node *item = static_cast<Node *>(index.internalPointer());

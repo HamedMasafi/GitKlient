@@ -91,6 +91,7 @@ DiffWindow::DiffWindow(Git::Manager *git, const QString &oldBranch, const QStrin
 
     for (auto &f: diffs) {
         _diffModel->addFile(f);
+//        qDebug() << f.name() << f.status();
         _filesModel->append(f.name());
     }
     _leftStorage = _rightStorage = Git;
