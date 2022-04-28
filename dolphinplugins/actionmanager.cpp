@@ -61,15 +61,15 @@ QList<QAction *> ActionManager::actions(const KFileItemListProperties &fileItemI
             status = _cache.pathStatus(path);
 
         if (status == FileStatus::NoGit) {
-            addMenu(menu, i18n("Clone"), QStringList() << "--clone");
-            addMenu(menu, i18n("Init"), QStringList() << "--init");
+            addMenu(menu, i18n("Clone"), {"clone", path});
+            addMenu(menu, i18n("Init"), {"init", path});
         } else {
             addMenu(menu, i18n("Open"), {path});
             addMenu(menu, i18n("Pull"), {"pull", path});
             addMenu(menu, i18n("Push"), {"push", path});
             addMenu(menu, i18n("Modifications"), {"changes", path});
+            addMenu(menu, i18n("Diff"), {"diff", path});
             if (fileItemInfos.isFile()) {
-                addMenu(menu, i18n("Diff"), {"diff", path});
                 addMenu(menu, i18n("History"), {"history", path});
                 addMenu(menu, i18n("Blame"), {"blame", path});
             }

@@ -115,6 +115,11 @@ QList<Segment *> diff(const QStringList &oldText, const QStringList &newText);
 QList<MergeSegment *> diff3_2(const QStringList &base,
                             const QStringList &local,
                             const QStringList &remote);
+
+
+QList<MergeSegment *> diff3(const QString &base,
+                            const QString &local,
+                            const QString &remote);
 QList<MergeSegment *> diff3(const QStringList &base,
                             const QStringList &local,
                             const QStringList &remote);

@@ -2,6 +2,7 @@
 
 #include "commandargsparser.h"
 #include "dialogs/changedfilesdialog.h"
+#include "dialogs/clonedialog.h"
 #include "dialogs/fileblamedialog.h"
 #include "dialogs/filehistorydialog.h"
 #include "dialogs/pulldialog.h"
@@ -17,6 +18,7 @@
 #include <QDir>
 #include <QFileInfo>
 #include <QMetaMethod>
+
 
 CommandArgsParser::CommandArgsParser() : QObject()
 {
@@ -139,6 +141,25 @@ ArgParserReturn CommandArgsParser::help()
     return 0;
 }
 
+ArgParserReturn CommandArgsParser::clone(const QString &path)
+{
+    CloneDialog d;
+    if (d.exec() == QDialog::Accepted) {
+        RunnerDialog r;
+
+        auto cmd = d.command();;
+        r.run(cmd);
+        r.exec();
+        cmd->deleteLater();
+    }
+    return 0;
+}
+
+ArgParserReturn CommandArgsParser::init(const QString &path)
+{
+    return 0;
+}
+
 ArgParserReturn CommandArgsParser::pull(const QString &path)
 {
     git->setPath(path);
@@ -188,6 +209,11 @@ ArgParserReturn CommandArgsParser::diff(const QString &file)
         Git::File headFile(file);
         Git::File changedFile(git->currentBranch(), dir.relativeFilePath(file), git);
         auto d = new DiffWindow(headFile, changedFile);
+        d->showModal();
+        return ExecApp;
+    } else if (fi.isDir()) {
+        git->setPath(fi.absolutePath());
+        auto d = new DiffWindow(git, git->currentBranch(), "HEAD");
         d->showModal();
         return ExecApp;
     }

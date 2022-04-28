@@ -19,7 +19,7 @@ class DiffWindow : public MainWindow
     QString _oldBranch;
     QString _newBranch;
 
-    QString _oldDir, _newDir;
+    QString _leftDir, _rightDir;
 
     FilesModel *_filesModel;
     DiffTreeModel *_diffModel;
@@ -41,10 +41,12 @@ class DiffWindow : public MainWindow
     };
 
     Mode _mode{None};
-    Storage _storage{NoStorage};
+    Storage _leftStorage{NoStorage};
+    Storage _rightStorage{NoStorage};
 
 public:
     explicit DiffWindow();
+    DiffWindow(Git::Manager *git);
     DiffWindow(const Git::File &oldFile, const Git::File &newFile);
     DiffWindow(Git::Manager *git, const QString &oldBranch, const QString &newBranch);
     DiffWindow(const QString &oldDir, const QString &newDir);

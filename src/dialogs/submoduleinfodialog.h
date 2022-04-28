@@ -4,6 +4,9 @@
 #include "../core/dialog.h"
 #include "ui_submoduleinfodialog.h"
 
+namespace Git {
+class AddSubmoduleCommand;
+}
 class SubmoduleInfoDialog : public Dialog, private Ui::SubmoduleInfoDialog
 {
     Q_OBJECT
@@ -22,6 +25,8 @@ public:
 
     QString branch() const;
     void setBranch(const QString &newBranch);
+
+    Git::AddSubmoduleCommand *command() const;
 };
 
 #endif // SUBMODULEINFODIALOG_H

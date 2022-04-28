@@ -6,6 +6,7 @@
 #include "git/gitmanager.h"
 #include "runnerdialog.h"
 #include "actions/changedfileactions.h"
+#include "GitKlientSettings.h"
 
 #include <KService>
 #include <KTextEditor/CodeCompletionModel>
@@ -25,13 +26,13 @@ CommitPushDialog::CommitPushDialog(Git::Manager *git, QWidget *parent) :
         item->setText(i.key());
         switch (i.value()) {
         case Git::Manager::Modified:
-            item->setForeground(Qt::blue);
+            item->setForeground(GitKlientSettings::diffModifiedColor());
             break;
         case Git::Manager::Added:
-            item->setForeground(Qt::green);
+            item->setForeground(GitKlientSettings::diffAddedColor());
             break;
         case Git::Manager::Removed:
-            item->setForeground(Qt::red);
+            item->setForeground(GitKlientSettings::diffRemovedColor());
             break;
 
         default:

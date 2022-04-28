@@ -4,7 +4,7 @@
 #include "diffwindow.h"
 #include "git/gitfile.h"
 #include "git/gitmanager.h"
-
+#include "GitKlientSettings.h"
 #include <QDebug>
 
 ChangedFilesDialog::ChangedFilesDialog(Git::Manager *git, QWidget *parent) :
@@ -33,7 +33,7 @@ void ChangedFilesDialog::reload()
         item->setText(i.key());
         switch (i.value()) {
         case Git::Manager::Modified:
-            item->setForeground(Qt::blue);
+            item->setForeground(GitKlientSettings::diffModifiedColor());
             break;
 
         default:

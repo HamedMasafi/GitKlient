@@ -21,7 +21,6 @@ set(gitklient_SRCS
 
     main.cpp
     gitklientwindow.cpp
-    gitklientview.cpp
     buttonsgroup.cpp
     multipagewidget.cpp
     argsparser.cpp
@@ -30,6 +29,7 @@ set(gitklient_SRCS
     commandargsparser.cpp
     settingshelper.cpp
     gitklientconfig.cpp
+    settingsmanager.cpp
 )
 
 ecm_qt_declare_logging_category(gitklient_SRCS
@@ -50,7 +50,7 @@ add_compile_definitions(GIT_GUI)
 
 ki18n_wrap_ui(
     gitklient_SRCS
-    gitklientViewBase.ui
+
     settingsBase.ui
     diffsettings.ui
     multipagewidget.ui

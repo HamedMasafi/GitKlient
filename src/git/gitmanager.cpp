@@ -190,6 +190,25 @@ QString Manager::diff(const QString &from, const QString &to)
     return runGit({"diff", from, to});
 }
 
+QList<FileStatus> Manager::diffBranch(const QString &from)
+{
+    auto buffer = QString(runGit({"diff", from, "--name-status"})).split("\n");
+    QList<FileStatus> files;
+    for (auto &item : buffer) {
+        if (!item.trimmed().size())
+            continue;
+        auto parts = item.split("\t");
+        if (parts.size() != 2)
+            continue;
+
+        FileStatus fs;
+        fs.setStatus(parts.at(0));
+        fs.setName(parts.at(1));
+        files.append(fs);
+    }
+    return files;
+}
+
 QList<FileStatus> Manager::diffBranches(const QString &from, const QString &to)
 {
     auto buffer = QString(runGit({"diff", from + ".." + to, "--name-status"})).split("\n");

@@ -11,6 +11,7 @@ namespace Diff
 
 namespace Impl {
 
+typedef QPair<int, int> Pair2;
 struct Pair3 {
     int first;
     int second;
@@ -26,7 +27,14 @@ struct Pair3 {
         return first == other.first && second == other.second && third == other.third;
     }
 };
-typedef QList<QPair<int, int>> Solution;
+
+QDebug operator<<(QDebug d, const Pair3 &p)
+{
+    d.noquote() << "(" << p.first << "," << p.second << "," << p.third << ")";
+    return d;
+}
+
+typedef QList<Pair2> Solution;
 typedef QList<Pair3> Solution3;
 
 QSet<Solution> findLCS(QStringList first, QStringList second, int m, int n)
@@ -114,6 +122,24 @@ int maxIn(int first, int second)
 
     return 4;
 }
+
+int maxIn(const QList<int> &list) {
+    if (!list.size())
+        return -1;
+    int max{list.first()};
+    int maxIndex{0};
+    int index{0};
+    for (const auto &i: list) {
+        if (i  >  max)  {
+            max = i;
+            maxIndex = index;
+        }
+        index++;
+    }
+
+    qDebug() << "max of" << list << "is" << max << "(" << maxIndex << ")";
+    return maxIndex;
+}
 Solution3 longestCommonSubsequence(const QStringList &source,
                                    const QStringList &target,
                                    const QStringList &target2)
@@ -154,19 +180,46 @@ Solution3 longestCommonSubsequence(const QStringList &source,
 ////        } else if (l[i][j][k - 1] > l[i][j - 1][k] && l[i][j][k - 1] > l[i - 1][j][k]) {
 ////            k--;
         } else {
-            int n = maxIn(l[i - 1][j][k], l[i][j - 1][k], l[i][j][k - 1]);
+            int n = maxIn({l[i - 1][j][k],
+                           l[i][j - 1][k],
+                           l[i][j][k - 1],
+
+                           l[i - 1][j - 1][k],
+                           l[i][j - 1][k - 1],
+                           l[i - 1][j][k - 1],
+
+                           l[i - 1][j - 1][k - 1]});
             switch (n) {
-            case 1:
+            case 0:
                 i--;
                 break;
-            case 2:
+            case 1:
                 j--;
                 break;
+            case 2:
+                k--;
+                break;
+
             case 3:
+                i--;
+                j--;
+                break;
+            case 4:
+                j--;
+                k--;
+                break;
+            case 5:
+                i--;
+                k--;
+                break;
+
+            case 6:
+                r.prepend({i - 1, j - 1, k - 1});
+                i--;
+                j--;
                 k--;
                 break;
             default:
-//                r.prepend({i - 1, j - 1, k - 1});
                 i--;
                 j--;
                 k--;
@@ -175,7 +228,7 @@ Solution3 longestCommonSubsequence(const QStringList &source,
 //            j--;
         }
     }
-
+    qDebug() << "lcs3" << r;
     return r;
 }
 Solution longestCommonSubsequence(const QStringList &source, const QStringList &target)
@@ -231,7 +284,7 @@ Solution longestCommonSubsequence(const QStringList &source, const QStringList &
         }
     }
 
-    qDebug() << r;
+    qDebug() << r << l[source.count()][target.count()];
     return r;
 }
 
@@ -247,6 +300,21 @@ QDebug &operator<<(QDebug &stream, const Tuple &t)
 {
     stream << t.base << t.local << t.remote;
     return stream;
+}
+
+QStringList readFileLines(const QString &filePath)
+{
+    //    QStringList buffer;
+    QFile f{filePath};
+    if (!f.open(QIODevice::ReadOnly))
+        return QStringList();
+
+    //    while (!f.atEnd()) {
+    //        buffer << f.readLine();
+    //    }
+    auto buf = QString(f.readAll()).split('\n');
+    f.close();
+    return buf;
 }
 
 Tuple firstCommonItem(const QStringList &base, const QStringList &local, const QStringList &remote)
@@ -340,7 +408,7 @@ QList<MergeSegment *> diff3(const QStringList &baseList, const QStringList &loca
         if (p.first == baseOffset && p.second == localOffset && p.third == remoteOffset) {
             auto segment = new MergeSegment;
             segment->type = SegmentType::SameOnBoth;
-            while (p.first == baseOffset && p.second == localOffset) {
+            while (p.first == baseOffset && p.second == localOffset && p.third == remoteOffset) {
                 baseOffset++;
                 localOffset++;
                 remoteOffset++;
@@ -352,12 +420,12 @@ QList<MergeSegment *> diff3(const QStringList &baseList, const QStringList &loca
                     p = max.takeFirst();
             }
             ret.append(segment);
-            if (!max.size())
-                break;
+//            if (!max.size())
+//                break;
         } else {
-            if (!max.size())
-                break;
-            p = max.takeFirst();
+//            if (!max.size())
+//                break;
+//            p = max.takeFirst();
         }
 
         QStringList _baseList, _localList, _remoteList;
@@ -377,6 +445,10 @@ QList<MergeSegment *> diff3(const QStringList &baseList, const QStringList &loca
         ret.append(segment);
     }
 
+    if (base.size() || local.size() || remote.size()) {
+        auto segment = new MergeSegment{base, local, remote};
+        ret.append(segment);
+    }
     return ret;
 }
 
@@ -474,14 +546,14 @@ MergeSegment::MergeSegment()
 MergeSegment::MergeSegment(const QStringList &base, const QStringList &local, const QStringList &remote)
     : base{base}, local{local}, remote{remote}
 {
-    if (local.size() && remote.size())
-        type = SegmentType::DifferentOnBoth;
-    else if (!local.size() && remote.size())
-        type = SegmentType::OnlyOnRight;
-    else if (local.size() && !remote.size())
-        type = SegmentType::OnlyOnLeft;
-    else
+    if (local == remote)
         type = SegmentType::SameOnBoth;
+    else if (!base.size() && local.size())
+        type = SegmentType::OnlyOnLeft;
+    else if (!base.size() && remote.size())
+        type = SegmentType::OnlyOnRight;
+    else
+        type = SegmentType::DifferentOnBoth;
 
     oldText = local;
     newText = remote;
@@ -666,6 +738,19 @@ QMap<QString, DiffType> diffDirs(const QString &dir1, const QString &dir2)
         map.insert(file, DiffType::Added);
 
     return map;
+}
+
+QList<MergeSegment *> diff3(const QString &base, const QString &local, const QString &remote)
+{
+    QStringList baseList, localList, remoteList;
+    if (!base.isEmpty())
+        baseList = base.split("\n");
+    if (!local.isEmpty())
+        localList = local.split("\n");
+    if (!remote.isEmpty())
+        remoteList = remote.split("\n");
+
+    return diff3(baseList, localList, remoteList);
 }
 
 }

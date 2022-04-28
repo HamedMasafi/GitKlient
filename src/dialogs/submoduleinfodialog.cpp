@@ -1,5 +1,7 @@
 #include "submoduleinfodialog.h"
 
+#include "git/commands/addsubmodulecommand.h"
+
 bool SubmoduleInfoDialog::force() const
 {
     return checkBoxForce->isChecked();
@@ -46,6 +48,20 @@ void SubmoduleInfoDialog::setBranch(const QString &newBranch)
         checkBoxBranch->setChecked(false);
         lineEditBranch->clear();
     }
+}
+
+Git::AddSubmoduleCommand *SubmoduleInfoDialog::command() const
+{
+    auto cmd = new Git::AddSubmoduleCommand(_git);
+    cmd->setForce(checkBoxForce->isChecked());
+
+    if (checkBoxBranch->isChecked())
+        cmd->setbranch(lineEditBranch->text());
+
+    cmd->setUrl(lineEditUrl->text());
+    cmd->setLocalPath(lineEditPath->text());
+
+    return cmd;
 }
 
 SubmoduleInfoDialog::SubmoduleInfoDialog(QWidget *parent) :
