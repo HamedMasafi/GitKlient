@@ -4,10 +4,19 @@ Git gui client for KDE
 
 ## Features
   - Show overlay icons on files in the Dolphin file manager ([Screenshot](doc/screenshots/icons.png))
-  - Clone, Checkout, Merge
-  - Support PosgtreSQL, MySQL, SQLite and Microsoft Sql Server
-  - Automatically create and update database
-  - Support for IDE autocomplete. No hard-coding is needed
-  - Detecting table joins
-  - Support common C++ and Qt-specific types ([Full list](doc/datatypes.md))
-  - Bulk insertation
+  - Browse files in another branch or commit and view files content ([Screenshot](doc/screenshots/browse.png))
+  - Autocomplete on writing commit messages ([Screenshot](doc/screenshots/autocomplete.png))
+  - Graph view for commits and merges ([Screenshot](doc/screenshots/graph.png))
+  - Show changes on visual way ([Screenshot](doc/screenshots/diff_on_changes.png))
+  - See differences and conflicts and resolve them by visual tool ([Screenshot](doc/screenshots/merge.png))
+
+
+## Build
+```
+cd <path/to/paoject/source>
+mkdir build
+cd build
+cmake ..
+make
+sudo make install
+```
