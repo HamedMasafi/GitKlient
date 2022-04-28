@@ -306,7 +306,7 @@ void GitKlientWindow::diffBranches()
 {
     SelectBranchesToDiffDialog d(_git, this);
     if (d.exec() == QDialog::Accepted) {
-        auto diffWin = new DiffWindow(d.oldBranch(), d.newBranch());
+        auto diffWin = new DiffWindow(_git, d.oldBranch(), d.newBranch());
         diffWin->showModal();
     }
 }

@@ -71,7 +71,7 @@ void CommitsWidget::on_actionDiffWithMain_triggered()
 {
     auto branchName = _repoModel->fullPath(treeViewRepo->currentIndex());
 
-    auto diffWin = new DiffWindow(branchName, _mainBranch);
+    auto diffWin = new DiffWindow(_git, branchName, _mainBranch);
     diffWin->showModal();
 }
 
