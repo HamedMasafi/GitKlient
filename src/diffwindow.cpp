@@ -69,7 +69,7 @@ DiffWindow::DiffWindow(Git::Manager *git) : MainWindow()
     _leftStorage = Git;
     _rightStorage =  FileSystem;
     _rightDir = git->path();
-    qDebug() << "right dir" << _rightDir;
+    _diffModel->sortItems();
 }
 
 DiffWindow::DiffWindow(const Git::File &oldFile, const Git::File &newFile)
@@ -95,6 +95,7 @@ DiffWindow::DiffWindow(Git::Manager *git, const QString &oldBranch, const QStrin
         _filesModel->append(f.name());
     }
     _leftStorage = _rightStorage = Git;
+    _diffModel->sortItems();
 }
 
 DiffWindow::DiffWindow(const QString &oldDir, const QString &newDir)

@@ -178,6 +178,11 @@ QString TreeModel::section(const QModelIndex &index) const
     return QString();
 }
 
+void TreeModel::sortItems()
+{
+    sortNode(rootNode);
+}
+
 
 void TreeModel::addData(const QStringList &data, const QString &prefix, bool split)
 {
@@ -259,4 +264,18 @@ void TreeModel::getFullPath(QString &path, Node *node) const
             getFullPath(path, node->parent);
         }
     }
+}
+
+void TreeModel::sortNode(Node *node)
+{
+    qDebug() << "Sorting" << node->title;
+    std::sort(node->childs.begin(), node->childs.end(), [](Node *l, Node *r) {
+        if (!l->childs.size() && r->childs.size())
+            return false;
+        if (l->childs.size() && !r->childs.size())
+            return true;
+        return l->title < r->title;
+    });
+    for (auto &n: node->childs)
+        sortNode(n);
 }

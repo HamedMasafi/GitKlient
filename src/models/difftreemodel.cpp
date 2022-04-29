@@ -52,11 +52,11 @@ QString icon(const Diff::DiffType &status)
 {
     switch (status) {
     case  Diff::DiffType::Added:
-        return "git-status-add";
+        return "git-status-added";
     case  Diff::DiffType::Modified:
         return "git-status-modified";
     case  Diff::DiffType::Removed:
-        return "git-status-remove";
+        return "git-status-removed";
     case  Diff::DiffType::Unchanged:
         return "git-status-update";
     }
@@ -150,8 +150,8 @@ QVariant DiffTreeModel::data(const QModelIndex &index, int role) const
 
         return QIcon::fromTheme(icon(item->metaData));
     } else if (role == Qt::ForegroundRole) {
-        Node *item = static_cast<Node *>(index.internalPointer());
-        return textColor(item->metaData);
+//        Node *item = static_cast<Node *>(index.internalPointer());
+//        return textColor(item->metaData);
     }
 
     return QVariant();
