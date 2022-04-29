@@ -58,6 +58,7 @@ public slots:
     ArgParserReturn clone(const QString &path);
     ArgParserReturn init(const QString &path);
     ArgParserReturn pull(const QString &path);
+    ArgParserReturn push(const QString &path);
     ArgParserReturn changes();
     ArgParserReturn changes(const QString &path);
 

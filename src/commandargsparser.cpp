@@ -5,7 +5,8 @@
 #include "dialogs/clonedialog.h"
 #include "dialogs/fileblamedialog.h"
 #include "dialogs/filehistorydialog.h"
-#include "dialogs/pulldialog.h"
+#include "dialogs/pulldialog.h"'
+#include "dialogs/commitpushdialog.h"
 #include "dialogs/runnerdialog.h"
 #include "diffwindow.h"
 #include "git/gitfile.h"
@@ -173,6 +174,22 @@ ArgParserReturn CommandArgsParser::pull(const QString &path)
     return 0;
 }
 
+ArgParserReturn CommandArgsParser::push(const QString &path)
+{
+    QFileInfo fi(path);
+
+    if (!fi.exists()) {
+        return 0;
+    }
+    if (fi.isFile())
+        git->setPath(fi.absolutePath());
+    else
+        git->setPath(fi.absoluteFilePath());
+    CommitPushDialog d(git);
+    d.exec();
+    return 0;
+}
+
 ArgParserReturn CommandArgsParser::changes()
 {
     QDir dir;
@@ -245,6 +262,15 @@ ArgParserReturn CommandArgsParser::diff(const QString &file1, const QString &fil
 
 ArgParserReturn CommandArgsParser::blame(const QString &file)
 {
+    QFileInfo fi{file};
+
+    if (!fi.exists()) {
+        return 0;
+    }
+
+    git->setPath(fi.absolutePath());
+
+
     Git::File f(git->currentBranch(), file, git);
     FileBlameDialog d(f);
     d.exec();

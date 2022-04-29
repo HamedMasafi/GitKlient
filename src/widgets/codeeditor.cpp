@@ -344,7 +344,7 @@ QPair<int, int> CodeEditor::blockArea(int from, int to)
 {
     auto firstBlock = document()->findBlockByLineNumber(from);
     auto secondBlock = document()->findBlockByLineNumber(to);
-    qDebug() << from << " to " << to << firstBlock.text() << secondBlock.text();
+//    qDebug() << from << " to " << to << firstBlock.text() << secondBlock.text();
 
     int top = qRound(blockBoundingGeometry(firstBlock).translated(contentOffset()).top());
     int bottom;
