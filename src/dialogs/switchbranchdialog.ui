@@ -14,7 +14,8 @@
    <string>Switch/Checkout</string>
   </property>
   <property name="windowIcon">
-   <iconset theme="gitklient"/>
+   <iconset theme="gitklient">
+    <normaloff>.</normaloff>.</iconset>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
@@ -103,6 +104,15 @@
    </item>
   </layout>
  </widget>
+ <tabstops>
+  <tabstop>radioButtonExistingBranch</tabstop>
+  <tabstop>comboBoxBranchSelect</tabstop>
+  <tabstop>radioButtonNewBranch</tabstop>
+  <tabstop>lineEditNewBranchName</tabstop>
+  <tabstop>radioButtonTag</tabstop>
+  <tabstop>comboBoxTags</tabstop>
+  <tabstop>checkBoxForce</tabstop>
+ </tabstops>
  <resources/>
  <connections>
   <connection>
@@ -166,6 +176,22 @@
     <hint type="destinationlabel">
      <x>223</x>
      <y>87</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>buttonBox</sender>
+   <signal>accepted()</signal>
+   <receiver>SwitchBranchDialog</receiver>
+   <slot>accept()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>123</x>
+     <y>212</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>80</x>
+     <y>183</y>
     </hint>
    </hints>
   </connection>

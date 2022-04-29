@@ -21,6 +21,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // application headers
 #include "diffwindow.h"
 #include "git/commands/commandpull.h"
+#include "git/commands/commandswitchbranch.h"
 #include "gitklientwindow.h"
 
 #include "dialogs/changedfilesdialog.h"
@@ -114,7 +115,11 @@ void GitKlientWindow::git_pathChanged()
     setWindowFilePath(_git->path());
 //    setWindowTitle(_git->path());
 
-    _statusCurrentBranchLabel->setText(i18n("Current branch: %1", _git->currentBranch()));
+    auto statusText = i18n("Current branch: %1", _git->currentBranch());
+    if (_git->isMerging())
+        statusText .append(i18n(" (merging)"));
+
+    _statusCurrentBranchLabel->setText(statusText);
 }
 
 void GitKlientWindow::settingsConfigure()
@@ -250,7 +255,7 @@ void GitKlientWindow::initRepo()
     if (d.exec() == QDialog::Accepted) {
         QDir dir;
         if (!dir.mkpath(d.path())) {
-            KMessageBox::sorry(this, i18n("Init repo"), i18n("Unable to create path: %1", d.path()));
+            KMessageBox::sorry(this, i18n("Unable to create path: %1", d.path()), i18n("Init repo"));
             return;
         }
         _git->init(d.path());
@@ -343,8 +348,16 @@ void GitKlientWindow::repoSettings()
 
 void GitKlientWindow::repoSwitch()
 {
+    if (_git->isMerging()) {
+        KMessageBox::sorry(this, i18n("Cannot switch branch while merging"), i18n("Switch branch"));
+        return;
+    }
     SwitchBranchDialog d(_git, this);
-    d.exec();
+    if (d.exec() == QDialog::Accepted) {
+        RunnerDialog runner(this);
+        runner.run(d.command());
+        runner.exec();
+    }
 }
 
 void GitKlientWindow::repoDiffTree()
