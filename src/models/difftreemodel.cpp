@@ -17,6 +17,7 @@ void DiffTreeModel::addFile(const FileStatus &file)
     auto parts = nodePath.split(seprator());
     node = createPath(parts, toDiffType(file.status()));
     node->key = file.name();
+    node->metaData = toDiffType(file.status());
 }
 
 void DiffTreeModel::addFile(const QString &file, const Diff::DiffType &type)

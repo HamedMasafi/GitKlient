@@ -1,5 +1,6 @@
 #include "widgets/codeeditor.h"
 #include "segmentconnector.h"
+#include "GitKlientSettings.h"
 
 #include <QPainter>
 #include <QPainterPath>
@@ -98,13 +99,13 @@ void SegmentConnector::paintEvent(QPaintEvent *event)
             continue;
             break;
         case Diff::SegmentType::OnlyOnRight:
-            painter.setBrush(Qt::green);
+            painter.setBrush(GitKlientSettings::diffAddedColor());
             break;
         case Diff::SegmentType::OnlyOnLeft:
-            painter.setBrush(Qt::red);
+            painter.setBrush(GitKlientSettings::diffRemovedColor());
             break;
         case Diff::SegmentType::DifferentOnBoth:
-            painter.setBrush(Qt::cyan);
+            painter.setBrush(GitKlientSettings::diffModifiedColor());
             break;
             }
 
