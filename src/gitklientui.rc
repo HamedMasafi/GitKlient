@@ -8,8 +8,8 @@
 <MenuBar>
   <Menu name="file">
     <text>Repo</text>
-    <Action name="repo_new"/>
-    <Action name="open_repo"/>
+    <Action name="repo_init"/>
+    <Action name="repo_open"/>
     <Action name="repo_clone"/>
     <Action name="recent" />
   </Menu>

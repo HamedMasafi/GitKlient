@@ -1,5 +1,6 @@
 #include "commitswidget.h"
 
+#include "actions/branchactions.h"
 #include "dialogs/filestreedialog.h"
 #include "diffwindow.h"
 #include "models/treemodel.h"
@@ -57,22 +58,10 @@ void CommitsWidget::on_treeViewRepo_itemActivated(const QModelIndex &index)
 
 void CommitsWidget::on_treeViewRepo_customContextMenuRequested(const QPoint &pos)
 {
-    _branchesMenu->popup(treeViewRepo->mapToGlobal(pos));
-}
-
-void CommitsWidget::on_actionBrowse_triggered()
-{
+    Q_UNUSED(pos)
     auto branchName = _repoModel->fullPath(treeViewRepo->currentIndex());
-    FilesTreeDialog d(branchName, this);
-    d.exec();
-}
-
-void CommitsWidget::on_actionDiffWithMain_triggered()
-{
-    auto branchName = _repoModel->fullPath(treeViewRepo->currentIndex());
-
-    auto diffWin = new DiffWindow(_git, branchName, _mainBranch);
-    diffWin->showModal();
+    _actions->setBranchName(branchName);
+    _actions->popup();
 }
 
 void CommitsWidget::init()
@@ -80,8 +69,5 @@ void CommitsWidget::init()
     _repoModel = new TreeModel(this);
     treeViewRepo->setModel(_repoModel);
 
-    _branchesMenu = new QMenu(this);
-    _branchesMenu->addAction(actionBrowse);
-    _branchesMenu->addAction(actionDiffWithMain);
-
+    _actions = new BranchActions(_git, this);
 }

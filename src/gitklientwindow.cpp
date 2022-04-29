@@ -28,6 +28,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "dialogs/commitpushdialog.h"
 #include "dialogs/fetchdialog.h"
 #include "dialogs/filestreedialog.h"
+#include "dialogs/initdialog.h"
 #include "dialogs/mergedialog.h"
 #include "dialogs/pulldialog.h"
 #include "dialogs/reposettingsdialog.h"
@@ -39,6 +40,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "git/models/logscache.h"
 #include "gitklientdebug.h"
 #include "multipagewidget.h"
+#include "settingsmanager.h"
 #include "widgets/branchesstatuswidget.h"
 #include "widgets/commitswidget.h"
 #include "widgets/historyviewwidget.h"
@@ -46,7 +48,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "widgets/stasheswidget.h"
 #include "widgets/submoduleswidget.h"
 #include "widgets/tagswidget.h"
-#include "settingsmanager.h"
 
 // KF headers
 #include <KActionCollection>
@@ -158,6 +159,17 @@ void GitKlientWindow::initActions()
 {
     KActionCollection* actionCollection = this->actionCollection();
 
+    auto repoInitAction = actionCollection->addAction("repo_init", this, &GitKlientWindow::initRepo);
+    repoInitAction->setText(i18n("Init..."));
+
+    auto repoOpenAction = actionCollection->addAction("repo_open", this, &GitKlientWindow::openRepo);
+    repoOpenAction->setText(i18n("Open..."));
+    actionCollection->setDefaultShortcut(repoOpenAction, QKeySequence("Ctrl+O"));
+    repoOpenAction->setIcon(QIcon::fromTheme(QStringLiteral("folder-open")));
+
+    auto repoCloneAction = actionCollection->addAction("repo_clone", this, &GitKlientWindow::clone);
+    repoCloneAction->setText(i18n("Clone..."));
+
     auto repoStatusAction = actionCollection->addAction(QStringLiteral("repo_status"),
                                                         this,
                                                         &GitKlientWindow::repoStatus);
@@ -167,17 +179,10 @@ void GitKlientWindow::initActions()
 
     {
         recentAction = actionCollection->addAction("recent");
-        recentAction->setText(i18n("Recent files"));
+        recentAction->setText(i18n("Recent repos"));
         recentAction->setMenu(new QMenu(this));
         initRecentFiles();
     }
-
-    auto openRepoAction = actionCollection->addAction(QStringLiteral("open_repo"),
-                                                      this,
-                                                      &GitKlientWindow::openRepo);
-    openRepoAction->setText(i18n("Open repo"));
-    actionCollection->setDefaultShortcut(openRepoAction, QKeySequence("Ctrl+O"));
-    openRepoAction->setIcon(QIcon::fromTheme(QStringLiteral("folder-open")));
 
     auto repoPullAction = actionCollection->addAction("repo_pull", this, &GitKlientWindow::pull);
     repoPullAction->setText(i18n("Pull..."));
@@ -205,7 +210,7 @@ void GitKlientWindow::initActions()
 
     KStandardAction::quit(this, &QMainWindow::close, actionCollection);
     KStandardAction::preferences(SettingsManager::instance(), &SettingsManager::show, actionCollection);
-    KStandardAction::openNew(this, &GitKlientWindow::clone, actionCollection);
+//    KStandardAction::openNew(this, &GitKlientWindow::clone, actionCollection);
 }
 void GitKlientWindow::initRecentFiles(const QString &newItem)
 {
@@ -237,6 +242,19 @@ void GitKlientWindow::repoStatus()
 {
     ChangedFilesDialog d(_git, this);
     d.exec();
+}
+
+void GitKlientWindow::initRepo()
+{
+    InitDialog d(_git, this);
+    if (d.exec() == QDialog::Accepted) {
+        QDir dir;
+        if (!dir.mkpath(d.path())) {
+            KMessageBox::sorry(this, i18n("Init repo"), i18n("Unable to create path: %1", d.path()));
+            return;
+        }
+        _git->init(d.path());
+    }
 }
 
 void GitKlientWindow::openRepo()
