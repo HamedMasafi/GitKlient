@@ -2,6 +2,7 @@
 #define ACTIONMANAGER_H
 
 #include <KIOWidgets/KAbstractFileItemActionPlugin>
+#include <KIOCore/kfileitem.h>
 #include "statuscache.h"
 
 class ActionManager : public KAbstractFileItemActionPlugin
@@ -22,6 +23,11 @@ public:
 
 private:
     void initActions();
+
+    QString getCommonPart(const KFileItemList& fileItems);
+
+    void addMenuToNonGitFile(QMenu *menu, const QString &path);
+    void addMenuToGitFile(QMenu *menu, const QString &path, bool isFile);
 };
 
 

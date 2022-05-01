@@ -398,6 +398,7 @@ QByteArray Manager::runGit(const QStringList &args) const
     auto out = p.readAllStandardOutput();
     auto err = p.readAllStandardError();
     Q_UNUSED(err)
+    qDebug() << err;
     return out; // + err;
 }
 

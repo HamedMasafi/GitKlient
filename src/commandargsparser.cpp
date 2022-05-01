@@ -134,10 +134,22 @@ ArgParserReturn CommandArgsParser::run(const QStringList &args)
 ArgParserReturn CommandArgsParser::help()
 {
     auto c = metaObject()->methodCount();
+
+    for (auto i = metaObject()->classInfoOffset(); i < metaObject()->classInfoCount(); i++) {
+        auto name = QString(metaObject()->classInfo(i).name());
+        auto value = QString(metaObject()->classInfo(i).value());
+
+        if (!name.startsWith("help."))
+            continue;
+        name = name.mid(5);
+
+        _helpTexts.insert(name, value);
+    }
     qDebug() << "Git Klient command line interface help:";
     for(int i = metaObject()->methodOffset(); i < c; i++) {
         auto method = metaObject()->method(i);
         qDebug().noquote() << "    " << method.name() << method.parameterNames().join(" ");
+        qDebug().noquote() << _helpTexts.value(method.name());
     }
     return 0;
 }

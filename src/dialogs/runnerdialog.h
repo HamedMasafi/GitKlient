@@ -4,6 +4,8 @@
 #include "../core/dialog.h"
 #include "ui_runnerdialog.h"
 
+#include <QProcess>
+
 namespace Git {
 class AbstractCommand;
 }
@@ -30,6 +32,7 @@ public:
 private slots:
     void git_readyReadStandardOutput();
     void git_readyReadStandardError();
+    void git_finished(int exitCode, QProcess::ExitStatus exitStatus);
 };
 
 #endif // RUNNERDIALOG_H

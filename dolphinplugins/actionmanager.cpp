@@ -40,15 +40,6 @@ QList<QAction *> ActionManager::actions(const KFileItemListProperties &fileItemI
     mainAction->setIcon(QIcon::fromTheme("gitklient"));
 
     auto menu = new QMenu;
-    /*QString path;
-        int index{0};
-        while (true) {
-
-    for (auto &f: fileItemInfos.items()) {
-        menu->addAction(f.text());
-    }
-
-}*/
 
     auto items = fileItemInfos.items();
     if (items.size() == 1) {
@@ -61,21 +52,16 @@ QList<QAction *> ActionManager::actions(const KFileItemListProperties &fileItemI
             status = _cache.pathStatus(path);
 
         if (status == FileStatus::NoGit) {
-            addMenu(menu, i18n("Clone"), {"clone", path});
-            addMenu(menu, i18n("Init"), {"init", path});
-        } else {
-            addMenu(menu, i18n("Open"), {path});
-            addMenu(menu, i18n("Pull"), {"pull", path});
-            addMenu(menu, i18n("Push"), {"push", path});
-            addMenu(menu, i18n("Modifications"), {"changes", path});
-            addMenu(menu, i18n("Diff"), {"diff", path});
-            if (fileItemInfos.isFile()) {
-                addMenu(menu, i18n("History"), {"history", path});
-                addMenu(menu, i18n("Blame"), {"blame", path});
+            if (fileItemInfos.isDirectory()) {
+                addMenuToNonGitFile(menu, path);
             }
+        } else {
+            addMenuToGitFile(menu, path, fileItemInfos.isFile());
         }
 
     } else {
+        auto path = getCommonPart(fileItemInfos.items());
+
         menu->addAction(QStringLiteral("Is dir: %1").arg(fileItemInfos.isDirectory()));
         menu->addAction(QStringLiteral("Is local: %1").arg(fileItemInfos.isLocal()));
 
@@ -86,7 +72,61 @@ QList<QAction *> ActionManager::actions(const KFileItemListProperties &fileItemI
     }
 
     mainAction->setMenu(menu);
-    return QList<QAction *>() << mainAction;
+
+    auto openAction = new QAction;
+    openAction->setText("Open git klient");
+    openAction->setIcon(QIcon::fromTheme("gitklient"));
+
+    return QList<QAction *>() << openAction << mainAction;
+}
+
+QString ActionManager::getCommonPart(const KFileItemList &fileItems)
+{
+    if (!fileItems.size())
+        return QString();
+
+    QStringList list;
+    for (auto const &i: fileItems)
+        list.append(i.url().toLocalFile());
+
+    QString root = list.front();
+    for(QStringList::const_iterator it = list.begin(); it != list.end(); ++it)
+    {
+        if (root.length() > it->length())
+        {
+            root.truncate(it->length());
+        }
+
+        for(int i = 0; i < root.length(); ++i)
+        {
+            if (root.at(i) != it->at(i))
+            {
+                root.truncate(i);
+                break;
+            }
+        }
+    }
+
+    return root;
+}
+
+void ActionManager::addMenuToNonGitFile(QMenu *menu, const QString &path)
+{
+    addMenu(menu, i18n("Clone"), {"clone", path});
+    addMenu(menu, i18n("Init"), {"init", path});
+}
+
+void ActionManager::addMenuToGitFile(QMenu *menu, const QString &path, bool isFile)
+{
+    addMenu(menu, i18n("Open"), {path});
+    addMenu(menu, i18n("Pull"), {"pull", path});
+    addMenu(menu, i18n("Push"), {"push", path});
+    addMenu(menu, i18n("Modifications"), {"changes", path});
+    addMenu(menu, i18n("Diff"), {"diff", path});
+    if (isFile) {
+        addMenu(menu, i18n("History"), {"history", path});
+        addMenu(menu, i18n("Blame"), {"blame", path});
+    }
 }
 
 K_PLUGIN_FACTORY_WITH_JSON(GitKlientPluginActionFactory,

@@ -17,6 +17,26 @@ int AbstractCommand::progress() const
     return m_progress;
 }
 
+AbstractCommand::Status AbstractCommand::status() const
+{
+    return _status;
+}
+
+void AbstractCommand::setStatus(Status newStatus)
+{
+    _status = newStatus;
+}
+
+const QString &AbstractCommand::errorMessage() const
+{
+    return _errorMessage;
+}
+
+void AbstractCommand::setErrorMessage(const QString &newErrorMessage)
+{
+    _errorMessage = newErrorMessage;
+}
+
 AbstractCommand::AbstractCommand(QObject *parent) : QObject(parent) {}
 
 AbstractCommand::AbstractCommand(const QStringList &args) : QObject(), _args(args) {}

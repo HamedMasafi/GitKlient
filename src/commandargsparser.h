@@ -36,6 +36,7 @@ class Manager;
 
 using CommandList = QList<Command>;
 
+#define HelpText(name, text) Q_CLASSINFO("help." #name, text);
 class CommandArgsParser : public QObject
 {
     Q_OBJECT
@@ -43,6 +44,10 @@ class CommandArgsParser : public QObject
     QMap<QString, CommandList> _commands;
     QMap<QString, QString> _params;
     Git::Manager *git;
+    QMap<QString, QString> _helpTexts;
+
+    HelpText(clone, "Clone an repo")
+
 public:
     CommandArgsParser();
     void add(const QString &name, const CommandList &list);
