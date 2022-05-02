@@ -23,7 +23,9 @@ set(GIT_KLIENT_ICONS
   sc-actions-git-status-added.svg
   sc-actions-git-status-added.svgz
   sc-actions-git-status-ignored.svgz
+  sc-actions-git-status-modified.svg
   sc-actions-git-status-modified.svgz
+  sc-actions-git-status-removed.svg
   sc-actions-git-status-removed.svgz
   sc-actions-git-status-unknown.svgz
   sc-actions-git-status-update.svgz

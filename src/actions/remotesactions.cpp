@@ -72,8 +72,8 @@ void RemotesActions::changeUrl()
 void RemotesActions::rename()
 {
     auto newName = QInputDialog::getText(_parent,
-                                         i18n("Change url"),
-                                         "URL",
+                                         i18n("Rename"),
+                                         "New name",
                                          QLineEdit::Normal,
                                          _remoteName);
 

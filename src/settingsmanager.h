@@ -11,6 +11,7 @@ class SettingsManager : public QObject
 public:
     SettingsManager();
     static SettingsManager *instance();
+    void exec(QWidget *parentWidget);
 
 private slots:
     void settingsChanged();

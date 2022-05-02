@@ -12,6 +12,7 @@ class BranchActions : public AbstractActions
     QString _branchName;
     QString _otherBranch;
 
+    DEFINE_ACTION(actionFetch)
     DEFINE_ACTION(actionBrowse)
     DEFINE_ACTION(actionCheckout)
     DEFINE_ACTION(actionDiff)
@@ -29,6 +30,7 @@ public:
     void setOtherBranch(const QString &newOtherBranch);
 
 private slots:
+    void fetch();
     void create();
     void browse();
     void checkout();

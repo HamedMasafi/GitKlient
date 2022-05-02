@@ -8,6 +8,8 @@
 #endif
 
 #include <KConfigDialog>
+
+#include <QAction>
 #include <QWidget>
 
 SettingsManager::SettingsManager()
@@ -29,11 +31,16 @@ void SettingsManager::settingsChanged()
 
 void SettingsManager::show()
 {
+    exec(GitKlientWindow::instance());
+}
+
+void SettingsManager::exec(QWidget *parentWidget)
+{
     if (KConfigDialog::showDialog(QStringLiteral("settings"))) {
         return;
     }
 
-    KConfigDialog *dialog = new KConfigDialog(GitKlientWindow::instance(),
+    KConfigDialog *dialog = new KConfigDialog(parentWidget,
                                               QStringLiteral("settings"),
                                               GitKlientSettings::self());
 

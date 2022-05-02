@@ -137,7 +137,6 @@ int maxIn(const QList<int> &list) {
         index++;
     }
 
-    qDebug() << "max of" << list << "is" << max << "(" << maxIndex << ")";
     return maxIndex;
 }
 Solution3 longestCommonSubsequence(const QStringList &source,
@@ -228,7 +227,6 @@ Solution3 longestCommonSubsequence(const QStringList &source,
 //            j--;
         }
     }
-    qDebug() << "lcs3" << r;
     return r;
 }
 Solution longestCommonSubsequence(const QStringList &source, const QStringList &target)
@@ -284,7 +282,6 @@ Solution longestCommonSubsequence(const QStringList &source, const QStringList &
         }
     }
 
-    qDebug() << r << l[source.count()][target.count()];
     return r;
 }
 
@@ -493,7 +490,6 @@ QList<MergeSegment *> diff3_2(const QStringList &baseList, const QStringList &lo
             continue;
         } else {
             auto common = firstCommonItem(base, local, remote);
-            qDebug() << "Common:" << common;
 
             if (common.base == -1) {
                 segments.append(new MergeSegment{base, local, remote});
@@ -509,9 +505,9 @@ QList<MergeSegment *> diff3_2(const QStringList &baseList, const QStringList &lo
             auto localSubList = take(local, common.local);
             auto remoteSubList = take(remote, common.remote);
             segments.append(new MergeSegment{baseSubList, localSubList, remoteSubList});
-            qDebug() << " * BASE:  " << baseSubList;
-            qDebug() << " * LOCAL: " << localSubList;
-            qDebug() << " * REMOTE:" << remoteSubList;
+//            qDebug() << " * BASE:  " << baseSubList;
+//            qDebug() << " * LOCAL: " << localSubList;
+//            qDebug() << " * REMOTE:" << remoteSubList;
             continue;
         }
     }

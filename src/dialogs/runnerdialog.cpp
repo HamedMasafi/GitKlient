@@ -3,6 +3,7 @@
 #include "git/gitmanager.h"
 
 #include <KLocalizedString>
+#include <KMessageBox>
 
 #include <QProcess>
 #include <QDebug>
@@ -24,6 +25,11 @@ RunnerDialog::RunnerDialog(QWidget *parent) :
             &QProcess::readyReadStandardError,
             this,
             &RunnerDialog::git_readyReadStandardError);
+
+    connect(_git,
+            QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished),
+            this,
+            &RunnerDialog::git_finished);
 }
 
 void RunnerDialog::run(const QStringList &args)
@@ -77,4 +83,16 @@ void RunnerDialog::git_readyReadStandardError()
 
     if (_cmd)
         _cmd->parseOutput(QByteArray(), buffer);
+}
+
+void RunnerDialog::git_finished(int exitCode, QProcess::ExitStatus exitStatus)
+{
+    Q_UNUSED(exitCode)
+    pushButton->setText(i18n("Close"));
+
+    if (exitStatus == QProcess::CrashExit)
+        KMessageBox::sorry(this, i18n("The git process crashed"));
+
+    if (_cmd && _cmd->status() == Git::AbstractCommand::Error)
+        KMessageBox::sorry(this, _cmd->errorMessage());
 }

@@ -21,6 +21,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // application headers
 #include "diffwindow.h"
 #include "git/commands/commandpull.h"
+#include "git/commands/commandswitchbranch.h"
 #include "gitklientwindow.h"
 
 #include "dialogs/changedfilesdialog.h"
@@ -28,6 +29,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "dialogs/commitpushdialog.h"
 #include "dialogs/fetchdialog.h"
 #include "dialogs/filestreedialog.h"
+#include "dialogs/initdialog.h"
 #include "dialogs/mergedialog.h"
 #include "dialogs/pulldialog.h"
 #include "dialogs/reposettingsdialog.h"
@@ -39,6 +41,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "git/models/logscache.h"
 #include "gitklientdebug.h"
 #include "multipagewidget.h"
+#include "settingsmanager.h"
 #include "widgets/branchesstatuswidget.h"
 #include "widgets/commitswidget.h"
 #include "widgets/historyviewwidget.h"
@@ -113,50 +116,27 @@ void GitKlientWindow::git_pathChanged()
     setWindowFilePath(_git->path());
 //    setWindowTitle(_git->path());
 
-    _statusCurrentBranchLabel->setText(i18n("Current branch: %1", _git->currentBranch()));
-}
+    auto statusText = i18n("Current branch: %1", _git->currentBranch());
+    if (_git->isMerging())
+        statusText .append(i18n(" (merging)"));
 
-void GitKlientWindow::settingsConfigure()
-{
-    if (KConfigDialog::showDialog(QStringLiteral("settings"))) {
-        return;
-    }
-
-    KConfigDialog *dialog = new KConfigDialog(this, QStringLiteral("settings"), GitKlientSettings::self());
-
-    QWidget *generalSettingsPage = new QWidget;
-    settingsBase.setupUi(generalSettingsPage);
-
-#if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
-    settingsBase.kcfg_calendarType->addItems(QCalendar::availableCalendars());
-#else
-    settingsBase.labelDefaultCalendar->hide();
-    settingsBase.kcfg_calendarType->hide();
-#endif
-
-    //#ifndef QT_BOOTSTRAPPED
-    //    settingsBase.kcfg_calendarType->addItem("Julian");
-    //    settingsBase.kcfg_calendarType->addItem("Milankovic");
-    //#endif
-    //#if QT_CONFIG(jalalicalendar)
-    //    settingsBase.kcfg_calendarType->addItem("Jalali");
-    //#endif
-    //#if QT_CONFIG(islamiccivilcalendar)
-    //    settingsBase.kcfg_calendarType->addItem("IslamicCivil");
-    //#endif
-    dialog->addPage(generalSettingsPage, i18n("General"), QStringLiteral("package_setting"));
-
-    auto diffSettingsPage = new QWidget;
-    diffSettings.setupUi(diffSettingsPage);
-    dialog->addPage(diffSettingsPage, i18n("Diff"), QStringLiteral("package_setting"));
-
-    //    connect(dialog, &KConfigDialog::settingsChanged, m_kde_actionsView, &KlientView::handleSettingsChanged);
-    dialog->show();
+    _statusCurrentBranchLabel->setText(statusText);
 }
 
 void GitKlientWindow::initActions()
 {
     KActionCollection* actionCollection = this->actionCollection();
+
+    auto repoInitAction = actionCollection->addAction("repo_init", this, &GitKlientWindow::initRepo);
+    repoInitAction->setText(i18n("Init..."));
+
+    auto repoOpenAction = actionCollection->addAction("repo_open", this, &GitKlientWindow::openRepo);
+    repoOpenAction->setText(i18n("Open..."));
+    actionCollection->setDefaultShortcut(repoOpenAction, QKeySequence("Ctrl+O"));
+    repoOpenAction->setIcon(QIcon::fromTheme(QStringLiteral("folder-open")));
+
+    auto repoCloneAction = actionCollection->addAction("repo_clone", this, &GitKlientWindow::clone);
+    repoCloneAction->setText(i18n("Clone..."));
 
     auto repoStatusAction = actionCollection->addAction(QStringLiteral("repo_status"),
                                                         this,
@@ -167,17 +147,10 @@ void GitKlientWindow::initActions()
 
     {
         recentAction = actionCollection->addAction("recent");
-        recentAction->setText(i18n("Recent files"));
+        recentAction->setText(i18n("Recent repos"));
         recentAction->setMenu(new QMenu(this));
         initRecentFiles();
     }
-
-    auto openRepoAction = actionCollection->addAction(QStringLiteral("open_repo"),
-                                                      this,
-                                                      &GitKlientWindow::openRepo);
-    openRepoAction->setText(i18n("Open repo"));
-    actionCollection->setDefaultShortcut(openRepoAction, QKeySequence("Ctrl+O"));
-    openRepoAction->setIcon(QIcon::fromTheme(QStringLiteral("folder-open")));
 
     auto repoPullAction = actionCollection->addAction("repo_pull", this, &GitKlientWindow::pull);
     repoPullAction->setText(i18n("Pull..."));
@@ -205,7 +178,7 @@ void GitKlientWindow::initActions()
 
     KStandardAction::quit(this, &QMainWindow::close, actionCollection);
     KStandardAction::preferences(SettingsManager::instance(), &SettingsManager::show, actionCollection);
-    KStandardAction::openNew(this, &GitKlientWindow::clone, actionCollection);
+//    KStandardAction::openNew(this, &GitKlientWindow::clone, actionCollection);
 }
 void GitKlientWindow::initRecentFiles(const QString &newItem)
 {
@@ -237,6 +210,19 @@ void GitKlientWindow::repoStatus()
 {
     ChangedFilesDialog d(_git, this);
     d.exec();
+}
+
+void GitKlientWindow::initRepo()
+{
+    InitDialog d(_git, this);
+    if (d.exec() == QDialog::Accepted) {
+        QDir dir;
+        if (!dir.mkpath(d.path())) {
+            KMessageBox::sorry(this, i18n("Unable to create path: %1", d.path()), i18n("Init repo"));
+            return;
+        }
+        _git->init(d.path());
+    }
 }
 
 void GitKlientWindow::openRepo()
@@ -306,7 +292,7 @@ void GitKlientWindow::diffBranches()
 {
     SelectBranchesToDiffDialog d(_git, this);
     if (d.exec() == QDialog::Accepted) {
-        auto diffWin = new DiffWindow(d.oldBranch(), d.newBranch());
+        auto diffWin = new DiffWindow(_git, d.oldBranch(), d.newBranch());
         diffWin->showModal();
     }
 }
@@ -325,8 +311,22 @@ void GitKlientWindow::repoSettings()
 
 void GitKlientWindow::repoSwitch()
 {
+    if (_git->isMerging()) {
+        KMessageBox::sorry(this, i18n("Cannot switch branch while merging"), i18n("Switch branch"));
+        return;
+    }
     SwitchBranchDialog d(_git, this);
-    d.exec();
+    if (d.exec() == QDialog::Accepted) {
+        RunnerDialog runner(this);
+        runner.run(d.command());
+        runner.exec();
+    }
+}
+
+void GitKlientWindow::repoDiffTree()
+{
+    auto w = new DiffWindow(_git);
+    w->showModal();
 }
 
 void GitKlientWindow::repoDiffTree()

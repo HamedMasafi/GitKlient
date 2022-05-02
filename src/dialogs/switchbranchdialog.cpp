@@ -14,29 +14,47 @@ SwitchBranchDialog::SwitchBranchDialog(Git::Manager *git, QWidget *parent) : Dia
     comboBoxTags->setModel(git->tagsModel());
 }
 
-void SwitchBranchDialog::on_buttonBox_accepted()
+Git::CommandSwitchBranch *SwitchBranchDialog::command() const
 {
-    Git::CommandSwitchBranch cmd(_git);
+    auto cmd = new Git::CommandSwitchBranch(_git);
 
     if (radioButtonExistingBranch->isChecked()) {
-        cmd.setMode(Git::CommandSwitchBranch::ExistingBranch);
-        cmd.setTarget(comboBoxBranchSelect->currentText());
+        cmd->setMode(Git::CommandSwitchBranch::ExistingBranch);
+        cmd->setTarget(comboBoxBranchSelect->currentText());
     } else if (radioButtonTag->isChecked()) {
-        cmd.setMode(Git::CommandSwitchBranch::Tag);
-        cmd.setTarget(comboBoxTags->currentText());
+        cmd->setMode(Git::CommandSwitchBranch::Tag);
+        cmd->setTarget(comboBoxTags->currentText());
     } else {
-        cmd.setMode(Git::CommandSwitchBranch::NewBranch);
-        cmd.setTarget(lineEditNewBranchName->text());
+        cmd->setMode(Git::CommandSwitchBranch::NewBranch);
+        cmd->setTarget(lineEditNewBranchName->text());
     }
 
-    qDebug() << cmd.target();
-    return;
-
-    cmd.setForce(checkBoxForce->isChecked());
-
-    RunnerDialog d(this);
-    d.run(&cmd);
-    d.exec();
-
-    accept();
+    return cmd;
 }
+
+//void SwitchBranchDialog::on_buttonBox_accepted()
+//{
+//    Git::CommandSwitchBranch cmd(_git);
+
+//    if (radioButtonExistingBranch->isChecked()) {
+//        cmd.setMode(Git::CommandSwitchBranch::ExistingBranch);
+//        cmd.setTarget(comboBoxBranchSelect->currentText());
+//    } else if (radioButtonTag->isChecked()) {
+//        cmd.setMode(Git::CommandSwitchBranch::Tag);
+//        cmd.setTarget(comboBoxTags->currentText());
+//    } else {
+//        cmd.setMode(Git::CommandSwitchBranch::NewBranch);
+//        cmd.setTarget(lineEditNewBranchName->text());
+//    }
+
+//    qDebug() << cmd.target();
+//    return;
+
+//    cmd.setForce(checkBoxForce->isChecked());
+
+//    RunnerDialog d(this);
+//    d.run(&cmd);
+//    d.exec();
+
+//    accept();
+//}

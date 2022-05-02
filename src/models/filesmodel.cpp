@@ -34,7 +34,7 @@ QVariant FilesModel::data(const QModelIndex &index, int role) const
 void FilesModel::append(const QString &data)
 {
     auto i = data.lastIndexOf("/");
-    if (i < data.size() - 1)
+    if (i != -1)
         _files.append({data.mid(i + 1), data});
     else
         _files.append({data, data});

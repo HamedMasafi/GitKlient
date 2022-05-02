@@ -14,6 +14,8 @@ class FetchDialog : public Dialog, private Ui::FetchDialog
 public:
     explicit FetchDialog(Git::Manager *git, QWidget *parent = nullptr);
 
+    void setBranch(const QString &branch);
+
 private slots:
     void on_buttonBox_accepted();
 };

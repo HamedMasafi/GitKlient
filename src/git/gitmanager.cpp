@@ -42,6 +42,8 @@ void Manager::setPath(const QString &newPath)
         _isValid = true;
         _logs.load();
         loadAsync();
+
+        setIsMerging(QFile::exists(_path + "/.git/MERGE_HEAD"));
     }
 
     Q_EMIT pathChanged();
@@ -396,6 +398,7 @@ QByteArray Manager::runGit(const QStringList &args) const
     auto out = p.readAllStandardOutput();
     auto err = p.readAllStandardError();
     Q_UNUSED(err)
+    qDebug() << err;
     return out; // + err;
 }
 
@@ -629,6 +632,19 @@ QString Manager::getTopLevelPath() const
 {
     //git rev-parse --show-toplevel
     return QString();
+}
+
+bool Manager::isMerging() const
+{
+    return m_isMerging;
+}
+
+void Manager::setIsMerging(bool newIsMerging)
+{
+    if (m_isMerging == newIsMerging)
+        return;
+    m_isMerging = newIsMerging;
+    emit isMergingChanged();
 }
 
 } // namespace Git

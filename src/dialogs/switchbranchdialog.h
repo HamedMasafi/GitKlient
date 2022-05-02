@@ -4,6 +4,9 @@
 #include "ui_switchbranchdialog.h"
 #include "core/dialog.h"
 
+namespace Git{
+class CommandSwitchBranch;
+}
 class SwitchBranchDialog : public Dialog, private Ui::SwitchBranchDialog
 {
     Q_OBJECT
@@ -11,8 +14,10 @@ class SwitchBranchDialog : public Dialog, private Ui::SwitchBranchDialog
 public:
     explicit SwitchBranchDialog(Git::Manager *git, QWidget *parent = nullptr);
 
+    Git::CommandSwitchBranch *command() const;
+
 private slots:
-    void on_buttonBox_accepted();
+//    void on_buttonBox_accepted();
 };
 
 #endif // SWITCHBRANCHDIALOG_H

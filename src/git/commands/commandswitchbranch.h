@@ -11,6 +11,8 @@ class CommandSwitchBranch : public AbstractCommand
 
 public:
     CommandSwitchBranch(Manager *git);
+    void parseOutput(const QByteArray &output, const QByteArray &errorOutput) override;
+
     enum Mode { NewBranch, ExistingBranch, Tag };
 
     const QString &target() const;
