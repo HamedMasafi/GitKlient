@@ -11,7 +11,6 @@ class DiffTest : public QObject
 private Q_SLOTS:
     void diff();
     void diff2();
-    void files();
     void merge();
 
     void mergeSqlModel();
@@ -36,12 +35,12 @@ auto segmentTypeText(Diff::SegmentType type) -> QString
 
 void print(Diff::Segment *segment)
 {
-//    qDebug().noquote() << "==================";
-//    qDebug().noquote() << "Segment" << segmentTypeText(segment->type);
-//    qDebug() << "Old:";
-//    qDebug().noquote() << segment->oldText;
-//    qDebug() << "New:";
-//    qDebug().noquote() << segment->newText;
+    qDebug().noquote() << "==================";
+    qDebug().noquote() << "Segment" << segmentTypeText(segment->type);
+    qDebug() << "Old:";
+    qDebug().noquote() << segment->oldText;
+    qDebug() << "New:";
+    qDebug().noquote() << segment->newText;
 }
 
 void print(Diff::MergeSegment *segment)
@@ -129,14 +128,6 @@ QString diffTypeText(const Diff::DiffType type)
     case Diff::DiffType::Modified: return "Modified";
     }
     return QString();
-}
-
-void DiffTest::files()
-{
-    auto map = Diff::diffDirs("/home/hamed/tmp/diff/1", "/home/hamed/tmp/diff/2");
-    for (auto i = map.begin(); i != map.end(); ++i) {
-        qDebug() << i.key() << diffTypeText(i.value());
-    }
 }
 
 void DiffTest::merge()

@@ -43,7 +43,7 @@ jobs:
           
       - name: Run tests
         run: |
-          mkdir build-cmake
+          cd build-cmake
           make test
               
       - name: Build deb package
