@@ -61,8 +61,8 @@ QList<QAction *> ActionManager::actions(const KFileItemListProperties &fileItemI
             status = _cache.pathStatus(path);
 
         if (status == FileStatus::NoGit) {
-            addMenu(menu, i18n("Clone"), QStringList() << "--clone");
-            addMenu(menu, i18n("Init"), QStringList() << "--init");
+            addMenu(menu, i18n("Clone"), {"clone", path});
+            addMenu(menu, i18n("Init"), {"init", path});
         } else {
             addMenu(menu, i18n("Open"), {path});
             addMenu(menu, i18n("Pull"), {"pull", path});

@@ -76,6 +76,8 @@ void Remote::parse(const QString &output)
                     branch.status = RemoteBranch::Status::FastForwardable;
                 else if (match.captured(3) == "up to date")
                     branch.status = RemoteBranch::Status::UpToDate;
+                else if (match.captured(3) == "local out of date")
+                    branch.status = RemoteBranch::Status::LocalOutOfDate;
                 else
                     qDebug() << "Unknown status" << match.captured(3);
 
@@ -115,6 +117,8 @@ QString RemoteBranch::statusText() const
         return "Up to date";
     case Status::FastForwardable:
         return "Fast forwardable";
+    case Status::LocalOutOfDate:
+        return "Local out of date";
     }
     return QString();
 }
