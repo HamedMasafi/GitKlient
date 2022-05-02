@@ -49,6 +49,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "widgets/stasheswidget.h"
 #include "widgets/submoduleswidget.h"
 #include "widgets/tagswidget.h"
+#include "settingsmanager.h"
 
 // KF headers
 #include <KActionCollection>
@@ -320,6 +321,12 @@ void GitKlientWindow::repoSwitch()
         runner.run(d.command());
         runner.exec();
     }
+}
+
+void GitKlientWindow::repoDiffTree()
+{
+    auto w = new DiffWindow(_git);
+    w->showModal();
 }
 
 void GitKlientWindow::repoDiffTree()
