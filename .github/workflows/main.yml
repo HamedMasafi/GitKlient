@@ -41,6 +41,11 @@ jobs:
           VAR=`cat version`
           echo "version=${VAR}" >> $GITHUB_ENV
           
+      - name: Run tests
+        run: |
+          mkdir build-cmake
+          make test
+              
       - name: Build deb package
         run: |
           cd build-cmake

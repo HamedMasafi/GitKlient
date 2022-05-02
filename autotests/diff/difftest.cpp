@@ -1,4 +1,5 @@
 #include "../../src/diff/diff.cpp"
+#include "../common/gittestmanager.cpp"
 #include <QtTest/QTest>
 #include <QDebug>
 #include <QTextStream>
@@ -180,9 +181,9 @@ five
 
 void DiffTest::mergeSqlModel()
 {
-    auto base = Diff::readFileLines("/home/hamed/tmp/merge-test/sqlmodel_BASE_32623.h");
-    auto local= Diff::readFileLines("/home/hamed/tmp/merge-test/sqlmodel_LOCAL_32623.h");
-    auto remote = Diff::readFileLines("/home/hamed/tmp/merge-test/sqlmodel_REMOTE_32623.h");
+    auto base = Diff::readFileLines("sqlmodel_BASE_32623.h");
+    auto local= Diff::readFileLines("sqlmodel_LOCAL_32623.h");
+    auto remote = Diff::readFileLines("sqlmodel_REMOTE_32623.h");
 
     auto segments = Diff::diff3(base, local, remote);
 
