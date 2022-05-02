@@ -168,20 +168,6 @@ ArgParserReturn CommandArgsParser::clone(const QString &path)
     return 0;
 }
 
-ArgParserReturn CommandArgsParser::clone(const QString &path)
-{
-    CloneDialog d;
-    if (d.exec() == QDialog::Accepted) {
-        RunnerDialog r;
-
-        auto cmd = d.command();;
-        r.run(cmd);
-        r.exec();
-        cmd->deleteLater();
-    }
-    return 0;
-}
-
 ArgParserReturn CommandArgsParser::init(const QString &path)
 {
     return 0;

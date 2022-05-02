@@ -329,12 +329,6 @@ void GitKlientWindow::repoDiffTree()
     w->showModal();
 }
 
-void GitKlientWindow::repoDiffTree()
-{
-    auto w = new DiffWindow(_git);
-    w->showModal();
-}
-
 template<class T>
 void GitKlientWindow::addPage(const QString &actionName)
 {
