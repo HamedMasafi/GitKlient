@@ -401,5 +401,3 @@ void CodeEditor::clearAll()
     clear();
 }
 
-
-#include "codeeditor.moc"
