@@ -14,7 +14,8 @@
    <string>Run command</string>
   </property>
   <property name="windowIcon">
-   <iconset theme="gitklient"/>
+   <iconset theme="gitklient">
+    <normaloff>.</normaloff>.</iconset>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_2">
    <item>
@@ -69,7 +70,7 @@
      <item>
       <widget class="QPushButton" name="pushButton">
        <property name="text">
-        <string>Close</string>
+        <string>Stop</string>
        </property>
       </widget>
      </item>

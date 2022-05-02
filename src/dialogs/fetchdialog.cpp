@@ -18,6 +18,11 @@ FetchDialog::FetchDialog(Git::Manager *git, QWidget *parent) : Dialog(parent)
 
 }
 
+void FetchDialog::setBranch(const QString &branch)
+{
+    comboBoxBranch->setCurrentText(branch);
+}
+
 void FetchDialog::on_buttonBox_accepted()
 {
     Git::CommandFetch cmd;

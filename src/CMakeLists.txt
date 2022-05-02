@@ -91,6 +91,7 @@ ki18n_wrap_ui(
     dialogs/reposettingsdialog.ui
     dialogs/fetchdialog.ui
     dialogs/switchbranchdialog.ui
+    dialogs/initdialog.ui
 )
 
 include(git/CMakeLists.txt)

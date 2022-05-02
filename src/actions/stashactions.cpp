@@ -60,7 +60,7 @@ void StashActions::pop()
 void StashActions::diff()
 {
     qDebug() << "diff" <<_stashName;
-    auto d = new DiffWindow(_stashName, "HEAD");
+    auto d = new DiffWindow(_git, _stashName, "HEAD");
     d->showModal();
 }
 

@@ -55,6 +55,12 @@ FileStatus::Status StatusCache::fileStatus(const QFileInfo &fileInfo)
     return FileStatus::Unmodified;
 }
 
+bool StatusCache::isGitDir(const QString &path)
+{
+    Git::MiniManager git(path);
+    return git.isValid();
+}
+
 FileStatus::Status StatusCache::fileStatus(const QString &filePath)
 {
     return fileStatus(QFileInfo(filePath));

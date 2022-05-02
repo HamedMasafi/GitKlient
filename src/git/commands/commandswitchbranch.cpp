@@ -1,10 +1,26 @@
 #include "commandswitchbranch.h"
 
+#include <QDebug>
+
+#include <klocalizedstring.h>
+
 namespace Git {
 
 CommandSwitchBranch::CommandSwitchBranch(Manager *git) : AbstractCommand(git)
 {
 
+}
+
+void CommandSwitchBranch::parseOutput(const QByteArray &output, const QByteArray &errorOutput)
+{
+    if (errorOutput.contains("error: Your local changes to the following files would be overwritten by checkout")) {
+        setStatus(Error);
+        setErrorMessage(
+            i18n("Your local changes to the following files would be overwritten by checkout. "
+                 "Please commit your changes or stash them before you switch branches."));
+    }
+    qDebug() << "Error" << errorOutput;
+    qDebug() << "out" << output;
 }
 
 const QString &CommandSwitchBranch::target() const

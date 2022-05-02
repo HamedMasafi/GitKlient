@@ -1,6 +1,19 @@
 #include "submoduleinfodialog.h"
 
 #include "git/commands/addsubmodulecommand.h"
+#include "git/gitmanager.h"
+
+#include <klocalizedstring.h>
+#include <kmessagebox.h>
+
+#include <QFileDialog>
+
+
+SubmoduleInfoDialog::SubmoduleInfoDialog(Git::Manager *git, QWidget *parent) :
+      Dialog(git, parent)
+{
+    setupUi(this);
+}
 
 bool SubmoduleInfoDialog::force() const
 {
@@ -64,8 +77,16 @@ Git::AddSubmoduleCommand *SubmoduleInfoDialog::command() const
     return cmd;
 }
 
-SubmoduleInfoDialog::SubmoduleInfoDialog(QWidget *parent) :
-      Dialog(parent)
+void SubmoduleInfoDialog::on_toolButtonBrowseLocalPath_clicked()
 {
-    setupUi(this);
+    auto localPath = QFileDialog::getExistingDirectory(this, i18n("Local path"), _git->path());
+    if (localPath.isEmpty())
+        return;
+
+    if (!localPath.startsWith(_git->path())) {
+        KMessageBox::sorry(this, i18n("The selected path is outside of working dir"));
+        return;
+    }
+
+    lineEditPath->setText(localPath.replace(_git->path() + "/", ""));
 }

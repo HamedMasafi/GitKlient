@@ -3,20 +3,20 @@
 #include <KActionCollection>
 #include <KLocalizedString>
 
-#include <QDockWidget>
 #include <QApplication>
-#include <QTreeView>
 #include <QDebug>
+#include <QDockWidget>
+#include <QTreeView>
 
 #include "dialogs/diffopendialog.h"
 #include "git/gitmanager.h"
 #include "models/difftreemodel.h"
+#include "models/filesmodel.h"
+#include "settingsmanager.h"
 #include "widgets/codeeditor.h"
 #include "widgets/difftreeview.h"
 #include "widgets/diffwidget.h"
 #include "widgets/editactionsmapper.h"
-
-#include <models/filesmodel.h>
 
 void DiffWindow::init(bool showSideBar)
 {
@@ -69,7 +69,7 @@ DiffWindow::DiffWindow(Git::Manager *git) : MainWindow()
     _leftStorage = Git;
     _rightStorage =  FileSystem;
     _rightDir = git->path();
-    qDebug() << "right dir" << _rightDir;
+    _diffModel->sortItems();
 }
 
 DiffWindow::DiffWindow(const Git::File &oldFile, const Git::File &newFile)
@@ -91,9 +91,11 @@ DiffWindow::DiffWindow(Git::Manager *git, const QString &oldBranch, const QStrin
 
     for (auto &f: diffs) {
         _diffModel->addFile(f);
+//        qDebug() << f.name() << f.status();
         _filesModel->append(f.name());
     }
     _leftStorage = _rightStorage = Git;
+    _diffModel->sortItems();
 }
 
 DiffWindow::DiffWindow(const QString &oldDir, const QString &newDir)
@@ -123,6 +125,11 @@ void DiffWindow::fileOpen()
         _diffWidget->setNewFile({d.newFile()});
         _diffWidget->compare();
     }
+}
+
+void DiffWindow::settings()
+{
+    SettingsManager::instance()->exec(this);
 }
 
 void DiffWindow::on_treeView_fileSelected(const QString &file)
@@ -191,6 +198,6 @@ void DiffWindow::initActions()
     viewFilesInfo->setChecked(true);
 
     KStandardAction::quit(this, &QWidget::close, actionCollection);
-//    KStandardAction::preferences(this, SLOT(settingsConfigure()), actionCollection);
+//    KStandardAction::preferences(this, &DiffWindow::settings, actionCollection);
     KStandardAction::open(this, &DiffWindow::fileOpen, actionCollection);
 }

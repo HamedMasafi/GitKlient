@@ -6,13 +6,14 @@
 
 namespace Git {
 class AddSubmoduleCommand;
+class Manager;
 }
 class SubmoduleInfoDialog : public Dialog, private Ui::SubmoduleInfoDialog
 {
     Q_OBJECT
 
 public:
-    explicit SubmoduleInfoDialog(QWidget *parent = nullptr);
+    explicit SubmoduleInfoDialog(Git::Manager *git, QWidget *parent = nullptr);
 
     bool force() const;
     void setForce(bool newForce);
@@ -27,6 +28,9 @@ public:
     void setBranch(const QString &newBranch);
 
     Git::AddSubmoduleCommand *command() const;
+
+private slots:
+    void on_toolButtonBrowseLocalPath_clicked();
 };
 
 #endif // SUBMODULEINFODIALOG_H

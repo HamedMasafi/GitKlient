@@ -47,6 +47,6 @@ void CommitActions::checkout()
 
 void CommitActions::diff()
 {
-    auto d = new DiffWindow(_commitHash, "HEAD");
+    auto d = new DiffWindow(_git, _commitHash, "HEAD");
     d->showModal();
 }

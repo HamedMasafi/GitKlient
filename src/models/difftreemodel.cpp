@@ -17,6 +17,7 @@ void DiffTreeModel::addFile(const FileStatus &file)
     auto parts = nodePath.split(seprator());
     node = createPath(parts, toDiffType(file.status()));
     node->key = file.name();
+    node->metaData = toDiffType(file.status());
 }
 
 void DiffTreeModel::addFile(const QString &file, const Diff::DiffType &type)
@@ -51,11 +52,11 @@ QString icon(const Diff::DiffType &status)
 {
     switch (status) {
     case  Diff::DiffType::Added:
-        return "git-status-add";
+        return "git-status-added";
     case  Diff::DiffType::Modified:
         return "git-status-modified";
     case  Diff::DiffType::Removed:
-        return "git-status-remove";
+        return "git-status-removed";
     case  Diff::DiffType::Unchanged:
         return "git-status-update";
     }
@@ -134,11 +135,23 @@ QVariant DiffTreeModel::data(const QModelIndex &index, int role) const
         Node *item = static_cast<Node*>(index.internalPointer());
 
         //        return statusColor(item->metaData);
-        qDebug() << "icon" << item->title << QIcon::fromTheme(icon(item->metaData)).isNull();
+        qDebug() << "icon" << item->title << icon(item->metaData) << QIcon::fromTheme(icon(item->metaData)).isNull();
+
+//        switch (item->metaData) {
+//        case Diff::DiffType::Added:
+//            return QColor(Qt::green);
+//        case Diff::DiffType::Removed:
+//            return QColor(Qt::red);
+//        case Diff::DiffType::Modified:
+//            return QColor(Qt::blue);
+//        case Diff::DiffType::Unchanged:
+//            return QColor(Qt::black);
+//        }
+
         return QIcon::fromTheme(icon(item->metaData));
     } else if (role == Qt::ForegroundRole) {
-        Node *item = static_cast<Node *>(index.internalPointer());
-        return textColor(item->metaData);
+//        Node *item = static_cast<Node *>(index.internalPointer());
+//        return textColor(item->metaData);
     }
 
     return QVariant();

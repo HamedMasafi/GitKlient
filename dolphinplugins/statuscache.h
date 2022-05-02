@@ -17,6 +17,7 @@ public:
     FileStatus::Status fileStatus(const QString &path);
     FileStatus::Status pathStatus(const QString &path);
     FileStatus::Status fileStatus(const QFileInfo &fileInfo);
+    bool isGitDir(const QString &path);
 
 private:
     bool addPath(const QString &path);

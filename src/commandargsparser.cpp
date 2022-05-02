@@ -5,7 +5,8 @@
 #include "dialogs/clonedialog.h"
 #include "dialogs/fileblamedialog.h"
 #include "dialogs/filehistorydialog.h"
-#include "dialogs/pulldialog.h"
+#include "dialogs/pulldialog.h"'
+#include "dialogs/commitpushdialog.h"
 #include "dialogs/runnerdialog.h"
 #include "diffwindow.h"
 #include "git/gitfile.h"
@@ -133,10 +134,36 @@ ArgParserReturn CommandArgsParser::run(const QStringList &args)
 ArgParserReturn CommandArgsParser::help()
 {
     auto c = metaObject()->methodCount();
+
+    for (auto i = metaObject()->classInfoOffset(); i < metaObject()->classInfoCount(); i++) {
+        auto name = QString(metaObject()->classInfo(i).name());
+        auto value = QString(metaObject()->classInfo(i).value());
+
+        if (!name.startsWith("help."))
+            continue;
+        name = name.mid(5);
+
+        _helpTexts.insert(name, value);
+    }
     qDebug() << "Git Klient command line interface help:";
     for(int i = metaObject()->methodOffset(); i < c; i++) {
         auto method = metaObject()->method(i);
         qDebug().noquote() << "    " << method.name() << method.parameterNames().join(" ");
+        qDebug().noquote() << _helpTexts.value(method.name());
+    }
+    return 0;
+}
+
+ArgParserReturn CommandArgsParser::clone(const QString &path)
+{
+    CloneDialog d;
+    if (d.exec() == QDialog::Accepted) {
+        RunnerDialog r;
+
+        auto cmd = d.command();;
+        r.run(cmd);
+        r.exec();
+        cmd->deleteLater();
     }
     return 0;
 }
@@ -170,6 +197,22 @@ ArgParserReturn CommandArgsParser::pull(const QString &path)
         r.run({"pull", "origin", branch});
         r.exec();
     }
+    return 0;
+}
+
+ArgParserReturn CommandArgsParser::push(const QString &path)
+{
+    QFileInfo fi(path);
+
+    if (!fi.exists()) {
+        return 0;
+    }
+    if (fi.isFile())
+        git->setPath(fi.absolutePath());
+    else
+        git->setPath(fi.absoluteFilePath());
+    CommitPushDialog d(git);
+    d.exec();
     return 0;
 }
 
@@ -245,6 +288,15 @@ ArgParserReturn CommandArgsParser::diff(const QString &file1, const QString &fil
 
 ArgParserReturn CommandArgsParser::blame(const QString &file)
 {
+    QFileInfo fi{file};
+
+    if (!fi.exists()) {
+        return 0;
+    }
+
+    git->setPath(fi.absolutePath());
+
+
     Git::File f(git->currentBranch(), file, git);
     FileBlameDialog d(f);
     d.exec();

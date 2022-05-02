@@ -72,6 +72,7 @@ public:
     QString fullPath(const QModelIndex &index) const;
     QString key(const QModelIndex &index) const;
     QString section(const QModelIndex &index) const;
+    void sortItems();
 
     void addData(const QStringList &data, const QString &prefix = QString(), bool split = true);
 
@@ -92,6 +93,7 @@ protected:
     Node *createPath(const QStringList &path);
     Node *find(QStringList &path, Node *node = nullptr);
     void getFullPath(QString &path, Node *node) const;
+    void sortNode(Node *node);
 };
 
 #endif // TREEMODEL_H

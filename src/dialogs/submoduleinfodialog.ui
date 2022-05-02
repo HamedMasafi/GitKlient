@@ -108,6 +108,14 @@
    </item>
   </layout>
  </widget>
+ <tabstops>
+  <tabstop>lineEditUrl</tabstop>
+  <tabstop>lineEditPath</tabstop>
+  <tabstop>toolButtonBrowseLocalPath</tabstop>
+  <tabstop>checkBoxForce</tabstop>
+  <tabstop>checkBoxBranch</tabstop>
+  <tabstop>lineEditBranch</tabstop>
+ </tabstops>
  <resources/>
  <connections>
   <connection>

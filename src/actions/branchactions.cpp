@@ -7,12 +7,26 @@
 #include <QFileDialog>
 #include <QMenu>
 
+#include "dialogs/fetchdialog.h"
 #include "dialogs/filestreedialog.h"
 #include "dialogs/mergedialog.h"
 #include "dialogs/runnerdialog.h"
 #include "diffwindow.h"
-#include "git/gitmanager.h"
 #include "git/commands/commandmerge.h"
+#include "git/gitmanager.h"
+
+BranchActions::BranchActions(Git::Manager *git, QWidget *parent) : AbstractActions(git, parent)
+{
+    _actionCreate = addActionHidden(i18n("Create..."), this, &BranchActions::create);
+    _actionCreate->setIcon(QIcon::fromTheme("document-new"));
+
+    _actionFetch = addActionDisabled(i18n("Fetch..."), this, &BranchActions::fetch);
+    _actionBrowse = addActionDisabled(i18n("Browse..."), this, &BranchActions::browse);
+    _actionCheckout = addActionDisabled(i18n("Switch"), this, &BranchActions::checkout);
+    _actionMerge = addActionDisabled(i18n("Merge..."), this, &BranchActions::merge);
+    _actionDiff = addActionDisabled(i18n("Diff"), this, &BranchActions::diff);
+    _actionRemove = addActionDisabled(i18n("Remove..."), this, &BranchActions::remove);
+}
 
 const QString &BranchActions::branchName() const
 {
@@ -23,6 +37,7 @@ void BranchActions::setBranchName(const QString &newBranchName)
 {
     _branchName = newBranchName;
 
+    setActionEnabled(_actionFetch, true);
     setActionEnabled(_actionBrowse, true);
     setActionEnabled(_actionCheckout, true);
     setActionEnabled(_actionMerge, true);
@@ -41,21 +56,16 @@ void BranchActions::setOtherBranch(const QString &newOtherBranch)
 
 }
 
+void BranchActions::fetch()
+{
+    FetchDialog d(_git, _parent);
+    d.setBranch(_branchName);
+    d.exec();
+}
+
 void BranchActions::create()
 {
 
-}
-
-BranchActions::BranchActions(Git::Manager *git, QWidget *parent) : AbstractActions(git, parent)
-{
-    _actionCreate = addActionHidden(i18n("Create..."), this, &BranchActions::create);
-    _actionCreate->setIcon(QIcon::fromTheme("document-new"));
-
-    _actionBrowse = addActionDisabled("Browse...", this, &BranchActions::browse);
-    _actionCheckout = addActionDisabled("Switch...", this, &BranchActions::checkout);
-    _actionMerge = addActionDisabled("Merge...", this, &BranchActions::merge);
-    _actionDiff = addActionDisabled("Diff...", this, &BranchActions::diff);
-    _actionRemove = addActionDisabled("Remove...", this, &BranchActions::remove);
 }
 
 void BranchActions::browse()
@@ -85,7 +95,7 @@ void BranchActions::diff()
             return;
     }
 
-    auto d = new DiffWindow(mainBranch, _branchName);
+    auto d = new DiffWindow(_git, mainBranch, _branchName);
     d->showModal();
 }
 

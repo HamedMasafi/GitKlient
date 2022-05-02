@@ -27,6 +27,7 @@ class Manager : public QObject
     Q_OBJECT
 
     Q_PROPERTY(QString path READ path WRITE setPath NOTIFY pathChanged)
+    Q_PROPERTY(bool isMerging READ isMerging WRITE setIsMerging NOTIFY isMergingChanged)
 
     QString _path;
     bool _isValid{false};
@@ -138,8 +139,13 @@ public:
 
     TagsModel *tagsModel() const;
 
+    bool isMerging() const;
+    void setIsMerging(bool newIsMerging);
+
 signals:
     void pathChanged();
+
+    void isMergingChanged();
 
 private:
     QStringList readAllNonEmptyOutput(const QStringList &cmd) const;
@@ -160,6 +166,7 @@ private:
     friend class LogsCache;
     friend class StashesCache;
     friend class TagsModel;
+    bool m_isMerging{false};
 };
 
 } // namespace Git

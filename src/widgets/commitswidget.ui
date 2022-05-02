@@ -35,16 +35,6 @@
     </widget>
    </item>
   </layout>
-  <action name="actionBrowse">
-   <property name="text">
-    <string>Browse</string>
-   </property>
-  </action>
-  <action name="actionDiffWithMain">
-   <property name="text">
-    <string>Diff with master</string>
-   </property>
-  </action>
  </widget>
  <customwidgets>
   <customwidget>

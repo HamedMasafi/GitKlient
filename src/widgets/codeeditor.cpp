@@ -1,5 +1,6 @@
 #include "codeeditor.h"
 #include "codeeditorsidebar.h"
+#include "GitKlientSettings.h"
 
 #include <KSyntaxHighlighting/Definition>
 #include <KSyntaxHighlighting/FoldingRegion>
@@ -60,9 +61,9 @@ CodeEditor::CodeEditor(QWidget *parent)
     QTextBlockFormat removedFormat;
     QTextBlockFormat changedFormat;
 
-    addedFormat.setBackground(Qt::green);
-    removedFormat.setBackground(Qt::red);
-    changedFormat.setBackground(Qt::cyan);
+    addedFormat.setBackground(GitKlientSettings::diffAddedColor());
+    removedFormat.setBackground(GitKlientSettings::diffRemovedColor());
+    changedFormat.setBackground(GitKlientSettings::diffModifiedColor());
     //    normalFormat.setBackground(Qt::lightGray);
 
     _formats.insert(Added, addedFormat);
@@ -343,7 +344,7 @@ QPair<int, int> CodeEditor::blockArea(int from, int to)
 {
     auto firstBlock = document()->findBlockByLineNumber(from);
     auto secondBlock = document()->findBlockByLineNumber(to);
-    qDebug() << from << " to " << to << firstBlock.text() << secondBlock.text();
+//    qDebug() << from << " to " << to << firstBlock.text() << secondBlock.text();
 
     int top = qRound(blockBoundingGeometry(firstBlock).translated(contentOffset()).top());
     int bottom;
