@@ -56,20 +56,19 @@ CodeEditor::CodeEditor(QWidget *parent)
     updateSidebarGeometry();
     highlightCurrentLine();
 
-    QTextBlockFormat normalFormat;
-    QTextBlockFormat addedFormat;
-    QTextBlockFormat removedFormat;
-    QTextBlockFormat changedFormat;
+    QTextBlockFormat normalFormat, addedFormat, removedFormat, changedFormat, highlightFormat;
 
     addedFormat.setBackground(GitKlientSettings::diffAddedColor());
     removedFormat.setBackground(GitKlientSettings::diffRemovedColor());
     changedFormat.setBackground(GitKlientSettings::diffModifiedColor());
+    highlightFormat.setBackground(Qt::yellow);
     //    normalFormat.setBackground(Qt::lightGray);
 
     _formats.insert(Added, addedFormat);
     _formats.insert(Removed, removedFormat);
     _formats.insert(Unchanged, normalFormat);
     _formats.insert(Edited, changedFormat);
+    _formats.insert(HighLight, highlightFormat);
 
     setLineWrapMode(QPlainTextEdit::NoWrap);
 }
@@ -134,11 +133,13 @@ void CodeEditor::sidebarPaintEvent(QPaintEvent *event)
     while (block.isValid() && top <= event->rect().bottom()) {
         if (block.isVisible() && bottom >= event->rect().top()) {
             const auto number = QString::number(blockNumber + 1);
-            painter.fillRect(QRect{0,
-                                   top,
-                                   m_sideBar->width() - 1,
-                                   fontMetrics().height()},
-                             document()->findBlockByNumber(blockNumber).blockFormat().background());
+
+            QBrush bg;
+            if (blockNumber >= _currentSegment.first && blockNumber<=_currentSegment.second)
+                bg = Qt::yellow;
+            else
+                bg = document()->findBlockByNumber(blockNumber).blockFormat().background();
+            painter.fillRect(QRect{0, top, m_sideBar->width() - 1, fontMetrics().height()}, bg);
 
             painter.setPen(m_highlighter->theme().editorColor(
                 (blockNumber == currentBlockNumber) ? KSyntaxHighlighting::Theme::CurrentLineNumber
@@ -372,6 +373,21 @@ void CodeEditor::gotoLineNumber(int lineNumber)
     }
 }
 
+void CodeEditor::gotoSegment(Diff::Segment *segment)
+{
+    for (auto i = _segments.begin(); i != _segments.end(); i++) {
+        if (i.value() == segment) {
+            QTextBlock block = document()->findBlockByLineNumber(i.key());
+
+            if (block.isValid()) {
+                QTextCursor cursor(block);
+                setTextCursor(cursor);
+            }
+            return;
+        }
+    }
+}
+
 void CodeEditor::mouseReleaseEvent(QMouseEvent *event)
 {
     Q_EMIT blockSelected();
@@ -385,13 +401,27 @@ Diff::Segment *CodeEditor::currentSegment() const
 
 void CodeEditor::highlightSegment(Diff::Segment *segment)
 {
+    _currentSegment = qMakePair(-1, -1);
     for (auto i = _segments.begin(); i != _segments.end(); i++) {
-        if (i.value()==segment) {
-            auto block = document()->findBlockByNumber(i.key());
-            QTextCursor cursor(block);
-            setTextCursor(cursor);
+        if (i.value() == segment) {
+            if (_currentSegment.first == -1)
+                _currentSegment.first = i.key();
+            //            auto block = document()->findBlockByNumber(i.key());
+
+            //            QTextCursor cursor(block);
+            ////            cursor.setBlockFormat(_formats.value(HighLight));
+            //            setTextCursor(cursor);
+            //            return;
+        } else if (_currentSegment.first != -1){
+            _currentSegment.second = i.key() - 1;
+            break;
         }
     }
+//    _currentSegment = segment;
+    m_sideBar->update();
+    qDebug() << _currentSegment;
+    return;
+    qDebug() << "Segment not found";
 }
 
 void CodeEditor::clearAll()

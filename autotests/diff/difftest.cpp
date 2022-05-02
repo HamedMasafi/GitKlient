@@ -14,6 +14,7 @@ private Q_SLOTS:
     void merge();
 
     void mergeSqlModel();
+    void array();
 };
 
 
@@ -180,6 +181,13 @@ void DiffTest::mergeSqlModel()
 
     for (auto &s: segments)
         print(s);
+}
+
+void DiffTest::array()
+{
+    Diff::Impl::Array<int> a(5, 5, 5);
+    a.setValue(4,1,2,3);
+    QCOMPARE(a.value(1, 2, 3), 4);
 }
 
 QTEST_MAIN(DiffTest)

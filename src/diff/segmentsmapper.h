@@ -2,12 +2,16 @@
 #define SEGMENTSMAPPER_H
 
 #include "diff/diff.h"
+#include <QMap>
 #include <QObject>
 
 class CodeEditor;
+class QScrollBar;
 class SegmentsMapper : public QObject
 {
     Q_OBJECT
+    Diff::Segment *_currentSegment{nullptr};
+
 public:
     SegmentsMapper(QObject *parent = nullptr);
 
@@ -19,6 +23,8 @@ public:
     int mapIndexFromNewToOld(int newIndex);
     int map(int from, int to, int index) const;
 
+    Diff::Segment *currentSegment() const;
+
 private slots:
     void codeEditor_blockSelected();
     void codeEditor_scroll(int value);
@@ -26,6 +32,7 @@ private slots:
 private:
     QList<Diff::MergeSegment *> _segments;
     QList<CodeEditor *> _editors;
+    QMap<QObject *, CodeEditor *> _scrollBars;
 };
 
 #endif // SEGMENTSMAPPER_H

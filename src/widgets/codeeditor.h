@@ -18,13 +18,15 @@ class CodeEditor : public QPlainTextEdit
 {
     Q_OBJECT
     QMap<int, Diff::Segment*> _segments;
+    QPair<int, int> _currentSegment;
 
 public:
     enum BlockType {
         Unchanged,
         Added,
         Removed,
-        Edited
+        Edited,
+        HighLight
     };
 
     explicit CodeEditor(QWidget *parent = nullptr);
@@ -40,6 +42,7 @@ public:
 
     int currentLineNumber() const;
     void gotoLineNumber(int lineNumber);
+    void gotoSegment(Diff::Segment *segment);
 
     Diff::Segment *currentSegment() const;
     void highlightSegment(Diff::Segment *segment);

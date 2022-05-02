@@ -17,6 +17,7 @@ void SegmentsMapper::addEditor(CodeEditor *editor)
             this,
             &SegmentsMapper::codeEditor_blockSelected);
 
+    _scrollBars.insert(editor->verticalScrollBar(), editor);
     connect(editor->verticalScrollBar(),
             &QScrollBar::valueChanged,
             this,
@@ -90,22 +91,48 @@ int SegmentsMapper::map(int from, int to, int index) const
 
 void SegmentsMapper::codeEditor_blockSelected()
 {
-    auto l = qobject_cast<CodeEditor*>(sender())->currentLineNumber();
-    auto n = map(2, 1, l);
-//    if (n != -1)
-//        m_ui.plainTextEditMine->gotoLineNumber(n);
+    auto s = qobject_cast<CodeEditor *>(sender());
+    auto l = s->currentLineNumber();
+    auto myIndx = _editors.indexOf(s);
+
+    _currentSegment = s->currentSegment();
+    s->highlightSegment(_currentSegment);
+
+    for (auto &editor : _editors) {
+        editor->highlightSegment(_currentSegment);
+        editor->gotoSegment(_currentSegment);
+        /*if (s == editor)
+            continue;
+        auto n = map(myIndx, _editors.indexOf(editor), l);
+
+        if (n != -1)
+            editor->gotoLineNumber(n);
+
+        editor->highlightSegment(s->currentSegment());*/
+    }
 }
 
 void SegmentsMapper::codeEditor_scroll(int value)
 {
-    auto s = /*find others*/ qobject_cast<CodeEditor *>(sender());
-    static bool b{false};
-    if (b)
+    static QAtomicInt n = 0;
+    if (n)
         return;
-    b = true;
-    s->verticalScrollBar()->setValue(
-        (int) (((float) value / (float) s->verticalScrollBar()->maximum())
-               * (float) s->verticalScrollBar()->maximum()));
-    b = false;
-//    m_ui.widgetSegmentsConnector->update();
+    n.ref();
+    auto s = _scrollBars.value(sender());
+    if (!s)
+        return;
+    for (auto &editor: _editors) {
+        if (s == editor)
+            continue;
+        editor->verticalScrollBar()->setValue(
+            (int) (((float) value / (float) s->verticalScrollBar()->maximum())
+                   * (float) s->verticalScrollBar()->maximum()));
+    }
+    n.deref();
 }
+
+Diff::Segment *SegmentsMapper::currentSegment() const
+{
+    return _currentSegment;
+}
+

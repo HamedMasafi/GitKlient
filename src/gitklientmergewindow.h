@@ -88,10 +88,6 @@ private Q_SLOTS:
 
     void codeEditors_customContextMenuRequested(QPoint pos);
 
-    void plainTextEditMine_scroll(int value);
-    void plainTextEditTheir_scroll(int value);
-    void plainTextEditMine_blockSelected();
-    void plainTextEditTheir_blockSelected();
     void on_plainTextEditResult_textChanged();
 
     void settingsConfigure();
