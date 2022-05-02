@@ -25,7 +25,6 @@ void ActionManager::addMenu(QMenu *menu, const QString &title, const QStringList
 {
     auto action = menu->addAction(title);
     connect(action, &QAction::triggered, [args]() {
-        qDebug() << "[RUN]" << args;
         KProcess::startDetached("gitklient", args);
     });
 }

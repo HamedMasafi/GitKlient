@@ -47,7 +47,6 @@ void ArgsParser::checkAll()
 
 void ArgsParser::run_diff(const QString &f1, const QString &f2)
 {
-    qDebug() << "diff" << f1 << f2;
     auto d = new DiffWindow;
     d->show();
 }

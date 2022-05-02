@@ -64,9 +64,6 @@ void RemotesActions::changeUrl()
                                         "URL",
                                         QLineEdit::Normal,
                                         remote->pushUrl);
-
-    if (newUrl != QString())
-        qDebug() << newUrl;
 }
 
 void RemotesActions::rename()

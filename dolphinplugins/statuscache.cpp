@@ -20,8 +20,6 @@ bool StatusCache::addPath(const QString &path)
 
     for (const auto &s: qAsConst(statuses)) {
         _statuses.insert(git.path() + "/" + s.name(), s.status());
-//        if (s.status() != FileStatus::Ignored)
-//            qDebug() << s.status() << git.path() << s.name();
     }
     return true;
 }

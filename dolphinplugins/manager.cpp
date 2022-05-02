@@ -58,7 +58,6 @@ QList<FileStatus> MiniManager::repoFilesStatus() const
             continue;
         FileStatus fs;
         fs.parseStatusLine(item);
-        //        qDebug() << "[STATUS]" << fs.name() << fs.status();
         fs.setFullPath(_path + "/" + fs.name());
         files.append(fs);
     }

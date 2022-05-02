@@ -3,10 +3,13 @@
 #include "commandargsparser.h"
 #include "dialogs/changedfilesdialog.h"
 #include "dialogs/clonedialog.h"
+#include "dialogs/commitpushdialog.h"
 #include "dialogs/fileblamedialog.h"
 #include "dialogs/filehistorydialog.h"
-#include "dialogs/pulldialog.h"'
+#include "dialogs/pulldialog.h"
 #include "dialogs/commitpushdialog.h"
+#include "dialogs/initdialog.h"
+#include "dialogs/pulldialog.h"
 #include "dialogs/runnerdialog.h"
 #include "diffwindow.h"
 #include "git/gitfile.h"
@@ -20,6 +23,7 @@
 #include <QFileInfo>
 #include <QMetaMethod>
 
+#include <KMessageBox>
 
 CommandArgsParser::CommandArgsParser() : QObject()
 {
@@ -170,6 +174,11 @@ ArgParserReturn CommandArgsParser::clone(const QString &path)
 
 ArgParserReturn CommandArgsParser::init(const QString &path)
 {
+    InitDialog d(git);
+    if (d.exec() == QDialog::Accepted) {
+        git->init(d.path());
+        KMessageBox::information(nullptr, i18n("The repo inited successfully"));
+    }
     return 0;
 }
 
