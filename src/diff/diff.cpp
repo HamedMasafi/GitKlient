@@ -142,75 +142,57 @@ int maxIn(const QList<int> &list) {
 }
 
 template <typename T>
-class Array
+class Array3
 {
     T* _data;
     int c1,c2,c3;
 public:
-    Array(int c1, int c2, int c3);
-    ~Array();
+    Array3(int c1, int c2, int c3);
+    ~Array3();
 
-    T value(int i1, int i2, int i3);
-    void setValue(int i1, int i2, int i3, const T &value);
+    Q_ALWAYS_INLINE T &operator()(int i1, int i2, int i3);
 };
 template<typename T>
-Q_OUTOFLINE_TEMPLATE Array<T>::Array(int c1, int c2, int c3) : c1(c1), c2(c2), c3(c3)
+Q_OUTOFLINE_TEMPLATE Array3<T>::Array3(int c1, int c2, int c3) : c1(c1), c2(c2), c3(c3)
 {
     _data = new T[c1 * c2 * c3];
 }
 
 template<typename T>
-Q_OUTOFLINE_TEMPLATE Array<T>::~Array()
+Q_OUTOFLINE_TEMPLATE Array3<T>::~Array3()
 {
     delete[] _data;
 }
 
 template<typename T>
-Q_OUTOFLINE_TEMPLATE T Array<T>::value(int i1, int i2, int i3)
+Q_OUTOFLINE_TEMPLATE T &Array3<T>::operator()(int i1, int i2, int i3)
 {
     return _data[i3 * c1 * c2 + c1 * i2 + i1];
-}
-
-template<typename T>
-Q_OUTOFLINE_TEMPLATE void Array<T>::setValue(int i1, int i2, int i3, const T &value)
-{
-    _data[i3 * c1 * c2 + c1 * i2 + i1] = value;
 }
 
 Solution3 longestCommonSubsequence(const QStringList &source,
                                    const QStringList &target,
                                    const QStringList &target2)
 {
-    //    QMap<int, QMap<int, QMap<int, int>>> l;
-    //    int ***l = new int **[source.count()];
-    Array<int> l(source.size() + 1, target.size() + 1, target2.size() + 1);
+    Array3<int> l(source.size() + 1, target.size() + 1, target2.size() + 1);
 
-    for (int i = 0; i <= source.count(); i++) {
-        //        l[i] = new int *[target.count()];
-        for (int j = 0; j <= target.count(); j++) {
-            //            l[i][j] = new int[target2.count()];
-            for (int k = 0; k <= target2.count(); ++k) {
+    for (int i = 0; i <= source.count(); i++)
+        for (int j = 0; j <= target.count(); j++)
+            for (int k = 0; k <= target2.count(); ++k)
                 if (i == 0 || j == 0 || k == 0) {
-                    l.setValue(i, j, k, 0);
+                    l(i, j, k) = 0;
                 } else if (source.at(i - 1) == target.at(j - 1)
                            && source.at(i - 1) == target2.at(k - 1)) {
-                    l.setValue(i, j, k, l.value(i - 1, j - 1, k - 1) + 1);
+                    l(i, j, k) = l(i - 1, j - 1, k - 1) + 1;
                 } else {
-                    l.setValue(i,
-                               j,
-                               k,
-                               std::max(std::max(l.value(i - 1, j, k), l.value(i, j - 1, k)),
-                                        l.value(i, j, k - 1)));
+                    l(i, j, k) = std::max(std::max(l(i - 1, j, k), l(i, j - 1, k)), l(i, j, k - 1));
                 }
-            }
-        }
-    }
 
     int i = source.count();
     int j = target.count();
     int k = target2.count();
-    int index = l.value(source.count(), target.count(), target2.count());
-    //    QString longestCommonSubsequence;
+    int index = l(source.count(), target.count(), target2.count());
+
     Solution3 r;
     while (i > 0 && j > 0 && k > 0) {
         if (source.at(i - 1) == target.at(j - 1) && source.at(i - 1) == target2.at(k - 1)) {
@@ -225,15 +207,15 @@ Solution3 longestCommonSubsequence(const QStringList &source,
 ////        } else if (l[i][j][k - 1] > l[i][j - 1][k] && l[i][j][k - 1] > l[i - 1][j][k]) {
 ////            k--;
         } else {
-            int n = maxIn({l.value(i - 1, j, k),
-                           l.value(i, j - 1, k),
-                           l.value(i, j, k - 1),
+            int n = maxIn({l(i - 1, j, k),
+                           l(i, j - 1, k),
+                           l(i, j, k - 1),
 
-                           l.value(i - 1, j - 1, k),
-                           l.value(i, j - 1, k - 1),
-                           l.value(i - 1, j, k - 1),
+                           l(i - 1, j - 1, k),
+                           l(i, j - 1, k - 1),
+                           l(i - 1, j, k - 1),
 
-                           l.value(i - 1, j - 1, k - 1)});
+                           l(i - 1, j - 1, k - 1)});
             switch (n) {
             case 0:
                 i--;

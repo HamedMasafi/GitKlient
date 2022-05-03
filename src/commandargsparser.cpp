@@ -324,7 +324,8 @@ ArgParserReturn CommandArgsParser::merge(const QString &base, const QString &loc
     d->setFilePathRemote(remote);
     d->setFilePathResult(result);
     d->load();
-    d->showModal();
+    int n = d->exec();
+    qDebug() << "GitKlientMergeWindow::exec" << n;
     return ExecApp;
 }
 

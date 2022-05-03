@@ -24,6 +24,10 @@ public:
     int map(int from, int to, int index) const;
 
     Diff::Segment *currentSegment() const;
+    void refresh();
+
+    void setCurrentSegment(Diff::Segment *newCurrentSegment);
+    bool isMergeable() const;
 
 private slots:
     void codeEditor_blockSelected();

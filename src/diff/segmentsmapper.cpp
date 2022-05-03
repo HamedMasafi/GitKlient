@@ -3,6 +3,8 @@
 #include <QScrollBar>
 #include "widgets/codeeditor.h"
 
+
+
 SegmentsMapper::SegmentsMapper(QObject *parent) : QObject(parent)
 {
 
@@ -136,3 +138,26 @@ Diff::Segment *SegmentsMapper::currentSegment() const
     return _currentSegment;
 }
 
+void SegmentsMapper::refresh()
+{
+    if (!_currentSegment)
+        return;
+    for (auto &editor : _editors) {
+        editor->highlightSegment(_currentSegment);
+        editor->gotoSegment(_currentSegment);
+    }
+}
+
+void SegmentsMapper::setCurrentSegment(Diff::Segment *newCurrentSegment)
+{
+    _currentSegment = newCurrentSegment;
+    refresh();
+}
+
+bool SegmentsMapper::isMergeable() const
+{
+    for (auto &s : _segments)
+        if (s->mergeType == Diff::MergeType::None)
+            return false;
+    return true;
+}

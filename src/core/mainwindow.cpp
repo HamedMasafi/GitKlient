@@ -1,4 +1,5 @@
 #include "mainwindow.h"
+#include "qdebug.h"
 
 #include <QEventLoop>
 #include <QCloseEvent>
@@ -21,6 +22,16 @@ void MainWindow::showModal()
     show();
 }
 
+void MainWindow::accept()
+{
+    _returnCode = Accepted;
+}
+
+void MainWindow::reject()
+{
+    _returnCode = Rejected;
+}
+
 void MainWindow::closeDialog(int resultCode)
 {
     _returnCode = resultCode;
@@ -30,7 +41,8 @@ void MainWindow::closeDialog(int resultCode)
 
 void MainWindow::closeEvent(QCloseEvent *event)
 {
-    event->accept();
+    qDebug() << Q_FUNC_INFO;
+    Q_UNUSED(event)
     if (_loop)
         _loop->quit();
 }

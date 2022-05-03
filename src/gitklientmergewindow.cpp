@@ -370,12 +370,13 @@ void GitKlientMergeWindow::doMergeAction(Diff::MergeType type)
 
     if (s->type == Diff::SegmentType::SameOnBoth)
         return;
-    if (s) {
-        auto ss = static_cast<Diff::MergeSegment *>(s);
-        ss->mergeType = type;
-        updateResult();
-        m_ui.plainTextEditResult->highlightSegment(s);
-    }
+
+    auto ss = static_cast<Diff::MergeSegment *>(s);
+    ss->mergeType = type;
+    updateResult();
+//    m_ui.plainTextEditResult->highlightSegment(s);
+
+    _mapper->setCurrentSegment(s);
 }
 
 bool GitKlientMergeWindow::isFullyResolved()
@@ -395,8 +396,10 @@ void GitKlientMergeWindow::closeEvent(QCloseEvent *event)
         switch (r) {
         case MergeCloseEventDialog::MarkAsResolved:
             fileSave();
+            accept();
             break;
         case MergeCloseEventDialog::LeaveAsIs:
+            reject();
             break;
         case MergeCloseEventDialog::DontExit:
             event->ignore();
@@ -539,10 +542,10 @@ void GitKlientMergeWindow::setFilePathLocal(const QString &newFilePathLocal)
 
 void GitKlientMergeWindow::on_plainTextEditResult_textChanged()
 {
-    //    auto segment = m_ui.plainTextEditResult->currentSegment();
-    //    if (segment) {
-    //        segment->mergeType = Diff::MergeCustom;
-    //    }
+//    auto segment = static_cast<Diff::MergeSegment *>(_mapper->currentSegment());
+//    if (segment) {
+//        segment->mergeType = Diff::MergeCustom;
+//    }
 }
 
 void GitKlientMergeWindow::settingsConfigure()

@@ -185,9 +185,9 @@ void DiffTest::mergeSqlModel()
 
 void DiffTest::array()
 {
-    Diff::Impl::Array<int> a(5, 5, 5);
-    a.setValue(4,1,2,3);
-    QCOMPARE(a.value(1, 2, 3), 4);
+    Diff::Impl::Array3<int> a(5, 5, 5);
+    a(1, 2, 3) = 4;
+    QCOMPARE(a(1, 2, 3), 4);
 }
 
 QTEST_MAIN(DiffTest)
