@@ -93,6 +93,13 @@ void DiffWidget::showFilesInfo(bool show)
     filesInfoWidget->setVisible(show);
 }
 
+void DiffWidget::showSameSize(bool show)
+{
+    m_sameSize = show;
+    segmentConnector->setSameSize(show);
+    compare();
+}
+
 void DiffWidget::on_splitter_splitterMoved(int, int)
 {
     recalculateInfoPaneSize();
