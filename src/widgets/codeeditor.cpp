@@ -64,7 +64,8 @@ CodeEditor::CodeEditor(QWidget *parent)
     removedFormat.setBackground(GitKlientSettings::diffRemovedColor());
     changedFormat.setBackground(GitKlientSettings::diffModifiedColor());
     highlightFormat.setBackground(Qt::yellow);
-    emptyFormat.setBackground(Qt::gray);
+
+    emptyFormat.setBackground(QBrush(Qt::gray, Qt::BDiagPattern));
     //    normalFormat.setBackground(Qt::lightGray);
 
     _formats.insert(Added, addedFormat);
@@ -150,7 +151,8 @@ void CodeEditor::sidebarPaintEvent(QPaintEvent *event)
                 (blockNumber == currentBlockNumber) ? KSyntaxHighlighting::Theme::CurrentLineNumber
                                                     : KSyntaxHighlighting::Theme::LineNumbers));
 
-            if (block.blockFormat() != emptyFormat) {
+//            if (block.blockFormat() != emptyFormat)
+            {
                 ++lineNumber;
                 const auto number = QString::number(lineNumber);
                 painter.drawText(0,

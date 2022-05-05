@@ -37,11 +37,11 @@ QDebug operator<<(QDebug d, const Pair3 &p)
 
 typedef QList<Pair2> Solution;
 typedef QList<Pair3> Solution3;
-
+/*
 QSet<Solution> findLCS(QStringList first, QStringList second, int m, int n)
 {
     // construct a set to store possible LCS
-    int matrix[120][120];
+    int matrix[120, 120];
     QSet<Solution> s;
 
     // If we reaches end of either string, return
@@ -72,19 +72,19 @@ QSet<Solution> findLCS(QStringList first, QStringList second, int m, int n)
     {
         // If LCS can be constructed from top side of
         // the matrix, recurse for X[0..m-2] and Y[0..n-1]
-        if (matrix[m - 1][n] >= matrix[m][n - 1]) {
+        if (matrix[m - 1, n] >= matrix[m, n - 1]) {
             auto tmp = findLCS(first, second, m - 1, n);
             s = s + tmp;
         }
 
         // If LCS can be constructed from left side of
         // the matrix, recurse for X[0..m-1] and Y[0..n-2]
-        if (matrix[m][n - 1] >= matrix[m - 1][n])
+        if (matrix[m, n - 1] >= matrix[m - 1, n])
 
         {
             auto tmp = findLCS(first, second, m, n - 1);
-            // merge two sets if L[m-1][n] == L[m][n-1]
-            // Note s will be empty if L[m-1][n] != L[m][n-1]
+            // merge two sets if L[m-1, n] == L[m, n-1]
+            // Note s will be empty if L[m-1, n] != L[m, n-1]
             //            s.insert(tmp.begin(), tmp.end());
             s = s + tmp;
         }
@@ -92,7 +92,7 @@ QSet<Solution> findLCS(QStringList first, QStringList second, int m, int n)
 
     return s;
 }
-
+*/
 int maxIn(int first, int second, int third)
 {
     if (first == second && second == third)
@@ -142,16 +142,50 @@ int maxIn(const QList<int> &list) {
 }
 
 template <typename T>
+class Array2
+{
+    T *_data;
+    int c1, c2;
+
+public:
+    Array2(int c1, int c2);
+    ~Array2();
+
+    Q_ALWAYS_INLINE T &operator()(int i1, int i2);
+};
+
+
+template<typename T>
+Q_OUTOFLINE_TEMPLATE Array2<T>::Array2(int c1, int c2) : c1(c1), c2(c2)
+{
+    _data = new T[c1 * c2];
+}
+
+template<typename T>
+Q_OUTOFLINE_TEMPLATE Array2<T>::~Array2()
+{
+    delete[] _data;
+}
+
+template<typename T>
+Q_OUTOFLINE_TEMPLATE T &Array2<T>::operator()(int i1, int i2)
+{
+    return _data[c1 * i1 + i2];
+}
+
+template <typename T>
 class Array3
 {
-    T* _data;
-    int c1,c2,c3;
+    T *_data;
+    int c1, c2, c3;
+
 public:
     Array3(int c1, int c2, int c3);
     ~Array3();
 
     Q_ALWAYS_INLINE T &operator()(int i1, int i2, int i3);
 };
+
 template<typename T>
 Q_OUTOFLINE_TEMPLATE Array3<T>::Array3(int c1, int c2, int c3) : c1(c1), c2(c2), c3(c3)
 {
@@ -261,38 +295,39 @@ Solution longestCommonSubsequence(const QStringList &source, const QStringList &
 {
     // Mostly stolen from https://www.geeksforgeeks.org/printing-longest-common-subsequence/
 
-    QMap<int, QMap<int, int>> l;
+    Array2<int> l(source.size() + 1, target.size() + 1);
+//    QMap<int, QMap<int, int>> l;
     for (int i = 0; i <= source.count(); i++) {
         for (int j = 0; j <= target.count(); j++) {
             if (i == 0 || j == 0) {
-                l[i][j] = 0;
+                l(i, j) = 0;
             } else if (source.at(i - 1) == target.at(j - 1)) {
-                l[i][j] = l[i - 1][j - 1] + 1;
+                l(i, j) = l(i - 1, j - 1) + 1;
             } else {
-                l[i][j] = std::max(l[i - 1][j], l[i][j - 1]);
+                l(i, j) = std::max(l(i - 1, j), l(i, j - 1));
             }
         }
     }
 
     int i = source.count();
     int j = target.count();
-    int index = l[source.count()][target.count()];
+    int index = l(source.count(), target.count());
 //    QString longestCommonSubsequence;
     Solution r;
     while (i > 0 && j > 0) {
         if (source.at(i - 1) == target.at(j - 1)) {
-            //            longestCommonSubsequence[index - 1] = source.at(i - 1);
+            //            longestCommonSubsequence[index - 1) = source.at(i - 1);
             r.prepend(qMakePair(i - 1, j - 1));
             i--;
             j--;
             index--;
-//        } else if (l[i - 1][j] > l[i][j - 1]) {
+//        } else if (l(i - 1, j] > l(i, j - 1]) {
 //            i--;
 //        } else {
 //            j--;
 //        }
         } else {
-            int n = maxIn(l[i - 1][j], l[i][j - 1]);
+            int n = maxIn(l(i - 1, j), l(i, j - 1));
             switch (n) {
             case 1:
                 i--;
