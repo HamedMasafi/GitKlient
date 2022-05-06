@@ -18,7 +18,7 @@ class CodeEditor : public QPlainTextEdit
 {
     Q_OBJECT
     QMap<int, Diff::Segment*> _segments;
-    QPair<int, int> _currentSegment;
+    QPair<int, int> _currentSegment{-1, -1};
 
 public:
     enum BlockType {

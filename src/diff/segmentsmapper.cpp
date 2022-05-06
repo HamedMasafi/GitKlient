@@ -94,8 +94,6 @@ int SegmentsMapper::map(int from, int to, int index) const
 void SegmentsMapper::codeEditor_blockSelected()
 {
     auto s = qobject_cast<CodeEditor *>(sender());
-    auto l = s->currentLineNumber();
-    auto myIndx = _editors.indexOf(s);
 
     _currentSegment = s->currentSegment();
     s->highlightSegment(_currentSegment);

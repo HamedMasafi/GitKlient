@@ -17,6 +17,7 @@ TagsWidget::TagsWidget(QWidget *parent) :
     pushButtonAddTag->setAction(_actions->actionCreate());
     pushButtonRemove->setAction(_actions->actionRemove());
     pushButtonCheckout->setAction(_actions->actionCheckout());
+    pushButtonPush->setAction(_actions->actionPush());
 }
 
 TagsWidget::TagsWidget(Git::Manager *git, GitKlientWindow *parent):
@@ -29,6 +30,7 @@ TagsWidget::TagsWidget(Git::Manager *git, GitKlientWindow *parent):
     pushButtonAddTag->setAction(_actions->actionCreate());
     pushButtonRemove->setAction(_actions->actionRemove());
     pushButtonCheckout->setAction(_actions->actionCheckout());
+    pushButtonPush->setAction(_actions->actionPush());
 }
 
 void TagsWidget::saveState(QSettings &settings) const

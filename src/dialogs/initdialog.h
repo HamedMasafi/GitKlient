@@ -12,6 +12,7 @@ class InitDialog : public Dialog, private Ui::InitDialog
 public:
     explicit InitDialog(Git::Manager *git, QWidget *parent = nullptr, Qt::WindowFlags f = Qt::WindowFlags());
     QString path() const;
+    void setPath(const QString &path);
 };
 
 #endif // INITDIALOG_H

@@ -136,7 +136,7 @@ void CodeEditor::sidebarPaintEvent(QPaintEvent *event)
     const auto foldingMarkerSize = fontMetrics().lineSpacing();
     int lineNumber{0};
 
-    auto &emptyFormat = _formats.value(Empty);
+//    auto &emptyFormat = _formats.value(Empty);
     while (block.isValid() && top <= event->rect().bottom()) {
         if (block.isVisible() && bottom >= event->rect().top()) {
 
@@ -154,7 +154,7 @@ void CodeEditor::sidebarPaintEvent(QPaintEvent *event)
 //            if (block.blockFormat() != emptyFormat)
             {
                 ++lineNumber;
-                const auto number = QString::number(lineNumber);
+                const auto number = QString::number(blockNumber + 1);
                 painter.drawText(0,
                                  top,
                                  m_sideBar->width() - 2 - foldingMarkerSize,

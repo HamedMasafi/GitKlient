@@ -1,5 +1,6 @@
 #include "tagsactions.h"
 
+#include "dialogs/runnerdialog.h"
 #include "dialogs/taginfodialog.h"
 #include "git/gitmanager.h"
 #include "git/models/tagsmodel.h"
@@ -18,6 +19,7 @@ TagsActions::TagsActions(Git::Manager *git, QWidget *parent) : AbstractActions(g
     _actionRemove = addActionDisabled(i18n("Remove..."), this, &TagsActions::remove);
     _actionCheckout = addActionDisabled(i18n("Checkout..."), this, &TagsActions::checkout);
     _actionDiff = addActionDisabled(i18n("Diff with HEAD..."), this, &TagsActions::diff);
+    _actionPush = addAction(i18n("Push..."), this, &TagsActions::push);
 }
 
 const QString &TagsActions::tagName() const
@@ -69,4 +71,11 @@ void TagsActions::diff()
 {
     auto d = new DiffWindow(_tagName, "HEAD");
     d->showModal();
+}
+
+void TagsActions::push()
+{
+    RunnerDialog d(_parent);
+    d.run({"push", "--tags"});
+    d.exec();
 }

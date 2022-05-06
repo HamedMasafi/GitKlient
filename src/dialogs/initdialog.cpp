@@ -10,3 +10,8 @@ QString InitDialog::path() const
 {
     return lineEditPath->text();
 }
+
+void InitDialog::setPath(const QString &path)
+{
+    lineEditPath->setText(path);
+}

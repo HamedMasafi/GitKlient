@@ -183,9 +183,10 @@ void CommitPushDialog::on_groupBoxMakeCommit_toggled(bool)
 
 void CommitPushDialog::on_listWidget_customContextMenuRequested(const QPoint &pos)
 {
+    Q_UNUSED(pos)
     if (listWidget->currentRow() == -1)
         return;
 
     _actions->setFilePath(listWidget->currentItem()->text());
-    _actions->popup(listWidget->mapToGlobal(pos));
+    _actions->popup();
 }

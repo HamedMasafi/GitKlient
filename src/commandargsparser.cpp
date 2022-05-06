@@ -161,6 +161,8 @@ ArgParserReturn CommandArgsParser::help()
 ArgParserReturn CommandArgsParser::clone(const QString &path)
 {
     CloneDialog d;
+    d.setLocalPath(path);
+
     if (d.exec() == QDialog::Accepted) {
         RunnerDialog r;
 
@@ -175,6 +177,8 @@ ArgParserReturn CommandArgsParser::clone(const QString &path)
 ArgParserReturn CommandArgsParser::init(const QString &path)
 {
     InitDialog d(git);
+    d.setPath(path);
+
     if (d.exec() == QDialog::Accepted) {
         git->init(d.path());
         KMessageBox::information(nullptr, i18n("The repo inited successfully"));

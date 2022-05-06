@@ -35,6 +35,11 @@ Git::CloneCommand *CloneDialog::command()
     return cmd;
 }
 
+void CloneDialog::setLocalPath(const QString &path)
+{
+    lineEditPath->setText(path);
+}
+
 void CloneDialog::on_lineEditUrl_textChanged(QString text)
 {
     auto parts = text.split("/");
