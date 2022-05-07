@@ -1,7 +1,0 @@
-[Desktop Entry]
-Name=Git Klient Merge Utility
-Exec=gitklientmerge
-Icon=gitklientmerge
-Type=Application
-X-DocPath=gitklient/index.html
-GenericName=Git client gui for KDE
