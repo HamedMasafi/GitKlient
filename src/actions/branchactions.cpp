@@ -5,6 +5,7 @@
 
 #include <QAction>
 #include <QFileDialog>
+#include <QInputDialog>
 #include <QMenu>
 
 #include "dialogs/fetchdialog.h"
@@ -14,6 +15,7 @@
 #include "diffwindow.h"
 #include "git/commands/commandmerge.h"
 #include "git/gitmanager.h"
+#include "git/models/branchescache.h"
 
 BranchActions::BranchActions(Git::Manager *git, QWidget *parent) : AbstractActions(git, parent)
 {
@@ -65,7 +67,12 @@ void BranchActions::fetch()
 
 void BranchActions::create()
 {
+    auto newBranchName = QInputDialog::getText(_parent, i18n("Create new branch"), i18n("Branch name"));
 
+    if (newBranchName !=QString()) {
+        _git->runGit({"checkout", "-b", newBranchName});
+        _git->branchesModel()->load();
+    }
 }
 
 void BranchActions::browse()
