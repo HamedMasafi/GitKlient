@@ -17,7 +17,7 @@ class TagsWidget : public WidgetBase, private Ui::TagsWidget
 
 public:
     explicit TagsWidget(QWidget *parent = nullptr);
-    explicit TagsWidget(Git::Manager *git, GitKlientWindow *parent = nullptr);
+    explicit TagsWidget(Git::Manager *git, AppWindow *parent = nullptr);
 
 private slots:
     void on_treeViewTags_customContextMenuRequested(const QPoint &pos);

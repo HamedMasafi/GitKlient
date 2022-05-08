@@ -1,7 +1,7 @@
 #include "initdialog.h"
 
 InitDialog::InitDialog(Git::Manager *git, QWidget *parent, Qt::WindowFlags f)
-    : Dialog(git, parent, f)
+    : AppDialog(git, parent, f)
 {
     setupUi(this);
 }

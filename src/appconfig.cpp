@@ -1,4 +1,4 @@
-#include "gitklientconfig.h"
+#include "appconfig.h"
 #include "git/gitmanager.h"
 
 GitKlientConfig::GitKlientConfig(Git::Manager *git) : _git(git)

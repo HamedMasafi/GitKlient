@@ -50,12 +50,12 @@ void DiffWindow::init(bool showSideBar)
     }
 }
 
-DiffWindow::DiffWindow() : MainWindow()
+DiffWindow::DiffWindow() : AppMainWindow()
 {
     init(true);
 }
 
-DiffWindow::DiffWindow(Git::Manager *git) : MainWindow()
+DiffWindow::DiffWindow(Git::Manager *git) : AppMainWindow()
 {
     init(true);
 
@@ -73,7 +73,7 @@ DiffWindow::DiffWindow(Git::Manager *git) : MainWindow()
 }
 
 DiffWindow::DiffWindow(const Git::File &oldFile, const Git::File &newFile)
-    : MainWindow(), _oldFile(oldFile), _newFile(newFile)
+    : AppMainWindow(), _oldFile(oldFile), _newFile(newFile)
 {
     init(false);
 
@@ -83,7 +83,7 @@ DiffWindow::DiffWindow(const Git::File &oldFile, const Git::File &newFile)
 }
 
 DiffWindow::DiffWindow(Git::Manager *git, const QString &oldBranch, const QString &newBranch)
-    : MainWindow(), _oldBranch(oldBranch), _newBranch(newBranch)
+    : AppMainWindow(), _oldBranch(oldBranch), _newBranch(newBranch)
 {
     init(true);
 

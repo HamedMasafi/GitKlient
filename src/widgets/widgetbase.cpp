@@ -8,7 +8,7 @@
 #include <QHeaderView>
 #include <QTreeView>
 #include <QVBoxLayout>
-#include "gitklientwindow.h"
+#include "appwindow.h"
 
 WidgetBase::WidgetBase(QWidget *parent) : QWidget(parent)
 {
@@ -16,7 +16,7 @@ WidgetBase::WidgetBase(QWidget *parent) : QWidget(parent)
     connect(_git, &Git::Manager::pathChanged, this, &WidgetBase::git_pathChanged);
 }
 
-WidgetBase::WidgetBase(Git::Manager *git, GitKlientWindow *parent) : QWidget(parent),
+WidgetBase::WidgetBase(Git::Manager *git, AppWindow *parent) : QWidget(parent),
       _git(git), _parent{parent}
 {
     if (!_git)

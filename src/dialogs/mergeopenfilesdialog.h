@@ -1,10 +1,10 @@
 #ifndef OPENFILESDIALOG_H
 #define OPENFILESDIALOG_H
 
-#include "../core/dialog.h"
+#include "../core/appdialog.h"
 #include "ui_mergeopenfilesdialog.h"
 
-class MergeOpenFilesDialog : public Dialog, private Ui::MergeOpenFilesDialog
+class MergeOpenFilesDialog : public AppDialog, private Ui::MergeOpenFilesDialog
 {
     Q_OBJECT
 

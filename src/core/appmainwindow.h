@@ -4,14 +4,14 @@
 #include <KXmlGuiWindow>
 
 class QEventLoop;
-class MainWindow : public KXmlGuiWindow
+class AppMainWindow : public KXmlGuiWindow
 {
     Q_OBJECT
 
 public:
     enum DialogCode { Rejected, Accepted };
 
-    MainWindow(QWidget *parent = nullptr, Qt::WindowFlags f = Qt::WindowFlags());
+    AppMainWindow(QWidget *parent = nullptr, Qt::WindowFlags f = Qt::WindowFlags());
 
     int exec();
     void showModal();

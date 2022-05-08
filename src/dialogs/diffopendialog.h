@@ -1,10 +1,10 @@
 #ifndef DIFFOPENDIALOG_H
 #define DIFFOPENDIALOG_H
 
-#include "../core/dialog.h"
+#include "../core/appdialog.h"
 #include "ui_diffopendialog.h"
 
-class DiffOpenDialog : public Dialog, private Ui::DiffOpenDialog
+class DiffOpenDialog : public AppDialog, private Ui::DiffOpenDialog
 {
     Q_OBJECT
 

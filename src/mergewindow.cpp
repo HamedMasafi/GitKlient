@@ -18,7 +18,7 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "gitklientmergewindow.h"
+#include "mergewindow.h"
 
 #include "GitKlientSettings.h"
 #include "dialogs/mergecloseeventdialog.h"
@@ -160,7 +160,7 @@ void GitKlientMergeWindow::load()
     setWindowModified(true);
 }
 
-GitKlientMergeWindow::GitKlientMergeWindow(Mode mode, QWidget *parent) : MainWindow(parent)
+GitKlientMergeWindow::GitKlientMergeWindow(Mode mode, QWidget *parent) : AppMainWindow(parent)
 {
     Q_UNUSED(mode)
 

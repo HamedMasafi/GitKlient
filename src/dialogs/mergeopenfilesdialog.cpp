@@ -4,7 +4,7 @@
 #include <KLocalizedString>
 
 MergeOpenFilesDialog::MergeOpenFilesDialog(QWidget *parent) :
-      Dialog(parent)
+      AppDialog(parent)
 {
     setupUi(this);
 }

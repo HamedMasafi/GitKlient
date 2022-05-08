@@ -15,8 +15,8 @@
 #include "git/gitfile.h"
 #include "git/gitmanager.h"
 #include "gitklientdebug.h"
-#include "gitklientmergewindow.h"
-#include "gitklientwindow.h"
+#include "mergewindow.h"
+#include "appwindow.h"
 
 #include <QApplication>
 #include <QDir>
@@ -335,7 +335,7 @@ ArgParserReturn CommandArgsParser::merge(const QString &base, const QString &loc
 
 ArgParserReturn CommandArgsParser::main()
 {
-    auto window = GitKlientWindow::instance();
+    auto window = AppWindow::instance();
     window->show();
     return ExecApp;
 }
@@ -343,7 +343,7 @@ ArgParserReturn CommandArgsParser::main()
 ArgParserReturn CommandArgsParser::main(const QString &path)
 {
     Git::Manager::instance()->setPath(path);
-    auto window = GitKlientWindow::instance();
+    auto window = AppWindow::instance();
     window->show();
     return ExecApp;
 }

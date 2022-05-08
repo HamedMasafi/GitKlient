@@ -29,7 +29,7 @@ HistoryViewWidget::HistoryViewWidget(QWidget *parent) :
     _actions = new CommitActions(Git::Manager::instance(), this);
 }
 
-HistoryViewWidget::HistoryViewWidget(Git::Manager *git, GitKlientWindow *parent):
+HistoryViewWidget::HistoryViewWidget(Git::Manager *git, AppWindow *parent):
       WidgetBase(git, parent)
 {
     setupUi(this);

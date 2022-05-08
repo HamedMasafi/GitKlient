@@ -8,7 +8,7 @@
 #include <QDebug>
 
 ChangedFilesDialog::ChangedFilesDialog(Git::Manager *git, QWidget *parent) :
-      Dialog(git, parent)
+      AppDialog(git, parent)
 {
     setupUi(this);
     reload();

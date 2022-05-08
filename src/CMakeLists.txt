@@ -20,15 +20,15 @@ set(gitklient_SRCS
     ${CORE_SRC}
 
     main.cpp
-    gitklientwindow.cpp
+    appwindow.cpp
     buttonsgroup.cpp
     multipagewidget.cpp
     argsparser.cpp
     diffwindow.cpp
-    gitklientmergewindow.cpp
+    mergewindow.cpp
     commandargsparser.cpp
     settingshelper.cpp
-    gitklientconfig.cpp
+    appconfig.cpp
     settingsmanager.cpp
 )
 

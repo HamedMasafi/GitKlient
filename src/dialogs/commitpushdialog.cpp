@@ -15,7 +15,7 @@
 #include <KTextEditor/View>
 
 CommitPushDialog::CommitPushDialog(Git::Manager *git, QWidget *parent) :
-      Dialog(parent), _git(git)
+      AppDialog(parent), _git(git)
 {
     setupUi(this);
 

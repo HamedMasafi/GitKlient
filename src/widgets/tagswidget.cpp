@@ -20,7 +20,7 @@ TagsWidget::TagsWidget(QWidget *parent) :
     pushButtonPush->setAction(_actions->actionPush());
 }
 
-TagsWidget::TagsWidget(Git::Manager *git, GitKlientWindow *parent):
+TagsWidget::TagsWidget(Git::Manager *git, AppWindow *parent):
       WidgetBase(git, parent)
 {
     setupUi(this);

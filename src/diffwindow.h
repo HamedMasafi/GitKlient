@@ -1,7 +1,7 @@
 #ifndef DIFFWINDOW_H
 #define DIFFWINDOW_H
 
-#include "core/mainwindow.h"
+#include "core/appmainwindow.h"
 #include <git/gitfile.h>
 #include <QObject>
 
@@ -9,7 +9,7 @@ class DiffTreeModel;
 class DiffWidget;
 class DiffTreeView;
 class FilesModel;
-class DiffWindow : public MainWindow
+class DiffWindow : public AppMainWindow
 {
     Q_OBJECT
 

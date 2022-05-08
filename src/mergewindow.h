@@ -21,7 +21,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef GitKlientMergeWindow_H
 #define GitKlientMergeWindow_H
 
-#include "core/mainwindow.h"
+#include "core/appmainwindow.h"
 
 #include <diff/diff.h>
 
@@ -39,7 +39,7 @@ class SegmentsMapper;
  * @author Hamed Masafi <hamed.masafi@gmail.com>
  * @version 0.1
  */
-class GitKlientMergeWindow : public MainWindow
+class GitKlientMergeWindow : public AppMainWindow
 {
     Q_OBJECT
 public:

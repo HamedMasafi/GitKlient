@@ -1,12 +1,12 @@
-#include "mainwindow.h"
+#include "appmainwindow.h"
 #include "qdebug.h"
 
 #include <QEventLoop>
 #include <QCloseEvent>
 
-MainWindow::MainWindow(QWidget *parent, Qt::WindowFlags f) : KXmlGuiWindow(parent, f) {}
+AppMainWindow::AppMainWindow(QWidget *parent, Qt::WindowFlags f) : KXmlGuiWindow(parent, f) {}
 
-int MainWindow::exec()
+int AppMainWindow::exec()
 {
     _loop = new QEventLoop(this);
     showModal();
@@ -14,7 +14,7 @@ int MainWindow::exec()
     return _returnCode;
 }
 
-void MainWindow::showModal()
+void AppMainWindow::showModal()
 {
     _isModal = true;
     setWindowModality(Qt::ApplicationModal);
@@ -22,24 +22,24 @@ void MainWindow::showModal()
     show();
 }
 
-void MainWindow::accept()
+void AppMainWindow::accept()
 {
     _returnCode = Accepted;
 }
 
-void MainWindow::reject()
+void AppMainWindow::reject()
 {
     _returnCode = Rejected;
 }
 
-void MainWindow::closeDialog(int resultCode)
+void AppMainWindow::closeDialog(int resultCode)
 {
     _returnCode = resultCode;
     if (_loop)
         _loop->quit();
 }
 
-void MainWindow::closeEvent(QCloseEvent *event)
+void AppMainWindow::closeEvent(QCloseEvent *event)
 {
     qDebug() << Q_FUNC_INFO;
     Q_UNUSED(event)
@@ -47,7 +47,7 @@ void MainWindow::closeEvent(QCloseEvent *event)
         _loop->quit();
 }
 
-void MainWindow::keyPressEvent(QKeyEvent *event)
+void AppMainWindow::keyPressEvent(QKeyEvent *event)
 {
     if (event->key() == Qt::Key_Escape && _isModal)
         close();

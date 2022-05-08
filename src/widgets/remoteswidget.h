@@ -17,7 +17,7 @@ class RemotesWidget : public WidgetBase, private Ui::RemotesWidget
 
 public:
     explicit RemotesWidget(QWidget *parent = nullptr);
-    explicit RemotesWidget(Git::Manager *git, GitKlientWindow *parent = nullptr);
+    explicit RemotesWidget(Git::Manager *git, AppWindow *parent = nullptr);
 
 
     void saveState(QSettings &settings) const override;

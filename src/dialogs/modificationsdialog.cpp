@@ -3,7 +3,7 @@
 #include "GitKlientSettings.h"
 
 ModificationsDialog::ModificationsDialog(QWidget *parent) :
-      Dialog(parent)
+      AppDialog(parent)
 {
     setupUi(this);
 

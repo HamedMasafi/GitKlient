@@ -17,7 +17,7 @@ StashesWidget::StashesWidget(QWidget *parent) :
 }
 
 
-StashesWidget::StashesWidget(Git::Manager *git, GitKlientWindow *parent) : WidgetBase(git, parent)
+StashesWidget::StashesWidget(Git::Manager *git, AppWindow *parent) : WidgetBase(git, parent)
 {
     setupUi(this);
     init(git);

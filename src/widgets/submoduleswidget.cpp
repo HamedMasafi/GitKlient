@@ -20,7 +20,7 @@ SubmodulesWidget::SubmodulesWidget(QWidget *parent) :
     treeView->setModel(_model);
 }
 
-SubmodulesWidget::SubmodulesWidget(Git::Manager *git, GitKlientWindow *parent) :
+SubmodulesWidget::SubmodulesWidget(Git::Manager *git, AppWindow *parent) :
       WidgetBase(git, parent)
 {
     setupUi(this);

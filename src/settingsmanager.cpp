@@ -1,7 +1,7 @@
 #include "settingsmanager.h"
 
 #include "GitKlientSettings.h"
-#include "gitklientwindow.h"
+#include "appwindow.h"
 
 #if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
 #include <QCalendar>
@@ -31,7 +31,7 @@ void SettingsManager::settingsChanged()
 
 void SettingsManager::show()
 {
-    exec(GitKlientWindow::instance());
+    exec(AppWindow::instance());
 }
 
 void SettingsManager::exec(QWidget *parentWidget)

@@ -6,7 +6,7 @@
 #include <QSettings>
 
 CloneDialog::CloneDialog(QWidget *parent) :
-      Dialog(parent)
+      AppDialog(parent)
 {
     setupUi(this);
     _fixedPath = QStandardPaths::writableLocation(QStandardPaths::HomeLocation);
