@@ -5,8 +5,10 @@
 #include <kmessagebox.h>
 #include <QDebug>
 
-#include "git/models/remotescache.h"
+#include "dialogs/runnerdialog.h"
+#include "git/commands/commandaddremote.h"
 #include "git/gitmanager.h"
+#include "git/models/remotescache.h"
 #include "widgets/remoteinfodialog.h"
 
 RemotesActions::RemotesActions(Git::Manager *git, QWidget *parent) : AbstractActions(git, parent)
@@ -35,7 +37,11 @@ void RemotesActions::create()
 {
     RemoteInfoDialog d{_parent};
     if (d.exec() == QDialog::Accepted) {
-        _git->addRemote(d.remoteName(), d.remoteUrl());
+//        _git->addRemote(d.remoteName(), d.remoteUrl());
+
+        RunnerDialog runner;
+        runner.run(d.command());
+        runner.exec();
         _git->remotesModel()->load();
     }
 }
