@@ -222,6 +222,7 @@ void AppWindow::initRepo()
             return;
         }
         _git->init(d.path());
+        _git->setPath(d.path());
     }
 }
 

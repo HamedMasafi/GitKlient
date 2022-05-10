@@ -180,6 +180,14 @@ ArgParserReturn CommandArgsParser::init(const QString &path)
     d.setPath(path);
 
     if (d.exec() == QDialog::Accepted) {
+        QDir dir;
+        if (!dir.mkpath(d.path())) {
+            KMessageBox::sorry(nullptr,
+                               i18n("Unable to create path: %1", d.path()),
+                               i18n("Init repo"));
+            return 1;
+        }
+
         git->init(d.path());
         KMessageBox::information(nullptr, i18n("The repo inited successfully"));
     }
