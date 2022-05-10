@@ -62,4 +62,4 @@ jobs:
         if: startsWith(github.ref, 'refs/tags/')
         run: |
           tag_name="${GITHUB_REF##*/}"
-          hub release create -a ./build-cmake/gitklient.deb#gitklient_${{env.version}}_amd64.deb -a ./build-cmake/gitklient.rpm#gitklient-${{env.version}}-Linux.rpm -m "$tag_name" "$tag_name"
+          hub release create -a ./build-cmake/gitklient.deb#gitklient_${{tag_name}}_amd64.deb -a ./build-cmake/gitklient.rpm#gitklient-${{tag_name}}-Linux.rpm -m "$tag_name" "$tag_name"
