@@ -8,13 +8,13 @@ class DiffTest : public QObject
 {
     Q_OBJECT
 
-private Q_SLOTS:
-    void diff();
-    void diff2();
+        void diff2();
     void merge();
 
     void mergeSqlModel();
     void array();
+private Q_SLOTS:
+    void diff();
 };
 
 
@@ -76,8 +76,8 @@ int main()
 
     auto segments = Diff::diff(oldCode.split("\n"), newCode.split("\n"));
 
-    for (auto &s: segments)
-        print(s);
+//    for (auto &s: segments)
+//        print(s);
 
     QCOMPARE(segments.size(), 5);
     QCOMPARE(segments.at(0)->type, Diff::SegmentType::SameOnBoth);
@@ -91,6 +91,7 @@ void DiffTest::diff2()
 {
     QString oldCode{R"~(
 1
+6
 2
 4
 7

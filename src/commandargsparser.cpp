@@ -293,6 +293,22 @@ ArgParserReturn CommandArgsParser::diff(const QString &file1, const QString &fil
     return 0;
 }
 
+ArgParserReturn CommandArgsParser::diff(const QString &path, const QString &file1, const QString &file2)
+{
+    if (file1.count(":") != 1 || file2.count(":") != 1)
+        return 1;
+    git->setPath(path);
+    if (!git->isValid())
+        return 1;
+    auto parts1 = file1.split(":");
+    auto parts2 = file2.split(":");
+    Git::File fileLeft(parts1.first(), parts1.at(1));
+    Git::File fileRight(parts2.first(), parts2.at(1));
+    auto d = new DiffWindow(fileLeft, fileRight);
+    d->showModal();
+    return ExecApp;
+}
+
 ArgParserReturn CommandArgsParser::blame(const QString &file)
 {
     QFileInfo fi{file};
