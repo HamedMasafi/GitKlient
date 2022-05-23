@@ -31,6 +31,10 @@ void LogDetailsWidget::setLog(Git::Log *newLog)
 
 void LogDetailsWidget::createText()
 {
+    if (!_log) {
+        clear();
+        return;
+    }
     auto files = Git::Manager::instance()->changedFiles(_log->commitHash());
     QString filesHtml;
 

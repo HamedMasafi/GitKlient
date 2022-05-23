@@ -19,6 +19,9 @@ class FileBlameDialog : public AppDialog, private Ui::FileBlameDialog
 public:
     explicit FileBlameDialog(Git::Manager *git, const QString &fileName, QWidget *parent = nullptr);
     explicit FileBlameDialog(const Git::File &file, QWidget *parent = nullptr);
+
+private slots:
+    void on_plainTextEdit_blockSelected();
 };
 
 #endif // FILEBLAMEDIALOG_H

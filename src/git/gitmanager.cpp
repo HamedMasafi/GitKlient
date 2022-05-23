@@ -538,9 +538,12 @@ BlameData Manager::blame(const File &file)
         auto metaIndex = line.indexOf(")");
         row.code = line.mid(metaIndex + 1);
 
-        auto log = logList.findByHash(row.commitHash);
+        auto hash = row.commitHash;
+        if (hash.startsWith("^"))
+            hash = hash.remove(0, 1);
+        auto log = logList.findByHash(hash);
         if (!log)
-            qDebug() << "Log not found";
+            qDebug() << "Log not found" << hash;
         row.log = log;
         auto parts = line.split("\t");
         b.append(row);

@@ -324,7 +324,7 @@ void CodeEditor::append(const QString &code, const BlockType &type, Diff::Segmen
     t.block().setUserData(new SegmentData{segment, isEmpty});
 }
 
-void CodeEditor::append(const QString &code, const QColor &backGroundColor)
+int CodeEditor::append(const QString &code, const QColor &backgroundColor)
 {
     auto t = textCursor();
 
@@ -334,8 +334,10 @@ void CodeEditor::append(const QString &code, const QColor &backGroundColor)
     QTextCursor c(t.block());
     c.insertText(code);
     QTextBlockFormat fmt;
-    fmt.setBackground(backGroundColor);
+    fmt.setBackground(backgroundColor);
     t.setBlockFormat(fmt);
+    _segments.insert(t.block().blockNumber(), nullptr);
+    return t.block().blockNumber();
 }
 
 void CodeEditor::append(const QStringList &code, const BlockType &type, Diff::Segment *segment, int size)
@@ -438,6 +440,7 @@ void CodeEditor::highlightSegment(Diff::Segment *segment)
 void CodeEditor::clearAll()
 {
     _segments.clear();
+    qDeleteAll(_segments);
     _lines.clear();
     clear();
 }

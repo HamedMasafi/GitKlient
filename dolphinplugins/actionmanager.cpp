@@ -58,25 +58,15 @@ QList<QAction *> ActionManager::actions(const KFileItemListProperties &fileItemI
             addMenuToGitFile(menu, path, fileItemInfos.isFile());
         }
 
-    } else {
-        auto path = getCommonPart(fileItemInfos.items());
-
-        menu->addAction(QStringLiteral("Is dir: %1").arg(fileItemInfos.isDirectory()));
-        menu->addAction(QStringLiteral("Is local: %1").arg(fileItemInfos.isLocal()));
-
-        menu->addAction(QStringLiteral("Count: %1").arg(fileItemInfos.items().size()));
-        for (auto &f : fileItemInfos.items()) {
-            menu->addAction(f.text());
-        }
     }
 
     mainAction->setMenu(menu);
-
+/*
     auto openAction = new QAction;
     openAction->setText("Open git klient");
     openAction->setIcon(QIcon::fromTheme("gitklient"));
-
-    return QList<QAction *>() << openAction << mainAction;
+*/
+    return QList<QAction *>() << /*openAction << */mainAction;
 }
 
 QString ActionManager::getCommonPart(const KFileItemList &fileItems)
