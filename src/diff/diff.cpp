@@ -343,7 +343,6 @@ Solution longestCommonSubsequence(const QStringList &source, const QStringList &
     int j = target.count();
     int index = l(source.count(), target.count());
     Solution r;
-    qDebug() << "len=" << index;
 
     while (i > 0 && j > 0) {
         if (isEqual(source.at(i - 1), target.at(j - 1))) {
@@ -472,10 +471,8 @@ int remove(QStringList &list, int count)
 
 QList<MergeSegment *> diff3(const QStringList &baseList, const QStringList &localList, const QStringList &remoteList)
 {
-    QElapsedTimer t;
-    t.start();
     auto max = Impl::longestCommonSubsequence(baseList, localList, remoteList);
-    qDebug() << "lcs3" << t.elapsed();
+
     auto base = baseList;
     auto local = localList;
     auto remote = remoteList;
@@ -593,9 +590,6 @@ QList<MergeSegment *> diff3_2(const QStringList &baseList, const QStringList &lo
             auto localSubList = take(local, common.local);
             auto remoteSubList = take(remote, common.remote);
             segments.append(new MergeSegment{baseSubList, localSubList, remoteSubList});
-//            qDebug() << " * BASE:  " << baseSubList;
-//            qDebug() << " * LOCAL: " << localSubList;
-//            qDebug() << " * REMOTE:" << remoteSubList;
             continue;
         }
     }
@@ -671,7 +665,7 @@ QList<Segment *> diff(const QStringList &oldText, const QStringList &newText)
     auto o = oldText;
     auto n = newText;
     auto max = Impl::longestCommonSubsequence(oldText, newText);
-    qDebug() << "longestCommonSubsequence=" << max;
+
     int oldOffset{0};
     int newOffset{0};
     QList<Segment *> ret;
