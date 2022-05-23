@@ -325,10 +325,6 @@ Solution longestCommonSubsequence(const QStringList &source, const QStringList &
 
     for (int i = 0; i <= source.count(); i++) {
         for (int j = 0; j <= target.count(); j++) {
-            if (i == target.count()) {
-                l(i, j) = 44;
-                continue;
-            }
             if (i == 0 || j == 0) {
                 l(i, j) = 0;
             } else if (isEqual(source.at(i - 1), target.at(j - 1))) {
