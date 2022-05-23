@@ -18,6 +18,7 @@ void EditActionsMapper::addTextEdit(QPlainTextEdit *control)
 
     control->installEventFilter(this);
 
+    control->setContextMenuPolicy(Qt::DefaultContextMenu);
     connect(control, &QPlainTextEdit::copyAvailable, this, &EditActionsMapper::control_copyAvailable);
     connect(control,
             &QPlainTextEdit::selectionChanged,
@@ -59,12 +60,14 @@ void EditActionsMapper::control_selectionChanged()
 
 void EditActionsMapper::actionUndo_triggered()
 {
-
+    if (_activeControl)
+        _activeControl->undo();
 }
 
 void EditActionsMapper::actionRedo_triggered()
 {
-
+    if (_activeControl)
+        _activeControl->redo();
 }
 
 void EditActionsMapper::actionCopy_triggered()
@@ -75,22 +78,24 @@ void EditActionsMapper::actionCopy_triggered()
 
 void EditActionsMapper::actionCut_triggered()
 {
-
+    if (_activeControl)
+        _activeControl->cut();
 }
 
 void EditActionsMapper::actionPaste_triggered()
 {
-
+    if (_activeControl)
+        _activeControl->paste();
 }
 
 void EditActionsMapper::actionSelectAll_triggered()
 {
-
+    if (_activeControl)
+        _activeControl->selectAll();
 }
 
 void EditActionsMapper::actionDelete_triggered()
 {
-
 }
 
 bool EditActionsMapper::eventFilter(QObject *watched, QEvent *event)

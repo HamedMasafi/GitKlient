@@ -13,6 +13,19 @@ class DiffWindow : public AppMainWindow
 {
     Q_OBJECT
 
+public:
+    explicit DiffWindow();
+    DiffWindow(Git::Manager *git);
+    DiffWindow(const Git::File &oldFile, const Git::File &newFile);
+    DiffWindow(Git::Manager *git, const QString &oldBranch, const QString &newBranch);
+    DiffWindow(const QString &oldDir, const QString &newDir);
+
+private slots:
+    void fileOpen();
+    void settings();
+    void on_treeView_fileSelected(const QString &file);
+
+private:
     Git::File _oldFile;
     Git::File _newFile;
 
@@ -25,6 +38,7 @@ class DiffWindow : public AppMainWindow
     DiffTreeModel *_diffModel;
     DiffWidget *_diffWidget;
     DiffTreeView *_treeView;
+    QDockWidget* _dock;
 
     void initActions();
     void init(bool showSideBar);
@@ -43,20 +57,6 @@ class DiffWindow : public AppMainWindow
     Mode _mode{None};
     Storage _leftStorage{NoStorage};
     Storage _rightStorage{NoStorage};
-
-public:
-    explicit DiffWindow();
-    DiffWindow(Git::Manager *git);
-    DiffWindow(const Git::File &oldFile, const Git::File &newFile);
-    DiffWindow(Git::Manager *git, const QString &oldBranch, const QString &newBranch);
-    DiffWindow(const QString &oldDir, const QString &newDir);
-
-private slots:
-    void fileOpen();
-    void settings();
-    void on_treeView_fileSelected(const QString &file);
-
-private:
     void compareDirs();
 };
 

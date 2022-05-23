@@ -86,6 +86,8 @@ void DiffWidget::showHiddenChars(bool show)
         leftCodeEditor->document()->setDefaultTextOption(_defaultOption);
         rightCodeEditor->document()->setDefaultTextOption(_defaultOption);
     }
+    leftCodeEditor->setWordWrapMode(QTextOption::NoWrap);
+    rightCodeEditor->setWordWrapMode(QTextOption::NoWrap);
 }
 
 void DiffWidget::showFilesInfo(bool show)
