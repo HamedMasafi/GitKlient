@@ -23,13 +23,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "core/appmainwindow.h"
 
-#include "ui_settingsBase.h"
-#include "ui_diffsettings.h"
 #include "GitKlientSettings.h"
 
 class GitKlientView;
 class MultiPageWidget;
 class WidgetBase;
+class QLabel;
 
 namespace Git {
 class Manager;
@@ -78,8 +77,6 @@ private Q_SLOTS:
     void repoDiffTree();
 
 private:
-    Ui::settingsBase settingsBase;
-    Ui::DiffSettings diffSettings;
     QAction *recentAction;
     MultiPageWidget *_mainWidget;
     QList<WidgetBase*> _baseWidgets;

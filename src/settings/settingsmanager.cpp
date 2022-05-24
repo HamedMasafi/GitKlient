@@ -63,8 +63,8 @@ QWidget *SettingsManager::createBasePage()
     pageBase.kcfg_calendarType->addItems(QCalendar::availableCalendars());
     pageBase.kcfg_calendarType->setCurrentText(GitKlientSettings::calendarType());
 #else
-    settingsBase.labelDefaultCalendar->hide();
-    settingsBase.kcfg_calendarType->hide();
+    pageBase.labelDefaultCalendar->hide();
+    pageBase.kcfg_calendarType->hide();
 #endif
     return w;
 }

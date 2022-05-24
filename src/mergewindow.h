@@ -21,16 +21,14 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef GitKlientMergeWindow_H
 #define GitKlientMergeWindow_H
 
-#include "core/appmainwindow.h"
-
-#include <diff/diff.h>
-
-#include "ui_settingsBase.h"
 #include "GitKlientSettings.h"
+#include "core/appmainwindow.h"
+#include "diff/diff.h"
 #include "ui_gitklientmergeview.h"
 
 class GitKlientView;
 class SegmentsMapper;
+class QLabel;
 class GitKlientMergeWindow : public AppMainWindow
 {
     Q_OBJECT

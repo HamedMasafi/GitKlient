@@ -33,6 +33,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <KLocalizedString>
 #include <KMessageBox>
 
+#include <QLabel>
 #include <QDebug>
 #include <QFile>
 #include <QFileInfo>
