@@ -19,11 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 // application headers
-#include "diffwindow.h"
-#include "git/commands/commandpull.h"
-#include "git/commands/commandswitchbranch.h"
 #include "appwindow.h"
-
 #include "dialogs/changedfilesdialog.h"
 #include "dialogs/clonedialog.h"
 #include "dialogs/commitpushdialog.h"
@@ -37,11 +33,14 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "dialogs/searchdialog.h"
 #include "dialogs/selectbranchestodiffdialog.h"
 #include "dialogs/switchbranchdialog.h"
+#include "diffwindow.h"
+#include "git/commands/commandpull.h"
+#include "git/commands/commandswitchbranch.h"
 #include "git/gitmanager.h"
 #include "git/models/logscache.h"
 #include "gitklientdebug.h"
 #include "multipagewidget.h"
-#include "settingsmanager.h"
+#include "settings/settingsmanager.h"
 #include "widgets/branchesstatuswidget.h"
 #include "widgets/commitswidget.h"
 #include "widgets/historyviewwidget.h"
@@ -49,7 +48,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "widgets/stasheswidget.h"
 #include "widgets/submoduleswidget.h"
 #include "widgets/tagswidget.h"
-#include "settingsmanager.h"
 
 // KF headers
 #include <KActionCollection>

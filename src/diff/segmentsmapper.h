@@ -29,6 +29,8 @@ public:
     void setCurrentSegment(Diff::Segment *newCurrentSegment);
     bool isMergeable() const;
 
+    int conflicts() const;
+
 private slots:
     void codeEditor_blockSelected();
     void codeEditor_scroll(int value);

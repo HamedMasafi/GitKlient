@@ -31,14 +31,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 class GitKlientView;
 class SegmentsMapper;
-/**
- * This class serves as the main window for gitklient.  It handles the
- * menus, toolbars and status bars.
- *
- * @short Main window class
- * @author Hamed Masafi <hamed.masafi@gmail.com>
- * @version 0.1
- */
 class GitKlientMergeWindow : public AppMainWindow
 {
     Q_OBJECT
@@ -49,14 +41,7 @@ public:
         MergeByParams
     };
 
-    /**
-     * Default Constructor
-     */
     explicit GitKlientMergeWindow(Mode mode = NoParams, QWidget *parent = nullptr);
-
-    /**
-     * Default Destructor
-     */
     ~GitKlientMergeWindow() override;
 
     void load();
@@ -76,6 +61,7 @@ public:
 private Q_SLOTS:
     void fileSave();
     void fileOpen();
+    void preferences();
 
     void actionKeepMine_clicked();
     void actionKeepTheir_clicked();
@@ -90,10 +76,7 @@ private Q_SLOTS:
 
     void on_plainTextEditResult_textChanged();
 
-    void settingsConfigure();
 private:
-    // this is the name of the root widget inside our Ui file
-    // you can rename it in designer and then change it here
     Ui::Form m_ui;
     void updateResult();
     void initActions();
@@ -111,6 +94,7 @@ private:
     QString _filePathBase;
     QString _filePathResult;
     Mode _mode;
+    QLabel *_conflictsLabel;
 
 protected:
     void closeEvent(QCloseEvent *event) override;

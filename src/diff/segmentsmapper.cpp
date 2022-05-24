@@ -159,3 +159,13 @@ bool SegmentsMapper::isMergeable() const
             return false;
     return true;
 }
+
+int SegmentsMapper::conflicts() const
+{
+    int r{0};
+    for (auto &s: _segments) {
+        if (s->mergeType == Diff::None)
+            r++;
+    }
+    return r;
+}

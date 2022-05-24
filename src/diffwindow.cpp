@@ -13,7 +13,7 @@
 #include "git/gitmanager.h"
 #include "models/difftreemodel.h"
 #include "models/filesmodel.h"
-#include "settingsmanager.h"
+#include "settings/settingsmanager.h"
 #include "widgets/codeeditor.h"
 #include "widgets/difftreeview.h"
 #include "widgets/diffwidget.h"

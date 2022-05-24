@@ -8,9 +8,12 @@ AppMainWindow::AppMainWindow(QWidget *parent, Qt::WindowFlags f) : KXmlGuiWindow
 
 int AppMainWindow::exec()
 {
-    _loop = new QEventLoop(this);
+    QEventLoop eventLoop;
+    _loop = &eventLoop;
     showModal();
-    _loop->exec();
+    (void) eventLoop.exec(QEventLoop::DialogExec);
+    _loop = nullptr;
+    qDebug() << "returnCode=" << _returnCode;
     return _returnCode;
 }
 
@@ -32,20 +35,28 @@ void AppMainWindow::reject()
     _returnCode = Rejected;
 }
 
-void AppMainWindow::closeDialog(int resultCode)
+void AppMainWindow::setVisible(bool visible)
 {
-    _returnCode = resultCode;
-    if (_loop)
-        _loop->quit();
+    if (!visible && _loop)
+        _loop->exit();
+    KXmlGuiWindow::setVisible(visible);
 }
 
-void AppMainWindow::closeEvent(QCloseEvent *event)
-{
-    qDebug() << Q_FUNC_INFO;
-    Q_UNUSED(event)
-    if (_loop)
-        _loop->quit();
-}
+//void AppMainWindow::closeDialog(int resultCode)
+//{
+//    _returnCode = resultCode;
+//    if (_loop && _loop->isRunning())
+//        _loop->quit();
+//}
+
+//void AppMainWindow::closeEvent(QCloseEvent *event)
+//{
+//    qDebug() << Q_FUNC_INFO;
+//    Q_UNUSED(event)
+//    if (_loop && _loop->isRunning())
+//        _loop->quit();
+//    KXmlGuiWindow::closeEvent(event);
+//}
 
 void AppMainWindow::keyPressEvent(QKeyEvent *event)
 {

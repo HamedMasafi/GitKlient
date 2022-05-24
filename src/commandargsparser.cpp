@@ -245,7 +245,7 @@ ArgParserReturn CommandArgsParser::changes(const QString &path)
 ArgParserReturn CommandArgsParser::diff()
 {
     auto d = new DiffWindow();
-    d->showModal();
+    d->exec();
     return ExecApp;
 }
 
@@ -259,12 +259,12 @@ ArgParserReturn CommandArgsParser::diff(const QString &file)
         Git::File headFile(file);
         Git::File changedFile(git->currentBranch(), dir.relativeFilePath(file), git);
         auto d = new DiffWindow(headFile, changedFile);
-        d->showModal();
+        d->exec();
         return ExecApp;
     } else if (fi.isDir()) {
         git->setPath(fi.absolutePath());
-        auto d = new DiffWindow(git, git->currentBranch(), "HEAD");
-        d->showModal();
+        auto d = new DiffWindow(git);//, git->currentBranch(), "HEAD");
+        d->exec();
         return ExecApp;
     }
     return 0;
@@ -281,12 +281,12 @@ ArgParserReturn CommandArgsParser::diff(const QString &file1, const QString &fil
         Git::File fileLeft(fi1.absoluteFilePath());
         Git::File fileRight(fi2.absoluteFilePath());
         auto d = new DiffWindow(fileLeft, fileRight);
-        d->showModal();
+        d->exec();
         return ExecApp;
     }
     if (fi1.isDir() && fi2.isDir()) {
         auto d = new DiffWindow(fi1.absoluteFilePath(), fi2.absoluteFilePath());
-        d->showModal();
+        d->exec();
         return ExecApp;
     }
 
@@ -305,7 +305,7 @@ ArgParserReturn CommandArgsParser::diff(const QString &path, const QString &file
     Git::File fileLeft(parts1.first(), parts1.at(1));
     Git::File fileRight(parts2.first(), parts2.at(1));
     auto d = new DiffWindow(fileLeft, fileRight);
-    d->showModal();
+    d->exec();
     return ExecApp;
 }
 
@@ -340,7 +340,7 @@ ArgParserReturn CommandArgsParser::history(const QString &file)
 ArgParserReturn CommandArgsParser::merge()
 {
     auto d = new GitKlientMergeWindow;
-    d->showModal();
+    d->exec();
     return ExecApp;
 }
 
@@ -353,8 +353,11 @@ ArgParserReturn CommandArgsParser::merge(const QString &base, const QString &loc
     d->setFilePathResult(result);
     d->load();
     int n = d->exec();
-    qDebug() << "GitKlientMergeWindow::exec" << n;
-    return ExecApp;
+
+    if (n == QDialog::Accepted)
+        return 0;
+    else
+        return 1;
 }
 
 ArgParserReturn CommandArgsParser::main()

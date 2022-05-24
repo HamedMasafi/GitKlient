@@ -2,7 +2,6 @@
 #include "GitKlientSettings.h"
 #include "git/gitlog.h"
 #include "git/gitmanager.h"
-#include "settingshelper.h"
 
 #include <KLocalizedString>
 

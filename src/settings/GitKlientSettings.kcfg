@@ -32,6 +32,13 @@
             <default>false</default>
         </entry>
 
+        <entry name="registerDiffTool" type="Bool">
+            <default>true</default>
+        </entry>
+        <entry name="registerMergeTool" type="Bool">
+            <default>true</default>
+        </entry>
+
 
     </group>
 </kcfg>
