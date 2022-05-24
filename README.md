@@ -8,12 +8,30 @@ Git gui client for KDE
 
 ## Features
 
-- Show overlay icons on files in the Dolphin file manager ([Screenshot](doc/screenshots/icons.png))
-- Browse files in another branch or commit and view files content ([Screenshot](doc/screenshots/browse.png))
-- Autocomplete on writing commit messages ([Screenshot](doc/screenshots/autocomplete.png))
-- Graph view for commits and merges ([Screenshot](doc/screenshots/graph.png))
-- Show changes on visual way ([Screenshot](doc/screenshots/diff_on_changes.png))
-- See differences and conflicts and resolve them by visual tool ([Screenshot](doc/screenshots/merge.png))
+- Show overlay icons on files in the Dolphin file manager
+<br />
+<img src="doc/screenshots/icons.png" height="400" />
+
+- Browse files in another branch or commit and view files content 
+<br />
+<img src="doc/screenshots/browse.png" height="400" />
+
+- Autocomplete on writing commit messages
+<br />
+<img src="doc/screenshots/autocomplete.png" height="400" />
+
+- Graph view for commits and merges
+<br />
+<img src="doc/screenshots/graph.png" height="400" />
+
+- Show changes on visual way
+<br />
+<img src="doc/screenshots/diff_on_changes.png" height="400" />
+
+- See differences and conflicts and resolve them by visual tool
+<br />
+<img src="doc/screenshots/merge.png" height="400" />
+
 
 
 ## Build
