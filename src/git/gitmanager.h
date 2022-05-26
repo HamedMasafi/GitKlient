@@ -116,6 +116,8 @@ public:
     bool removeRemote(const QString &name) const;
     bool renameRemote(const QString &name, const QString &newName) const;
 
+    bool isIgnored(const QString &path);
+
     QPair<int, int> uniqueCommiteOnBranches(const QString &branch1, const QString &branch2) const;
 
     QStringList fileLog(const QString &fileName) const;

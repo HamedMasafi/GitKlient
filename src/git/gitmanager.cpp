@@ -166,6 +166,12 @@ bool Manager::renameRemote(const QString &name, const QString &newName) const
     return true;
 }
 
+bool Manager::isIgnored(const QString &path)
+{
+    auto tmp = runGit({"git", "check-ignore", path});
+    return tmp.size();
+}
+
 QPair<int, int> Manager::uniqueCommiteOnBranches(const QString &branch1,
                                                  const QString &branch2) const
 {

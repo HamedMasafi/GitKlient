@@ -5,6 +5,9 @@
 #include <QDebug>
 #include <QFileInfo>
 
+#include <kmessagebox.h>
+#include <klocalizedstring.h>
+
 IgnoreFileDialog::IgnoreFileDialog(Git::Manager *git, const QString &filePath, QWidget *parent) :
       AppDialog(git, parent)
 {
@@ -24,6 +27,16 @@ IgnoreFileDialog::IgnoreFileDialog(Git::Manager *git, const QString &filePath, Q
         radioButtonDirIgnoreFile->setEnabled(false);
 
     generateIgnorePattern();
+
+    auto isIgnored = git->isIgnored(_name + "." + _ext);
+
+    if (isIgnored) {
+        groupBoxFileName->setEnabled(false);
+        groupBoxIgnoreFile->setEnabled(false);
+        groupBoxPath->setEnabled(false);
+        KMessageBox::sorry(this, i18n("The file is ignored already"));
+        _isIgnoredAlready = true;
+    }
 }
 
 void IgnoreFileDialog::generateIgnorePattern()
@@ -49,7 +62,27 @@ void IgnoreFileDialog::generateIgnorePattern()
 
 void IgnoreFileDialog::on_buttonBox_accepted()
 {
+    if (_isIgnoredAlready) {
+        accept();
+        close();
+        return;
+    }
 
+    if (lineEdit->text().isEmpty()) {
+        KMessageBox::sorry(this, i18n("Please enter the pattern"));
+        return;
+    }
+    QFile f(getIgnoreFile());
+    if (!f.open(QIODevice::Append |QIODevice::Text)) {
+        KMessageBox::sorry(this, i18n("Unable to open file: %1").arg(getIgnoreFile()));
+        return;
+    }
+
+    f.write("\n" + lineEdit->text().toUtf8());
+    f.close();
+
+    accept();
+    close();
 }
 
 QString IgnoreFileDialog::getIgnoreFile()
