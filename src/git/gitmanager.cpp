@@ -168,7 +168,8 @@ bool Manager::renameRemote(const QString &name, const QString &newName) const
 
 bool Manager::isIgnored(const QString &path)
 {
-    auto tmp = runGit({"git", "check-ignore", path});
+    auto tmp = readAllNonEmptyOutput({"check-ignore", path});
+    qDebug() << Q_FUNC_INFO << tmp;
     return tmp.size();
 }
 

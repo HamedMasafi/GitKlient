@@ -4,6 +4,7 @@
 
 #include <QDebug>
 #include <QFileInfo>
+#include <QPushButton>
 
 #include <kmessagebox.h>
 #include <klocalizedstring.h>
@@ -36,6 +37,7 @@ IgnoreFileDialog::IgnoreFileDialog(Git::Manager *git, const QString &filePath, Q
         groupBoxPath->setEnabled(false);
         KMessageBox::sorry(this, i18n("The file is ignored already"));
         _isIgnoredAlready = true;
+        buttonBox->button(QDialogButtonBox::Ok)->setEnabled(false);
     }
 }
 
