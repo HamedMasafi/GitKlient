@@ -135,7 +135,6 @@ QVariant DiffTreeModel::data(const QModelIndex &index, int role) const
         Node *item = static_cast<Node*>(index.internalPointer());
 
         //        return statusColor(item->metaData);
-        qDebug() << "icon" << item->title << icon(item->metaData) << QIcon::fromTheme(icon(item->metaData)).isNull();
 
 //        switch (item->metaData) {
 //        case Diff::DiffType::Added:

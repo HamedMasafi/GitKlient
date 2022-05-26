@@ -41,6 +41,7 @@ public:
 public slots:
     void showHiddenChars(bool show);
     void showFilesInfo(bool show);
+    void showSameSize(bool show);
 
 signals:
     void sameSizeChanged();

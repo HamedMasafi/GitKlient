@@ -263,6 +263,18 @@ void Manager::setConfig(const QString &name, const QString &value, ConfigType ty
     runGit(cmd);
 }
 
+void Manager::unsetConfig(const QString &name, ConfigType type) const
+{
+    QStringList cmd{"config", "--unset"};
+
+    if (type == ConfigGlobal)
+        cmd.append("--global");
+
+    cmd.append(name);
+
+    runGit(cmd);
+}
+
 QStringList Manager::readAllNonEmptyOutput(const QStringList &cmd) const
 {
     QStringList list;
@@ -398,7 +410,7 @@ QByteArray Manager::runGit(const QStringList &args) const
     auto out = p.readAllStandardOutput();
     auto err = p.readAllStandardError();
     Q_UNUSED(err)
-    qDebug() << err;
+//    qDebug() << err;
     return out; // + err;
 }
 
@@ -538,9 +550,12 @@ BlameData Manager::blame(const File &file)
         auto metaIndex = line.indexOf(")");
         row.code = line.mid(metaIndex + 1);
 
-        auto log = logList.findByHash(row.commitHash);
-        if (!log)
-            qDebug() << "Log not found";
+        auto hash = row.commitHash;
+        if (hash.startsWith("^"))
+            hash = hash.remove(0, 1);
+        auto log = logList.findByHash(hash);
+//        if (!log)
+//            qDebug() << "Log not found" << hash;
         row.log = log;
         auto parts = line.split("\t");
         b.append(row);

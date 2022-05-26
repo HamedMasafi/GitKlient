@@ -15,7 +15,13 @@
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
-    <widget class="BlameCodeView" name="plainTextEdit"/>
+    <widget class="QSplitter" name="splitter">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <widget class="BlameCodeView" name="plainTextEdit"/>
+     <widget class="LogDetailsWidget" name="logDetailsWidget" native="true"/>
+    </widget>
    </item>
   </layout>
  </widget>
@@ -24,6 +30,12 @@
    <class>BlameCodeView</class>
    <extends>QPlainTextEdit</extends>
    <header>widgets/blamecodeview.h</header>
+  </customwidget>
+  <customwidget>
+   <class>LogDetailsWidget</class>
+   <extends>QWidget</extends>
+   <header>widgets/logdetailswidget.h</header>
+   <container>1</container>
   </customwidget>
  </customwidgets>
  <resources/>

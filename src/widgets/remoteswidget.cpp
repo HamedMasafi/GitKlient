@@ -11,7 +11,7 @@ RemotesWidget::RemotesWidget(QWidget *parent) : WidgetBase(parent)
     init(Git::Manager::instance());
 }
 
-RemotesWidget::RemotesWidget(Git::Manager *git, GitKlientWindow *parent) :
+RemotesWidget::RemotesWidget(Git::Manager *git, AppWindow *parent) :
       WidgetBase(git, parent)
 {
     setupUi(this);

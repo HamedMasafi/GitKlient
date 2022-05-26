@@ -1,14 +1,14 @@
 #ifndef SUBMODULEINFODIALOG_H
 #define SUBMODULEINFODIALOG_H
 
-#include "../core/dialog.h"
+#include "../core/appdialog.h"
 #include "ui_submoduleinfodialog.h"
 
 namespace Git {
 class AddSubmoduleCommand;
 class Manager;
 }
-class SubmoduleInfoDialog : public Dialog, private Ui::SubmoduleInfoDialog
+class SubmoduleInfoDialog : public AppDialog, private Ui::SubmoduleInfoDialog
 {
     Q_OBJECT
 

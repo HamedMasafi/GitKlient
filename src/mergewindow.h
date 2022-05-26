@@ -21,26 +21,15 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef GitKlientMergeWindow_H
 #define GitKlientMergeWindow_H
 
-#include <KXmlGuiWindow>
-
-#include <diff/diff.h>
-
-#include "ui_settingsBase.h"
-#include "GitKlientMergeSettings.h"
+#include "GitKlientSettings.h"
+#include "core/appmainwindow.h"
+#include "diff/diff.h"
 #include "ui_gitklientmergeview.h"
 
 class GitKlientView;
-class MainWidget;
 class SegmentsMapper;
-/**
- * This class serves as the main window for gitklient.  It handles the
- * menus, toolbars and status bars.
- *
- * @short Main window class
- * @author Hamed Masafi <hamed.masafi@gmail.com>
- * @version 0.1
- */
-class GitKlientMergeWindow : public KXmlGuiWindow
+class QLabel;
+class GitKlientMergeWindow : public AppMainWindow
 {
     Q_OBJECT
 public:
@@ -50,14 +39,7 @@ public:
         MergeByParams
     };
 
-    /**
-     * Default Constructor
-     */
-    explicit GitKlientMergeWindow(Mode mode, QWidget *parent = nullptr);
-
-    /**
-     * Default Destructor
-     */
+    explicit GitKlientMergeWindow(Mode mode = NoParams, QWidget *parent = nullptr);
     ~GitKlientMergeWindow() override;
 
     void load();
@@ -77,6 +59,7 @@ public:
 private Q_SLOTS:
     void fileSave();
     void fileOpen();
+    void preferences();
 
     void actionKeepMine_clicked();
     void actionKeepTheir_clicked();
@@ -89,16 +72,9 @@ private Q_SLOTS:
 
     void codeEditors_customContextMenuRequested(QPoint pos);
 
-    void plainTextEditMine_scroll(int value);
-    void plainTextEditTheir_scroll(int value);
-    void plainTextEditMine_blockSelected();
-    void plainTextEditTheir_blockSelected();
     void on_plainTextEditResult_textChanged();
 
-    void settingsConfigure();
 private:
-    // this is the name of the root widget inside our Ui file
-    // you can rename it in designer and then change it here
     Ui::Form m_ui;
     void updateResult();
     void initActions();
@@ -116,6 +92,7 @@ private:
     QString _filePathBase;
     QString _filePathResult;
     Mode _mode;
+    QLabel *_conflictsLabel;
 
 protected:
     void closeEvent(QCloseEvent *event) override;

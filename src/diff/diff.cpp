@@ -5,6 +5,10 @@
 #include <QSet>
 #include <QDateTime>
 #include <set>
+#include <QElapsedTimer>
+
+#include <iostream>
+#include <iomanip>
 
 namespace Diff
 {
@@ -36,11 +40,11 @@ QDebug operator<<(QDebug d, const Pair3 &p)
 
 typedef QList<Pair2> Solution;
 typedef QList<Pair3> Solution3;
-
+/*
 QSet<Solution> findLCS(QStringList first, QStringList second, int m, int n)
 {
     // construct a set to store possible LCS
-    int matrix[120][120];
+    int matrix[120, 120];
     QSet<Solution> s;
 
     // If we reaches end of either string, return
@@ -71,19 +75,19 @@ QSet<Solution> findLCS(QStringList first, QStringList second, int m, int n)
     {
         // If LCS can be constructed from top side of
         // the matrix, recurse for X[0..m-2] and Y[0..n-1]
-        if (matrix[m - 1][n] >= matrix[m][n - 1]) {
+        if (matrix[m - 1, n] >= matrix[m, n - 1]) {
             auto tmp = findLCS(first, second, m - 1, n);
             s = s + tmp;
         }
 
         // If LCS can be constructed from left side of
         // the matrix, recurse for X[0..m-1] and Y[0..n-2]
-        if (matrix[m][n - 1] >= matrix[m - 1][n])
+        if (matrix[m, n - 1] >= matrix[m - 1, n])
 
         {
             auto tmp = findLCS(first, second, m, n - 1);
-            // merge two sets if L[m-1][n] == L[m][n-1]
-            // Note s will be empty if L[m-1][n] != L[m][n-1]
+            // merge two sets if L[m-1, n] == L[m, n-1]
+            // Note s will be empty if L[m-1, n] != L[m, n-1]
             //            s.insert(tmp.begin(), tmp.end());
             s = s + tmp;
         }
@@ -91,11 +95,14 @@ QSet<Solution> findLCS(QStringList first, QStringList second, int m, int n)
 
     return s;
 }
-
+*/
 int maxIn(int first, int second, int third)
 {
     if (first == second && second == third)
         return 0;
+
+    if (third > first && third > second)
+        return 3;
 
     if (first > second && first > third)
         return 1;
@@ -103,8 +110,6 @@ int maxIn(int first, int second, int third)
     if (second > first && second > third)
         return 2;
 
-    if (third > first && third > second)
-        return 3;
 
     return 4;
 }
@@ -139,32 +144,107 @@ int maxIn(const QList<int> &list) {
 
     return maxIndex;
 }
+
+template <typename T>
+class Array2
+{
+    T *_data;
+    int c1, c2;
+
+public:
+    Array2(int c1, int c2);
+    ~Array2();
+
+    Q_ALWAYS_INLINE T &operator()(int i1, int i2);
+
+    void exportToCsv(const QString &file);
+};
+
+
+template<typename T>
+Q_OUTOFLINE_TEMPLATE Array2<T>::Array2(int c1, int c2) : c1(c1), c2(c2)
+{
+    _data = new T[c1 * c2];
+}
+
+template<typename T>
+Q_OUTOFLINE_TEMPLATE Array2<T>::~Array2()
+{
+    delete[] _data;
+}
+
+template<typename T>
+Q_OUTOFLINE_TEMPLATE T &Array2<T>::operator()(int i1, int i2)
+{
+    return _data[c1 * i2 + i1];
+}
+
+template<typename T>
+Q_OUTOFLINE_TEMPLATE void Array2<T>::exportToCsv(const QString &file)
+{
+    QFile f(file);
+    f.open(QIODevice::WriteOnly | QIODevice::Text);
+    for (int i = 0; i <= c1; i++) {
+        for (int j = 0; j <= c2; j++)
+                f.write(QByteArray::number(operator()(i, j)) + ",");
+        f.write("\n");
+    }
+    f.close();
+}
+template <typename T>
+class Array3
+{
+    T *_data;
+    int c1, c2, c3;
+
+public:
+    Array3(int c1, int c2, int c3);
+    ~Array3();
+
+    Q_ALWAYS_INLINE T &operator()(int i1, int i2, int i3);
+};
+
+template<typename T>
+Q_OUTOFLINE_TEMPLATE Array3<T>::Array3(int c1, int c2, int c3) : c1(c1), c2(c2), c3(c3)
+{
+    _data = new T[c1 * c2 * c3];
+}
+
+template<typename T>
+Q_OUTOFLINE_TEMPLATE Array3<T>::~Array3()
+{
+    delete[] _data;
+}
+
+template<typename T>
+Q_OUTOFLINE_TEMPLATE T &Array3<T>::operator()(int i1, int i2, int i3)
+{
+    return _data[i3 * c1 * c2 + c1 * i2 + i1];
+}
+
 Solution3 longestCommonSubsequence(const QStringList &source,
                                    const QStringList &target,
                                    const QStringList &target2)
 {
-    // Mostly stolen from https://www.geeksforgeeks.org/printing-longest-common-subsequence/
+    Array3<int> l(source.size() + 1, target.size() + 1, target2.size() + 1);
 
-    QMap<int, QMap<int, QMap<int, int>>> l;
-    for (int i = 0; i <= source.count(); i++) {
-        for (int j = 0; j <= target.count(); j++) {
-            for (int k = 0; k <= target2.count(); ++k) {
+    for (int i = 0; i <= source.count(); i++)
+        for (int j = 0; j <= target.count(); j++)
+            for (int k = 0; k <= target2.count(); ++k)
                 if (i == 0 || j == 0 || k == 0) {
-                    l[i][j][k] = 0;
-                } else if (source.at(i - 1) == target.at(j - 1) && source.at(i - 1) == target2.at(k - 1) ) {
-                    l[i][j][k] = l[i - 1][j - 1][k - 1] + 1;
+                    l(i, j, k) = 0;
+                } else if (source.at(i - 1) == target.at(j - 1)
+                           && source.at(i - 1) == target2.at(k - 1)) {
+                    l(i, j, k) = l(i - 1, j - 1, k - 1) + 1;
                 } else {
-                    l[i][j][k] = std::max(std::max(l[i - 1][j][k], l[i][j - 1][k]), l[i][j][k - 1]);
+                    l(i, j, k) = std::max(std::max(l(i - 1, j, k), l(i, j - 1, k)), l(i, j, k - 1));
                 }
-            }
-        }
-    }
 
     int i = source.count();
     int j = target.count();
     int k = target2.count();
-    int index = l[source.count()][target.count()][target2.count()];
-//    QString longestCommonSubsequence;
+    int index = l(source.count(), target.count(), target2.count());
+
     Solution3 r;
     while (i > 0 && j > 0 && k > 0) {
         if (source.at(i - 1) == target.at(j - 1) && source.at(i - 1) == target2.at(k - 1)) {
@@ -179,15 +259,15 @@ Solution3 longestCommonSubsequence(const QStringList &source,
 ////        } else if (l[i][j][k - 1] > l[i][j - 1][k] && l[i][j][k - 1] > l[i - 1][j][k]) {
 ////            k--;
         } else {
-            int n = maxIn({l[i - 1][j][k],
-                           l[i][j - 1][k],
-                           l[i][j][k - 1],
+            int n = maxIn({l(i - 1, j, k),
+                           l(i, j - 1, k),
+                           l(i, j, k - 1),
 
-                           l[i - 1][j - 1][k],
-                           l[i][j - 1][k - 1],
-                           l[i - 1][j][k - 1],
+                           l(i - 1, j - 1, k),
+                           l(i, j - 1, k - 1),
+                           l(i - 1, j, k - 1),
 
-                           l[i - 1][j - 1][k - 1]});
+                           l(i - 1, j - 1, k - 1)});
             switch (n) {
             case 0:
                 i--;
@@ -229,42 +309,45 @@ Solution3 longestCommonSubsequence(const QStringList &source,
     }
     return r;
 }
+
+template<typename T>
+inline bool isEqual(const T &i1, const T &i2) {
+    return i1 == i2;
+}
+template<>
+inline bool isEqual<QString>(const QString &i1, const QString &i2) {
+    return i1.trimmed() == i2.trimmed();
+}
+
 Solution longestCommonSubsequence(const QStringList &source, const QStringList &target)
 {
-    // Mostly stolen from https://www.geeksforgeeks.org/printing-longest-common-subsequence/
+    Array2<int> l(source.size() + 1, target.size() + 1);
 
-    QMap<int, QMap<int, int>> l;
     for (int i = 0; i <= source.count(); i++) {
         for (int j = 0; j <= target.count(); j++) {
             if (i == 0 || j == 0) {
-                l[i][j] = 0;
-            } else if (source.at(i - 1) == target.at(j - 1)) {
-                l[i][j] = l[i - 1][j - 1] + 1;
+                l(i, j) = 0;
+            } else if (isEqual(source.at(i - 1), target.at(j - 1))) {
+                l(i, j) = l(i - 1, j - 1) + 1;
             } else {
-                l[i][j] = std::max(l[i - 1][j], l[i][j - 1]);
+                l(i, j) = qMax(l(i - 1, j), l(i, j - 1));
             }
         }
     }
 
     int i = source.count();
     int j = target.count();
-    int index = l[source.count()][target.count()];
-//    QString longestCommonSubsequence;
+    int index = l(source.count(), target.count());
     Solution r;
+
     while (i > 0 && j > 0) {
-        if (source.at(i - 1) == target.at(j - 1)) {
-            //            longestCommonSubsequence[index - 1] = source.at(i - 1);
+        if (isEqual(source.at(i - 1), target.at(j - 1))) {
             r.prepend(qMakePair(i - 1, j - 1));
             i--;
             j--;
             index--;
-//        } else if (l[i - 1][j] > l[i][j - 1]) {
-//            i--;
-//        } else {
-//            j--;
-//        }
         } else {
-            int n = maxIn(l[i - 1][j], l[i][j - 1]);
+            int n = maxIn(l(i - 1, j), l(i, j - 1), l(i - 1, j - 1));
             switch (n) {
             case 1:
                 i--;
@@ -273,12 +356,10 @@ Solution longestCommonSubsequence(const QStringList &source, const QStringList &
                 j--;
                 break;
             default:
-                //                r.prepend({i - 1, j - 1, k - 1});
                 i--;
                 j--;
                 break;
             }
-            //            j--;
         }
     }
 
@@ -505,9 +586,6 @@ QList<MergeSegment *> diff3_2(const QStringList &baseList, const QStringList &lo
             auto localSubList = take(local, common.local);
             auto remoteSubList = take(remote, common.remote);
             segments.append(new MergeSegment{baseSubList, localSubList, remoteSubList});
-//            qDebug() << " * BASE:  " << baseSubList;
-//            qDebug() << " * LOCAL: " << localSubList;
-//            qDebug() << " * REMOTE:" << remoteSubList;
             continue;
         }
     }
@@ -583,6 +661,7 @@ QList<Segment *> diff(const QStringList &oldText, const QStringList &newText)
     auto o = oldText;
     auto n = newText;
     auto max = Impl::longestCommonSubsequence(oldText, newText);
+
     int oldOffset{0};
     int newOffset{0};
     QList<Segment *> ret;

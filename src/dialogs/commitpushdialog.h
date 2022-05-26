@@ -1,14 +1,14 @@
 #ifndef COMMITPUSHDIALOG_H
 #define COMMITPUSHDIALOG_H
 
-#include "../core/dialog.h"
+#include "../core/appdialog.h"
 #include "ui_commitpushdialog.h"
 
 namespace Git {
 class Manager;
 }
 class ChangedFileActions;
-class CommitPushDialog : public Dialog, private Ui::CommitPushDialog
+class CommitPushDialog : public AppDialog, private Ui::CommitPushDialog
 {
     Q_OBJECT
     ChangedFileActions *_actions;

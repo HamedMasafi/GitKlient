@@ -15,8 +15,8 @@
 #include "git/gitfile.h"
 #include "git/gitmanager.h"
 #include "gitklientdebug.h"
-#include "gitklientmergewindow.h"
-#include "gitklientwindow.h"
+#include "mergewindow.h"
+#include "appwindow.h"
 
 #include <QApplication>
 #include <QDir>
@@ -161,6 +161,8 @@ ArgParserReturn CommandArgsParser::help()
 ArgParserReturn CommandArgsParser::clone(const QString &path)
 {
     CloneDialog d;
+    d.setLocalPath(path);
+
     if (d.exec() == QDialog::Accepted) {
         RunnerDialog r;
 
@@ -175,7 +177,17 @@ ArgParserReturn CommandArgsParser::clone(const QString &path)
 ArgParserReturn CommandArgsParser::init(const QString &path)
 {
     InitDialog d(git);
+    d.setPath(path);
+
     if (d.exec() == QDialog::Accepted) {
+        QDir dir;
+        if (!dir.mkpath(d.path())) {
+            KMessageBox::sorry(nullptr,
+                               i18n("Unable to create path: %1", d.path()),
+                               i18n("Init repo"));
+            return 1;
+        }
+
         git->init(d.path());
         KMessageBox::information(nullptr, i18n("The repo inited successfully"));
     }
@@ -233,7 +245,7 @@ ArgParserReturn CommandArgsParser::changes(const QString &path)
 ArgParserReturn CommandArgsParser::diff()
 {
     auto d = new DiffWindow();
-    d->showModal();
+    d->exec();
     return ExecApp;
 }
 
@@ -247,12 +259,12 @@ ArgParserReturn CommandArgsParser::diff(const QString &file)
         Git::File headFile(file);
         Git::File changedFile(git->currentBranch(), dir.relativeFilePath(file), git);
         auto d = new DiffWindow(headFile, changedFile);
-        d->showModal();
+        d->exec();
         return ExecApp;
     } else if (fi.isDir()) {
         git->setPath(fi.absolutePath());
-        auto d = new DiffWindow(git, git->currentBranch(), "HEAD");
-        d->showModal();
+        auto d = new DiffWindow(git);//, git->currentBranch(), "HEAD");
+        d->exec();
         return ExecApp;
     }
     return 0;
@@ -269,16 +281,32 @@ ArgParserReturn CommandArgsParser::diff(const QString &file1, const QString &fil
         Git::File fileLeft(fi1.absoluteFilePath());
         Git::File fileRight(fi2.absoluteFilePath());
         auto d = new DiffWindow(fileLeft, fileRight);
-        d->showModal();
+        d->exec();
         return ExecApp;
     }
     if (fi1.isDir() && fi2.isDir()) {
         auto d = new DiffWindow(fi1.absoluteFilePath(), fi2.absoluteFilePath());
-        d->showModal();
+        d->exec();
         return ExecApp;
     }
 
     return 0;
+}
+
+ArgParserReturn CommandArgsParser::diff(const QString &path, const QString &file1, const QString &file2)
+{
+    if (file1.count(":") != 1 || file2.count(":") != 1)
+        return 1;
+    git->setPath(path);
+    if (!git->isValid())
+        return 1;
+    auto parts1 = file1.split(":");
+    auto parts2 = file2.split(":");
+    Git::File fileLeft(parts1.first(), parts1.at(1));
+    Git::File fileRight(parts2.first(), parts2.at(1));
+    auto d = new DiffWindow(fileLeft, fileRight);
+    d->exec();
+    return ExecApp;
 }
 
 ArgParserReturn CommandArgsParser::blame(const QString &file)
@@ -312,7 +340,7 @@ ArgParserReturn CommandArgsParser::history(const QString &file)
 ArgParserReturn CommandArgsParser::merge()
 {
     auto d = new GitKlientMergeWindow;
-    d->showModal();
+    d->exec();
     return ExecApp;
 }
 
@@ -324,13 +352,17 @@ ArgParserReturn CommandArgsParser::merge(const QString &base, const QString &loc
     d->setFilePathRemote(remote);
     d->setFilePathResult(result);
     d->load();
-    d->showModal();
-    return ExecApp;
+    int n = d->exec();
+
+    if (n == QDialog::Accepted)
+        return 0;
+    else
+        return 1;
 }
 
 ArgParserReturn CommandArgsParser::main()
 {
-    auto window = GitKlientWindow::instance();
+    auto window = AppWindow::instance();
     window->show();
     return ExecApp;
 }
@@ -338,7 +370,7 @@ ArgParserReturn CommandArgsParser::main()
 ArgParserReturn CommandArgsParser::main(const QString &path)
 {
     Git::Manager::instance()->setPath(path);
-    auto window = GitKlientWindow::instance();
+    auto window = AppWindow::instance();
     window->show();
     return ExecApp;
 }

@@ -36,6 +36,7 @@ set(
     ${CMAKE_CURRENT_LIST_DIR}/commands/commandswitchbranch.cpp
     ${CMAKE_CURRENT_LIST_DIR}/commands/commandmerge.cpp
     ${CMAKE_CURRENT_LIST_DIR}/commands/addsubmodulecommand.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/commands/commandaddremote.cpp
 )
 
 #include(${CMAKE_CURRENT_LIST_DIR}/models/CMakeLists.txt)

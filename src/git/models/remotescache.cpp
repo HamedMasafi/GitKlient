@@ -74,6 +74,7 @@ void RemotesCache::fill()
     auto remotes = _git->remotes();
     for (const auto &remote: qAsConst(remotes)) {
         auto r = new Remote;
+        r->name = remote;
         auto ret = QString(_git->runGit({"remote", "show", remote}));
         r->parse(ret);
         _data.append(r);

@@ -16,7 +16,7 @@ BranchesStatusWidget::BranchesStatusWidget(QWidget *parent) : WidgetBase(parent)
 }
 
 
-BranchesStatusWidget::BranchesStatusWidget(Git::Manager *git, GitKlientWindow *parent) :
+BranchesStatusWidget::BranchesStatusWidget(Git::Manager *git, AppWindow *parent) :
       WidgetBase(git, parent)
 
 {

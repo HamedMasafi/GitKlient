@@ -2,7 +2,6 @@
 #include "GitKlientSettings.h"
 #include "git/gitlog.h"
 #include "git/gitmanager.h"
-#include "settingshelper.h"
 
 #include <KLocalizedString>
 
@@ -31,6 +30,10 @@ void LogDetailsWidget::setLog(Git::Log *newLog)
 
 void LogDetailsWidget::createText()
 {
+    if (!_log) {
+        clear();
+        return;
+    }
     auto files = Git::Manager::instance()->changedFiles(_log->commitHash());
     QString filesHtml;
 

@@ -18,7 +18,7 @@ class StashesWidget : public WidgetBase, private Ui::StashesWidget
 
 public:
     explicit StashesWidget(QWidget *parent = nullptr);
-    StashesWidget(Git::Manager *git, GitKlientWindow *parent = nullptr);
+    StashesWidget(Git::Manager *git, AppWindow *parent = nullptr);
 
     void saveState(QSettings &settings) const override;
     void restoreState(QSettings &settings) override;

@@ -19,11 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 // application headers
-#include "diffwindow.h"
-#include "git/commands/commandpull.h"
-#include "git/commands/commandswitchbranch.h"
-#include "gitklientwindow.h"
-
+#include "appwindow.h"
 #include "dialogs/changedfilesdialog.h"
 #include "dialogs/clonedialog.h"
 #include "dialogs/commitpushdialog.h"
@@ -37,11 +33,14 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "dialogs/searchdialog.h"
 #include "dialogs/selectbranchestodiffdialog.h"
 #include "dialogs/switchbranchdialog.h"
+#include "diffwindow.h"
+#include "git/commands/commandpull.h"
+#include "git/commands/commandswitchbranch.h"
 #include "git/gitmanager.h"
 #include "git/models/logscache.h"
 #include "gitklientdebug.h"
 #include "multipagewidget.h"
-#include "settingsmanager.h"
+#include "settings/settingsmanager.h"
 #include "widgets/branchesstatuswidget.h"
 #include "widgets/commitswidget.h"
 #include "widgets/historyviewwidget.h"
@@ -49,7 +48,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "widgets/stasheswidget.h"
 #include "widgets/submoduleswidget.h"
 #include "widgets/tagswidget.h"
-#include "settingsmanager.h"
 
 // KF headers
 #include <KActionCollection>
@@ -62,11 +60,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <QStatusBar>
 #include <QtConcurrent/QtConcurrent>
 
-GitKlientWindow::GitKlientWindow()
-    : MainWindow()
+AppWindow::AppWindow()
+    : AppMainWindow()
 {
     _git = Git::Manager::instance();
-    connect(_git, &Git::Manager::pathChanged, this, &GitKlientWindow::git_pathChanged);
+    connect(_git, &Git::Manager::pathChanged, this, &AppWindow::git_pathChanged);
 
     initActions();
     _mainWidget = new MultiPageWidget(this);
@@ -93,25 +91,25 @@ GitKlientWindow::GitKlientWindow()
         auto p = s.value("last_repo").toString();
         _git->setPath(p);
         initRecentFiles(p);
-        QtConcurrent::run(this, &GitKlientWindow::loadRemotes);
+        QtConcurrent::run(this, &AppWindow::loadRemotes);
 
     }
 }
 
-GitKlientWindow::~GitKlientWindow()
+AppWindow::~AppWindow()
 {
     QSettings s;
     for (auto &w: _baseWidgets)
         w->saveState(s);
 }
 
-GitKlientWindow *GitKlientWindow::instance()
+AppWindow *AppWindow::instance()
 {
-    static GitKlientWindow *instance = new GitKlientWindow;
+    static AppWindow *instance = new AppWindow;
     return instance;
 }
 
-void GitKlientWindow::git_pathChanged()
+void AppWindow::git_pathChanged()
 {
     setWindowFilePath(_git->path());
 //    setWindowTitle(_git->path());
@@ -123,24 +121,24 @@ void GitKlientWindow::git_pathChanged()
     _statusCurrentBranchLabel->setText(statusText);
 }
 
-void GitKlientWindow::initActions()
+void AppWindow::initActions()
 {
     KActionCollection* actionCollection = this->actionCollection();
 
-    auto repoInitAction = actionCollection->addAction("repo_init", this, &GitKlientWindow::initRepo);
+    auto repoInitAction = actionCollection->addAction("repo_init", this, &AppWindow::initRepo);
     repoInitAction->setText(i18n("Init..."));
 
-    auto repoOpenAction = actionCollection->addAction("repo_open", this, &GitKlientWindow::openRepo);
+    auto repoOpenAction = actionCollection->addAction("repo_open", this, &AppWindow::openRepo);
     repoOpenAction->setText(i18n("Open..."));
     actionCollection->setDefaultShortcut(repoOpenAction, QKeySequence("Ctrl+O"));
     repoOpenAction->setIcon(QIcon::fromTheme(QStringLiteral("folder-open")));
 
-    auto repoCloneAction = actionCollection->addAction("repo_clone", this, &GitKlientWindow::clone);
+    auto repoCloneAction = actionCollection->addAction("repo_clone", this, &AppWindow::clone);
     repoCloneAction->setText(i18n("Clone..."));
 
     auto repoStatusAction = actionCollection->addAction(QStringLiteral("repo_status"),
                                                         this,
-                                                        &GitKlientWindow::repoStatus);
+                                                        &AppWindow::repoStatus);
     repoStatusAction->setText(i18n("Changed files..."));
     repoStatusAction->setIcon(QIcon::fromTheme("gitklient-changedfiles"));
     actionCollection->setDefaultShortcut(repoStatusAction, QKeySequence("Ctrl+S"));
@@ -152,35 +150,35 @@ void GitKlientWindow::initActions()
         initRecentFiles();
     }
 
-    auto repoPullAction = actionCollection->addAction("repo_pull", this, &GitKlientWindow::pull);
+    auto repoPullAction = actionCollection->addAction("repo_pull", this, &AppWindow::pull);
     repoPullAction->setText(i18n("Pull..."));
 
-    auto repoFetchAction = actionCollection->addAction("repo_fetch", this, &GitKlientWindow::fetch);
+    auto repoFetchAction = actionCollection->addAction("repo_fetch", this, &AppWindow::fetch);
     repoFetchAction->setText(i18n("Fetch..."));
 
-    auto repoPushAction = actionCollection->addAction("repo_push", this, &GitKlientWindow::commitPushAction);
+    auto repoPushAction = actionCollection->addAction("repo_push", this, &AppWindow::commitPushAction);
     repoPushAction->setText(i18n("Push..."));
 
-    auto diffBranchesAction = actionCollection->addAction("diff_branches", this, &GitKlientWindow::diffBranches);
+    auto diffBranchesAction = actionCollection->addAction("diff_branches", this, &AppWindow::diffBranches);
     diffBranchesAction->setText(i18n("Diff branches..."));
 
-    auto repoSearchAction = actionCollection->addAction("repo_search", this, &GitKlientWindow::search);
+    auto repoSearchAction = actionCollection->addAction("repo_search", this, &AppWindow::search);
     repoSearchAction->setText(i18n("Search..."));
 
-    auto repoSettingsAction = actionCollection->addAction("repo_settings", this, &GitKlientWindow::repoSettings);
+    auto repoSettingsAction = actionCollection->addAction("repo_settings", this, &AppWindow::repoSettings);
     repoSettingsAction->setText(i18n("Repo settings..."));
 
-    auto repoSwitchAction = actionCollection->addAction("repo_switch", this, &GitKlientWindow::repoSwitch);
+    auto repoSwitchAction = actionCollection->addAction("repo_switch", this, &AppWindow::repoSwitch);
     repoSwitchAction->setText(i18n("Switch/Checkout..."));
 
-    auto repoDiffTreeAction = actionCollection->addAction("repo_diff_tree", this, &GitKlientWindow::repoDiffTree);
+    auto repoDiffTreeAction = actionCollection->addAction("repo_diff_tree", this, &AppWindow::repoDiffTree);
     repoDiffTreeAction->setText(i18n("Diff tree"));
 
     KStandardAction::quit(this, &QMainWindow::close, actionCollection);
     KStandardAction::preferences(SettingsManager::instance(), &SettingsManager::show, actionCollection);
 //    KStandardAction::openNew(this, &GitKlientWindow::clone, actionCollection);
 }
-void GitKlientWindow::initRecentFiles(const QString &newItem)
+void AppWindow::initRecentFiles(const QString &newItem)
 {
     recentAction->menu()->clear();
     QSettings s;
@@ -195,24 +193,24 @@ void GitKlientWindow::initRecentFiles(const QString &newItem)
     for (auto &item: recentList) {
         auto action = recentAction->menu()->addAction(item);
         action->setData(item);
-        connect(action, &QAction::triggered, this, &GitKlientWindow::recentActionTriggered);
+        connect(action, &QAction::triggered, this, &AppWindow::recentActionTriggered);
     }
 }
 
-void GitKlientWindow::loadRemotes()
+void AppWindow::loadRemotes()
 {
     auto remotes = _git->remotes();
     for (auto &r: remotes)
         volatile auto remote = _git->remoteDetails(r);
 }
 
-void GitKlientWindow::repoStatus()
+void AppWindow::repoStatus()
 {
     ChangedFilesDialog d(_git, this);
     d.exec();
 }
 
-void GitKlientWindow::initRepo()
+void AppWindow::initRepo()
 {
     InitDialog d(_git, this);
     if (d.exec() == QDialog::Accepted) {
@@ -222,10 +220,11 @@ void GitKlientWindow::initRepo()
             return;
         }
         _git->init(d.path());
+        _git->setPath(d.path());
     }
 }
 
-void GitKlientWindow::openRepo()
+void AppWindow::openRepo()
 {
     QFileDialog d;
     d.setFileMode(QFileDialog::Directory);
@@ -236,7 +235,7 @@ void GitKlientWindow::openRepo()
     }
 }
 
-void GitKlientWindow::recentActionTriggered()
+void AppWindow::recentActionTriggered()
 {
     auto action = qobject_cast<QAction*>(sender());
     if (!action)
@@ -247,35 +246,35 @@ void GitKlientWindow::recentActionTriggered()
 
     initRecentFiles(p);
 
-    QtConcurrent::run(this, &GitKlientWindow::loadRemotes);
+    QtConcurrent::run(this, &AppWindow::loadRemotes);
 }
 
-void GitKlientWindow::commitPushAction()
+void AppWindow::commitPushAction()
 {
     CommitPushDialog d(_git, this);
     if (d.exec() == QDialog::Accepted)
         _git->logsCache()->load();
 }
 
-void GitKlientWindow::pull()
+void AppWindow::pull()
 {
     PullDialog d(this);
     d.exec();
 }
 
-void GitKlientWindow::fetch()
+void AppWindow::fetch()
 {
     FetchDialog d(_git, this);
     d.exec();
 }
 
-void GitKlientWindow::showBranchesStatus()
+void AppWindow::showBranchesStatus()
 {
     MergeDialog d(_git, this);
     d.exec();
 }
 
-void GitKlientWindow::clone()
+void AppWindow::clone()
 {
     CloneDialog d(this);
     if (d.exec() == QDialog::Accepted) {
@@ -288,7 +287,7 @@ void GitKlientWindow::clone()
     }
 }
 
-void GitKlientWindow::diffBranches()
+void AppWindow::diffBranches()
 {
     SelectBranchesToDiffDialog d(_git, this);
     if (d.exec() == QDialog::Accepted) {
@@ -297,19 +296,19 @@ void GitKlientWindow::diffBranches()
     }
 }
 
-void GitKlientWindow::search()
+void AppWindow::search()
 {
     SearchDialog d(_git, this);
     d.exec();
 }
 
-void GitKlientWindow::repoSettings()
+void AppWindow::repoSettings()
 {
     RepoSettingsDialog d(_git, this);
     d.exec();
 }
 
-void GitKlientWindow::repoSwitch()
+void AppWindow::repoSwitch()
 {
     if (_git->isMerging()) {
         KMessageBox::sorry(this, i18n("Cannot switch branch while merging"), i18n("Switch branch"));
@@ -323,14 +322,14 @@ void GitKlientWindow::repoSwitch()
     }
 }
 
-void GitKlientWindow::repoDiffTree()
+void AppWindow::repoDiffTree()
 {
     auto w = new DiffWindow(_git);
     w->showModal();
 }
 
 template<class T>
-void GitKlientWindow::addPage(const QString &actionName)
+void AppWindow::addPage(const QString &actionName)
 {
     const QList<Qt::Key> keys = {
         Qt::Key_0,

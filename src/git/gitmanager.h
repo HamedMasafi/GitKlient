@@ -131,6 +131,8 @@ public:
 
     QString config(const QString &name, ConfigType type = ConfigLocal) const;
     void setConfig(const QString &name, const QString &value, ConfigType type = ConfigLocal) const;
+    void unsetConfig(const QString &name, ConfigType type = ConfigLocal) const;
+
     RemotesCache *remotesModel() const;
     SubmodulesCache *submodulesModel() const;
     BranchesCache *branchesModel() const;

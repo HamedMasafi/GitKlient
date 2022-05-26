@@ -7,7 +7,7 @@
 #include "diffwindow.h"
 #include "git/gitfile.h"
 #include "git/gitmanager.h"
-#include "gitklientmergewindow.h"
+#include "mergewindow.h"
 
 #include <KIO/AccessManager>
 #include <KLocalizedString>

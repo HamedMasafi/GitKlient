@@ -1,7 +1,7 @@
 #ifndef FILEHISTORYDIALOG_H
 #define FILEHISTORYDIALOG_H
 
-#include "../core/dialog.h"
+#include "../core/appdialog.h"
 #include "ui_filehistorydialog.h"
 
 namespace Git {
@@ -9,7 +9,7 @@ class Manager;
 class File;
 }
 
-class FileHistoryDialog : public Dialog, private Ui::FileHistoryDialog
+class FileHistoryDialog : public AppDialog, private Ui::FileHistoryDialog
 {
     Q_OBJECT
     Git::Manager *_git;

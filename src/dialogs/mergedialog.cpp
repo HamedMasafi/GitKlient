@@ -17,7 +17,7 @@ void MergeDialog::init(Git::Manager *git)
 }
 
 MergeDialog::MergeDialog(Git::Manager *git, QWidget *parent) :
-      Dialog(git, parent)
+      AppDialog(git, parent)
 {
     setupUi(this);
 
@@ -25,7 +25,7 @@ MergeDialog::MergeDialog(Git::Manager *git, QWidget *parent) :
 }
 
 MergeDialog::MergeDialog(Git::Manager *git, const QString &sourceBranch, QWidget *parent):
-      Dialog(git, parent), _sourceBranch(sourceBranch)
+      AppDialog(git, parent), _sourceBranch(sourceBranch)
 {
     setupUi(this);
 

@@ -7,7 +7,7 @@
 
 #include <QDebug>
 
-SwitchBranchDialog::SwitchBranchDialog(Git::Manager *git, QWidget *parent) : Dialog(git, parent)
+SwitchBranchDialog::SwitchBranchDialog(Git::Manager *git, QWidget *parent) : AppDialog(git, parent)
 {
     setupUi(this);
     comboBoxBranchSelect->setModel(git->branchesModel());

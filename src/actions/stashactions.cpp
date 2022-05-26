@@ -9,6 +9,7 @@
 
 #include "diffwindow.h"
 #include "git/gitmanager.h"
+#include "git/models/stashescache.h"
 
 StashActions::StashActions(Git::Manager *git, QWidget *parent) : AbstractActions(git, parent)
 {
@@ -34,11 +35,14 @@ void StashActions::setStashName(const QString &newStashName)
     setActionEnabled(_actionApply, true);
     setActionEnabled(_actionDiff, true);
     setActionEnabled(_actionDrop, true);
+    setActionEnabled(_actionDrop, true);
 }
 
 void StashActions::apply()
 {
-    auto r = KMessageBox::questionYesNo(_parent, i18n("Are you sure to apply the selected stash?"), i18n("Apply stash %1", _stashName));
+    auto r = KMessageBox::questionYesNo(_parent,
+                                        i18n("Are you sure to apply the selected stash?"),
+                                        i18n("Apply stash %1", _stashName));
 
     if (r == KMessageBox::Yes)
         _git->applyStash(_stashName);
@@ -48,13 +52,22 @@ void StashActions::drop()
 {
     auto r = KMessageBox::questionYesNo(_parent, i18n("Are you sure to apply the selected stash?"), i18n("Apply stash %1", _stashName));
 
-    if (r == KMessageBox::Yes)
+    if (r == KMessageBox::Yes) {
         _git->removeStash(_stashName);
+        _git->stashesCache()->load();
+    }
 }
 
 void StashActions::pop()
 {
+    auto r = KMessageBox::questionYesNo(_parent,
+                                        i18n("Are you sure to apply the selected stash?"),
+                                        i18n("Apply stash %1", _stashName));
 
+    if (r == KMessageBox::Yes) {
+        _git->runGit({"stash", "push", _stashName});
+        _git->stashesCache()->load();
+    }
 }
 
 void StashActions::diff()

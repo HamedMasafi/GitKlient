@@ -35,6 +35,7 @@ find_package(
         Gui
         Widgets
         Concurrent
+        Test
 )
 
 find_package(Qt5Test ${QT_MIN_VERSION} CONFIG QUIET)

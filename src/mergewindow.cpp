@@ -18,12 +18,13 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "gitklientmergewindow.h"
+#include "mergewindow.h"
 
 #include "GitKlientSettings.h"
 #include "dialogs/mergecloseeventdialog.h"
 #include "dialogs/mergeopenfilesdialog.h"
 #include "diff/segmentsmapper.h"
+#include "settings/settingsmanager.h"
 #include "widgets/codeeditor.h"
 #include "widgets/editactionsmapper.h"
 
@@ -32,11 +33,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <KLocalizedString>
 #include <KMessageBox>
 
+#include <QLabel>
 #include <QDebug>
 #include <QFile>
 #include <QFileInfo>
 #include <QMenu>
 #include <QScrollBar>
+#include <QStatusBar>
 #include <QTextBlock>
 #include <QTextEdit>
 
@@ -62,7 +65,6 @@ void compare(QTextEdit *e1, QTextEdit *e2)
         }
     }
 }
-
 QStringList readFile(const QString &filePath)
 {
 //    QStringList buffer;
@@ -77,6 +79,58 @@ QStringList readFile(const QString &filePath)
     f.close();
     return buf;
 }
+
+GitKlientMergeWindow::GitKlientMergeWindow(Mode mode, QWidget *parent) : AppMainWindow(parent)
+{
+    Q_UNUSED(mode)
+
+    initActions();
+    auto mapper = new EditActionsMapper;
+    mapper->init(actionCollection());
+    setupGUI(Default, "gitklientmergeui.rc");
+    auto w = new QWidget(this);
+    m_ui.setupUi(w);
+    setCentralWidget(w);
+
+
+    mapper->addTextEdit(m_ui.plainTextEditMine);
+    mapper->addTextEdit(m_ui.plainTextEditTheir);
+    mapper->addTextEdit(m_ui.plainTextEditResult);
+
+
+    _mapper = new SegmentsMapper;
+
+    _mapper->addEditor(m_ui.plainTextEditBase);
+    _mapper->addEditor(m_ui.plainTextEditMine);
+    _mapper->addEditor(m_ui.plainTextEditTheir);
+    _mapper->addEditor(m_ui.plainTextEditResult);
+
+    m_ui.plainTextEditMine->setContextMenuPolicy(Qt::CustomContextMenu);
+    m_ui.plainTextEditTheir->setContextMenuPolicy(Qt::CustomContextMenu);
+
+    connect(m_ui.plainTextEditMine,
+            &CodeEditor::customContextMenuRequested,
+            this,
+            &GitKlientMergeWindow::codeEditors_customContextMenuRequested);
+
+    connect(m_ui.plainTextEditTheir,
+            &CodeEditor::customContextMenuRequested,
+            this,
+            &GitKlientMergeWindow::codeEditors_customContextMenuRequested);
+
+    /*auto actions = QList<QAction*> ()
+                   << actionKeepThis
+                   << actionKeepThis
+                   << actionKeepThisBeforeOther
+                   << actionKeepThisAfterOther;*/
+
+    //    m_ui.plainTextEditMine->insertActions(nullptr, actions);
+
+    _conflictsLabel = new QLabel(this);
+    statusBar()->addPermanentWidget(_conflictsLabel);
+}
+
+GitKlientMergeWindow::~GitKlientMergeWindow() {}
 
 void GitKlientMergeWindow::load()
 {
@@ -120,13 +174,13 @@ void GitKlientMergeWindow::load()
         case Diff::SegmentType::OnlyOnRight:
             m_ui.plainTextEditMine->append(d->local, CodeEditor::Removed, d);
             m_ui.plainTextEditTheir->append(d->remote, CodeEditor::Added, d);
-            m_ui.plainTextEditBase->append(d->base, CodeEditor::Unchanged, d);
+            m_ui.plainTextEditBase->append(d->base, CodeEditor::Edited, d);
             d->mergeType = Diff::KeepRemote;
             break;
         case Diff::SegmentType::OnlyOnLeft:
             m_ui.plainTextEditMine->append(d->local, CodeEditor::Added, d);
             m_ui.plainTextEditTheir->append(d->remote, CodeEditor::Removed, d);
-            m_ui.plainTextEditBase->append(d->base, CodeEditor::Unchanged, d);
+            m_ui.plainTextEditBase->append(d->base, CodeEditor::Edited, d);
             d->mergeType = Diff::KeepLocal;
             break;
 
@@ -134,16 +188,16 @@ void GitKlientMergeWindow::load()
             if (isEmpty(d->local)) {
                 m_ui.plainTextEditMine->append(d->local, CodeEditor::Edited, d);
                 m_ui.plainTextEditTheir->append(d->remote, CodeEditor::Added, d);
-//                d->mergeType = Diff::KeepRemote;
+                //                d->mergeType = Diff::KeepRemote;
             } else if (isEmpty(d->remote)) {
                 m_ui.plainTextEditMine->append(d->local, CodeEditor::Added, d);
                 m_ui.plainTextEditTheir->append(d->remote, CodeEditor::Edited, d);
-//                d->mergeType = Diff::KeepLocal;
+                //                d->mergeType = Diff::KeepLocal;
             } else {
                 m_ui.plainTextEditMine->append(d->local, CodeEditor::Edited, d);
                 m_ui.plainTextEditTheir->append(d->remote, CodeEditor::Edited, d);
             }
-            m_ui.plainTextEditBase->append(d->base, CodeEditor::Unchanged, d);
+            m_ui.plainTextEditBase->append(d->base, CodeEditor::Edited, d);
             d->mergeType = Diff::None;
             break;
         }
@@ -159,79 +213,6 @@ void GitKlientMergeWindow::load()
     setWindowTitle(fi.fileName() + "[*]");
     setWindowModified(true);
 }
-
-GitKlientMergeWindow::GitKlientMergeWindow(Mode mode, QWidget *parent) : MainWindow(parent)
-{
-    Q_UNUSED(mode)
-
-    initActions();
-    auto mapper = new EditActionsMapper;
-    mapper->init(actionCollection());
-    setupGUI(Default, "gitklientmergeui.rc");
-    auto w = new QWidget(this);
-    m_ui.setupUi(w);
-    setCentralWidget(w);
-
-
-    mapper->addTextEdit(m_ui.plainTextEditMine);
-    mapper->addTextEdit(m_ui.plainTextEditTheir);
-    mapper->addTextEdit(m_ui.plainTextEditResult);
-
-
-    _mapper = new SegmentsMapper;
-
-#ifdef QT_DEBUG
-    _filePathBase = "/doc/dev/qt/git-diff/samples/sample_BASE.h";
-    _filePathLocal = "/doc/dev/qt/git-diff/samples/sample_LOCAL.h";
-    _filePathRemote = "/doc/dev/qt/git-diff/samples/sample_REMOTE.h";
-    _filePathResult = "/doc/dev/qt/git-diff/samples/sample.h";
-    load();
-#endif
-
-    connect(m_ui.plainTextEditMine,
-            &CodeEditor::blockSelected,
-            this,
-            &GitKlientMergeWindow::plainTextEditMine_blockSelected);
-
-    connect(m_ui.plainTextEditTheir,
-            &CodeEditor::blockSelected,
-            this,
-            &GitKlientMergeWindow::plainTextEditTheir_blockSelected);
-
-    connect(m_ui.plainTextEditMine->verticalScrollBar(),
-            &QScrollBar::valueChanged,
-            this,
-            &GitKlientMergeWindow::plainTextEditMine_scroll);
-
-    connect(m_ui.plainTextEditTheir->verticalScrollBar(),
-            &QScrollBar::valueChanged,
-            this,
-            &GitKlientMergeWindow::plainTextEditTheir_scroll);
-
-    m_ui.plainTextEditMine->setContextMenuPolicy(Qt::CustomContextMenu);
-    m_ui.plainTextEditTheir->setContextMenuPolicy(Qt::CustomContextMenu);
-
-    connect(m_ui.plainTextEditMine,
-            &CodeEditor::customContextMenuRequested,
-            this,
-            &GitKlientMergeWindow::codeEditors_customContextMenuRequested);
-
-    connect(m_ui.plainTextEditTheir,
-            &CodeEditor::customContextMenuRequested,
-            this,
-            &GitKlientMergeWindow::codeEditors_customContextMenuRequested);
-
-    /*auto actions = QList<QAction*> ()
-                   << actionKeepThis
-                   << actionKeepThis
-                   << actionKeepThisBeforeOther
-                   << actionKeepThisAfterOther;*/
-
-    //    m_ui.plainTextEditMine->insertActions(nullptr, actions);
-
-}
-
-GitKlientMergeWindow::~GitKlientMergeWindow() {}
 
 void GitKlientMergeWindow::updateResult()
 {
@@ -257,7 +238,9 @@ void GitKlientMergeWindow::updateResult()
                 break;
 
             case Diff::SegmentType::DifferentOnBoth:
-                if (isEmpty(d->local))
+                if (d->local == d->remote)
+                    m_ui.plainTextEditResult->append(d->remote, CodeEditor::Added, d); // Not changed
+                else if (isEmpty(d->local))
                     m_ui.plainTextEditResult->append(d->remote, CodeEditor::Added, d);
                 else if (isEmpty(d->remote))
                     m_ui.plainTextEditResult->append(d->local, CodeEditor::Added, d);
@@ -291,6 +274,7 @@ void GitKlientMergeWindow::updateResult()
             break;
         }
     }
+    _conflictsLabel->setText(i18n("Conflicts: %1", _mapper->conflicts()));
 }
 
 void GitKlientMergeWindow::initActions()
@@ -345,7 +329,7 @@ void GitKlientMergeWindow::initActions()
     actionKeepTheirFile->setIcon(QIcon::fromTheme("diff-keep-their-file"));
     actionCollection->setDefaultShortcut(actionKeepTheirFile, QKeySequence("Ctrl+Alt+R"));
 
-    auto actionGotoPrevDiff = actionCollection
+    /*auto actionGotoPrevDiff = actionCollection
                                   ->addAction("goto_prev_diff",
                                               this,
                                               &GitKlientMergeWindow::actionGotoPrevDiff_clicked);
@@ -360,11 +344,11 @@ void GitKlientMergeWindow::initActions()
     actionGotoNextDiff->setText(i18n("Next diff"));
     actionGotoNextDiff->setIcon(QIcon::fromTheme("diff-goto-next-diff"));
     actionCollection->setDefaultShortcut(actionGotoNextDiff, QKeySequence(Qt::Key_PageDown));
-
+*/
     KStandardAction::open(this, &GitKlientMergeWindow::fileOpen, actionCollection);
     KStandardAction::save(this, &GitKlientMergeWindow::fileSave, actionCollection);
     KStandardAction::quit(qApp, &QApplication::closeAllWindows, actionCollection);
-    KStandardAction::preferences(this, &GitKlientMergeWindow::settingsConfigure, actionCollection);
+    KStandardAction::preferences(this, &GitKlientMergeWindow::preferences, actionCollection);
 
     _codeEditorContextMenu = new QMenu(this);
     _codeEditorContextMenu->addActions({actionKeepMine, actionKeepTheir});
@@ -376,28 +360,20 @@ void GitKlientMergeWindow::initActions()
 
 void GitKlientMergeWindow::doMergeAction(Diff::MergeType type)
 {
-    if (!m_ui.plainTextEditMine->hasFocus() && !m_ui.plainTextEditTheir->hasFocus())
-        return;
-
-    CodeEditor *from;
-    if (m_ui.plainTextEditMine->hasFocus()) {
-        from = m_ui.plainTextEditMine;
-    } else {
-        from = m_ui.plainTextEditTheir;
-    }
-    auto s = from->currentSegment();
+    auto s = _mapper->currentSegment();
 
     if (!s)
         return;
 
     if (s->type == Diff::SegmentType::SameOnBoth)
         return;
-    if (s) {
-        auto ss = static_cast<Diff::MergeSegment *>(s);
-        ss->mergeType = type;
-        updateResult();
-        m_ui.plainTextEditResult->highlightSegment(s);
-    }
+
+    auto ss = static_cast<Diff::MergeSegment *>(s);
+    ss->mergeType = type;
+    updateResult();
+//    m_ui.plainTextEditResult->highlightSegment(s);
+
+    _mapper->setCurrentSegment(s);
 }
 
 bool GitKlientMergeWindow::isFullyResolved()
@@ -417,8 +393,10 @@ void GitKlientMergeWindow::closeEvent(QCloseEvent *event)
         switch (r) {
         case MergeCloseEventDialog::MarkAsResolved:
             fileSave();
+            accept();
             break;
         case MergeCloseEventDialog::LeaveAsIs:
+            reject();
             break;
         case MergeCloseEventDialog::DontExit:
             event->ignore();
@@ -484,6 +462,11 @@ void GitKlientMergeWindow::fileOpen()
     }
 }
 
+void GitKlientMergeWindow::preferences()
+{
+    SettingsManager::instance()->exec(this);
+}
+
 void GitKlientMergeWindow::actionKeepMine_clicked()
 {
     doMergeAction(Diff::MergeType::KeepLocal);
@@ -526,7 +509,8 @@ void GitKlientMergeWindow::actionGotoNextDiff_clicked()
 
 void GitKlientMergeWindow::codeEditors_customContextMenuRequested(QPoint pos)
 {
-    _codeEditorContextMenu->popup(qobject_cast<QWidget*>(sender())->mapToGlobal(pos));
+    Q_UNUSED(pos)
+    _codeEditorContextMenu->popup(QCursor::pos());
 }
 
 const QString &GitKlientMergeWindow::filePathBase() const
@@ -559,88 +543,11 @@ void GitKlientMergeWindow::setFilePathLocal(const QString &newFilePathLocal)
     _filePathLocal = newFilePathLocal;
 }
 
-void GitKlientMergeWindow::plainTextEditMine_scroll(int value)
-{
-    static bool b{false};
-    if (b)
-        return;
-    b = true;
-    m_ui.plainTextEditTheir->verticalScrollBar()->setValue(
-        (int) (((float) value / (float) m_ui.plainTextEditTheir->verticalScrollBar()->maximum())
-               * (float) m_ui.plainTextEditTheir->verticalScrollBar()->maximum()));
-    b = false;
-    m_ui.widgetSegmentsConnector->update();
-}
-
-void GitKlientMergeWindow::plainTextEditTheir_scroll(int value)
-{
-    static bool b{false};
-    if (b)
-        return;
-    b = true;
-    m_ui.plainTextEditMine->verticalScrollBar()->setValue(
-        (int) (((float) value / (float) m_ui.plainTextEditMine->verticalScrollBar()->maximum())
-               * (float) m_ui.plainTextEditMine->verticalScrollBar()->maximum()));
-    b = false;
-    m_ui.widgetSegmentsConnector->update();
-}
-
-void GitKlientMergeWindow::plainTextEditMine_blockSelected()
-{
-    auto l = m_ui.plainTextEditMine->currentLineNumber();
-    auto n = _mapper->mapIndexFromOldToNew(l);
-    if (n != -1)
-        m_ui.plainTextEditTheir->gotoLineNumber(n);
-    return;
-
-    //    auto b = plainTextEditMine->textCursor().block().blockNumber();
-    auto b = m_ui.plainTextEditMine->currentSegment();
-    if (b) {
-        m_ui.widgetSegmentsConnector->setCurrentSegment(b);
-        qDebug() << "Block found" << b->oldText;
-        m_ui.plainTextEditTheir->highlightSegment(b);
-    }
-}
-
-void GitKlientMergeWindow::plainTextEditTheir_blockSelected()
-{
-    auto l = m_ui.plainTextEditTheir->currentLineNumber();
-    auto n = _mapper->map(2, 1, l);
-    if (n != -1)
-        m_ui.plainTextEditMine->gotoLineNumber(n);
-
-    //    auto b = m_ui.plainTextEditTheir->currentSegment();
-    //    if (b) {
-    //        m_ui.widgetSegmentsConnector->setCurrentSegment(b);
-    //        m_ui.plainTextEditMine->highlightSegment(b);
-    //    }
-}
-
 void GitKlientMergeWindow::on_plainTextEditResult_textChanged()
 {
-    //    auto segment = m_ui.plainTextEditResult->currentSegment();
-    //    if (segment) {
-    //        segment->mergeType = Diff::MergeCustom;
-    //    }
+//    auto segment = static_cast<Diff::MergeSegment *>(_mapper->currentSegment());
+//    if (segment) {
+//        segment->mergeType = Diff::MergeCustom;
+//    }
 }
 
-void GitKlientMergeWindow::settingsConfigure()
-{
-//    qCDebug(GITKLIENTDIFF) << "GitKlientDiffWindow::settingsConfigure()";
-    // The preference dialog is derived from prefs_base.ui
-    //
-    // compare the names of the widgets in the .ui file
-    // to the names of the variables in the .kcfg file
-    //avoid to have 2 dialogs shown
-    if (KConfigDialog::showDialog(QStringLiteral("settings"))) {
-        return;
-    }
-
-    KConfigDialog *dialog = new KConfigDialog(this, QStringLiteral("settings"), GitKlientSettings::self());
-    QWidget *generalSettingsPage = new QWidget;
-//    settingsBase.setupUi(generalSettingsPage);
-    dialog->addPage(generalSettingsPage, i18n("General"), QStringLiteral("package_setting"));
-    //    connect(dialog, &KConfigDialog::settingsChanged, m_gitklientdiffView, &GitKlientDiffView::handleSettingsChanged);
-    dialog->setAttribute(Qt::WA_DeleteOnClose);
-    dialog->show();
-}

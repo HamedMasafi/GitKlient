@@ -1,7 +1,7 @@
 #include "mergecloseeventdialog.h"
 
 MergeCloseEventDialog::MergeCloseEventDialog(QWidget *parent) :
-      Dialog(parent)
+      AppDialog(parent)
 {
     setupUi(this);
 }

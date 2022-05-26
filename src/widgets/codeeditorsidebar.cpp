@@ -3,7 +3,10 @@
 
 #include <QTextBlock>
 
-CodeEditorSidebar::CodeEditorSidebar(CodeEditor *editor) : QWidget(editor), m_codeEditor(editor) {}
+CodeEditorSidebar::CodeEditorSidebar(CodeEditor *editor) : QWidget(editor), m_codeEditor(editor) {
+
+    setAttribute(Qt::WA_OpaquePaintEvent);
+}
 
 QSize CodeEditorSidebar::sizeHint() const
 {

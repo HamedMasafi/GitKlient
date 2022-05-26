@@ -34,10 +34,15 @@ void BlameCodeView::setBlameData(const Git::BlameData &newBlameData)
         if (lastCommit != commitHash)
             currentColor = (currentColor + 1) % colors.size();
 
-        append(blame.code + "\n", colors.at(currentColor));
-
+        auto blockNumber = append(blame.code, colors.at(currentColor));
+        _blames.insert(blockNumber, blame);
         lastCommit = commitHash;
     }
+}
+
+Git::BlameDataRow BlameCodeView::blameData(const int &blockNumber) const
+{
+    return _blames.value(blockNumber);
 }
 
 int BlameCodeView::sidebarWidth() const

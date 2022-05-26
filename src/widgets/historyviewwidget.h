@@ -18,7 +18,7 @@ class HistoryViewWidget : public WidgetBase, private Ui::HistoryViewWidget
 
 public:
     explicit HistoryViewWidget(QWidget *parent = nullptr);
-    explicit HistoryViewWidget(Git::Manager *git, GitKlientWindow *parent = nullptr);
+    explicit HistoryViewWidget(Git::Manager *git, AppWindow *parent = nullptr);
     void setBranch(const QString &branchName);
 
     void saveState(QSettings &settings) const override;

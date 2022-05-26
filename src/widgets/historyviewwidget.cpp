@@ -29,7 +29,7 @@ HistoryViewWidget::HistoryViewWidget(QWidget *parent) :
     _actions = new CommitActions(Git::Manager::instance(), this);
 }
 
-HistoryViewWidget::HistoryViewWidget(Git::Manager *git, GitKlientWindow *parent):
+HistoryViewWidget::HistoryViewWidget(Git::Manager *git, AppWindow *parent):
       WidgetBase(git, parent)
 {
     setupUi(this);
@@ -98,12 +98,13 @@ void HistoryViewWidget::on_textBrowser_fileClicked(const QString &file)
 
 void HistoryViewWidget::on_treeViewHistory_customContextMenuRequested(const QPoint &pos)
 {
+    Q_UNUSED(pos)
     auto log = _historyModel->fromIndex(treeViewHistory->currentIndex());
     if (!log)
         return;
     _actions->setCommitHash(log->commitHash());
 
-    _actions->popup(treeViewHistory->mapToGlobal(pos));
+    _actions->popup();
 }
 
 void HistoryViewWidget::git_pathChanged()

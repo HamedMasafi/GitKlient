@@ -19,20 +19,38 @@ void SegmentConnector::setSegments(const QList<Diff::Segment *> &newSegments)
     int newIndex{0};
     _segmentPos.clear();
 
-    for (auto &s: _segments) {
-        SegmentPos pos{oldIndex,
-                       oldIndex + s->oldText.size() - 1,
-                       newIndex,
-                       newIndex + s->newText.size() - 1};
+    for (auto &s : _segments) {
+        if (m_sameSize) {
+            auto sizeMax = qMax(s->oldText.size(), s->newText.size());
 
-        if (s->oldText.isEmpty())
-            pos.leftEnd = -1;
-        if (s->newText.isEmpty())
-            pos.rightEnd = -1;
-        _segmentPos.insert(s, pos);
+            SegmentPos pos{oldIndex,
+                           oldIndex + s->oldText.size() - 1,
+                           newIndex,
+                           newIndex + s->newText.size() - 1};
 
-        oldIndex += s->oldText.size();
-        newIndex += s->newText.size();
+//            if (s->oldText.isEmpty())
+//                pos.leftEnd = -1;
+//            if (s->newText.isEmpty())
+//                pos.rightEnd = -1;
+            _segmentPos.insert(s, pos);
+
+            oldIndex += sizeMax;
+            newIndex += sizeMax;
+        } else {
+            SegmentPos pos{oldIndex,
+                           oldIndex + s->oldText.size() - 1,
+                           newIndex,
+                           newIndex + s->newText.size() - 1};
+
+            if (s->oldText.isEmpty())
+                pos.leftEnd = -1;
+            if (s->newText.isEmpty())
+                pos.rightEnd = -1;
+            _segmentPos.insert(s, pos);
+
+            oldIndex += s->oldText.size();
+            newIndex += s->newText.size();
+        }
     }
 }
 
@@ -45,6 +63,16 @@ void SegmentConnector::setCurrentSegment(Diff::Segment *newCurrentSegment)
 {
     _currentSegment = newCurrentSegment;
     update();
+}
+
+bool SegmentConnector::sameSize() const
+{
+    return m_sameSize;
+}
+
+void SegmentConnector::setSameSize(bool newSameSize)
+{
+    m_sameSize = newSameSize;
 }
 
 SegmentConnector::SegmentConnector(QWidget *parent) : QWidget(parent)

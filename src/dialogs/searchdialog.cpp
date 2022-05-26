@@ -8,7 +8,7 @@
 #include <KLocalizedString>
 
 SearchDialog::SearchDialog(const QString &path, Git::Manager *git, QWidget *parent)
-    : Dialog(parent), _git(git)
+    : AppDialog(parent), _git(git)
 {
     setupUi(this);
     initModel();
@@ -29,7 +29,7 @@ void SearchDialog::initModel()
 
 }
 
-SearchDialog::SearchDialog(Git::Manager *git, QWidget *parent) : Dialog(parent), _git(git)
+SearchDialog::SearchDialog(Git::Manager *git, QWidget *parent) : AppDialog(parent), _git(git)
 {
     setupUi(this);
     initModel();

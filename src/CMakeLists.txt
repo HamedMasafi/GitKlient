@@ -20,16 +20,14 @@ set(gitklient_SRCS
     ${CORE_SRC}
 
     main.cpp
-    gitklientwindow.cpp
+    appwindow.cpp
     buttonsgroup.cpp
     multipagewidget.cpp
-    argsparser.cpp
     diffwindow.cpp
-    gitklientmergewindow.cpp
+    mergewindow.cpp
     commandargsparser.cpp
-    settingshelper.cpp
-    gitklientconfig.cpp
-    settingsmanager.cpp
+    appconfig.cpp
+    settings/settingsmanager.cpp
 )
 
 ecm_qt_declare_logging_category(gitklient_SRCS
@@ -37,7 +35,7 @@ ecm_qt_declare_logging_category(gitklient_SRCS
     IDENTIFIER GITKLIENT
     CATEGORY_NAME "gitklient"
 )
-kconfig_add_kcfg_files(gitklient_SRCS GitKlientSettings.kcfgc)
+kconfig_add_kcfg_files(gitklient_SRCS settings/GitKlientSettings.kcfgc)
 
 #set(CMAKE_AUTOUIC ON)
 
@@ -51,8 +49,9 @@ add_compile_definitions(GIT_GUI)
 ki18n_wrap_ui(
     gitklient_SRCS
 
-    settingsBase.ui
-    diffsettings.ui
+    settings/settingspagebase.ui
+    settings/settingspagediff.ui
+    settings/settingspagegit.ui
     multipagewidget.ui
     gitklientmergeview.ui
     commandpullwidget.ui

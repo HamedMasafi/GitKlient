@@ -22,9 +22,10 @@ class SegmentData : public QTextBlockUserData
     Diff::Segment *_segment{nullptr};
 
 public:
-    SegmentData(Diff::Segment *segment) : _segment{segment} {}
+    SegmentData(Diff::Segment *segment, bool empty = false) : _segment{segment}, isEmpty(empty) {}
     Diff::Segment *segment() const;
     void setSegment(Diff::Segment *newSegment);
+    bool isEmpty{false};
 };
 
 Diff::Segment *SegmentData::segment() const
@@ -56,20 +57,23 @@ CodeEditor::CodeEditor(QWidget *parent)
     updateSidebarGeometry();
     highlightCurrentLine();
 
-    QTextBlockFormat normalFormat;
-    QTextBlockFormat addedFormat;
-    QTextBlockFormat removedFormat;
-    QTextBlockFormat changedFormat;
+    QTextBlockFormat normalFormat, addedFormat, removedFormat, changedFormat, highlightFormat,
+        emptyFormat;
 
     addedFormat.setBackground(GitKlientSettings::diffAddedColor());
     removedFormat.setBackground(GitKlientSettings::diffRemovedColor());
     changedFormat.setBackground(GitKlientSettings::diffModifiedColor());
+    highlightFormat.setBackground(Qt::yellow);
+
+    emptyFormat.setBackground(QBrush(Qt::gray, Qt::BDiagPattern));
     //    normalFormat.setBackground(Qt::lightGray);
 
     _formats.insert(Added, addedFormat);
     _formats.insert(Removed, removedFormat);
     _formats.insert(Unchanged, normalFormat);
     _formats.insert(Edited, changedFormat);
+    _formats.insert(HighLight, highlightFormat);
+    _formats.insert(Empty, emptyFormat);
 
     setLineWrapMode(QPlainTextEdit::NoWrap);
 }
@@ -130,26 +134,34 @@ void CodeEditor::sidebarPaintEvent(QPaintEvent *event)
     const int currentBlockNumber = textCursor().blockNumber();
 
     const auto foldingMarkerSize = fontMetrics().lineSpacing();
+    int lineNumber{0};
 
+//    auto &emptyFormat = _formats.value(Empty);
     while (block.isValid() && top <= event->rect().bottom()) {
         if (block.isVisible() && bottom >= event->rect().top()) {
-            const auto number = QString::number(blockNumber + 1);
-            painter.fillRect(QRect{0,
-                                   top,
-                                   m_sideBar->width() - 1,
-                                   fontMetrics().height()},
-                             document()->findBlockByNumber(blockNumber).blockFormat().background());
+
+            QBrush bg;
+            if (blockNumber >= _currentSegment.first && blockNumber <= _currentSegment.second)
+                bg = Qt::yellow;
+            else
+                bg = document()->findBlockByNumber(blockNumber).blockFormat().background();
+            painter.fillRect(QRect{0, top, m_sideBar->width() - 1, fontMetrics().height()}, bg);
 
             painter.setPen(m_highlighter->theme().editorColor(
                 (blockNumber == currentBlockNumber) ? KSyntaxHighlighting::Theme::CurrentLineNumber
                                                     : KSyntaxHighlighting::Theme::LineNumbers));
-            painter.drawText(0,
-                             top,
-                             m_sideBar->width() - 2 - foldingMarkerSize,
-                             fontMetrics().height(),
-                             Qt::AlignRight,
-                             number);
 
+//            if (block.blockFormat() != emptyFormat)
+            {
+                ++lineNumber;
+                const auto number = QString::number(blockNumber + 1);
+                painter.drawText(0,
+                                 top,
+                                 m_sideBar->width() - 2 - foldingMarkerSize,
+                                 fontMetrics().height(),
+                                 Qt::AlignRight,
+                                 number);
+            }
         }
 
         // folding marker
@@ -298,7 +310,7 @@ void CodeEditor::setHighlighting(const QString &fileName)
     m_highlighter->setDefinition(def);
 }
 
-void CodeEditor::append(const QString &code, const BlockType &type, Diff::Segment *segment)
+void CodeEditor::append(const QString &code, const BlockType &type, Diff::Segment *segment, bool isEmpty)
 {
     auto t = textCursor();
 
@@ -309,10 +321,10 @@ void CodeEditor::append(const QString &code, const BlockType &type, Diff::Segmen
     c.insertText(code);
     _segments.insert(t.block().blockNumber(), segment);
     t.setBlockFormat(_formats.value(type));
-    t.block().setUserData(new SegmentData{segment});
+    t.block().setUserData(new SegmentData{segment, isEmpty});
 }
 
-void CodeEditor::append(const QString &code, const QColor &backGroundColor)
+int CodeEditor::append(const QString &code, const QColor &backgroundColor)
 {
     auto t = textCursor();
 
@@ -322,8 +334,10 @@ void CodeEditor::append(const QString &code, const QColor &backGroundColor)
     QTextCursor c(t.block());
     c.insertText(code);
     QTextBlockFormat fmt;
-    fmt.setBackground(backGroundColor);
+    fmt.setBackground(backgroundColor);
     t.setBlockFormat(fmt);
+    _segments.insert(t.block().blockNumber(), nullptr);
+    return t.block().blockNumber();
 }
 
 void CodeEditor::append(const QStringList &code, const BlockType &type, Diff::Segment *segment, int size)
@@ -336,7 +350,7 @@ void CodeEditor::append(const QStringList &code, const BlockType &type, Diff::Se
         append(e, type, segment);
     if (size > code.size())
         for (int var = 0; var < size - code.size(); ++var) {
-            append(QString(), type, segment);
+            append(QString(), Empty, segment, true);
         }
 }
 
@@ -372,6 +386,21 @@ void CodeEditor::gotoLineNumber(int lineNumber)
     }
 }
 
+void CodeEditor::gotoSegment(Diff::Segment *segment)
+{
+    for (auto i = _segments.begin(); i != _segments.end(); i++) {
+        if (i.value() == segment) {
+            QTextBlock block = document()->findBlockByLineNumber(i.key());
+
+            if (block.isValid()) {
+                QTextCursor cursor(block);
+                setTextCursor(cursor);
+            }
+            return;
+        }
+    }
+}
+
 void CodeEditor::mouseReleaseEvent(QMouseEvent *event)
 {
     Q_EMIT blockSelected();
@@ -385,18 +414,33 @@ Diff::Segment *CodeEditor::currentSegment() const
 
 void CodeEditor::highlightSegment(Diff::Segment *segment)
 {
+    _currentSegment = qMakePair(-1, -1);
     for (auto i = _segments.begin(); i != _segments.end(); i++) {
-        if (i.value()==segment) {
-            auto block = document()->findBlockByNumber(i.key());
-            QTextCursor cursor(block);
-            setTextCursor(cursor);
+        if (i.value() == segment) {
+            if (_currentSegment.first == -1)
+                _currentSegment.first = i.key();
+            //            auto block = document()->findBlockByNumber(i.key());
+
+            //            QTextCursor cursor(block);
+            ////            cursor.setBlockFormat(_formats.value(HighLight));
+            //            setTextCursor(cursor);
+            //            return;
+        } else if (_currentSegment.first != -1){
+            _currentSegment.second = i.key() - 1;
+            break;
         }
     }
+//    _currentSegment = segment;
+    m_sideBar->update();
+    qDebug() << _currentSegment;
+    return;
+    qDebug() << "Segment not found";
 }
 
 void CodeEditor::clearAll()
 {
     _segments.clear();
+    qDeleteAll(_segments);
     _lines.clear();
     clear();
 }

@@ -1,9 +1,13 @@
 #include "fileblamedialog.h"
 
 #include "git/gitmanager.h"
+#include "git/models/logscache.h"
+#include "qtextobject.h"
+
+#include <klocalizedstring.h>
 
 FileBlameDialog::FileBlameDialog(Git::Manager *git, const QString &fileName, QWidget *parent)
-    : Dialog(parent), _git(git), _fileName(fileName)
+    : AppDialog(parent), _git(git), _fileName(fileName)
 {
     setupUi(this);
 
@@ -15,7 +19,7 @@ FileBlameDialog::FileBlameDialog(Git::Manager *git, const QString &fileName, QWi
 }
 
 FileBlameDialog::FileBlameDialog(const Git::File &file, QWidget *parent)
-    : Dialog(parent), _file(file)
+    : AppDialog(parent), _git(Git::Manager::instance()), _file(file)
 {
     setupUi(this);
     plainTextEdit->setHighlighting(file.fileName());
@@ -26,4 +30,10 @@ FileBlameDialog::FileBlameDialog(const Git::File &file, QWidget *parent)
 
     b.initCommits(file.git()->logs());
     setWindowTitle(i18n("Blame file: %1", file.fileName()));
+}
+
+void FileBlameDialog::on_plainTextEdit_blockSelected()
+{
+    auto b = plainTextEdit->blameData(plainTextEdit->textCursor().block().blockNumber());
+    logDetailsWidget->setLog(_git->logsCache()->findLogByHash(b.commitHash));
 }

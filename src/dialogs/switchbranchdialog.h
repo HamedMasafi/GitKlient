@@ -2,12 +2,12 @@
 #define SWITCHBRANCHDIALOG_H
 
 #include "ui_switchbranchdialog.h"
-#include "core/dialog.h"
+#include "core/appdialog.h"
 
 namespace Git{
 class CommandSwitchBranch;
 }
-class SwitchBranchDialog : public Dialog, private Ui::SwitchBranchDialog
+class SwitchBranchDialog : public AppDialog, private Ui::SwitchBranchDialog
 {
     Q_OBJECT
 

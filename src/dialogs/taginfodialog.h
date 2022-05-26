@@ -1,10 +1,10 @@
 #ifndef TAGINFODIALOG_H
 #define TAGINFODIALOG_H
 
-#include "../core/dialog.h"
+#include "../core/appdialog.h"
 #include "ui_taginfodialog.h"
 
-class TagInfoDialog : public Dialog, private Ui::TagInfoDialog
+class TagInfoDialog : public AppDialog, private Ui::TagInfoDialog
 {
     Q_OBJECT
 

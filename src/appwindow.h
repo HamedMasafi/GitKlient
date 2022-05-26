@@ -21,15 +21,14 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef GITKLIENTWINDOW_H
 #define GITKLIENTWINDOW_H
 
-#include "core/mainwindow.h"
+#include "core/appmainwindow.h"
 
-#include "ui_settingsBase.h"
-#include "ui_diffsettings.h"
 #include "GitKlientSettings.h"
 
 class GitKlientView;
 class MultiPageWidget;
 class WidgetBase;
+class QLabel;
 
 namespace Git {
 class Manager;
@@ -42,7 +41,7 @@ class Manager;
  * @author Hamed Masafi <hamed.masafi@gmail.com>
  * @version 0.1
  */
-class GitKlientWindow : public MainWindow
+class AppWindow : public AppMainWindow
 {
     Q_OBJECT
     Git::Manager *_git;
@@ -51,14 +50,14 @@ public:
     /**
      * Default Constructor
      */
-    GitKlientWindow();
+    AppWindow();
 
     /**
      * Default Destructor
      */
-    ~GitKlientWindow() override;
+    ~AppWindow() override;
 
-    static GitKlientWindow *instance();
+    static AppWindow *instance();
 
 private Q_SLOTS:
     void git_pathChanged();
@@ -78,8 +77,6 @@ private Q_SLOTS:
     void repoDiffTree();
 
 private:
-    Ui::settingsBase settingsBase;
-    Ui::DiffSettings diffSettings;
     QAction *recentAction;
     MultiPageWidget *_mainWidget;
     QList<WidgetBase*> _baseWidgets;
