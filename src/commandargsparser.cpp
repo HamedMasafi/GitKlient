@@ -1,13 +1,13 @@
 #include "commandargsparser.h"
 
+#include "appwindow.h"
 #include "commandargsparser.h"
 #include "dialogs/changedfilesdialog.h"
 #include "dialogs/clonedialog.h"
 #include "dialogs/commitpushdialog.h"
 #include "dialogs/fileblamedialog.h"
 #include "dialogs/filehistorydialog.h"
-#include "dialogs/pulldialog.h"
-#include "dialogs/commitpushdialog.h"
+#include "dialogs/ignorefiledialog.h"
 #include "dialogs/initdialog.h"
 #include "dialogs/pulldialog.h"
 #include "dialogs/runnerdialog.h"
@@ -16,7 +16,6 @@
 #include "git/gitmanager.h"
 #include "gitklientdebug.h"
 #include "mergewindow.h"
-#include "appwindow.h"
 
 #include <QApplication>
 #include <QDir>
@@ -24,6 +23,7 @@
 #include <QMetaMethod>
 
 #include <KMessageBox>
+
 
 CommandArgsParser::CommandArgsParser() : QObject()
 {
@@ -358,6 +358,25 @@ ArgParserReturn CommandArgsParser::merge(const QString &base, const QString &loc
         return 0;
     else
         return 1;
+}
+
+ArgParserReturn CommandArgsParser::ignore(const QString &path)
+{
+    QFileInfo fi(path);
+    if (!fi.exists())
+        return 1;
+
+    if (fi.isDir())
+        git->setPath(path);
+    else
+        git->setPath(fi.absolutePath());
+
+    if (!git->isValid())
+        return 1;
+
+    IgnoreFileDialog d(git, path);
+    d.exec();
+    return 0;
 }
 
 ArgParserReturn CommandArgsParser::main()

@@ -67,6 +67,7 @@ ki18n_wrap_ui(
     widgets/tagswidget.ui
     widgets/difftreeview.ui
     widgets/diffwidget.ui
+    dialogs/ignorefiledialog.ui
 
     dialogs/mergeopenfilesdialog.ui
     dialogs/mergecloseeventdialog.ui

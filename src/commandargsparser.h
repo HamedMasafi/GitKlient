@@ -78,6 +78,7 @@ public slots:
               const QString &local,
               const QString &remote,
               const QString &result);
+    ArgParserReturn ignore(const QString &path);
     ArgParserReturn main();
     ArgParserReturn main(const QString &path);
 };

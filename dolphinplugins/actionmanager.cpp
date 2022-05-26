@@ -79,7 +79,7 @@ QString ActionManager::getCommonPart(const KFileItemList &fileItems)
         list.append(i.url().toLocalFile());
 
     QString root = list.front();
-    for(QStringList::const_iterator it = list.begin(); it != list.end(); ++it)
+    for(QStringList::const_iterator it = list.cbegin(); it != list.cend(); ++it)
     {
         if (root.length() > it->length())
         {
@@ -112,6 +112,7 @@ void ActionManager::addMenuToGitFile(QMenu *menu, const QString &path, bool isFi
     addMenu(menu, i18n("Push"), {"push", path});
     addMenu(menu, i18n("Modifications"), {"changes", path});
     addMenu(menu, i18n("Diff"), {"diff", path});
+    addMenu(menu, i18n("Ignore file"), {"ignore", path});
     if (isFile) {
         addMenu(menu, i18n("History"), {"history", path});
         addMenu(menu, i18n("Blame"), {"blame", path});
