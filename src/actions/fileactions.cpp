@@ -182,7 +182,7 @@ void FileActions::diffWithHead()
 
 void FileActions::mergeWithHead()
 {
-    auto d = new GitKlientMergeWindow(GitKlientMergeWindow::NoParams);
+    auto d = new MergeWindow(MergeWindow::NoParams);
 
     auto p = QStandardPaths::writableLocation(QStandardPaths::TempLocation) + "/ggggg";
     Git::File f{_place, _filePath};

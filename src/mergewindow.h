@@ -29,7 +29,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 class GitKlientView;
 class SegmentsMapper;
 class QLabel;
-class GitKlientMergeWindow : public AppMainWindow
+class MergeWindow : public AppMainWindow
 {
     Q_OBJECT
 public:
@@ -39,8 +39,8 @@ public:
         MergeByParams
     };
 
-    explicit GitKlientMergeWindow(Mode mode = NoParams, QWidget *parent = nullptr);
-    ~GitKlientMergeWindow() override;
+    explicit MergeWindow(Mode mode = NoParams, QWidget *parent = nullptr);
+    ~MergeWindow() override;
 
     void load();
 
@@ -70,9 +70,13 @@ private Q_SLOTS:
     void actionGotoPrevDiff_clicked();
     void actionGotoNextDiff_clicked();
 
+    void actionViewFiles_clicked();
+    void actionViewBlocks_clicked();
+
     void codeEditors_customContextMenuRequested(QPoint pos);
 
     void on_plainTextEditResult_textChanged();
+    void on_plainTextEditResult_blockSelected();
 
 private:
     Ui::Form m_ui;
@@ -93,6 +97,8 @@ private:
     QString _filePathResult;
     Mode _mode;
     QLabel *_conflictsLabel;
+    QAction *_actionBlocksView;
+    QAction *_actionFilesView;
 
 protected:
     void closeEvent(QCloseEvent *event) override;

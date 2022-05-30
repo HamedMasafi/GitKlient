@@ -339,14 +339,14 @@ ArgParserReturn CommandArgsParser::history(const QString &file)
 
 ArgParserReturn CommandArgsParser::merge()
 {
-    auto d = new GitKlientMergeWindow;
+    auto d = new MergeWindow;
     d->exec();
     return ExecApp;
 }
 
 ArgParserReturn CommandArgsParser::merge(const QString &base, const QString &local, const QString &remote, const QString &result)
 {
-    auto d = new GitKlientMergeWindow;
+    auto d = new MergeWindow;
     d->setFilePathLocal(local);
     d->setFilePathBase(base);
     d->setFilePathRemote(remote);

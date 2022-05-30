@@ -26,46 +26,15 @@ void SegmentsMapper::addEditor(CodeEditor *editor)
             &SegmentsMapper::codeEditor_scroll);
 }
 
-const QList<Diff::MergeSegment *> &SegmentsMapper::segments() const
+const QList<Diff::Segment *> &SegmentsMapper::segments() const
 {
     return _segments;
 }
 
 void SegmentsMapper::setSegments(const QList<Diff::MergeSegment *> &newSegments)
 {
-    _segments = newSegments;
-}
-
-int SegmentsMapper::mapIndexFromOldToNew(int oldIndex)
-{
-    auto offset = qMakePair(0, 0);
-    for (auto &s : _segments) {
-        if (offset.first + s->local.size() > oldIndex) {
-            if (s->type != Diff::SegmentType::DifferentOnBoth)
-                return offset.second + (oldIndex - offset.first);
-            else
-                return offset.second;
-        }
-        offset.first += s->local.size();
-        offset.second += s->remote.size();
-    }
-    return -1;
-}
-
-int SegmentsMapper::mapIndexFromNewToOld(int newIndex)
-{
-    auto offset = qMakePair(0, 0);
-    for (auto &s : _segments) {
-        if (offset.second + s->remote.size() > newIndex) {
-            if (s->type != Diff::SegmentType::DifferentOnBoth)
-                return offset.first + (newIndex - offset.second);
-            else
-                return offset.first;
-        }
-        offset.first += s->local.size();
-        offset.second += s->remote.size();
-    }
-    return -1;
+    for (auto &s: newSegments)
+        _segments.append(s);
 }
 
 int SegmentsMapper::map(int from, int to, int index) const
@@ -77,6 +46,8 @@ int SegmentsMapper::map(int from, int to, int index) const
     int &offsetTo = to == 1 ? offset1 : (to == 2 ? offset2 : offset3);
 
     for (auto &s : _segments) {
+        auto ms = static_cast<Diff::MergeSegment*>(s);
+
         if (offsetFrom + s->get(from).size() > index) {
             if (s->type != Diff::SegmentType::DifferentOnBoth)
                 return offsetFrom + (index - offsetTo);
@@ -84,9 +55,9 @@ int SegmentsMapper::map(int from, int to, int index) const
                 return offsetFrom;
         }
 
-        offset1 += s->base.size();
-        offset2 += s->local.size();
-        offset3 += s->remote.size();
+        offset1 += ms->base.size();
+        offset2 += ms->local.size();
+        offset3 += ms->remote.size();
     }
     return -1;
 }
@@ -154,9 +125,11 @@ void SegmentsMapper::setCurrentSegment(Diff::Segment *newCurrentSegment)
 
 bool SegmentsMapper::isMergeable() const
 {
-    for (auto &s : _segments)
-        if (s->mergeType == Diff::MergeType::None)
+    for (auto &s : _segments) {
+        auto ms = static_cast<Diff::MergeSegment*>(s);
+        if (ms->mergeType == Diff::MergeType::None)
             return false;
+    }
     return true;
 }
 
@@ -164,8 +137,40 @@ int SegmentsMapper::conflicts() const
 {
     int r{0};
     for (auto &s: _segments) {
-        if (s->mergeType == Diff::None)
+        auto ms = static_cast<Diff::MergeSegment*>(s);
+        if (ms->mergeType == Diff::None)
             r++;
     }
     return r;
+}
+
+void SegmentsMapper::findPrevious(const Diff::SegmentType &type)
+{
+    int index;
+    if (_currentSegment)
+        index = _segments.indexOf(static_cast<Diff::MergeSegment *>(_currentSegment)) - 1;
+    else
+        index = _segments.size() - 1;
+
+    for (auto i = index; i; i--)
+        if (_segments.at(i)->type == type) {
+            setCurrentSegment(_segments.at(i));
+            return;
+        }
+}
+
+void SegmentsMapper::findNext(const Diff::SegmentType &type)
+{
+    int index;
+    if (_currentSegment)
+        index = _segments.indexOf(static_cast<Diff::MergeSegment *>(_currentSegment)) + 1;
+    else
+        index = 0;
+
+    for (auto i = index; i < _segments.size(); i++)
+        if (_segments.at(i)->type == type) {
+            setCurrentSegment(_segments.at(i));
+            return;
+        }
+
 }

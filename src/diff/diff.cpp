@@ -219,7 +219,7 @@ Q_OUTOFLINE_TEMPLATE Array3<T>::~Array3()
 template<typename T>
 Q_OUTOFLINE_TEMPLATE T &Array3<T>::operator()(int i1, int i2, int i3)
 {
-    return _data[i3 * c1 * c2 + c1 * i2 + i1];
+    return _data[i3 + (c2 * c2 * i1) + (c3 * i2)];
 }
 
 Solution3 longestCommonSubsequence(const QStringList &source,

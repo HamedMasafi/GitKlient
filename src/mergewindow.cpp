@@ -1,22 +1,5 @@
-/*
-Copyright (C) 2021 by Hamed Masafi <hamed.masafi@gmail.com>
-
-This program is free software; you can redistribute it and/or
-modify it under the terms of the GNU General Public License as
-published by the Free Software Foundation; either version 2 of
-the License or (at your option) version 3 or any later version
-accepted by the membership of KDE e.V. (or its successor approved
-by the membership of KDE e.V.), which shall act as a proxy 
-defined in Section 14 of version 3 of the license.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+// Copyright (C) 2020 Hamed Masafi <hamed.masafi@gmail.com>
+// SPDX-License-Identifier: GPL-3.0-or-later
 
 #include "mergewindow.h"
 
@@ -42,6 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <QStatusBar>
 #include <QTextBlock>
 #include <QTextEdit>
+#include <QSettings>
 
 
 bool isEmpty(const QStringList &list)
@@ -80,14 +64,14 @@ QStringList readFile(const QString &filePath)
     return buf;
 }
 
-GitKlientMergeWindow::GitKlientMergeWindow(Mode mode, QWidget *parent) : AppMainWindow(parent)
+MergeWindow::MergeWindow(Mode mode, QWidget *parent) : AppMainWindow(parent)
 {
     Q_UNUSED(mode)
 
     initActions();
     auto mapper = new EditActionsMapper;
     mapper->init(actionCollection());
-    setupGUI(Default, "gitklientmergeui.rc");
+
     auto w = new QWidget(this);
     m_ui.setupUi(w);
     setCentralWidget(w);
@@ -108,15 +92,21 @@ GitKlientMergeWindow::GitKlientMergeWindow(Mode mode, QWidget *parent) : AppMain
     m_ui.plainTextEditMine->setContextMenuPolicy(Qt::CustomContextMenu);
     m_ui.plainTextEditTheir->setContextMenuPolicy(Qt::CustomContextMenu);
 
+
     connect(m_ui.plainTextEditMine,
             &CodeEditor::customContextMenuRequested,
             this,
-            &GitKlientMergeWindow::codeEditors_customContextMenuRequested);
+            &MergeWindow::codeEditors_customContextMenuRequested);
 
     connect(m_ui.plainTextEditTheir,
             &CodeEditor::customContextMenuRequested,
             this,
-            &GitKlientMergeWindow::codeEditors_customContextMenuRequested);
+            &MergeWindow::codeEditors_customContextMenuRequested);
+
+    connect(m_ui.plainTextEditResult,
+            &CodeEditor::blockSelected,
+            this,
+            &MergeWindow::on_plainTextEditResult_blockSelected);
 
     /*auto actions = QList<QAction*> ()
                    << actionKeepThis
@@ -128,11 +118,15 @@ GitKlientMergeWindow::GitKlientMergeWindow(Mode mode, QWidget *parent) : AppMain
 
     _conflictsLabel = new QLabel(this);
     statusBar()->addPermanentWidget(_conflictsLabel);
+
+    actionViewBlocks_clicked();
+
+    setupGUI(Default, "gitklientmergeui.rc");
 }
 
-GitKlientMergeWindow::~GitKlientMergeWindow() {}
+MergeWindow::~MergeWindow() {}
 
-void GitKlientMergeWindow::load()
+void MergeWindow::load()
 {
     m_ui.plainTextEditMine->clear();
     m_ui.plainTextEditTheir->clear();
@@ -147,6 +141,8 @@ void GitKlientMergeWindow::load()
     m_ui.plainTextEditMine->setHighlighting(_filePathLocal);
     m_ui.plainTextEditTheir->setHighlighting(_filePathRemote);
     m_ui.plainTextEditResult->setHighlighting(_filePathResult);
+    m_ui.codeEditorMyBlock->setHighlighting(_filePathLocal);
+    m_ui.codeEditorTheirBlock->setHighlighting(_filePathRemote);
 
     _diffs = Diff::diff3(baseList, localList, remoteList);
     _mapper->setSegments(_diffs);
@@ -214,7 +210,7 @@ void GitKlientMergeWindow::load()
     setWindowModified(true);
 }
 
-void GitKlientMergeWindow::updateResult()
+void MergeWindow::updateResult()
 {
     m_ui.plainTextEditResult->clearAll();
     for (auto &d : _diffs) {
@@ -277,13 +273,13 @@ void GitKlientMergeWindow::updateResult()
     _conflictsLabel->setText(i18n("Conflicts: %1", _mapper->conflicts()));
 }
 
-void GitKlientMergeWindow::initActions()
+void MergeWindow::initActions()
 {
     KActionCollection *actionCollection = this->actionCollection();
 
     auto actionKeepMine = actionCollection->addAction("keep_mine",
                                                       this,
-                                                      &GitKlientMergeWindow::actionKeepMine_clicked);
+                                                      &MergeWindow::actionKeepMine_clicked);
     actionKeepMine->setText(i18n("Keep mine"));
     actionKeepMine->setIcon(QIcon::fromTheme("diff-keep-mine"));
     actionCollection->setDefaultShortcut(actionKeepMine, QKeySequence("Ctrl+L"));
@@ -291,7 +287,7 @@ void GitKlientMergeWindow::initActions()
     auto actionKeepTheir = actionCollection
                                ->addAction("keep_their",
                                            this,
-                                           &GitKlientMergeWindow::actionKeepTheir_clicked);
+                                           &MergeWindow::actionKeepTheir_clicked);
     actionKeepTheir->setText(i18n("Keep their"));
     actionKeepTheir->setIcon(QIcon::fromTheme("diff-keep-their"));
     actionCollection->setDefaultShortcut(actionKeepTheir, QKeySequence("Ctrl+R"));
@@ -299,7 +295,7 @@ void GitKlientMergeWindow::initActions()
     auto actionKeepMineBeforeTheir
         = actionCollection->addAction("keep_mine_before_their",
                                       this,
-                                      &GitKlientMergeWindow::actionKeepMineBeforeTheir_clicked);
+                                      &MergeWindow::actionKeepMineBeforeTheir_clicked);
 
     actionKeepMineBeforeTheir->setText(i18n("Keep mine before their"));
     actionKeepMineBeforeTheir->setIcon(QIcon::fromTheme("diff-keep-mine-before-their"));
@@ -308,7 +304,7 @@ void GitKlientMergeWindow::initActions()
     auto actionKeepTheirBeforeMine
         = actionCollection->addAction("keep_their_before_mine",
                                       this,
-                                      &GitKlientMergeWindow::actionKeepTheirBeforeMine_clicked);
+                                      &MergeWindow::actionKeepTheirBeforeMine_clicked);
     actionKeepTheirBeforeMine->setText(i18n("Keep their before mine"));
     actionKeepTheirBeforeMine->setIcon(QIcon::fromTheme("diff-keep-their-before-mine"));
     actionCollection->setDefaultShortcut(actionKeepTheirBeforeMine, QKeySequence("Ctrl+Shift+R"));
@@ -316,7 +312,7 @@ void GitKlientMergeWindow::initActions()
     auto actionKeepMyFile = actionCollection
                                 ->addAction("keep_my_file",
                                             this,
-                                            &GitKlientMergeWindow::actionKeepMyFile_clicked);
+                                            &MergeWindow::actionKeepMyFile_clicked);
     actionKeepMyFile->setText(i18n("Keep my file"));
     actionKeepMyFile->setIcon(QIcon::fromTheme("diff-keep-mine-file"));
     actionCollection->setDefaultShortcut(actionKeepMyFile, QKeySequence("Ctrl+Alt+L"));
@@ -324,15 +320,30 @@ void GitKlientMergeWindow::initActions()
     auto actionKeepTheirFile = actionCollection
                                    ->addAction("keep_their_file",
                                                this,
-                                               &GitKlientMergeWindow::actionKeepTheirFile_clicked);
+                                               &MergeWindow::actionKeepTheirFile_clicked);
     actionKeepTheirFile->setText(i18n("Keep their file"));
     actionKeepTheirFile->setIcon(QIcon::fromTheme("diff-keep-their-file"));
     actionCollection->setDefaultShortcut(actionKeepTheirFile, QKeySequence("Ctrl+Alt+R"));
 
-    /*auto actionGotoPrevDiff = actionCollection
+
+    _actionBlocksView = actionCollection
+                                ->addAction("view_blocks",
+                                            this,
+                                            &MergeWindow::actionViewBlocks_clicked);
+    _actionBlocksView->setText(i18n("Blocks"));
+    _actionBlocksView->setCheckable(true);
+
+    _actionFilesView = actionCollection
+                                ->addAction("view_files",
+                                            this,
+                                            &MergeWindow::actionViewFiles_clicked);
+    _actionFilesView->setText(i18n("Files"));
+    _actionFilesView->setCheckable(true);
+
+    auto actionGotoPrevDiff = actionCollection
                                   ->addAction("goto_prev_diff",
                                               this,
-                                              &GitKlientMergeWindow::actionGotoPrevDiff_clicked);
+                                              &MergeWindow::actionGotoPrevDiff_clicked);
     actionGotoPrevDiff->setText(i18n("Previous diff"));
     actionGotoPrevDiff->setIcon(QIcon::fromTheme("diff-goto-prev-diff"));
     actionCollection->setDefaultShortcut(actionGotoPrevDiff, QKeySequence(Qt::Key_PageUp));
@@ -340,15 +351,16 @@ void GitKlientMergeWindow::initActions()
     auto actionGotoNextDiff = actionCollection
                                   ->addAction("goto_next_diff",
                                               this,
-                                              &GitKlientMergeWindow::actionGotoNextDiff_clicked);
+                                              &MergeWindow::actionGotoNextDiff_clicked);
     actionGotoNextDiff->setText(i18n("Next diff"));
     actionGotoNextDiff->setIcon(QIcon::fromTheme("diff-goto-next-diff"));
     actionCollection->setDefaultShortcut(actionGotoNextDiff, QKeySequence(Qt::Key_PageDown));
-*/
-    KStandardAction::open(this, &GitKlientMergeWindow::fileOpen, actionCollection);
-    KStandardAction::save(this, &GitKlientMergeWindow::fileSave, actionCollection);
+
+
+    KStandardAction::open(this, &MergeWindow::fileOpen, actionCollection);
+    KStandardAction::save(this, &MergeWindow::fileSave, actionCollection);
     KStandardAction::quit(qApp, &QApplication::closeAllWindows, actionCollection);
-    KStandardAction::preferences(this, &GitKlientMergeWindow::preferences, actionCollection);
+    KStandardAction::preferences(this, &MergeWindow::preferences, actionCollection);
 
     _codeEditorContextMenu = new QMenu(this);
     _codeEditorContextMenu->addActions({actionKeepMine, actionKeepTheir});
@@ -358,7 +370,7 @@ void GitKlientMergeWindow::initActions()
     _codeEditorContextMenu->addActions({actionKeepMyFile, actionKeepTheirFile});
 }
 
-void GitKlientMergeWindow::doMergeAction(Diff::MergeType type)
+void MergeWindow::doMergeAction(Diff::MergeType type)
 {
     auto s = _mapper->currentSegment();
 
@@ -376,7 +388,7 @@ void GitKlientMergeWindow::doMergeAction(Diff::MergeType type)
     _mapper->setCurrentSegment(s);
 }
 
-bool GitKlientMergeWindow::isFullyResolved()
+bool MergeWindow::isFullyResolved()
 {
     for (auto &d : _diffs)
         if (d->mergeType == Diff::None && d->type == Diff::SegmentType::DifferentOnBoth)
@@ -384,7 +396,7 @@ bool GitKlientMergeWindow::isFullyResolved()
     return true;
 }
 
-void GitKlientMergeWindow::closeEvent(QCloseEvent *event)
+void MergeWindow::closeEvent(QCloseEvent *event)
 {
     if (isWindowModified()) {
         MergeCloseEventDialog d(this);
@@ -403,43 +415,20 @@ void GitKlientMergeWindow::closeEvent(QCloseEvent *event)
             break;
         }
     }
-    return;;
-    if (isWindowModified()) {
-        auto btn = KMessageBox::questionYesNo(this,
-                                              i18n("Changes is not saved, exit?"),
-                                              i18n("Close"));
-
-        if (btn == KMessageBox::Yes)
-            event->accept();
-        else
-            event->ignore();
-        return;
-    }
-    if (isFullyResolved()) {
-        event->accept();
-    } else {
-        auto btn = KMessageBox::questionYesNo(this,
-                                              i18n("The comflicts are not fully resolved, exit?"),
-                                              i18n("Close"));
-
-        if (btn == KMessageBox::Yes)
-            event->accept();
-        else
-            event->ignore();
-    }
+    accept();
 }
 
-const QString &GitKlientMergeWindow::filePathResult() const
+const QString &MergeWindow::filePathResult() const
 {
     return _filePathResult;
 }
 
-void GitKlientMergeWindow::setFilePathResult(const QString &newFilePathResult)
+void MergeWindow::setFilePathResult(const QString &newFilePathResult)
 {
     _filePathResult = newFilePathResult;
 }
 
-void GitKlientMergeWindow::fileSave()
+void MergeWindow::fileSave()
 {
     QFile f(_filePathResult);
     if (!f.open(QIODevice::Text | QIODevice::WriteOnly)) {
@@ -451,7 +440,7 @@ void GitKlientMergeWindow::fileSave()
     setWindowModified(false);
 }
 
-void GitKlientMergeWindow::fileOpen()
+void MergeWindow::fileOpen()
 {
     MergeOpenFilesDialog d;
     if (d.exec() == QDialog::Accepted) {
@@ -462,92 +451,124 @@ void GitKlientMergeWindow::fileOpen()
     }
 }
 
-void GitKlientMergeWindow::preferences()
+void MergeWindow::preferences()
 {
     SettingsManager::instance()->exec(this);
 }
 
-void GitKlientMergeWindow::actionKeepMine_clicked()
+void MergeWindow::actionKeepMine_clicked()
 {
     doMergeAction(Diff::MergeType::KeepLocal);
 }
 
-void GitKlientMergeWindow::actionKeepTheir_clicked()
+void MergeWindow::actionKeepTheir_clicked()
 {
     doMergeAction(Diff::MergeType::KeepRemote);
 }
 
-void GitKlientMergeWindow::actionKeepMineBeforeTheir_clicked()
+void MergeWindow::actionKeepMineBeforeTheir_clicked()
 {
     doMergeAction(Diff::MergeType::KeepLocalThenRemote);
 }
 
-void GitKlientMergeWindow::actionKeepTheirBeforeMine_clicked()
+void MergeWindow::actionKeepTheirBeforeMine_clicked()
 {
     doMergeAction(Diff::MergeType::KeepRemoteThenLocal);
 }
 
-void GitKlientMergeWindow::actionKeepMyFile_clicked()
+void MergeWindow::actionKeepMyFile_clicked()
 {
     m_ui.plainTextEditResult->setPlainText(m_ui.plainTextEditMine->toPlainText());
 }
 
-void GitKlientMergeWindow::actionKeepTheirFile_clicked()
+void MergeWindow::actionKeepTheirFile_clicked()
 {
     m_ui.plainTextEditResult->setPlainText(m_ui.plainTextEditTheir->toPlainText());
 }
 
-void GitKlientMergeWindow::actionGotoPrevDiff_clicked()
+void MergeWindow::actionGotoPrevDiff_clicked()
 {
-
+    _mapper->findPrevious(Diff::SegmentType::DifferentOnBoth);
+    on_plainTextEditResult_blockSelected();
 }
 
-void GitKlientMergeWindow::actionGotoNextDiff_clicked()
+void MergeWindow::actionGotoNextDiff_clicked()
 {
-
+    _mapper->findNext(Diff::SegmentType::DifferentOnBoth);
+    on_plainTextEditResult_blockSelected();
 }
 
-void GitKlientMergeWindow::codeEditors_customContextMenuRequested(QPoint pos)
+void MergeWindow::actionViewFiles_clicked()
+{
+    _actionBlocksView->setChecked(false);
+    _actionFilesView->setChecked(true);
+    m_ui.widgetBlockView->hide();
+    m_ui.widgetCodeView->show();
+}
+
+void MergeWindow::actionViewBlocks_clicked()
+{
+    _actionBlocksView->setChecked(true);
+    _actionFilesView->setChecked(false);
+    m_ui.widgetBlockView->show();
+    m_ui.widgetCodeView->hide();
+}
+
+void MergeWindow::codeEditors_customContextMenuRequested(QPoint pos)
 {
     Q_UNUSED(pos)
     _codeEditorContextMenu->popup(QCursor::pos());
 }
 
-const QString &GitKlientMergeWindow::filePathBase() const
+const QString &MergeWindow::filePathBase() const
 {
     return _filePathBase;
 }
 
-void GitKlientMergeWindow::setFilePathBase(const QString &newFilePathBase)
+void MergeWindow::setFilePathBase(const QString &newFilePathBase)
 {
     _filePathBase = newFilePathBase;
 }
 
-const QString &GitKlientMergeWindow::filePathRemote() const
+const QString &MergeWindow::filePathRemote() const
 {
     return _filePathRemote;
 }
 
-void GitKlientMergeWindow::setFilePathRemote(const QString &newFilePathRemote)
+void MergeWindow::setFilePathRemote(const QString &newFilePathRemote)
 {
     _filePathRemote = newFilePathRemote;
 }
 
-const QString &GitKlientMergeWindow::filePathLocal() const
+const QString &MergeWindow::filePathLocal() const
 {
     return _filePathLocal;
 }
 
-void GitKlientMergeWindow::setFilePathLocal(const QString &newFilePathLocal)
+void MergeWindow::setFilePathLocal(const QString &newFilePathLocal)
 {
     _filePathLocal = newFilePathLocal;
 }
 
-void GitKlientMergeWindow::on_plainTextEditResult_textChanged()
+void MergeWindow::on_plainTextEditResult_textChanged()
 {
+    qDebug() << "**********************";
 //    auto segment = static_cast<Diff::MergeSegment *>(_mapper->currentSegment());
 //    if (segment) {
 //        segment->mergeType = Diff::MergeCustom;
-//    }
+    //    }
+}
+
+void MergeWindow::on_plainTextEditResult_blockSelected()
+{
+    auto segment = static_cast<Diff::MergeSegment *>(m_ui.plainTextEditResult->currentSegment());
+
+    if (segment->type == Diff::SegmentType::DifferentOnBoth) {
+        m_ui.codeEditorMyBlock->setPlainText(segment->local.join("\n"));
+        m_ui.codeEditorTheirBlock->setPlainText(segment->remote.join("\n"));
+    } else {
+        m_ui.codeEditorMyBlock->clear();
+        m_ui.codeEditorTheirBlock->clear();
+    }
 }
 
