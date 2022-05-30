@@ -4,11 +4,11 @@
 namespace Git {
 class Manager;
 }
-class GitKlientConfig
+class AppConfig
 {
     Git::Manager *_git;
 public:
-    GitKlientConfig(Git::Manager *git);
+    AppConfig(Git::Manager *git);
 
     void apply();
 };

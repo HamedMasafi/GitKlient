@@ -1,3 +1,6 @@
+// Copyright (C) 2020 Hamed Masafi <hamed.masafi@gmail.com>
+// SPDX-License-Identifier: GPL-3.0-or-later
+
 #ifndef BLAMECODEVIEW_H
 #define BLAMECODEVIEW_H
 

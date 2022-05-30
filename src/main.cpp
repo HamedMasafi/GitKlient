@@ -28,7 +28,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "diffwindow.h"
 #include "git/gitfile.h"
 #include "git/gitmanager.h"
-#include "gitklientdebug.h"
+#include "appdebug.h"
 #include "mergewindow.h"
 #include "appwindow.h"
 

@@ -1,12 +1,12 @@
 #include "appconfig.h"
 #include "git/gitmanager.h"
 
-GitKlientConfig::GitKlientConfig(Git::Manager *git) : _git(git)
+AppConfig::AppConfig(Git::Manager *git) : _git(git)
 {
 
 }
 
-void GitKlientConfig::apply()
+void AppConfig::apply()
 {
     _git->setConfig("alias.klient", "!gitklient", Git::Manager::ConfigGlobal);
     _git->setConfig("alias.gkdiff",

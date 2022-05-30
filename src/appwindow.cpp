@@ -20,6 +20,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 // application headers
 #include "appwindow.h"
+#include "appdebug.h"
 #include "dialogs/changedfilesdialog.h"
 #include "dialogs/clonedialog.h"
 #include "dialogs/commitpushdialog.h"
@@ -38,7 +39,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "git/commands/commandswitchbranch.h"
 #include "git/gitmanager.h"
 #include "git/models/logscache.h"
-#include "gitklientdebug.h"
 #include "multipagewidget.h"
 #include "settings/settingsmanager.h"
 #include "widgets/branchesstatuswidget.h"
