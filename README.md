@@ -1,4 +1,4 @@
-# GitKlient
+# Git Klient
 
 [![CI Build](https://github.com/HamedMasafi/GitKlient/actions/workflows/main.yml/badge.svg)](https://github.com/HamedMasafi/GitKlient/actions/workflows/main.yml)
 [![GitLicense](https://gitlicense.com/badge/hamedmasafi/gitklient)](https://gitlicense.com/license/hamedmasafi/gitklient)
