@@ -36,7 +36,7 @@ DiffWindow::DiffWindow(Git::Manager *git) : AppMainWindow()
         _filesModel->append(f.name());
     }
     _leftStorage = Git;
-    _rightStorage =  FileSystem;
+    _rightStorage = FileSystem;
     _rightDir = git->path();
     _diffModel->sortItems();
 }
@@ -101,15 +101,14 @@ void DiffWindow::init(bool showSideBar)
     _dock->setAllowedAreas(Qt::AllDockWidgetAreas);
     addDockWidget(Qt::LeftDockWidgetArea, _dock);
 
-    if (!showSideBar)
-        _dock->hide();
-
     _filesModel = new FilesModel(this);
     _diffModel = new DiffTreeModel(this);
     _treeView->setDiffModel(_diffModel, _filesModel);
 
     initActions();
     setupGUI(StandardWindowOption::Default, "gitklientdiffui.rc");
+
+    _dock->setVisible(showSideBar);
 }
 
 void DiffWindow::initActions()

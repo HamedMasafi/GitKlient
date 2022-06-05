@@ -37,7 +37,11 @@ public:
     void setSameSize(bool newSameSize);
 
     void scrollToTop();
-
+    
+    void setOldFileText(const Git::File &newOldFile);
+    
+    void setNewFileText(const Git::File &newNewFile);
+    
 public slots:
     void showHiddenChars(bool show);
     void showFilesInfo(bool show);

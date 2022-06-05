@@ -262,8 +262,8 @@ ArgParserReturn CommandArgsParser::diff(const QString &file)
         d->exec();
         return ExecApp;
     } else if (fi.isDir()) {
-        git->setPath(fi.absolutePath());
-        auto d = new DiffWindow(git);//, git->currentBranch(), "HEAD");
+        git->setPath(fi.absoluteFilePath());
+        auto d = new DiffWindow(git);
         d->exec();
         return ExecApp;
     }
@@ -382,6 +382,7 @@ ArgParserReturn CommandArgsParser::ignore(const QString &path)
 ArgParserReturn CommandArgsParser::main()
 {
     auto window = AppWindow::instance();
+    window->resize(588*2,332*2);
     window->show();
     return ExecApp;
 }
