@@ -6,6 +6,7 @@
 class QSortFilterProxyModel;
 class DiffTreeModel;
 class FilesModel;
+class QStringListModel;
 class DiffTreeView : public QWidget, private Ui::DiffTreeView
 {
     Q_OBJECT
@@ -20,6 +21,7 @@ public:
 
     DiffTreeModel *diffModel() const;
     void setDiffModel(DiffTreeModel *newDiffModel, FilesModel *filesModel);
+    void setModels(DiffTreeModel *newDiffModel, QStringListModel *filesModel);
 
     bool hideUnchangeds() const;
     void setHideUnchangeds(bool newHideUnchangeds);

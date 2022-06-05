@@ -1,8 +1,10 @@
 #include "difftreeview.h"
 #include "models/difftreemodel.h"
-#include <QSortFilterProxyModel>
 #include "models/filesmodel.h"
+
 #include <QDebug>
+#include <QSortFilterProxyModel>
+#include <QStringListModel>
 
 DiffTreeModel *DiffTreeView::diffModel() const
 {
@@ -13,7 +15,30 @@ void DiffTreeView::setDiffModel(DiffTreeModel *newDiffModel, FilesModel *filesMo
 {
     _diffModel = newDiffModel;
     _filesModel = filesModel;
+
+    auto m = new QStringListModel;
+    QStringList sl;
+    for(int i =0; i  < 100; i++) {
+        sl.append(QString::number(i));
+}
+    m->setStringList(sl);
+    _filterModel = new QSortFilterProxyModel(this);
     _filterModel->setSourceModel(filesModel);
+    _filterModel->setFilterKeyColumn(1);
+    listView->setModel(_filterModel);
+
+    treeView->setModel(_diffModel);
+}
+
+void DiffTreeView::setModels(DiffTreeModel *newDiffModel, QStringListModel *filesModel)
+{
+    _diffModel = newDiffModel;
+
+    _filterModel = new QSortFilterProxyModel(this);
+    _filterModel->setSourceModel(filesModel);
+    _filterModel->setFilterKeyColumn(1);
+    listView->setModel(_filterModel);
+
     treeView->setModel(_diffModel);
 }
 
@@ -22,8 +47,8 @@ DiffTreeView::DiffTreeView(QWidget *parent) :
 {
     setupUi(this);
     _filterModel = new QSortFilterProxyModel(this);
-    _filterModel->setFilterKeyColumn(0);
-    _filterModel->setFilterCaseSensitivity(Qt::CaseInsensitive);
+//    _filterModel->setFilterKeyColumn(0);
+//    _filterModel->setFilterCaseSensitivity(Qt::CaseInsensitive);
     listView->setModel(_filterModel);
 
     connect(checkBoxHideUnchangeds, &QAbstractButton::toggled, this, &DiffTreeView::hideUnchangedsChanged);
@@ -33,7 +58,7 @@ DiffTreeView::DiffTreeView(QWidget *parent) :
 void DiffTreeView::on_lineEditFilter_textChanged(QString text)
 {
     stackedWidget->setCurrentIndex(text.isEmpty() ? 0 : 1);
-//    _filterModel->setFilterRegularExpression(".*" + text + ".*");
+    _filterModel->setFilterRegularExpression(".*" + text + ".*");
 }
 
 void DiffTreeView::on_treeView_clicked(const QModelIndex &index)

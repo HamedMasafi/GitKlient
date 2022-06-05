@@ -8,6 +8,7 @@
 #include <QDockWidget>
 #include <QTreeView>
 #include <qaction.h>
+#include <QStringListModel>
 
 #include "dialogs/diffopendialog.h"
 #include "git/gitmanager.h"
@@ -31,14 +32,20 @@ DiffWindow::DiffWindow(Git::Manager *git) : AppMainWindow()
     _oldBranch = git->currentBranch();
     auto diffs = git->diffBranch(_oldBranch);
 
+    QStringList sl;
     for (auto &f: diffs) {
         _diffModel->addFile(f);
         _filesModel->append(f.name());
+        sl.append(f.name());
     }
+    _filesModel2->setStringList(sl);
+
     _leftStorage = Git;
     _rightStorage = FileSystem;
     _rightDir = git->path();
     _diffModel->sortItems();
+
+    _treeView->setDiffModel(_diffModel, _filesModel);
 }
 
 DiffWindow::DiffWindow(const Git::File &oldFile, const Git::File &newFile)
@@ -49,6 +56,8 @@ DiffWindow::DiffWindow(const Git::File &oldFile, const Git::File &newFile)
     _diffWidget->setOldFile(std::move(oldFile));
     _diffWidget->setNewFile(std::move(newFile));
     _diffWidget->compare();
+
+    _treeView->setDiffModel(_diffModel, _filesModel);
 }
 
 DiffWindow::DiffWindow(Git::Manager *git, const QString &oldBranch, const QString &newBranch)
@@ -65,6 +74,8 @@ DiffWindow::DiffWindow(Git::Manager *git, const QString &oldBranch, const QStrin
     }
     _leftStorage = _rightStorage = Git;
     _diffModel->sortItems();
+
+    _treeView->setDiffModel(_diffModel, _filesModel);
 }
 
 DiffWindow::DiffWindow(const QString &oldDir, const QString &newDir)
@@ -76,6 +87,8 @@ DiffWindow::DiffWindow(const QString &oldDir, const QString &newDir)
     compareDirs();
 
     _leftStorage = _rightStorage = FileSystem;
+
+    _treeView->setDiffModel(_diffModel, _filesModel);
 }
 
 void DiffWindow::init(bool showSideBar)
@@ -103,7 +116,7 @@ void DiffWindow::init(bool showSideBar)
 
     _filesModel = new FilesModel(this);
     _diffModel = new DiffTreeModel(this);
-    _treeView->setDiffModel(_diffModel, _filesModel);
+    //_treeView->setDiffModel(_diffModel, _filesModel);
 
     initActions();
     setupGUI(StandardWindowOption::Default, "gitklientdiffui.rc");

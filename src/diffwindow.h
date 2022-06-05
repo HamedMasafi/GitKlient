@@ -9,6 +9,7 @@ class DiffTreeModel;
 class DiffWidget;
 class DiffTreeView;
 class FilesModel;
+class QStringListModel;
 class DiffWindow : public AppMainWindow
 {
     Q_OBJECT
@@ -35,6 +36,7 @@ private:
     QString _leftDir, _rightDir;
 
     FilesModel *_filesModel;
+    QStringListModel *_filesModel2;
     DiffTreeModel *_diffModel;
     DiffWidget *_diffWidget;
     DiffTreeView *_treeView;
