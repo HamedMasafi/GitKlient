@@ -117,6 +117,7 @@ void ActionManager::addMenuToGitFile(QMenu *menu, const QString &path, bool isFi
         addMenu(menu, i18n("History"), {"history", path});
         addMenu(menu, i18n("Blame"), {"blame", path});
     }
+    addMenu(menu, i18n("Create tag"), {"create-tag", path});
 }
 
 K_PLUGIN_FACTORY_WITH_JSON(GitKlientPluginActionFactory,

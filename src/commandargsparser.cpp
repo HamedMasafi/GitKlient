@@ -11,6 +11,7 @@
 #include "dialogs/initdialog.h"
 #include "dialogs/pulldialog.h"
 #include "dialogs/runnerdialog.h"
+#include "dialogs/taginfodialog.h"
 #include "diffwindow.h"
 #include "git/gitfile.h"
 #include "git/gitmanager.h"
@@ -23,7 +24,18 @@
 #include <QMetaMethod>
 
 #include <KMessageBox>
+#include <klocalizedstring.h>
 
+#define checkGitPath(path)                                                                         \
+    QFileInfo fi(path);                                                                            \
+    if (fi.isFile())                                                                               \
+        git->setPath(fi.absolutePath());                                                           \
+    else                                                                                           \
+        git->setPath(path);                                                                        \
+    if (!git->isValid()) {                                                                         \
+        KMessageBox::sorry(nullptr, i18n("The path is not git repo: %1", path));                   \
+        return 1;                                                                                  \
+    }
 
 CommandArgsParser::CommandArgsParser() : QObject()
 {
@@ -96,13 +108,13 @@ ArgParserReturn CommandArgsParser::run(const QStringList &args)
 #define GET_OP(x) params.size() > x ? Q_ARG(QString, params.at(x)) : QGenericArgument()
     if (args.size() == 1)
         return main();
-    auto name = args.at(1);
+    auto name = QString(args.at(1)).replace("-", "_").toLocal8Bit();
     auto c = metaObject()->methodCount();
     qDebug() << "Running" << args;
     for(int i = 0; i < c; i++) {
         auto method = metaObject()->method(i);
 
-        if (method.name() == name) {
+        if (method.name().compare(name, Qt::CaseInsensitive) == 0) {
             if (method.parameterCount() != args.size() - 1) {
                 auto params = args.mid(2);
                 ArgParserReturn r;
@@ -239,6 +251,18 @@ ArgParserReturn CommandArgsParser::changes(const QString &path)
     git->setPath(fi.isFile() ? fi.absoluteFilePath() : fi.absolutePath());
     ChangedFilesDialog d(git);
     d.exec();
+    return 0;
+}
+
+ArgParserReturn CommandArgsParser::create_tag(const QString &path)
+{
+    checkGitPath(path);
+
+    TagInfoDialog d(nullptr);
+    d.setWindowTitle(i18n("New tag"));
+    if (d.exec() == QDialog::Accepted) {
+        git->createTag(d.tagName(), d.message());
+    }
     return 0;
 }
 

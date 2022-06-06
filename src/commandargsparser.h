@@ -67,6 +67,7 @@ public slots:
     ArgParserReturn changes();
     ArgParserReturn changes(const QString &path);
 
+    ArgParserReturn create_tag(const QString &path);
     ArgParserReturn diff();
     ArgParserReturn diff(const QString &file);
     ArgParserReturn diff(const QString &file1, const QString &file2);
