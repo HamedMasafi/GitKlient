@@ -14,9 +14,9 @@
 #include "diffwindow.h"
 #include "git/gitfile.h"
 #include "git/gitmanager.h"
-#include "gitklientdebug.h"
 #include "mergewindow.h"
 
+#include <QDebug>
 #include <QApplication>
 #include <QDir>
 #include <QFileInfo>
