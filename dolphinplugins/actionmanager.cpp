@@ -55,7 +55,7 @@ QList<QAction *> ActionManager::actions(const KFileItemListProperties &fileItemI
                 addMenuToNonGitFile(menu, path);
             }
         } else {
-            addMenuToGitFile(menu, path, fileItemInfos.isFile());
+            addMenuToGitFile(menu, path, fileItemInfos.isFile(), status);
         }
 
     }
@@ -105,7 +105,7 @@ void ActionManager::addMenuToNonGitFile(QMenu *menu, const QString &path)
     addMenu(menu, i18n("Init"), {"init", path});
 }
 
-void ActionManager::addMenuToGitFile(QMenu *menu, const QString &path, bool isFile)
+void ActionManager::addMenuToGitFile(QMenu *menu, const QString &path, bool isFile, const FileStatus::Status &status)
 {
     addMenu(menu, i18n("Open"), {path});
     addMenu(menu, i18n("Pull"), {"pull", path});
@@ -118,6 +118,12 @@ void ActionManager::addMenuToGitFile(QMenu *menu, const QString &path, bool isFi
         addMenu(menu, i18n("Blame"), {"blame", path});
     }
     addMenu(menu, i18n("Create tag"), {"create-tag", path});
+
+    if (status == FileStatus::Untracked) {
+        addMenu(menu, i18n("Add"), {"add", path});
+    } else {
+        addMenu(menu, i18n("Add"), {"remove", path});
+    }
 }
 
 K_PLUGIN_FACTORY_WITH_JSON(GitKlientPluginActionFactory,

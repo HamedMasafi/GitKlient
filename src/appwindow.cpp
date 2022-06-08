@@ -60,8 +60,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <QStatusBar>
 #include <QtConcurrent/QtConcurrent>
 
-AppWindow::AppWindow()
-    : AppMainWindow()
+void AppWindow::init()
 {
     _git = Git::Manager::instance();
     connect(_git, &Git::Manager::pathChanged, this, &AppWindow::git_pathChanged);
@@ -85,6 +84,12 @@ AppWindow::AppWindow()
     _statusCurrentBranchLabel = new QLabel(statusBar());
     statusBar()->addPermanentWidget(_statusCurrentBranchLabel);
     _statusCurrentBranchLabel->setText(i18n("No repo selected"));
+}
+
+AppWindow::AppWindow()
+    : AppMainWindow()
+{
+    init();
 
     if (GitKlientSettings::openLastRepo()) {
         QSettings s;
@@ -94,6 +99,13 @@ AppWindow::AppWindow()
         QtConcurrent::run(this, &AppWindow::loadRemotes);
 
     }
+}
+
+AppWindow::AppWindow(const QString &path)
+{
+    init();
+    _git->setPath(path);
+    QtConcurrent::run(this, &AppWindow::loadRemotes);
 }
 
 AppWindow::~AppWindow()

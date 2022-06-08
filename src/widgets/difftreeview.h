@@ -20,11 +20,11 @@ public:
     explicit DiffTreeView(QWidget *parent = nullptr);
 
     DiffTreeModel *diffModel() const;
-    void setDiffModel(DiffTreeModel *newDiffModel, FilesModel *filesModel);
-    void setModels(DiffTreeModel *newDiffModel, QStringListModel *filesModel);
+    void setModels(DiffTreeModel *newDiffModel, FilesModel *filesModel);
 
     bool hideUnchangeds() const;
     void setHideUnchangeds(bool newHideUnchangeds);
+    bool eventFilter(QObject *watched, QEvent *event) override;
 
 private slots:
     void on_lineEditFilter_textChanged(QString text);
@@ -34,6 +34,7 @@ private slots:
 signals:
     void fileSelected(const QString &file);
     void hideUnchangedsChanged();
+
 };
 
 #endif // DIFFTREEVIEW_H

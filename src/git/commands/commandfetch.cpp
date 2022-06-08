@@ -5,16 +5,6 @@
 
 namespace Git {
 
-bool CommandFetch::squash() const
-{
-    return _squash;
-}
-
-void CommandFetch::setSquash(bool newSquash)
-{
-    _squash = newSquash;
-}
-
 bool CommandFetch::noFf() const
 {
     return _noFf;
@@ -93,9 +83,9 @@ void CommandFetch::setBranch(const QString &newBranch)
 
 QStringList CommandFetch::generateArgs() const
 {
-    QStringList args{"fetch", _remote, _branch};
-    if (_squash)
-        args.append("--squash");
+    QStringList args{"fetch", _remote};
+    if (!_branch.isEmpty())
+        args.append(_branch);
     if (_noFf)
         args.append("--no-ff");
     if (_ffOnly)

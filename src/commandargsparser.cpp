@@ -144,6 +144,9 @@ ArgParserReturn CommandArgsParser::run(const QStringList &args)
     }
 #undef GET_OP
     qWarning().noquote() << "Method not found" << args.at(1);
+
+    if (args.size() == 2)
+        return main(args.at(1));
     return main();
 }
 
@@ -403,18 +406,40 @@ ArgParserReturn CommandArgsParser::ignore(const QString &path)
     return 0;
 }
 
+ArgParserReturn CommandArgsParser::add(const QString &path)
+{
+    checkGitPath(path);
+
+    git->addFile(path);
+    KMessageBox::information(nullptr, i18n("File(s) added to git successfully"));
+    return 0;
+}
+
+ArgParserReturn CommandArgsParser::remove(const QString &path)
+{
+    checkGitPath(path);
+
+
+    auto r = KMessageBox::questionYesNo(nullptr,
+                                        i18n("Would you like to leave file(s) on disk?"));
+
+    bool cached = r == KMessageBox::Yes;
+
+    git->removeFile(path, cached);
+    KMessageBox::information(nullptr, i18n("File(s) removed to git successfully"));
+    return 0;
+}
+
 ArgParserReturn CommandArgsParser::main()
 {
     auto window = AppWindow::instance();
-    window->resize(588*2,332*2);
     window->show();
     return ExecApp;
 }
 
 ArgParserReturn CommandArgsParser::main(const QString &path)
 {
-    Git::Manager::instance()->setPath(path);
-    auto window = AppWindow::instance();
+    auto window = new AppWindow(path);
     window->show();
     return ExecApp;
 }

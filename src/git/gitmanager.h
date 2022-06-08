@@ -100,6 +100,7 @@ public:
     void commit(const QString &message);
     void push();
     void addFile(const QString &file);
+    void removeFile(const QString &file, bool cached);
     QString getTopLevelPath() const;
 
     const QString &path() const;

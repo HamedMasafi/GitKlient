@@ -10,7 +10,10 @@
 SwitchBranchDialog::SwitchBranchDialog(Git::Manager *git, QWidget *parent) : AppDialog(git, parent)
 {
     setupUi(this);
-    comboBoxBranchSelect->setModel(git->branchesModel());
+
+    comboBoxBranchSelect->addItems(git->branches());
+    comboBoxBranchSelect->addItems(git->remoteBranches());
+
     comboBoxTags->setModel(git->tagsModel());
 }
 

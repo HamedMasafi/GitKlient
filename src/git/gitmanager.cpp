@@ -455,6 +455,9 @@ QStringList Manager::branches() const
         if (b.startsWith("* "))
             b = b.mid(2);
 
+        if (b.startsWith("(HEAD detached at"))
+            continue;
+
         branchesList.append(b.trimmed());
     }
     return branchesList;
@@ -462,7 +465,20 @@ QStringList Manager::branches() const
 
 QStringList Manager::remoteBranches() const
 {
-    return QString(runGit({"branch", "--remote", "--list"})).split("\n");
+    QStringList branchesList;
+    auto out = QString(runGit({"branch", "--remote", "--list"})).split("\n");
+
+    for (auto &line : out) {
+        auto b = line.trimmed();
+        if (b.isEmpty())
+            continue;
+        if (b.startsWith("* "))
+            b = b.mid(2);
+
+        if (!b.contains("->"))
+        branchesList.append(b.trimmed());
+    }
+    return branchesList;
 }
 
 QStringList Manager::remotes() const
@@ -651,6 +667,16 @@ void Manager::push()
 void Manager::addFile(const QString &file)
 {
     runGit({"add", file});
+}
+
+void Manager::removeFile(const QString &file, bool cached)
+{
+    QStringList args;
+    args.append("rm");
+    if (cached)
+        args.append("--cached");
+    args.append(file);
+    runGit(args);
 }
 
 QString Manager::getTopLevelPath() const

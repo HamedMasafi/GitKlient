@@ -51,6 +51,7 @@ public:
      * Default Constructor
      */
     AppWindow();
+    AppWindow(const QString &path);
 
     /**
      * Default Destructor
@@ -88,6 +89,7 @@ private:
 
     template <class T>
     void addPage(const QString &actionName);
+    void init();
 };
 
 #endif // GITKLIENTWINDOW_H

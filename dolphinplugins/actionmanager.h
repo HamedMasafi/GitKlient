@@ -27,7 +27,7 @@ private:
     QString getCommonPart(const KFileItemList& fileItems);
 
     void addMenuToNonGitFile(QMenu *menu, const QString &path);
-    void addMenuToGitFile(QMenu *menu, const QString &path, bool isFile);
+    void addMenuToGitFile(QMenu *menu, const QString &path, bool isFile, const FileStatus::Status &status);
 };
 
 

@@ -12,9 +12,6 @@ public:
 
     QStringList generateArgs() const override;
 
-    bool squash() const;
-    void setSquash(bool newSquash);
-
     bool noFf() const;
     void setNoFf(bool newNoFf);
 
@@ -39,7 +36,6 @@ public:
     void setBranch(const QString &newBranch);
 
 private:
-    bool _squash{false};
     bool _noFf{false};
     bool _ffOnly{false};
     bool _noCommit{false};
