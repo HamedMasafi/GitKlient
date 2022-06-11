@@ -36,7 +36,6 @@ private:
     QString _leftDir, _rightDir;
 
     FilesModel *_filesModel;
-    QStringListModel *_filesModel2;
     DiffTreeModel *_diffModel;
     DiffWidget *_diffWidget;
     DiffTreeView *_treeView;

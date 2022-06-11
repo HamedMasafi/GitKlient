@@ -32,13 +32,10 @@ DiffWindow::DiffWindow(Git::Manager *git) : AppMainWindow()
     _oldBranch = git->currentBranch();
     auto diffs = git->diffBranch(_oldBranch);
 
-    QStringList sl;
     for (auto &f: diffs) {
         _diffModel->addFile(f);
         _filesModel->append(f.name());
-        sl.append(f.name());
     }
-    _filesModel2->setStringList(sl);
 
     _leftStorage = Git;
     _rightStorage = FileSystem;
