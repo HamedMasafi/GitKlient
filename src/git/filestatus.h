@@ -6,19 +6,18 @@
 class FileStatus
 {
 public:
-    enum Status
-    {
-        Unknown,
-        Unmodified,
-        Modified,
-        Added,
-        Removed,
-        Renamed,
-        Copied,
-        UpdatedButInmerged,
-        Ignored,
-        Untracked,
-        NoGit
+    enum Status {
+        Unknown = 0,
+        Unmodified = 1,
+        Modified = 2,
+        Added = 3,
+        Removed = 4,
+        Renamed = 5,
+        Copied = 6,
+        UpdatedButInmerged = 7,
+        Ignored = 8,
+        Untracked = 9,
+        NoGit = 10
     };
 
     FileStatus();
@@ -32,7 +31,7 @@ public:
 
     void setFullPath(const QString &newFullPath);
 
-    void setStatus(const QString &statusLetter);
+    void setStatus(const QString &x, const QString &y = QString());
     void setName(const QString &newName);
 
 private:
@@ -43,5 +42,7 @@ private:
 
     friend class Manager;
 };
+
+bool operator==(const FileStatus &f1, const FileStatus &f2);
 
 #endif // FILESTATUS_H

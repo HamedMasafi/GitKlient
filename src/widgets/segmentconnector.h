@@ -13,6 +13,7 @@ class SegmentConnector : public QWidget
     CodeEditor *_right{nullptr};
     QList<Diff::Segment*> _segments;
     Diff::Segment* _currentSegment{nullptr};
+    bool m_sameSize{false};
     struct SegmentPos
     {
         int leftStart;
@@ -37,6 +38,9 @@ public:
 
     Diff::Segment *currentSegment() const;
     void setCurrentSegment(Diff::Segment *newCurrentSegment);
+
+    bool sameSize() const;
+    void setSameSize(bool newSameSize);
 
 signals:
 

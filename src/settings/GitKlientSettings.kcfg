@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kcfg xmlns="http://www.kde.org/standards/kcfg/1.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.kde.org/standards/kcfg/1.0
+    http://www.kde.org/standards/kcfg/1.0/kcfg.xsd" >
+    <kcfgfile name="GitKlientSettings"/>
+    <group name="Preferences">
+        <entry name="diffAddedColor" type="Color">
+            <label>Added color</label>
+            <default>green</default>
+        </entry>
+        <entry name="diffRemovedColor" type="Color">
+            <label>Removed color</label>
+            <default>red</default>
+        </entry>
+        <entry name="diffModifiedColor" type="Color">
+            <label>Modified color</label>
+            <default>blue</default>
+        </entry>
+        <entry name="colorForeground" type="Color">
+            <label>color of the foreground</label>
+            <default>yellow</default>
+        </entry>
+
+        <entry name="gitBinPath" type="String">
+            <label>age of the project</label>
+        </entry>
+        <entry name="calendarType" type="String">
+        </entry>
+        <entry name="openLastRepo" type="Bool">
+            <label>Open last repo at startup</label>
+            <default>false</default>
+        </entry>
+
+        <entry name="registerDiffTool" type="Bool">
+            <default>true</default>
+        </entry>
+        <entry name="registerMergeTool" type="Bool">
+            <default>true</default>
+        </entry>
+
+
+    </group>
+</kcfg>

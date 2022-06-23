@@ -1,11 +1,14 @@
+// Copyright (C) 2020 Hamed Masafi <hamed.masafi@gmail.com>
+// SPDX-License-Identifier: GPL-3.0-or-later
+
 #include "gitmanager.h"
 #include "filestatus.h"
 
-#include "models/branchescache.h"
-#include "models/logscache.h"
-#include "models/remotescache.h"
-#include "models/stashescache.h"
-#include "models/submodulescache.h"
+#include "models/branchesmodel.h"
+#include "models/logsmodel.h"
+#include "models/remotesmodel.h"
+#include "models/stashesmodel.h"
+#include "models/submodulesmodel.h"
 #include "models/tagsmodel.h"
 
 #include <QDebug>
@@ -40,7 +43,6 @@ void Manager::setPath(const QString &newPath)
     } else {
         _path = ret.replace("\n", "");
         _isValid = true;
-        _logs.load();
         loadAsync();
 
         setIsMerging(QFile::exists(_path + "/.git/MERGE_HEAD"));
@@ -140,14 +142,6 @@ bool Manager::isValid() const
     return _isValid;
 }
 
-const LogList &Manager::logs()
-{
-    if (!_logs.size())
-        _logs.load();
-
-    return _logs;
-}
-
 bool Manager::addRemote(const QString &name, const QString &url) const
 {
     runGit({"remote", "add", name, url});
@@ -164,6 +158,13 @@ bool Manager::renameRemote(const QString &name, const QString &newName) const
 {
     runGit({"remote", "rename", name, newName});
     return true;
+}
+
+bool Manager::isIgnored(const QString &path)
+{
+    auto tmp = readAllNonEmptyOutput({"check-ignore", path});
+    qDebug() << Q_FUNC_INFO << tmp;
+    return tmp.size();
 }
 
 QPair<int, int> Manager::uniqueCommiteOnBranches(const QString &branch1,
@@ -263,6 +264,18 @@ void Manager::setConfig(const QString &name, const QString &value, ConfigType ty
     runGit(cmd);
 }
 
+void Manager::unsetConfig(const QString &name, ConfigType type) const
+{
+    QStringList cmd{"config", "--unset"};
+
+    if (type == ConfigGlobal)
+        cmd.append("--global");
+
+    cmd.append(name);
+
+    runGit(cmd);
+}
+
 QStringList Manager::readAllNonEmptyOutput(const QStringList &cmd) const
 {
     QStringList list;
@@ -281,25 +294,33 @@ QStringList Manager::readAllNonEmptyOutput(const QStringList &cmd) const
 QString Manager::escapeFileName(const QString &filePath) const
 {
     if (filePath.contains(" "))
-        return " " + filePath + " ";
+        return "'" + filePath + "'";
     return filePath;
 }
 
-bool load(Cache *cache)
+bool load(AbstractGitItemsModel *cache)
 {
     cache->load();
     return true;
 }
 void Manager::loadAsync()
 {
-    QList<Cache *> models = {_remotesModel,
-                             _submodulesModel,
-                             _branchesModel,
-                             _logsCache,
-                             _stashesCache,
-                             _tagsModel};
+    QList<AbstractGitItemsModel *> models;
+    if (_loadFlags & LoadStashes)
+        models << _stashesCache;
+    if (_loadFlags & LoadRemotes)
+        models << _remotesModel;
+    if (_loadFlags & LoadSubmodules)
+        models << _submodulesModel;
+    if (_loadFlags & LoadBranches)
+        models << _branchesModel;
+    if (_loadFlags & LoadLogs)
+        models << _logsCache;
+    if (_loadFlags & LoadTags)
+        models << _tagsModel;
 
-    QtConcurrent::mapped(models, load);
+    if (models.size())
+        QtConcurrent::mapped(models, load);
 }
 
 TagsModel *Manager::tagsModel() const
@@ -308,48 +329,58 @@ TagsModel *Manager::tagsModel() const
 }
 
 
-StashesCache *Manager::stashesCache() const
+StashesModel *Manager::stashesModel() const
 {
     return _stashesCache;
 }
 
-LogsCache *Manager::logsCache() const
+LogsModel *Manager::logsModel() const
 {
     return _logsCache;
 }
 
-BranchesCache *Manager::branchesModel() const
+BranchesModel *Manager::branchesModel() const
 {
     return _branchesModel;
 }
 
-SubmodulesCache *Manager::submodulesModel() const
+SubmodulesModel *Manager::submodulesModel() const
 {
     return _submodulesModel;
 }
 
-RemotesCache *Manager::remotesModel() const
+RemotesModel *Manager::remotesModel() const
 {
     return _remotesModel;
 }
 
+const LoadFlags &Manager::loadFlags() const
+{
+    return _loadFlags;
+}
+
+void Manager::setLoadFlags(const LoadFlags &newLoadFlags)
+{
+    _loadFlags = newLoadFlags;
+}
+
 Manager::Manager()
     : QObject()
-      , _remotesModel{new RemotesCache(this)}
-      , _submodulesModel{new SubmodulesCache(this)}
-      , _branchesModel{new BranchesCache(this)}
-      , _logsCache{new LogsCache(this)}
-      , _stashesCache{new StashesCache(this)}
+      , _remotesModel{new RemotesModel(this)}
+      , _submodulesModel{new SubmodulesModel(this)}
+      , _branchesModel{new BranchesModel(this)}
+      , _logsCache{new LogsModel(this)}
+      , _stashesCache{new StashesModel(this)}
       , _tagsModel{new TagsModel(this)}
 {}
 
 Manager::Manager(const QString path)
     : QObject()
-      , _remotesModel{new RemotesCache(this)}
-      , _submodulesModel{new SubmodulesCache(this)}
-      , _branchesModel{new BranchesCache(this)}
-      , _logsCache{new LogsCache(this)}
-      , _stashesCache{new StashesCache(this)}
+      , _remotesModel{new RemotesModel(this)}
+      , _submodulesModel{new SubmodulesModel(this)}
+      , _branchesModel{new BranchesModel(this)}
+      , _logsCache{new LogsModel(this)}
+      , _stashesCache{new StashesModel(this)}
       , _tagsModel{new TagsModel(this)}
 {
     setPath(path);
@@ -398,7 +429,7 @@ QByteArray Manager::runGit(const QStringList &args) const
     auto out = p.readAllStandardOutput();
     auto err = p.readAllStandardError();
     Q_UNUSED(err)
-    qDebug() << err;
+//    qDebug() << err;
     return out; // + err;
 }
 
@@ -416,7 +447,8 @@ void Manager::saveFile(const QString &place, const QString &fileName, const QStr
 {
     auto buffer = runGit({"show", place + ":" + fileName});
     QFile f{localFile};
-    f.open(QIODevice::WriteOnly);
+    if (!f.open(QIODevice::WriteOnly))
+        return;
     f.write(buffer);
     f.close();
 }
@@ -433,6 +465,9 @@ QStringList Manager::branches() const
         if (b.startsWith("* "))
             b = b.mid(2);
 
+        if (b.startsWith("(HEAD detached at"))
+            continue;
+
         branchesList.append(b.trimmed());
     }
     return branchesList;
@@ -440,7 +475,20 @@ QStringList Manager::branches() const
 
 QStringList Manager::remoteBranches() const
 {
-    return QString(runGit({"branch", "--remote", "--list"})).split("\n");
+    QStringList branchesList;
+    auto out = QString(runGit({"branch", "--remote", "--list"})).split("\n");
+
+    for (auto &line : out) {
+        auto b = line.trimmed();
+        if (b.isEmpty())
+            continue;
+        if (b.startsWith("* "))
+            b = b.mid(2);
+
+        if (!b.contains("->"))
+        branchesList.append(b.trimmed());
+    }
+    return branchesList;
 }
 
 QStringList Manager::remotes() const
@@ -525,7 +573,7 @@ bool Manager::removeBranch(const QString &branchName) const
 
 BlameData Manager::blame(const File &file)
 {
-    auto logList = logs();
+//    auto logList = logs();
     BlameData b;
     auto lines = readAllNonEmptyOutput({"--no-pager", "blame", "-l", file.fileName()});
     b.reserve(lines.size());
@@ -538,9 +586,12 @@ BlameData Manager::blame(const File &file)
         auto metaIndex = line.indexOf(")");
         row.code = line.mid(metaIndex + 1);
 
-        auto log = logList.findByHash(row.commitHash);
-        if (!log)
-            qDebug() << "Log not found";
+        auto hash = row.commitHash;
+        if (hash.startsWith("^"))
+            hash = hash.remove(0, 1);
+        auto log = _logsCache->findLogByHash(hash);
+        //        if (!log)
+        //            qDebug() << "Log not found" << hash;
         row.log = log;
         auto parts = line.split("\t");
         b.append(row);
@@ -626,6 +677,16 @@ void Manager::push()
 void Manager::addFile(const QString &file)
 {
     runGit({"add", file});
+}
+
+void Manager::removeFile(const QString &file, bool cached)
+{
+    QStringList args;
+    args.append("rm");
+    if (cached)
+        args.append("--cached");
+    args.append(file);
+    runGit(args);
 }
 
 QString Manager::getTopLevelPath() const

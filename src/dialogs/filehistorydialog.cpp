@@ -2,28 +2,29 @@
 
 #include "git/gitmanager.h"
 #include "git/gitlog.h"
+#include "git/models/logsmodel.h"
 
 #include <KLocalizedString>
 
 FileHistoryDialog::FileHistoryDialog(QWidget *parent) :
-      Dialog(parent)
+      AppDialog(parent)
 {
     setupUi(this);
     _git = Git::Manager::instance();
 }
 
 FileHistoryDialog::FileHistoryDialog(Git::Manager *git, const QString &fileName, QWidget *parent):
-      Dialog(parent), _git(git), _fileName(fileName)
+      AppDialog(parent), _git(git), _fileName(fileName)
 {
     setupUi(this);
 
     auto hashes = git->fileLog(fileName);
 
-    auto logs = git->logs();
+    auto logs = git->logsModel();
 
 
     for (auto &hash: hashes) {
-        auto log = logs.findByHash(hash);
+        auto log = logs->findLogByHash(hash);
         if (!log)
             continue;
 
@@ -36,18 +37,18 @@ FileHistoryDialog::FileHistoryDialog(Git::Manager *git, const QString &fileName,
 }
 
 FileHistoryDialog::FileHistoryDialog(Git::Manager *git, const Git::File &file, QWidget *parent)
-    : Dialog(parent), _git(git)
+    : AppDialog(parent), _git(git)
 {
     setupUi(this);
 
     _fileName = file.fileName();
     auto hashes = git->fileLog(file.fileName());
 
-    auto logs = git->logs();
+    auto logs = git->logsModel();
 
 
     for (auto &hash: hashes) {
-        auto log = logs.findByHash(hash);
+        auto log = logs->findLogByHash(hash);
         if (!log)
             continue;
 

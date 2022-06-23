@@ -1,0 +1,253 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>IgnoreFileDialog</class>
+ <widget class="QDialog" name="IgnoreFileDialog">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>491</width>
+    <height>490</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Ignoer file</string>
+  </property>
+  <property name="windowIcon">
+   <iconset theme="gitklient"/>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout_3">
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout">
+     <item>
+      <widget class="QLabel" name="label">
+       <property name="text">
+        <string>Pattern:</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLineEdit" name="lineEdit"/>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <widget class="QGroupBox" name="groupBoxFileName">
+     <property name="title">
+      <string>Name</string>
+     </property>
+     <layout class="QVBoxLayout" name="verticalLayout_4">
+      <item>
+       <widget class="QRadioButton" name="radioButtonNameAndExt">
+        <property name="text">
+         <string>Name and extension</string>
+        </property>
+        <property name="checked">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QRadioButton" name="radioButtonExt">
+        <property name="text">
+         <string>All files by this extension</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QRadioButton" name="radioButtonName">
+        <property name="text">
+         <string>All files by this name</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <widget class="QGroupBox" name="groupBoxPath">
+     <property name="title">
+      <string>Path</string>
+     </property>
+     <layout class="QVBoxLayout" name="verticalLayout_2">
+      <item>
+       <widget class="QRadioButton" name="radioButtonExactPath">
+        <property name="text">
+         <string>Exact the path</string>
+        </property>
+        <property name="checked">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QRadioButton" name="radioButtonEveryWhere">
+        <property name="text">
+         <string>File in everywhere</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <widget class="QGroupBox" name="groupBoxIgnoreFile">
+     <property name="title">
+      <string>Ignore file</string>
+     </property>
+     <layout class="QVBoxLayout" name="verticalLayout">
+      <item>
+       <widget class="QRadioButton" name="radioButtonRootIgnoreFile">
+        <property name="text">
+         <string>.gitignore in the repository root</string>
+        </property>
+        <property name="checked">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QRadioButton" name="radioButtonDirIgnoreFile">
+        <property name="text">
+         <string>.gitignore in the containing directory</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QRadioButton" name="radioButtonExcludeFile">
+        <property name="text">
+         <string>.git/info/exclude</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <spacer name="verticalSpacer">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>43</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item>
+    <widget class="QDialogButtonBox" name="buttonBox">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="standardButtons">
+      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+     </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>buttonBox</sender>
+   <signal>rejected()</signal>
+   <receiver>IgnoreFileDialog</receiver>
+   <slot>reject()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>295</x>
+     <y>476</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>286</x>
+     <y>274</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>radioButtonNameAndExt</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>IgnoreFileDialog</receiver>
+   <slot>generateIgnorePattern()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>75</x>
+     <y>78</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>66</x>
+     <y>419</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>radioButtonExt</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>IgnoreFileDialog</receiver>
+   <slot>generateIgnorePattern()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>44</x>
+     <y>109</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>5</x>
+     <y>183</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>radioButtonName</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>IgnoreFileDialog</receiver>
+   <slot>generateIgnorePattern()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>97</x>
+     <y>140</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>105</x>
+     <y>427</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>radioButtonExactPath</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>IgnoreFileDialog</receiver>
+   <slot>generateIgnorePattern()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>81</x>
+     <y>214</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>288</x>
+     <y>433</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>radioButtonEveryWhere</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>IgnoreFileDialog</receiver>
+   <slot>generateIgnorePattern()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>120</x>
+     <y>244</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>270</x>
+     <y>425</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <slots>
+  <slot>generateIgnorePattern()</slot>
+ </slots>
+</ui>

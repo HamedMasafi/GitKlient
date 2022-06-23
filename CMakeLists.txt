@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 2.8.12)
 
 project(gitklient)
 set(PROJECT_VERSION_MAJOR 0)
-set(PROJECT_VERSION_MINOR 1)
+set(PROJECT_VERSION_MINOR 2)
 set(PROJECT_VERSION_PATCH 0)
 
 add_definitions(-DGK_VERSION="${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}.${PROJECT_VERSION_PATCH}")
@@ -35,6 +35,7 @@ find_package(
         Gui
         Widgets
         Concurrent
+        Test
 )
 
 find_package(Qt5Test ${QT_MIN_VERSION} CONFIG QUIET)
@@ -101,25 +102,21 @@ set(CPACK_PACKAGE_INSTALL_DIRECTORY ${CPACK_PACKAGE_NAME})
 set(CPACK_PACKAGE_VERSION_MAJOR ${PROJECT_VERSION_MAJOR})
 set(CPACK_PACKAGE_VERSION_MINOR ${PROJECT_VERSION_MINOR})
 set(CPACK_PACKAGE_VERSION_PATCH ${PROJECT_VERSION_PATCH})
+set(CPACK_PACKAGE_DESCRIPTION   "Git client for KDE")
 
 set(CPACK_PACKAGE_CONTACT "hamed.masafi@gmail.com")
 set(CPACK_DEBIAN_PACKAGE_MAINTAINER "Hamed Masafi")
 
-#set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_CURRENT_SOURCE_DIR}/LICENSE")
+set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_CURRENT_SOURCE_DIR}/LICENSE")
 #set(CPACK_RESOURCE_FILE_README "${CMAKE_CURRENT_SOURCE_DIR}/README.md")
 
-# package name for deb
-# if set, then instead of some-application-0.9.2-Linux.deb
-# you'll get some-application_0.9.2_amd64.deb (note the underscores too)
 if (GITKLIENT_BUILD_DIR)
     set(CPACK_PACKAGE_FILE_NAME "gitklient")
 else()
     set(CPACK_DEBIAN_FILE_NAME DEB-DEFAULT)
 endif()
-# if you want every group to have its own package,
-# although the same happens if this is not sent (so it defaults to ONE_PER_GROUP)
-# and CPACK_DEB_COMPONENT_INSTALL is set to YES
-set(CPACK_COMPONENTS_GROUPING ALL_COMPONENTS_IN_ONE)#ONE_PER_GROUP)
+
+set(CPACK_COMPONENTS_GROUPING ONE_PER_GROUP)
 # without this you won't be able to pack only specified component
 set(CPACK_DEB_COMPONENT_INSTALL YES)
 set(CPACK_DEBIAN_PACKAGE_SHLIBDEPS ON)

@@ -7,7 +7,7 @@
 #include "diffwindow.h"
 #include "git/gitfile.h"
 #include "git/gitmanager.h"
-#include "gitklientmergewindow.h"
+#include "mergewindow.h"
 
 #include <KIO/AccessManager>
 #include <KLocalizedString>
@@ -182,7 +182,7 @@ void FileActions::diffWithHead()
 
 void FileActions::mergeWithHead()
 {
-    auto d = new GitKlientMergeWindow(GitKlientMergeWindow::NoParams);
+    auto d = new MergeWindow(MergeWindow::NoParams);
 
     auto p = QStandardPaths::writableLocation(QStandardPaths::TempLocation) + "/ggggg";
     Git::File f{_place, _filePath};

@@ -3,7 +3,7 @@
 #include "dialogs/filestreedialog.h"
 #include "diffwindow.h"
 #include "git/gitlog.h"
-#include "git/models/logscache.h"
+#include "git/models/logsmodel.h"
 #include "models/historymodel.h"
 #include "widgets/graphpainter.h"
 
@@ -14,7 +14,7 @@ HistoryViewWidget::HistoryViewWidget(QWidget *parent) :
       WidgetBase(parent)
 {
     setupUi(this);
-    _historyModel = new Git::LogsCache(Git::Manager::instance(), this);
+    _historyModel = new Git::LogsModel(Git::Manager::instance(), this);
 //        Git::Manager::instance()->logsCache();
     treeViewHistory->setModel(_historyModel);
 
@@ -29,11 +29,11 @@ HistoryViewWidget::HistoryViewWidget(QWidget *parent) :
     _actions = new CommitActions(Git::Manager::instance(), this);
 }
 
-HistoryViewWidget::HistoryViewWidget(Git::Manager *git, GitKlientWindow *parent):
+HistoryViewWidget::HistoryViewWidget(Git::Manager *git, AppWindow *parent):
       WidgetBase(git, parent)
 {
     setupUi(this);
-    _historyModel = git->logsCache();
+    _historyModel = git->logsModel();
     treeViewHistory->setModel(_historyModel);
 
     _graphPainter = new GraphPainter(_historyModel, this);
@@ -98,12 +98,13 @@ void HistoryViewWidget::on_textBrowser_fileClicked(const QString &file)
 
 void HistoryViewWidget::on_treeViewHistory_customContextMenuRequested(const QPoint &pos)
 {
+    Q_UNUSED(pos)
     auto log = _historyModel->fromIndex(treeViewHistory->currentIndex());
     if (!log)
         return;
     _actions->setCommitHash(log->commitHash());
 
-    _actions->popup(treeViewHistory->mapToGlobal(pos));
+    _actions->popup();
 }
 
 void HistoryViewWidget::git_pathChanged()

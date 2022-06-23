@@ -9,7 +9,7 @@
 #include <QDebug>
 
 RunnerDialog::RunnerDialog(QWidget *parent) :
-      Dialog(parent)
+      AppDialog(parent)
 {
     setupUi(this);
 
@@ -34,8 +34,10 @@ RunnerDialog::RunnerDialog(QWidget *parent) :
 
 void RunnerDialog::run(const QStringList &args)
 {
+    progressBar->hide();
     _mode = RunByArgs;
     lineEditCommand->setText("git " + args.join(" "));
+    textBrowser->append("$ " + lineEditCommand->text());
     _git->setArguments(args);
     _git->start();
 }

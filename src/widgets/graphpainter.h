@@ -5,16 +5,16 @@
 #include "git/gitgraphlane.h"
 
 namespace Git {
-class LogsCache;
+class LogsModel;
 };
 class GraphPainter : public QStyledItemDelegate
 {
     Q_OBJECT
-    Git::LogsCache *_model;
+    Git::LogsModel *_model;
     QVector<QColor> _colors;
 
 public:
-    GraphPainter(Git::LogsCache *model, QObject *parent = nullptr);
+    GraphPainter(Git::LogsModel *model, QObject *parent = nullptr);
 
     void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const override;
     void paintLane(QPainter *painter, const Git::GraphLane &lane, int index) const;

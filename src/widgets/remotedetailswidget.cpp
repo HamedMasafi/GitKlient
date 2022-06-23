@@ -1,7 +1,7 @@
 #include "remotedetailswidget.h"
 #include "git/gitmanager.h"
 #include "git/gitremote.h"
-#include "git/models/remotescache.h"
+#include "git/models/remotesmodel.h"
 
 #include <QDebug>
 

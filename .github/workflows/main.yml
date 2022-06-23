@@ -4,6 +4,9 @@ on:
   push:
     branches:
       - '*'
+    tags:
+      - '**'
+      
   pull_request:
     paths-ignore:
       - "**.md"
@@ -26,6 +29,7 @@ jobs:
  
       - name: Install Qt from package manager
         run: |
+          sudo apt update
           sudo apt install qt5-default qt5-qmake qt5-qmake-bin libqt5core5a libqt5gui5 libqt5concurrent5
  
       - name: Install required packages
@@ -41,6 +45,11 @@ jobs:
           VAR=`cat version`
           echo "version=${VAR}" >> $GITHUB_ENV
           
+      - name: Run tests
+        run: |
+          cd build-cmake
+          make test
+              
       - name: Build deb package
         run: |
           cd build-cmake
@@ -53,6 +62,10 @@ jobs:
   
       - name: Create Release
         if: startsWith(github.ref, 'refs/tags/')
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           tag_name="${GITHUB_REF##*/}"
-          hub release create -a ./build-cmake/gitklient.deb#gitklient_${{env.version}}_amd64.deb -a ./build-cmake/gitklient.rpm#gitklient-${{env.version}}-Linux.rpm -m "$tag_name" "$tag_name"
+          gh release create $tag_name --generate-notes
+          gh release upload $tag_name ./build-cmake/gitklient.deb#gitklient_${tag_name}_amd64.deb
+          gh release upload $tag_name ./build-cmake/gitklient.rpm#gitklient-${tag_name}-Linux.rpm

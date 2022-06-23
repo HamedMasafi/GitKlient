@@ -1,7 +1,7 @@
 #ifndef FILEVIEWERDIALOG_H
 #define FILEVIEWERDIALOG_H
 
-#include "../core/dialog.h"
+#include "../core/appdialog.h"
 #include "ui_fileviewerdialog.h"
 
 #include <QPointer>

@@ -8,42 +8,67 @@
 #include "actions/changedfileactions.h"
 #include "GitKlientSettings.h"
 
+#include <QBitmap>
+#include <QPainter>
+
 #include <KService>
 #include <KTextEditor/CodeCompletionModel>
 #include <KTextEditor/Document>
 #include <KTextEditor/Editor>
 #include <KTextEditor/View>
 
+// TODO: improve this method
+QIcon createIcon(const QColor &color)
+{
+    QPixmap pixmap(32, 32);
+    QPainter p(&pixmap);
+    p.setBrush(color);
+    p.setPen(color);
+    p.fillRect(0, 0, 32, 32, Qt::color1);
+    p.drawEllipse({16, 16}, 8, 8);
+
+    QImage image = pixmap.toImage();
+    image.setAlphaChannel(pixmap.toImage());
+
+    return QIcon(QPixmap::fromImage(image));
+}
 CommitPushDialog::CommitPushDialog(Git::Manager *git, QWidget *parent) :
-      Dialog(parent), _git(git)
+      AppDialog(parent), _git(git)
 {
     setupUi(this);
 
     auto files = git->changedFiles();
+    QMap<Git::Manager::ChangeStatus, QIcon> icons;
 
     for (auto i = files.begin(); i != files.end(); ++i) {
         auto item = new QListWidgetItem(listWidget);
         item->setText(i.key());
-        switch (i.value()) {
-        case Git::Manager::Modified:
-            item->setForeground(GitKlientSettings::diffModifiedColor());
-            break;
-        case Git::Manager::Added:
-            item->setForeground(GitKlientSettings::diffAddedColor());
-            break;
-        case Git::Manager::Removed:
-            item->setForeground(GitKlientSettings::diffRemovedColor());
-            break;
 
-        default:
-            break;
+        if (icons.contains(i.value())) {
+            item->setIcon(icons.value(i.value()));
+        } else {
+            QColor cl;
+            switch (i.value()) {
+            case Git::Manager::Modified:
+                cl = GitKlientSettings::diffModifiedColor();
+                break;
+            case Git::Manager::Added:
+                cl = GitKlientSettings::diffAddedColor();
+                break;
+            case Git::Manager::Removed:
+                cl = GitKlientSettings::diffRemovedColor();
+                break;
+
+            default:
+                break;
+            }
+            auto icon = createIcon(cl);
+            icons.insert(i.value(), icon);
+            item->setIcon(icon);
         }
         item->setCheckState(Qt::Unchecked);
-        item->setData(1, i.value());
         listWidget->addItem(item);
     }
-//    textEditMessage->setSpellCheckingLanguage("en_US");
-//    textEditMessage->setCheckSpellingEnabled(true);
 
     auto branches = git->branches();
     auto remotes = git->remotes();
@@ -183,9 +208,10 @@ void CommitPushDialog::on_groupBoxMakeCommit_toggled(bool)
 
 void CommitPushDialog::on_listWidget_customContextMenuRequested(const QPoint &pos)
 {
+    Q_UNUSED(pos)
     if (listWidget->currentRow() == -1)
         return;
 
     _actions->setFilePath(listWidget->currentItem()->text());
-    _actions->popup(listWidget->mapToGlobal(pos));
+    _actions->popup();
 }

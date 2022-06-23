@@ -1,3 +1,6 @@
+// Copyright (C) 2020 Hamed Masafi <hamed.masafi@gmail.com>
+// SPDX-License-Identifier: GPL-3.0-or-later
+
 #ifndef GITMANAGER_H
 #define GITMANAGER_H
 
@@ -15,24 +18,33 @@
 
 namespace Git {
 
-class Cache;
-class RemotesCache;
-class SubmodulesCache;
-class BranchesCache;
-class LogsCache;
-class StashesCache;
+class AbstractGitItemsModel;
+class RemotesModel;
+class SubmodulesModel;
+class BranchesModel;
+class LogsModel;
+class StashesModel;
 class TagsModel;
+
+enum LoadFlag {
+    LoadNone = 0,
+    LoadStashes = 1,
+    LoadRemotes = 2,
+    LoadSubmodules = 4,
+    LoadBranches = 8,
+    LoadLogs = 16,
+    LoadTags = 32,
+    LoadAll = LoadStashes | LoadRemotes | LoadSubmodules | LoadBranches | LoadLogs | LoadTags
+};
+Q_DECLARE_FLAGS(LoadFlags, LoadFlag)
+Q_DECLARE_OPERATORS_FOR_FLAGS(LoadFlags)
+
 class Manager : public QObject
 {
     Q_OBJECT
 
     Q_PROPERTY(QString path READ path WRITE setPath NOTIFY pathChanged)
     Q_PROPERTY(bool isMerging READ isMerging WRITE setIsMerging NOTIFY isMergingChanged)
-
-    QString _path;
-    bool _isValid{false};
-    LogList _logs;
-    QMap<QString, Remote> _remotes;
 
 public:
     enum ChangeStatus
@@ -49,8 +61,7 @@ public:
         Untracked
     };
 
-    struct Log
-    {
+    struct Log {
         QString hash;
         QString author;
         QString date;
@@ -97,6 +108,7 @@ public:
     void commit(const QString &message);
     void push();
     void addFile(const QString &file);
+    void removeFile(const QString &file, bool cached);
     QString getTopLevelPath() const;
 
     const QString &path() const;
@@ -110,11 +122,11 @@ public:
     QList<Log *> log(const QString &branch) const;
     bool isValid() const;
 
-    const LogList &logs();
-
     bool addRemote(const QString &name, const QString &url) const;
     bool removeRemote(const QString &name) const;
     bool renameRemote(const QString &name, const QString &newName) const;
+
+    bool isIgnored(const QString &path);
 
     QPair<int, int> uniqueCommiteOnBranches(const QString &branch1, const QString &branch2) const;
 
@@ -131,16 +143,20 @@ public:
 
     QString config(const QString &name, ConfigType type = ConfigLocal) const;
     void setConfig(const QString &name, const QString &value, ConfigType type = ConfigLocal) const;
-    RemotesCache *remotesModel() const;
-    SubmodulesCache *submodulesModel() const;
-    BranchesCache *branchesModel() const;
-    LogsCache *logsCache() const;
-    StashesCache *stashesCache() const;
+    void unsetConfig(const QString &name, ConfigType type = ConfigLocal) const;
 
+    RemotesModel *remotesModel() const;
+    SubmodulesModel *submodulesModel() const;
+    BranchesModel *branchesModel() const;
+    LogsModel *logsModel() const;
+    StashesModel *stashesModel() const;
     TagsModel *tagsModel() const;
 
     bool isMerging() const;
     void setIsMerging(bool newIsMerging);
+
+    const LoadFlags &loadFlags() const;
+    void setLoadFlags(const LoadFlags &newLoadFlags);
 
 signals:
     void pathChanged();
@@ -148,25 +164,30 @@ signals:
     void isMergingChanged();
 
 private:
+    QString _path;
+    bool _isValid{false};
+    QMap<QString, Remote> _remotes;
+    LoadFlags _loadFlags{LoadAll};
+    bool m_isMerging{false};
+
     QStringList readAllNonEmptyOutput(const QStringList &cmd) const;
     QString escapeFileName(const QString& filePath) const;
     void loadAsync();
 
-    RemotesCache *const _remotesModel;
-    SubmodulesCache *const _submodulesModel;
-    BranchesCache *const _branchesModel;
-    LogsCache *const _logsCache;
-    StashesCache *const _stashesCache;
+    RemotesModel *const _remotesModel;
+    SubmodulesModel *const _submodulesModel;
+    BranchesModel *const _branchesModel;
+    LogsModel *const _logsCache;
+    StashesModel *const _stashesCache;
     TagsModel *const _tagsModel;
 
     friend class Stash;
-    friend class RemotesCache;
-    friend class SubmodulesCache;
-    friend class BranchesCache;
-    friend class LogsCache;
-    friend class StashesCache;
+    friend class RemotesModel;
+    friend class SubmodulesModel;
+    friend class BranchesModel;
+    friend class LogsModel;
+    friend class StashesModel;
     friend class TagsModel;
-    bool m_isMerging{false};
 };
 
 } // namespace Git

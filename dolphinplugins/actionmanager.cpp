@@ -55,28 +55,18 @@ QList<QAction *> ActionManager::actions(const KFileItemListProperties &fileItemI
                 addMenuToNonGitFile(menu, path);
             }
         } else {
-            addMenuToGitFile(menu, path, fileItemInfos.isFile());
+            addMenuToGitFile(menu, path, fileItemInfos.isFile(), status);
         }
 
-    } else {
-        auto path = getCommonPart(fileItemInfos.items());
-
-        menu->addAction(QStringLiteral("Is dir: %1").arg(fileItemInfos.isDirectory()));
-        menu->addAction(QStringLiteral("Is local: %1").arg(fileItemInfos.isLocal()));
-
-        menu->addAction(QStringLiteral("Count: %1").arg(fileItemInfos.items().size()));
-        for (auto &f : fileItemInfos.items()) {
-            menu->addAction(f.text());
-        }
     }
 
     mainAction->setMenu(menu);
-
+/*
     auto openAction = new QAction;
     openAction->setText("Open git klient");
     openAction->setIcon(QIcon::fromTheme("gitklient"));
-
-    return QList<QAction *>() << openAction << mainAction;
+*/
+    return QList<QAction *>() << /*openAction << */mainAction;
 }
 
 QString ActionManager::getCommonPart(const KFileItemList &fileItems)
@@ -89,7 +79,7 @@ QString ActionManager::getCommonPart(const KFileItemList &fileItems)
         list.append(i.url().toLocalFile());
 
     QString root = list.front();
-    for(QStringList::const_iterator it = list.begin(); it != list.end(); ++it)
+    for(QStringList::const_iterator it = list.cbegin(); it != list.cend(); ++it)
     {
         if (root.length() > it->length())
         {
@@ -115,17 +105,25 @@ void ActionManager::addMenuToNonGitFile(QMenu *menu, const QString &path)
     addMenu(menu, i18n("Init"), {"init", path});
 }
 
-void ActionManager::addMenuToGitFile(QMenu *menu, const QString &path, bool isFile)
+void ActionManager::addMenuToGitFile(QMenu *menu, const QString &path, bool isFile, const FileStatus::Status &status)
 {
     addMenu(menu, i18n("Open"), {path});
     addMenu(menu, i18n("Pull"), {"pull", path});
     addMenu(menu, i18n("Push"), {"push", path});
     addMenu(menu, i18n("Modifications"), {"changes", path});
     addMenu(menu, i18n("Diff"), {"diff", path});
+    addMenu(menu, i18n("Ignore file"), {"ignore", path});
     if (isFile) {
         addMenu(menu, i18n("History"), {"history", path});
         addMenu(menu, i18n("Blame"), {"blame", path});
+        if (status == FileStatus::Untracked) {
+            addMenu(menu, i18n("Add"), {"add", path});
+        } else {
+            addMenu(menu, i18n("Remove"), {"remove", path});
+        }
     }
+    addMenu(menu, i18n("Create tag"), {"create-tag", path});
+
 }
 
 K_PLUGIN_FACTORY_WITH_JSON(GitKlientPluginActionFactory,

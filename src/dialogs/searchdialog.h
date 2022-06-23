@@ -1,7 +1,7 @@
 #ifndef SEARCHDIALOG_H
 #define SEARCHDIALOG_H
 
-#include "../core/dialog.h"
+#include "../core/appdialog.h"
 #include "ui_searchdialog.h"
 
 namespace Git {
@@ -9,7 +9,7 @@ class Manager;
 }
 
 class QStandardItemModel;
-class SearchDialog : public Dialog, private Ui::SearchDialog
+class SearchDialog : public AppDialog, private Ui::SearchDialog
 {
     Q_OBJECT
     Git::Manager *_git;

@@ -6,18 +6,18 @@
 
 class RemotesActions;
 namespace Git {
-class RemotesCache;
+class RemotesModel;
 class Manager;
 }
 class RemotesWidget : public WidgetBase, private Ui::RemotesWidget
 {
     Q_OBJECT
-    Git::RemotesCache *_model;
+    Git::RemotesModel *_model;
     RemotesActions *_actions;
 
 public:
     explicit RemotesWidget(QWidget *parent = nullptr);
-    explicit RemotesWidget(Git::Manager *git, GitKlientWindow *parent = nullptr);
+    explicit RemotesWidget(Git::Manager *git, AppWindow *parent = nullptr);
 
 
     void saveState(QSettings &settings) const override;

@@ -10,7 +10,7 @@
 
 
 SubmoduleInfoDialog::SubmoduleInfoDialog(Git::Manager *git, QWidget *parent) :
-      Dialog(git, parent)
+      AppDialog(git, parent)
 {
     setupUi(this);
 }

@@ -1,4 +1,5 @@
 #include "../../src/diff/diff.cpp"
+#include "../common/gittestmanager.cpp"
 #include <QtTest/QTest>
 #include <QDebug>
 #include <QTextStream>
@@ -7,13 +8,13 @@ class DiffTest : public QObject
 {
     Q_OBJECT
 
-private Q_SLOTS:
-    void diff();
-    void diff2();
-    void files();
+        void diff2();
     void merge();
 
     void mergeSqlModel();
+    void array();
+private Q_SLOTS:
+    void diff();
 };
 
 
@@ -35,12 +36,12 @@ auto segmentTypeText(Diff::SegmentType type) -> QString
 
 void print(Diff::Segment *segment)
 {
-//    qDebug().noquote() << "==================";
-//    qDebug().noquote() << "Segment" << segmentTypeText(segment->type);
-//    qDebug() << "Old:";
-//    qDebug().noquote() << segment->oldText;
-//    qDebug() << "New:";
-//    qDebug().noquote() << segment->newText;
+    qDebug().noquote() << "==================";
+    qDebug().noquote() << "Segment" << segmentTypeText(segment->type);
+    qDebug() << "Old:";
+    qDebug().noquote() << segment->oldText;
+    qDebug() << "New:";
+    qDebug().noquote() << segment->newText;
 }
 
 void print(Diff::MergeSegment *segment)
@@ -75,8 +76,8 @@ int main()
 
     auto segments = Diff::diff(oldCode.split("\n"), newCode.split("\n"));
 
-    for (auto &s: segments)
-        print(s);
+//    for (auto &s: segments)
+//        print(s);
 
     QCOMPARE(segments.size(), 5);
     QCOMPARE(segments.at(0)->type, Diff::SegmentType::SameOnBoth);
@@ -90,6 +91,7 @@ void DiffTest::diff2()
 {
     QString oldCode{R"~(
 1
+6
 2
 4
 7
@@ -128,14 +130,6 @@ QString diffTypeText(const Diff::DiffType type)
     case Diff::DiffType::Modified: return "Modified";
     }
     return QString();
-}
-
-void DiffTest::files()
-{
-    auto map = Diff::diffDirs("/home/hamed/tmp/diff/1", "/home/hamed/tmp/diff/2");
-    for (auto i = map.begin(); i != map.end(); ++i) {
-        qDebug() << i.key() << diffTypeText(i.value());
-    }
 }
 
 void DiffTest::merge()
@@ -180,14 +174,21 @@ five
 
 void DiffTest::mergeSqlModel()
 {
-    auto base = Diff::readFileLines("/home/hamed/tmp/merge-test/sqlmodel_BASE_32623.h");
-    auto local= Diff::readFileLines("/home/hamed/tmp/merge-test/sqlmodel_LOCAL_32623.h");
-    auto remote = Diff::readFileLines("/home/hamed/tmp/merge-test/sqlmodel_REMOTE_32623.h");
+    auto base = Diff::readFileLines("sqlmodel_BASE_32623.h");
+    auto local= Diff::readFileLines("sqlmodel_LOCAL_32623.h");
+    auto remote = Diff::readFileLines("sqlmodel_REMOTE_32623.h");
 
     auto segments = Diff::diff3(base, local, remote);
 
     for (auto &s: segments)
         print(s);
+}
+
+void DiffTest::array()
+{
+    Diff::Impl::Array3<int> a(5, 5, 5);
+    a(1, 2, 3) = 4;
+    QCOMPARE(a(1, 2, 3), 4);
 }
 
 QTEST_MAIN(DiffTest)

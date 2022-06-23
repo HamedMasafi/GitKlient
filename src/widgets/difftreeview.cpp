@@ -1,37 +1,50 @@
 #include "difftreeview.h"
 #include "models/difftreemodel.h"
-#include <QSortFilterProxyModel>
 #include "models/filesmodel.h"
+
 #include <QDebug>
+#include <QKeyEvent>
+#include <QSortFilterProxyModel>
+#include <QStringListModel>
 
 DiffTreeModel *DiffTreeView::diffModel() const
 {
     return _diffModel;
 }
 
-void DiffTreeView::setDiffModel(DiffTreeModel *newDiffModel, FilesModel *filesModel)
+void DiffTreeView::setModels(DiffTreeModel *newDiffModel, FilesModel *filesModel)
 {
     _diffModel = newDiffModel;
     _filesModel = filesModel;
+
     _filterModel->setSourceModel(filesModel);
-    treeView->setModel(_diffModel);
     listView->setModel(_filterModel);
+
+    treeView->setModel(_diffModel);
 }
 
-DiffTreeView::DiffTreeView(QWidget *parent) :
-      QWidget(parent)
+DiffTreeView::DiffTreeView(QWidget *parent) : QWidget(parent)
 {
     setupUi(this);
     _filterModel = new QSortFilterProxyModel(this);
     _filterModel->setFilterKeyColumn(0);
-    connect(checkBoxHideUnchangeds, &QAbstractButton::toggled, this, &DiffTreeView::hideUnchangedsChanged);
+    _filterModel->setFilterCaseSensitivity(Qt::CaseInsensitive);
+    listView->setModel(_filterModel);
+
+    connect(checkBoxHideUnchangeds,
+            &QAbstractButton::toggled,
+            this,
+            &DiffTreeView::hideUnchangedsChanged);
     checkBoxHideUnchangeds->hide();
+
+    lineEditFilter->installEventFilter(this);
+    listView->installEventFilter(this);
 }
 
 void DiffTreeView::on_lineEditFilter_textChanged(QString text)
 {
     stackedWidget->setCurrentIndex(text.isEmpty() ? 0 : 1);
-    _filterModel->setFilterWildcard("*" + text + "*");
+    _filterModel->setFilterRegularExpression(".*" + text + ".*");
 }
 
 void DiffTreeView::on_treeView_clicked(const QModelIndex &index)
@@ -58,4 +71,25 @@ void DiffTreeView::setHideUnchangeds(bool newHideUnchangeds)
         return;
     checkBoxHideUnchangeds->setChecked(newHideUnchangeds);
     emit hideUnchangedsChanged();
+}
+
+bool DiffTreeView::eventFilter(QObject *watched, QEvent *event)
+{
+    if (watched == lineEditFilter && event->type() == QEvent::KeyPress) {
+        auto ke = static_cast<QKeyEvent*>(event);
+
+        if (ke->key() == Qt::Key_Down) {
+            if (stackedWidget->currentIndex() == 0)
+                treeView->setFocus();
+            else
+                listView->setFocus();
+        }
+    }
+    if (watched == listView && event->type() == QEvent::KeyPress) {
+        auto ke = static_cast<QKeyEvent*>(event);
+
+        if (ke->key() == Qt::Key_Up && listView->currentIndex().row() == 0)
+            lineEditFilter->setFocus();
+    }
+    return QWidget::eventFilter(watched, event);
 }

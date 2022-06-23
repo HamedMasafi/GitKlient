@@ -7,6 +7,10 @@ xsi:schemaLocation="http://www.kde.org/standards/kxmlgui/1.0
 http://www.kde.org/standards/kxmlgui/1.0/kxmlgui.xsd">
 
     <MenuBar>
+        <Menu name="view">
+            <Action name="view_files"/>
+            <Action name="view_blocks"/>
+        </Menu>
         <Menu name="diff">
             <text>Diff</text>
             <Action name="keep_mine"/>

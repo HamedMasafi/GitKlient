@@ -1,6 +1,8 @@
-#include "../../src/git/gitmanager.h"
-#include "../common/gittestmanager.h"
-#include "../../dolphinplugins/statuscache.h"
+#include "../common/gittestmanager.cpp"
+#include "../../dolphinplugins/statuscache.cpp"
+#include "../../src/git/filestatus.cpp"
+#include "../../dolphinplugins/manager.cpp"
+#include "gitglobal.cpp"
 
 #include <QtTest/QTest>
 #include <QDebug>
@@ -18,25 +20,27 @@ private Q_SLOTS:
 
 void OverlayTest::test1()
 {
-    auto p = GitKlientTest::getTempPath();
-    Git::Manager m(p);
-    m.init(p);
-    GitKlientTest::touch(p + "/README.md");
-    GitKlientTest::touch(p + "/2");
-    m.addFile(p + "/README.md");
-    m.addFile(p + "/2");
-    m.commit("update readme");
-    GitKlientTest::touch(p + "/sample");
-    GitKlientTest::touch(p + "/2");
-    qDebug() << "p="<<p;
-    QDir d(p);
-    d.cd(p);
-    auto list = d.entryInfoList(QDir::NoDotAndDotDot | QDir::Dirs | QDir::Files);
+    GitTestManager tm;
+
+    tm.init();
+    tm.addToIgnore("ignored.txt");
+    tm.touch("ignored.txt");
+    tm.touch("added.txt");
+    tm.touch("changed.txt");
+    tm.touch("removed.txt");
+    tm.add();
+    tm.commit("Initial commit");
+    tm.touch("changed.txt");
+    tm.remove("removed.txt");
+    tm.touch("untracked.txt");
+
     StatusCache cache;
 
-    QCOMPARE(cache.fileStatus(p + "/README.md"), FileStatus::Unmodified);
-    QCOMPARE(cache.fileStatus(p + "/sample"), FileStatus::Untracked);
-    QCOMPARE(cache.fileStatus(p + "/2"), FileStatus::Modified);
+    QCOMPARE(cache.fileStatus(tm.absoluteFilePath("added.txt")), FileStatus::Unmodified);
+    QCOMPARE(cache.fileStatus(tm.absoluteFilePath("ignored.txt")), FileStatus::Ignored);
+    QCOMPARE(cache.fileStatus(tm.absoluteFilePath("removed.txt")), FileStatus::Removed);
+    QCOMPARE(cache.fileStatus(tm.absoluteFilePath("changed.txt")), FileStatus::Modified);
+    QCOMPARE(cache.fileStatus(tm.absoluteFilePath("untracked.txt")), FileStatus::Untracked);
 }
 
 QTEST_MAIN(OverlayTest)

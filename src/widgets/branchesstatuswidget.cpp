@@ -5,7 +5,7 @@
 #include "dialogs/runnerdialog.h"
 #include "diffwindow.h"
 #include "git/gitmanager.h"
-#include "git/models/branchescache.h"
+#include "git/models/branchesmodel.h"
 
 #include <KMessageBox>
 
@@ -16,7 +16,7 @@ BranchesStatusWidget::BranchesStatusWidget(QWidget *parent) : WidgetBase(parent)
 }
 
 
-BranchesStatusWidget::BranchesStatusWidget(Git::Manager *git, GitKlientWindow *parent) :
+BranchesStatusWidget::BranchesStatusWidget(Git::Manager *git, AppWindow *parent) :
       WidgetBase(git, parent)
 
 {

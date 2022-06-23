@@ -2,15 +2,18 @@
 #include "git/commands/commandswitchbranch.h"
 #include "git/gitmanager.h"
 #include "runnerdialog.h"
-#include "git/models/branchescache.h"
+#include "git/models/branchesmodel.h"
 #include "git/models/tagsmodel.h"
 
 #include <QDebug>
 
-SwitchBranchDialog::SwitchBranchDialog(Git::Manager *git, QWidget *parent) : Dialog(git, parent)
+SwitchBranchDialog::SwitchBranchDialog(Git::Manager *git, QWidget *parent) : AppDialog(git, parent)
 {
     setupUi(this);
-    comboBoxBranchSelect->setModel(git->branchesModel());
+
+    comboBoxBranchSelect->addItems(git->branches());
+    comboBoxBranchSelect->addItems(git->remoteBranches());
+
     comboBoxTags->setModel(git->tagsModel());
 }
 

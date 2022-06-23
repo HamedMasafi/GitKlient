@@ -8,7 +8,7 @@ aux_source_directory(actions ACTIONS_SRC)
 aux_source_directory(core CORE_SRC)
 include_directories(${CMAKE_SOURCE_DIR}/core)
 
-set(gitklient_SRCS
+set(APP_SRCS
 #    ${GIT_SRC}
     ${DIFF_SRC}
     ${CORE_WIDGETS_SRC}
@@ -20,39 +20,38 @@ set(gitklient_SRCS
     ${CORE_SRC}
 
     main.cpp
-    gitklientwindow.cpp
+    appwindow.cpp
     buttonsgroup.cpp
     multipagewidget.cpp
-    argsparser.cpp
     diffwindow.cpp
-    gitklientmergewindow.cpp
+    mergewindow.cpp
     commandargsparser.cpp
-    settingshelper.cpp
-    gitklientconfig.cpp
-    settingsmanager.cpp
+    appconfig.cpp
+    settings/settingsmanager.cpp
 )
 
-ecm_qt_declare_logging_category(gitklient_SRCS
-    HEADER gitklientdebug.h
+ecm_qt_declare_logging_category(APP_SRCS
+    HEADER appdebug.h
     IDENTIFIER GITKLIENT
     CATEGORY_NAME "gitklient"
 )
-kconfig_add_kcfg_files(gitklient_SRCS GitKlientSettings.kcfgc)
+kconfig_add_kcfg_files(APP_SRCS settings/GitKlientSettings.kcfgc)
 
 #set(CMAKE_AUTOUIC ON)
 
 #qt5_wrap_ui(
-#    gitklient_SRCS
+#    APP_SRCS
 #    widgets/commandpullwidget.ui
 #)
 
 add_compile_definitions(GIT_GUI)
 
 ki18n_wrap_ui(
-    gitklient_SRCS
+    APP_SRCS
 
-    settingsBase.ui
-    diffsettings.ui
+    settings/settingspagebase.ui
+    settings/settingspagediff.ui
+    settings/settingspagegit.ui
     multipagewidget.ui
     gitklientmergeview.ui
     commandpullwidget.ui
@@ -68,6 +67,7 @@ ki18n_wrap_ui(
     widgets/tagswidget.ui
     widgets/difftreeview.ui
     widgets/diffwidget.ui
+    dialogs/ignorefiledialog.ui
 
     dialogs/mergeopenfilesdialog.ui
     dialogs/mergecloseeventdialog.ui
@@ -95,7 +95,7 @@ ki18n_wrap_ui(
 )
 
 include(git/CMakeLists.txt)
-add_executable(gitklient ${gitklient_SRCS} ${GIT_SOURCE})
+add_executable(gitklient ${APP_SRCS} ${GIT_SOURCE})
 
 target_link_libraries(gitklient
     Qt5::Core

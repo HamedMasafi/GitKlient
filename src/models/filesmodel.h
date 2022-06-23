@@ -1,6 +1,7 @@
 #ifndef FILESMODEL_H
 #define FILESMODEL_H
 
+#include "git/filestatus.h"
 #include <QtCore/QAbstractListModel>
 
 #include <QList>
@@ -20,6 +21,8 @@ public:
     int columnCount(const QModelIndex &parent) const override;
     QVariant data(const QModelIndex &index, int role) const override;
     void append(const QString &data);
+
+    void addFile(const FileStatus &file);
 };
 
 #endif // FILESMODEL_H

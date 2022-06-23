@@ -1,7 +1,7 @@
 #include "dialogs/submoduleinfodialog.h"
 #include "submoduleswidget.h"
 #include "git/gitmanager.h"
-#include "git/models/submodulescache.h"
+#include "git/models/submodulesmodel.h"
 #include "actions/submoduleactions.h"
 
 #include <QDebug>
@@ -20,7 +20,7 @@ SubmodulesWidget::SubmodulesWidget(QWidget *parent) :
     treeView->setModel(_model);
 }
 
-SubmodulesWidget::SubmodulesWidget(Git::Manager *git, GitKlientWindow *parent) :
+SubmodulesWidget::SubmodulesWidget(Git::Manager *git, AppWindow *parent) :
       WidgetBase(git, parent)
 {
     setupUi(this);

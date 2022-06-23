@@ -18,13 +18,16 @@ class CodeEditor : public QPlainTextEdit
 {
     Q_OBJECT
     QMap<int, Diff::Segment*> _segments;
+    QPair<int, int> _currentSegment{-1, -1};
 
 public:
     enum BlockType {
         Unchanged,
         Added,
         Removed,
-        Edited
+        Edited,
+        HighLight,
+        Empty
     };
 
     explicit CodeEditor(QWidget *parent = nullptr);
@@ -32,14 +35,15 @@ public:
 
     void setHighlighting(const QString &fileName);
 
-    void append(const QString &code, const BlockType &type = Unchanged, Diff::Segment *segment = nullptr);
-    void append(const QString &code, const QColor &backGroundColor);
+    void append(const QString &code, const BlockType &type = Unchanged, Diff::Segment *segment = nullptr, bool isEmpty = false);
+    int append(const QString &code, const QColor &backgroundColor);
     void append(const QStringList &code, const BlockType &type = Unchanged, Diff::Segment *segment = nullptr, int size = -1);
 
     QPair<int, int> blockArea(int from, int to);
 
     int currentLineNumber() const;
     void gotoLineNumber(int lineNumber);
+    void gotoSegment(Diff::Segment *segment);
 
     Diff::Segment *currentSegment() const;
     void highlightSegment(Diff::Segment *segment);

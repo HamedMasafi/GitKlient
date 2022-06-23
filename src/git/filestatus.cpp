@@ -22,13 +22,14 @@ FileStatus::Status FileStatus::status() const
 
 void FileStatus::parseStatusLine(const QString &line)
 {
-    auto status = line.at(1);
+    auto statusX = line.at(0);
+    auto statusY = line.at(1);
     auto fileName = line.mid(3);
     _name = fileName;
 
-    setStatus(status);
+    setStatus(statusX, statusY);
 
-//    qDebug() << "line=" << line<< status<<_status <<fileName;
+//    qDebug() << "***=" << line << _status << statusX << statusY;
 }
 
 const QString &FileStatus::fullPath() const
@@ -41,23 +42,23 @@ void FileStatus::setFullPath(const QString &newFullPath)
     _fullPath = newFullPath;
 }
 
-void FileStatus::setStatus(const QString &statusLetter)
+void FileStatus::setStatus(const QString &x, const QString &y)
 {
-    if (statusLetter == "M")
+    if (x == "M" || y == "M")
         _status = Modified;
-    else if (statusLetter == "A")
+    else if (x == "A")
         _status = Added;
-    else if (statusLetter == "D")
+    else if (x == "D")
         _status = Removed;
-    else if (statusLetter == "R")
+    else if (x == "R")
         _status = Renamed;
-    else if (statusLetter == "C")
+    else if (x == "C")
         _status = Copied;
-    else if (statusLetter == "U")
+    else if (x == "U")
         _status = UpdatedButInmerged;
-    else if (statusLetter == "?")
+    else if (x == "?")
         _status = Untracked;
-    else if (statusLetter == "!")
+    else if (x == "!")
         _status = Ignored;
     else
         _status = Unknown;
@@ -66,4 +67,9 @@ void FileStatus::setStatus(const QString &statusLetter)
 void FileStatus::setName(const QString &newName)
 {
     _name = newName;
+}
+
+bool operator==(const FileStatus &f1, const FileStatus &f2)
+{
+    return f1.name() == f2.name();
 }

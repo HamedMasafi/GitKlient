@@ -1,7 +1,7 @@
 #include "taginfodialog.h"
 
 TagInfoDialog::TagInfoDialog(QWidget *parent) :
-      Dialog(parent)
+      AppDialog(parent)
 {
     setupUi(this);
 }

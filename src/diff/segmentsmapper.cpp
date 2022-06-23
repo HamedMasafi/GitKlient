@@ -3,6 +3,8 @@
 #include <QScrollBar>
 #include "widgets/codeeditor.h"
 
+
+
 SegmentsMapper::SegmentsMapper(QObject *parent) : QObject(parent)
 {
 
@@ -17,52 +19,22 @@ void SegmentsMapper::addEditor(CodeEditor *editor)
             this,
             &SegmentsMapper::codeEditor_blockSelected);
 
+    _scrollBars.insert(editor->verticalScrollBar(), editor);
     connect(editor->verticalScrollBar(),
             &QScrollBar::valueChanged,
             this,
             &SegmentsMapper::codeEditor_scroll);
 }
 
-const QList<Diff::MergeSegment *> &SegmentsMapper::segments() const
+const QList<Diff::Segment *> &SegmentsMapper::segments() const
 {
     return _segments;
 }
 
 void SegmentsMapper::setSegments(const QList<Diff::MergeSegment *> &newSegments)
 {
-    _segments = newSegments;
-}
-
-int SegmentsMapper::mapIndexFromOldToNew(int oldIndex)
-{
-    auto offset = qMakePair(0, 0);
-    for (auto &s : _segments) {
-        if (offset.first + s->local.size() > oldIndex) {
-            if (s->type != Diff::SegmentType::DifferentOnBoth)
-                return offset.second + (oldIndex - offset.first);
-            else
-                return offset.second;
-        }
-        offset.first += s->local.size();
-        offset.second += s->remote.size();
-    }
-    return -1;
-}
-
-int SegmentsMapper::mapIndexFromNewToOld(int newIndex)
-{
-    auto offset = qMakePair(0, 0);
-    for (auto &s : _segments) {
-        if (offset.second + s->remote.size() > newIndex) {
-            if (s->type != Diff::SegmentType::DifferentOnBoth)
-                return offset.first + (newIndex - offset.second);
-            else
-                return offset.first;
-        }
-        offset.first += s->local.size();
-        offset.second += s->remote.size();
-    }
-    return -1;
+    for (auto &s: newSegments)
+        _segments.append(s);
 }
 
 int SegmentsMapper::map(int from, int to, int index) const
@@ -74,6 +46,8 @@ int SegmentsMapper::map(int from, int to, int index) const
     int &offsetTo = to == 1 ? offset1 : (to == 2 ? offset2 : offset3);
 
     for (auto &s : _segments) {
+        auto ms = static_cast<Diff::MergeSegment*>(s);
+
         if (offsetFrom + s->get(from).size() > index) {
             if (s->type != Diff::SegmentType::DifferentOnBoth)
                 return offsetFrom + (index - offsetTo);
@@ -81,31 +55,122 @@ int SegmentsMapper::map(int from, int to, int index) const
                 return offsetFrom;
         }
 
-        offset1 += s->base.size();
-        offset2 += s->local.size();
-        offset3 += s->remote.size();
+        offset1 += ms->base.size();
+        offset2 += ms->local.size();
+        offset3 += ms->remote.size();
     }
     return -1;
 }
 
 void SegmentsMapper::codeEditor_blockSelected()
 {
-    auto l = qobject_cast<CodeEditor*>(sender())->currentLineNumber();
-    auto n = map(2, 1, l);
-//    if (n != -1)
-//        m_ui.plainTextEditMine->gotoLineNumber(n);
+    auto s = qobject_cast<CodeEditor *>(sender());
+
+    _currentSegment = s->currentSegment();
+    s->highlightSegment(_currentSegment);
+
+    for (auto &editor : _editors) {
+        editor->highlightSegment(_currentSegment);
+        editor->gotoSegment(_currentSegment);
+        /*if (s == editor)
+            continue;
+        auto n = map(myIndx, _editors.indexOf(editor), l);
+
+        if (n != -1)
+            editor->gotoLineNumber(n);
+
+        editor->highlightSegment(s->currentSegment());*/
+    }
 }
 
 void SegmentsMapper::codeEditor_scroll(int value)
 {
-    auto s = /*find others*/ qobject_cast<CodeEditor *>(sender());
-    static bool b{false};
-    if (b)
+    static QAtomicInt n = 0;
+    if (n)
         return;
-    b = true;
-    s->verticalScrollBar()->setValue(
-        (int) (((float) value / (float) s->verticalScrollBar()->maximum())
-               * (float) s->verticalScrollBar()->maximum()));
-    b = false;
-//    m_ui.widgetSegmentsConnector->update();
+    n.ref();
+    auto s = _scrollBars.value(sender());
+    if (!s)
+        return;
+    for (auto &editor: _editors) {
+        if (s == editor)
+            continue;
+        editor->verticalScrollBar()->setValue(
+            (int) (((float) value / (float) s->verticalScrollBar()->maximum())
+                   * (float) s->verticalScrollBar()->maximum()));
+    }
+    n.deref();
+}
+
+Diff::Segment *SegmentsMapper::currentSegment() const
+{
+    return _currentSegment;
+}
+
+void SegmentsMapper::refresh()
+{
+    if (!_currentSegment)
+        return;
+    for (auto &editor : _editors) {
+        editor->highlightSegment(_currentSegment);
+        editor->gotoSegment(_currentSegment);
+    }
+}
+
+void SegmentsMapper::setCurrentSegment(Diff::Segment *newCurrentSegment)
+{
+    _currentSegment = newCurrentSegment;
+    refresh();
+}
+
+bool SegmentsMapper::isMergeable() const
+{
+    for (auto &s : _segments) {
+        auto ms = static_cast<Diff::MergeSegment*>(s);
+        if (ms->mergeType == Diff::MergeType::None)
+            return false;
+    }
+    return true;
+}
+
+int SegmentsMapper::conflicts() const
+{
+    int r{0};
+    for (auto &s: _segments) {
+        auto ms = static_cast<Diff::MergeSegment*>(s);
+        if (ms->mergeType == Diff::None)
+            r++;
+    }
+    return r;
+}
+
+void SegmentsMapper::findPrevious(const Diff::SegmentType &type)
+{
+    int index;
+    if (_currentSegment)
+        index = _segments.indexOf(static_cast<Diff::MergeSegment *>(_currentSegment)) - 1;
+    else
+        index = _segments.size() - 1;
+
+    for (auto i = index; i; i--)
+        if (_segments.at(i)->type == type) {
+            setCurrentSegment(_segments.at(i));
+            return;
+        }
+}
+
+void SegmentsMapper::findNext(const Diff::SegmentType &type)
+{
+    int index;
+    if (_currentSegment)
+        index = _segments.indexOf(static_cast<Diff::MergeSegment *>(_currentSegment)) + 1;
+    else
+        index = 0;
+
+    for (auto i = index; i < _segments.size(); i++)
+        if (_segments.at(i)->type == type) {
+            setCurrentSegment(_segments.at(i));
+            return;
+        }
+
 }

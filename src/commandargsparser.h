@@ -67,9 +67,11 @@ public slots:
     ArgParserReturn changes();
     ArgParserReturn changes(const QString &path);
 
+    ArgParserReturn create_tag(const QString &path);
     ArgParserReturn diff();
     ArgParserReturn diff(const QString &file);
     ArgParserReturn diff(const QString &file1, const QString &file2);
+    ArgParserReturn diff(const QString &path, const QString &file1, const QString &file2);
     ArgParserReturn blame(const QString &file);
     ArgParserReturn history(const QString &file);
     ArgParserReturn merge();
@@ -77,6 +79,11 @@ public slots:
               const QString &local,
               const QString &remote,
               const QString &result);
+    ArgParserReturn ignore(const QString &path);
+
+    ArgParserReturn add(const QString &path);
+    ArgParserReturn remove(const QString &path);
+
     ArgParserReturn main();
     ArgParserReturn main(const QString &path);
 };

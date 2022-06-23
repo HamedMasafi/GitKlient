@@ -9,6 +9,10 @@
   <Menu name="view">
     <Action name="view_hidden_chars"/>
     <Action name="view_same_size_blocks"/>
+    <Action name="view_files_info"/>
+  </Menu>
+  <Menu name="settings">
+    <Action name="show_tree_dock"/>
   </Menu>
 </MenuBar>
 

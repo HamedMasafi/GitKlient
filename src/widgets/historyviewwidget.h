@@ -7,18 +7,18 @@
 class GraphPainter;
 class CommitActions;
 namespace Git {
-class LogsCache;
+class LogsModel;
 }
 class HistoryViewWidget : public WidgetBase, private Ui::HistoryViewWidget
 {
     Q_OBJECT
     CommitActions *_actions;
-    Git::LogsCache *_historyModel;
+    Git::LogsModel *_historyModel;
     GraphPainter *_graphPainter;
 
 public:
     explicit HistoryViewWidget(QWidget *parent = nullptr);
-    explicit HistoryViewWidget(Git::Manager *git, GitKlientWindow *parent = nullptr);
+    explicit HistoryViewWidget(Git::Manager *git, AppWindow *parent = nullptr);
     void setBranch(const QString &branchName);
 
     void saveState(QSettings &settings) const override;

@@ -1,2 +1,2 @@
 #!/bin/sh
-gitklient diff
+gitklient diff "$@"

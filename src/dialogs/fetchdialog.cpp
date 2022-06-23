@@ -4,7 +4,7 @@
 #include "git/commands/commandfetch.h"
 #include "git/gitmanager.h"
 
-FetchDialog::FetchDialog(Git::Manager *git, QWidget *parent) : Dialog(parent)
+FetchDialog::FetchDialog(Git::Manager *git, QWidget *parent) : AppDialog(parent)
 {
     setupUi(this);
 
@@ -28,8 +28,9 @@ void FetchDialog::on_buttonBox_accepted()
     Git::CommandFetch cmd;
 
     cmd.setRemote(comboBoxRemote->currentText());
-    cmd.setBranch(comboBoxBranch->currentText());
-    cmd.setSquash(checkBoxSquash->isChecked());
+
+    if (checkBoxAllBranches->isChecked())
+        cmd.setBranch(comboBoxBranch->currentText());
     cmd.setNoFf(checkBoxNoFastForward->isChecked());
     cmd.setFfOnly(checkBoxFastForwardOnly->isChecked());
     cmd.setNoCommit(checkBoxNoCommit->isChecked());

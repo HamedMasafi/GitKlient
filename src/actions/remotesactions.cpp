@@ -5,8 +5,10 @@
 #include <kmessagebox.h>
 #include <QDebug>
 
-#include "git/models/remotescache.h"
+#include "dialogs/runnerdialog.h"
+#include "git/commands/commandaddremote.h"
 #include "git/gitmanager.h"
+#include "git/models/remotesmodel.h"
 #include "widgets/remoteinfodialog.h"
 
 RemotesActions::RemotesActions(Git::Manager *git, QWidget *parent) : AbstractActions(git, parent)
@@ -35,7 +37,11 @@ void RemotesActions::create()
 {
     RemoteInfoDialog d{_parent};
     if (d.exec() == QDialog::Accepted) {
-        _git->addRemote(d.remoteName(), d.remoteUrl());
+//        _git->addRemote(d.remoteName(), d.remoteUrl());
+
+        RunnerDialog runner;
+        runner.run(d.command());
+        runner.exec();
         _git->remotesModel()->load();
     }
 }
@@ -64,6 +70,11 @@ void RemotesActions::changeUrl()
                                         "URL",
                                         QLineEdit::Normal,
                                         remote->pushUrl);
+
+    if (!newUrl.isEmpty()) {
+        _git->remotesModel()->setUrl(_remoteName, newUrl);
+        KMessageBox::information(_parent, i18n("Url for remote changed successfully"));
+    }
 }
 
 void RemotesActions::rename()

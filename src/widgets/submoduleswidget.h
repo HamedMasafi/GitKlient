@@ -8,18 +8,18 @@ class QTreeWidgetItem;
 class SubmoduleActions;
 
 namespace Git {
-class SubmodulesCache;
+class SubmodulesModel;
 }
 
 class SubmodulesWidget : public WidgetBase, private Ui::SubmodulesWidget
 {
     Q_OBJECT
     SubmoduleActions *_actions;
-    Git::SubmodulesCache *_model;
+    Git::SubmodulesModel *_model;
 
 public:
     explicit SubmodulesWidget(QWidget *parent = nullptr);
-    explicit SubmodulesWidget(Git::Manager *git, GitKlientWindow *parent = nullptr);
+    explicit SubmodulesWidget(Git::Manager *git, AppWindow *parent = nullptr);
 
 
     void saveState(QSettings &settings) const override;

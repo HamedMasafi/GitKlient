@@ -61,6 +61,13 @@
        </property>
       </widget>
      </item>
+     <item>
+      <widget class="PushButton" name="pushButtonPush">
+       <property name="text">
+        <string>Push</string>
+       </property>
+      </widget>
+     </item>
     </layout>
    </item>
   </layout>

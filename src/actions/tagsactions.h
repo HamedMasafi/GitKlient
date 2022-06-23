@@ -11,6 +11,7 @@ class TagsActions : public AbstractActions
     DEFINE_ACTION(actionRemove)
     DEFINE_ACTION(actionCheckout)
     DEFINE_ACTION(actionDiff)
+    DEFINE_ACTION(actionPush)
 
 public:
     TagsActions(Git::Manager *git, QWidget *parent = nullptr);
@@ -23,6 +24,7 @@ private slots:
     void remove();
     void checkout();
     void diff();
+    void push();
 
 private:
     QString _tagName;

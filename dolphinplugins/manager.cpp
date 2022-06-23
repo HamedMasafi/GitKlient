@@ -1,5 +1,6 @@
 #include "manager.h"
 
+#include <QDebug>
 #include <gitglobal.h>
 #include <QProcess>
 
@@ -50,16 +51,25 @@ QList<FileStatus> MiniManager::repoFilesStatus() const
                                               "--ignored",
                                               "--short",
                                               "--ignore-submodules",
-                                              "--porcelain"});
+                                              "--porcelain"}, false);
 
     QList<FileStatus> files;
+    QSet<QString> set;
+    //TODO: read untrackeds
     for (auto &item : buffer) {
         if (!item.trimmed().size())
             continue;
+
+        if (item.startsWith("??")) {
+
+        }
+
         FileStatus fs;
         fs.parseStatusLine(item);
         fs.setFullPath(_path + "/" + fs.name());
-        files.append(fs);
+        if (fs.status() != FileStatus::Untracked)// && !files.contains(fs))
+            files.append(fs);
+
     }
     return files;
 }

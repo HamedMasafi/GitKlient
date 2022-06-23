@@ -6,7 +6,7 @@
 #include <QSettings>
 
 CloneDialog::CloneDialog(QWidget *parent) :
-      Dialog(parent)
+      AppDialog(parent)
 {
     setupUi(this);
     _fixedPath = QStandardPaths::writableLocation(QStandardPaths::HomeLocation);
@@ -33,6 +33,11 @@ Git::CloneCommand *CloneDialog::command()
         cmd->setDepth(spinBoxDepth->value());
     cmd->setRecursive(checkBoxRecursive->isChecked());
     return cmd;
+}
+
+void CloneDialog::setLocalPath(const QString &path)
+{
+    lineEditPath->setText(path);
 }
 
 void CloneDialog::on_lineEditUrl_textChanged(QString text)

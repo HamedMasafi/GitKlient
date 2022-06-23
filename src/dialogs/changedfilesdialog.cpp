@@ -8,7 +8,7 @@
 #include <QDebug>
 
 ChangedFilesDialog::ChangedFilesDialog(Git::Manager *git, QWidget *parent) :
-      Dialog(git, parent)
+      AppDialog(git, parent)
 {
     setupUi(this);
     reload();
@@ -53,9 +53,10 @@ void ChangedFilesDialog::on_listWidget_itemDoubleClicked(QListWidgetItem *item)
 
 void ChangedFilesDialog::on_listWidget_customContextMenuRequested(const QPoint &pos)
 {
+    Q_UNUSED(pos)
     if (listWidget->currentRow() == -1)
         return;
 
     _actions->setFilePath(listWidget->currentItem()->text());
-    _actions->popup(listWidget->mapToGlobal(pos));
+    _actions->popup();
 }

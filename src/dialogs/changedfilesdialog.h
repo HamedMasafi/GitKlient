@@ -1,11 +1,11 @@
 #ifndef CHANGEDFILESDIALOG_H
 #define CHANGEDFILESDIALOG_H
 
-#include "../core/dialog.h"
+#include "../core/appdialog.h"
 #include "ui_changedfilesdialog.h"
 
 class ChangedFileActions;
-class ChangedFilesDialog : public Dialog, private Ui::ChangedFilesDialog
+class ChangedFilesDialog : public AppDialog, private Ui::ChangedFilesDialog
 {
     Q_OBJECT
     ChangedFileActions *_actions;

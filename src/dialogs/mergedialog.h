@@ -1,14 +1,14 @@
 #ifndef MERGEDIALOG_H
 #define MERGEDIALOG_H
 
-#include "../core/dialog.h"
+#include "../core/appdialog.h"
 #include "ui_mergedialog.h"
 
 namespace Git {
 class CommandMerge;
 class Manager;
 }
-class MergeDialog : public Dialog, private Ui::MergeDialog
+class MergeDialog : public AppDialog, private Ui::MergeDialog
 {
     Q_OBJECT
 public:

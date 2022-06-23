@@ -1,13 +1,13 @@
 #ifndef FETCHDIALOG_H
 #define FETCHDIALOG_H
 
-#include "../core/dialog.h"
+#include "../core/appdialog.h"
 #include "ui_fetchdialog.h"
 
 namespace Git {
 class Manager;
 }
-class FetchDialog : public Dialog, private Ui::FetchDialog
+class FetchDialog : public AppDialog, private Ui::FetchDialog
 {
     Q_OBJECT
 
