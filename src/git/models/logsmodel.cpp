@@ -371,7 +371,7 @@ void LogsModel::fill()
         d->_body = lines.mid(5).join("\n");
         _data.append(d);
         _dataByCommitHashLong.insert(d->commitHash(), d);
-        _dataByCommitHashLong.insert(d->commitShortHash(), d);
+        _dataByCommitHashShort.insert(d->commitShortHash(), d);
     }
     //    std::sort(begin(), end(), [](GitLog *log1,GitLog *log2){
     //        return log1->commitDate() < log2->commitDate();

@@ -29,7 +29,7 @@ FileBlameDialog::FileBlameDialog(const Git::File &file, QWidget *parent)
     auto b = file.git()->blame(file);
     plainTextEdit->setBlameData(b);
 
-    b.initCommits(file.git()->logs());
+//    b.initCommits(file.git()->logs());
     setWindowTitle(i18n("Blame file: %1", file.fileName()));
 
     logDetailsWidget->setEnableCommitsLinks(false);

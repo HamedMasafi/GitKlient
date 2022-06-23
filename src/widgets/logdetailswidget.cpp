@@ -2,6 +2,7 @@
 #include "GitKlientSettings.h"
 #include "git/gitlog.h"
 #include "git/gitmanager.h"
+#include "git/models/logsmodel.h"
 
 #include <KLocalizedString>
 
@@ -149,7 +150,7 @@ void LogDetailsWidget::appendParagraph(QString &html, const QString &name, const
 
 QString LogDetailsWidget::createHashLink(const QString &hash) const
 {
-    auto log = Git::Manager::instance()->logs().findByHash(hash);
+    auto log = Git::Manager::instance()->logsModel()->findLogByHash(hash);
     if (!log)
         return QString();
 

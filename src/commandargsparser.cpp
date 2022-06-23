@@ -15,6 +15,7 @@
 #include "diffwindow.h"
 #include "git/gitfile.h"
 #include "git/gitmanager.h"
+#include "git/models/logsmodel.h"
 #include "mergewindow.h"
 
 #include <QDebug>
@@ -345,6 +346,8 @@ ArgParserReturn CommandArgsParser::blame(const QString &file)
     }
 
     git->setPath(fi.absolutePath());
+    git->setLoadFlags(Git::LoadNone);
+    git->logsModel()->load();
 
     Git::File f(git->currentBranch(), file, git);
     FileBlameDialog d(f);
