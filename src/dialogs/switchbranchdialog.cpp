@@ -2,7 +2,7 @@
 #include "git/commands/commandswitchbranch.h"
 #include "git/gitmanager.h"
 #include "runnerdialog.h"
-#include "git/models/branchescache.h"
+#include "git/models/branchesmodel.h"
 #include "git/models/tagsmodel.h"
 
 #include <QDebug>

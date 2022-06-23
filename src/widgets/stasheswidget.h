@@ -6,7 +6,7 @@
 #include "git/stash.h"
 
 namespace Git {
-class StashesCache;
+class StashesModel;
 }
 class QStandardItemModel;
 class StashActions;
@@ -14,7 +14,7 @@ class StashesWidget : public WidgetBase, private Ui::StashesWidget
 {
     Q_OBJECT
     StashActions *_actions;
-    Git::StashesCache *_model;
+    Git::StashesModel *_model;
 
 public:
     explicit StashesWidget(QWidget *parent = nullptr);

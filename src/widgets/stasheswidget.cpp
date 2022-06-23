@@ -1,6 +1,6 @@
 #include "stasheswidget.h"
 #include "git/gitmanager.h"
-#include "git/models/stashescache.h"
+#include "git/models/stashesmodel.h"
 #include "actions/stashactions.h"
 
 #include <QInputDialog>
@@ -31,7 +31,7 @@ void StashesWidget::init(Git::Manager *git)
     pushButtonRemoveSelected->setAction(_actions->actionDrop());
     pushButtonCreateNew->setAction(_actions->actionNew());
 
-    _model = git->stashesCache();
+    _model = git->stashesModel();
     treeView->setModel(_model);
 }
 

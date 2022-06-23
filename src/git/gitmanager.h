@@ -18,12 +18,12 @@
 
 namespace Git {
 
-class Cache;
-class RemotesCache;
-class SubmodulesCache;
-class BranchesCache;
-class LogsCache;
-class StashesCache;
+class AbstractGitItemsModel;
+class RemotesModel;
+class SubmodulesModel;
+class BranchesModel;
+class LogsModel;
+class StashesModel;
 class TagsModel;
 class Manager : public QObject
 {
@@ -139,12 +139,11 @@ public:
     void setConfig(const QString &name, const QString &value, ConfigType type = ConfigLocal) const;
     void unsetConfig(const QString &name, ConfigType type = ConfigLocal) const;
 
-    RemotesCache *remotesModel() const;
-    SubmodulesCache *submodulesModel() const;
-    BranchesCache *branchesModel() const;
-    LogsCache *logsCache() const;
-    StashesCache *stashesCache() const;
-
+    RemotesModel *remotesModel() const;
+    SubmodulesModel *submodulesModel() const;
+    BranchesModel *branchesModel() const;
+    LogsModel *logsModel() const;
+    StashesModel *stashesModel() const;
     TagsModel *tagsModel() const;
 
     bool isMerging() const;
@@ -160,19 +159,19 @@ private:
     QString escapeFileName(const QString& filePath) const;
     void loadAsync();
 
-    RemotesCache *const _remotesModel;
-    SubmodulesCache *const _submodulesModel;
-    BranchesCache *const _branchesModel;
-    LogsCache *const _logsCache;
-    StashesCache *const _stashesCache;
+    RemotesModel *const _remotesModel;
+    SubmodulesModel *const _submodulesModel;
+    BranchesModel *const _branchesModel;
+    LogsModel *const _logsCache;
+    StashesModel *const _stashesCache;
     TagsModel *const _tagsModel;
 
     friend class Stash;
-    friend class RemotesCache;
-    friend class SubmodulesCache;
-    friend class BranchesCache;
-    friend class LogsCache;
-    friend class StashesCache;
+    friend class RemotesModel;
+    friend class SubmodulesModel;
+    friend class BranchesModel;
+    friend class LogsModel;
+    friend class StashesModel;
     friend class TagsModel;
     bool m_isMerging{false};
 };

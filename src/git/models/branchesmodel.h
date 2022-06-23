@@ -1,14 +1,14 @@
 #ifndef BRANCHESCACHE_H
 #define BRANCHESCACHE_H
 
-#include "cache.h"
+#include "abstractgititemsmodel.h"
 
 #include <QStringList>
 
 namespace Git {
 
 class Manager;
-class BranchesCache : public Cache
+class BranchesModel : public AbstractGitItemsModel
 {
     Q_OBJECT
 
@@ -19,7 +19,7 @@ public:
         int commitsAhead;
         int commitsBehind;
     };
-    explicit BranchesCache(Manager *git, QObject *parent = nullptr);
+    explicit BranchesModel(Manager *git, QObject *parent = nullptr);
 
     int rowCount(const QModelIndex &parent) const override;
     int columnCount(const QModelIndex &parent) const override;

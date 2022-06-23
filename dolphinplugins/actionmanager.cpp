@@ -116,14 +116,14 @@ void ActionManager::addMenuToGitFile(QMenu *menu, const QString &path, bool isFi
     if (isFile) {
         addMenu(menu, i18n("History"), {"history", path});
         addMenu(menu, i18n("Blame"), {"blame", path});
+        if (status == FileStatus::Untracked) {
+            addMenu(menu, i18n("Add"), {"add", path});
+        } else {
+            addMenu(menu, i18n("Remove"), {"remove", path});
+        }
     }
     addMenu(menu, i18n("Create tag"), {"create-tag", path});
 
-    if (status == FileStatus::Untracked) {
-        addMenu(menu, i18n("Add"), {"add", path});
-    } else {
-        addMenu(menu, i18n("Add"), {"remove", path});
-    }
 }
 
 K_PLUGIN_FACTORY_WITH_JSON(GitKlientPluginActionFactory,

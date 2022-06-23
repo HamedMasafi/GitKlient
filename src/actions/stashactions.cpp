@@ -9,7 +9,7 @@
 
 #include "diffwindow.h"
 #include "git/gitmanager.h"
-#include "git/models/stashescache.h"
+#include "git/models/stashesmodel.h"
 
 StashActions::StashActions(Git::Manager *git, QWidget *parent) : AbstractActions(git, parent)
 {
@@ -54,7 +54,7 @@ void StashActions::drop()
 
     if (r == KMessageBox::Yes) {
         _git->removeStash(_stashName);
-        _git->stashesCache()->load();
+        _git->stashesModel()->load();
     }
 }
 
@@ -66,7 +66,7 @@ void StashActions::pop()
 
     if (r == KMessageBox::Yes) {
         _git->runGit({"stash", "push", _stashName});
-        _git->stashesCache()->load();
+        _git->stashesModel()->load();
     }
 }
 

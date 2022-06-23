@@ -2,7 +2,7 @@
 #define STATUSCACHE_H
 
 #include <QMap>
-#include "../../src/git/filestatus.h"
+#include "filestatus.h"
 
 class QUrl;
 class QFileInfo ;
@@ -22,6 +22,8 @@ public:
 private:
     bool addPath(const QString &path);
     bool isInDir(const QString &dirPath, const QString &filePath);
+
+    friend class OverlayTest;
 };
 
 #endif // STATUSCACHE_H

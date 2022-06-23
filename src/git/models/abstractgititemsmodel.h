@@ -10,13 +10,13 @@
 namespace Git {
 
 class Manager;
-class Cache : public QAbstractListModel
+class AbstractGitItemsModel : public QAbstractListModel
 {
     Q_OBJECT
     Q_PROPERTY(Status status READ status WRITE setStatus NOTIFY statusChanged)
 
 public:
-    Cache(Manager *git, QObject *parent = nullptr);
+    AbstractGitItemsModel(Manager *git, QObject *parent = nullptr);
     enum Status { NotLoaded, Loading, Loaded };
     Q_ENUM(Status)
     bool isLoaded() const;

@@ -1,4 +1,4 @@
-#include "logscache.h"
+#include "logsmodel.h"
 
 #include "../gitmanager.h"
 #include "../gitlog.h"
@@ -200,17 +200,17 @@ struct LanesFactory {
 
 } // namespace Impl
 
-Git::LogsCache::LogsCache(Manager *git, QObject *parent) : Cache(git, parent)
+Git::LogsModel::LogsModel(Manager *git, QObject *parent) : AbstractGitItemsModel(git, parent)
 {
 
 }
 
-const QString &LogsCache::branch() const
+const QString &LogsModel::branch() const
 {
     return _branch;
 }
 
-void LogsCache::setBranch(const QString &newBranch)
+void LogsModel::setBranch(const QString &newBranch)
 {
     _branch = newBranch;
 
@@ -219,19 +219,19 @@ void LogsCache::setBranch(const QString &newBranch)
     endResetModel();
 }
 
-int LogsCache::rowCount(const QModelIndex &parent) const
+int LogsModel::rowCount(const QModelIndex &parent) const
 {
     Q_UNUSED(parent)
     return _data.size();
 }
 
-int LogsCache::columnCount(const QModelIndex &parent) const
+int LogsModel::columnCount(const QModelIndex &parent) const
 {
     Q_UNUSED(parent)
     return _branch.isEmpty() ? 1 : 3;
 }
 
-QVariant LogsCache::headerData(int section, Qt::Orientation orientation, int role) const
+QVariant LogsModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
     if (role != Qt::DisplayRole)
         return QVariant();
@@ -259,7 +259,7 @@ QVariant LogsCache::headerData(int section, Qt::Orientation orientation, int rol
     return QVariant();
 }
 
-QVariant LogsCache::data(const QModelIndex &index, int role) const
+QVariant LogsModel::data(const QModelIndex &index, int role) const
 {
     if (role != Qt::DisplayRole)
         return QVariant();
@@ -288,7 +288,7 @@ QVariant LogsCache::data(const QModelIndex &index, int role) const
     return QVariant();
 }
 
-Log *LogsCache::fromIndex(const QModelIndex &index) const
+Log *LogsModel::fromIndex(const QModelIndex &index) const
 {
     if (!index.isValid() || index.row() < 0 || index.row() >= _data.size())
         return nullptr;
@@ -296,7 +296,7 @@ Log *LogsCache::fromIndex(const QModelIndex &index) const
     return _data.at(index.row());
 }
 
-QModelIndex LogsCache::findIndexByHash(const QString &hash) const
+QModelIndex LogsModel::findIndexByHash(const QString &hash) const
 {
     int idx{0};
     for (auto &log : _data)
@@ -307,7 +307,7 @@ QModelIndex LogsCache::findIndexByHash(const QString &hash) const
     return QModelIndex();
 }
 
-Log *LogsCache::findLogByHash(const QString &hash) const
+Log *LogsModel::findLogByHash(const QString &hash) const
 {
     int idx{0};
     for (auto &log : _data)
@@ -318,7 +318,7 @@ Log *LogsCache::findLogByHash(const QString &hash) const
     return nullptr;
 }
 
-void LogsCache::fill()
+void LogsModel::fill()
 {
     qDeleteAll(_data);
     _data.clear();
@@ -380,7 +380,7 @@ void LogsCache::fill()
     initGraph();
 }
 
-void LogsCache::initChilds()
+void LogsModel::initChilds()
 {
     for (auto i = _data.rbegin(); i != _data.rend(); i++) {
         auto &log = *i;
@@ -389,7 +389,7 @@ void LogsCache::initChilds()
     }
 }
 
-void LogsCache::initGraph()
+void LogsModel::initGraph()
 {
     Impl::LanesFactory factory;
     for (auto i = _data.rbegin(); i != _data.rend(); i++) {

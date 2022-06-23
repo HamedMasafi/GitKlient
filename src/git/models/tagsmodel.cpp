@@ -8,7 +8,7 @@
 
 namespace Git {
 
-TagsModel::TagsModel(Manager *git, QObject *parent) : Cache(git, parent) {}
+TagsModel::TagsModel(Manager *git, QObject *parent) : AbstractGitItemsModel(git, parent) {}
 
 int TagsModel::rowCount(const QModelIndex &parent) const
 {

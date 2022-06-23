@@ -1,24 +1,24 @@
-#include "cache.h"
+#include "abstractgititemsmodel.h"
 #include "../gitmanager.h"
 
 namespace Git {
 
-Cache::Cache(Manager *git, QObject *parent) : QAbstractListModel(parent), _git(git)
+AbstractGitItemsModel::AbstractGitItemsModel(Manager *git, QObject *parent) : QAbstractListModel(parent), _git(git)
 {
 //    connect(git, &Manager::pathChanged, this, &Cache::load);
 }
 
-bool Cache::isLoaded() const
+bool AbstractGitItemsModel::isLoaded() const
 {
     return m_status == Loaded;
 }
 
-Cache::Status Cache::status() const
+AbstractGitItemsModel::Status AbstractGitItemsModel::status() const
 {
     return m_status;
 }
 
-void Cache::load()
+void AbstractGitItemsModel::load()
 {
     if (!_git->isValid())
         return;
@@ -30,7 +30,7 @@ void Cache::load()
     setStatus(Loaded);
 }
 
-void Cache::setStatus(Status newStatus)
+void AbstractGitItemsModel::setStatus(Status newStatus)
 {
     if (m_status == newStatus)
         return;

@@ -5,7 +5,7 @@
 
 #include "git/gitmanager.h"
 #include "git/commands/commandmerge.h"
-#include "git/models/branchescache.h"
+#include "git/models/branchesmodel.h"
 
 void MergeDialog::init(Git::Manager *git)
 {

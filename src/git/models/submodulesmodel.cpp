@@ -1,28 +1,28 @@
-#include "submodulescache.h"
+#include "submodulesmodel.h"
 #include "../gitsubmodule.h"
 #include "../gitmanager.h"
 
 namespace Git {
 
-SubmodulesCache::SubmodulesCache(Git::Manager *git, QObject *parent)
-    : Cache{git, parent}
+SubmodulesModel::SubmodulesModel(Git::Manager *git, QObject *parent)
+    : AbstractGitItemsModel{git, parent}
 {
 
 }
 
-int SubmodulesCache::rowCount(const QModelIndex &parent) const
+int SubmodulesModel::rowCount(const QModelIndex &parent) const
 {
     Q_UNUSED(parent)
     return _data.size();
 }
 
-int SubmodulesCache::columnCount(const QModelIndex &parent) const
+int SubmodulesModel::columnCount(const QModelIndex &parent) const
 {
     Q_UNUSED(parent)
     return 2;
 }
 
-QVariant SubmodulesCache::data(const QModelIndex &index, int role) const
+QVariant SubmodulesModel::data(const QModelIndex &index, int role) const
 {
     if (role != Qt::DisplayRole || !index.isValid() || index.row() < 0
         || index.row() >= _data.size())
@@ -44,7 +44,7 @@ QVariant SubmodulesCache::data(const QModelIndex &index, int role) const
     return QVariant();
 }
 
-QVariant SubmodulesCache::headerData(int section, Qt::Orientation orientation, int role) const
+QVariant SubmodulesModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
     if (orientation != Qt::Horizontal || role != Qt::DisplayRole)
         return QVariant();
@@ -61,7 +61,7 @@ QVariant SubmodulesCache::headerData(int section, Qt::Orientation orientation, i
     return QVariant();
 }
 
-bool SubmodulesCache::append(Submodule *module)
+bool SubmodulesModel::append(Submodule *module)
 {
     beginInsertRows(QModelIndex(), _data.size(), _data.size());
     _data.append(module);
@@ -69,7 +69,7 @@ bool SubmodulesCache::append(Submodule *module)
     return true;
 }
 
-Submodule *SubmodulesCache::fromIndex(const QModelIndex &index)
+Submodule *SubmodulesModel::fromIndex(const QModelIndex &index)
 {
     if (!index.isValid() || index.row() < 0 || index.row() >= _data.size())
         return nullptr;
@@ -77,7 +77,7 @@ Submodule *SubmodulesCache::fromIndex(const QModelIndex &index)
     return _data.at(index.row());
 }
 
-void SubmodulesCache::fill()
+void SubmodulesModel::fill()
 {
     qDeleteAll(_data);
     _data.clear();

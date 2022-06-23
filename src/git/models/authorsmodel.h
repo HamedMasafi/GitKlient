@@ -1,7 +1,7 @@
 #ifndef AUTHORSMODEL_H
 #define AUTHORSMODEL_H
 
-#include "cache.h"
+#include "abstractgititemsmodel.h"
 
 namespace Git {
 
@@ -10,7 +10,7 @@ struct Author {
     QString name;
 };
 
-class AuthorsModel : public Cache
+class AuthorsModel : public AbstractGitItemsModel
 {
     Q_OBJECT
     QList<Author *> _data;

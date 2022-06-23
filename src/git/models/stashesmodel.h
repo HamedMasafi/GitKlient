@@ -1,19 +1,19 @@
 #ifndef STASHESCACHE_H
 #define STASHESCACHE_H
 
-#include "cache.h"
+#include "abstractgititemsmodel.h"
 
 namespace Git {
 
 class Manager;
 class Stash;
-class StashesCache : public Cache
+class StashesModel : public AbstractGitItemsModel
 {
     Q_OBJECT
     QList<Stash *> _data;
 
 public:
-    explicit StashesCache(Manager *git, QObject *parent = nullptr);
+    explicit StashesModel(Manager *git, QObject *parent = nullptr);
 
     int rowCount(const QModelIndex &parent) const override;
     int columnCount(const QModelIndex &parent) const override;

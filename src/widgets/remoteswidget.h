@@ -6,13 +6,13 @@
 
 class RemotesActions;
 namespace Git {
-class RemotesCache;
+class RemotesModel;
 class Manager;
 }
 class RemotesWidget : public WidgetBase, private Ui::RemotesWidget
 {
     Q_OBJECT
-    Git::RemotesCache *_model;
+    Git::RemotesModel *_model;
     RemotesActions *_actions;
 
 public:

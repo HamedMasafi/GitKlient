@@ -1,7 +1,7 @@
 #include "remoteinfodialog.h"
 #include "remoteswidget.h"
 #include "git/gitmanager.h"
-#include "git/models/remotescache.h"
+#include "git/models/remotesmodel.h"
 #include "actions/remotesactions.h"
 
 

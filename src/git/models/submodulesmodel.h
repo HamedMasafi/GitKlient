@@ -1,19 +1,19 @@
 #ifndef SUBMODULESCACHE_H
 #define SUBMODULESCACHE_H
 
-#include "cache.h"
+#include "abstractgititemsmodel.h"
 
 namespace Git {
 
 class Submodule;
-class SubmodulesCache : public Cache
+class SubmodulesModel : public AbstractGitItemsModel
 {
     Q_OBJECT
 
     QList<Submodule *> _data;
 
 public:
-    explicit SubmodulesCache(Git::Manager *git, QObject *parent = nullptr);
+    explicit SubmodulesModel(Git::Manager *git, QObject *parent = nullptr);
 
     int rowCount(const QModelIndex &parent) const override;
     int columnCount(const QModelIndex &parent) const override;

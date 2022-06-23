@@ -31,7 +31,7 @@ public:
     const QDateTime &pushTime() const;
 
     friend class Manager;
-    friend class StashesCache;
+    friend class StashesModel;
 };
 
 } // namespace Git

@@ -46,17 +46,23 @@ QByteArray runGit(const QString &workingDir, const QStringList &args)
     return out; // + err;
 }
 
-QStringList readAllNonEmptyOutput(const QString &workingDir, const QStringList &cmd)
+QStringList readAllNonEmptyOutput(const QString &workingDir, const QStringList &cmd, bool trim)
 {
     QStringList list;
     auto out = QString(runGit(workingDir, cmd)).split("\n");
 
     for (auto &line : out) {
-        auto b = line.trimmed();
+        QString b;
+
+        if (trim)
+            b = line.trimmed();
+        else
+            b = line;
+
         if (b.isEmpty())
             continue;
 
-        list.append(b.trimmed());
+        list.append(b);
     }
     return list;
 }

@@ -5,7 +5,7 @@
 #include "dialogs/runnerdialog.h"
 #include "diffwindow.h"
 #include "git/gitmanager.h"
-#include "git/models/branchescache.h"
+#include "git/models/branchesmodel.h"
 
 #include <KMessageBox>
 

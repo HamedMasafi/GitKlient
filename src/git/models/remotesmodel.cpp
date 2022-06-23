@@ -2,30 +2,30 @@
 // Created by hamed on 25.03.22.
 //
 
-#include "remotescache.h"
+#include "remotesmodel.h"
 #include "../gitremote.h"
 #include "../gitmanager.h"
 
 namespace Git {
 
-RemotesCache::RemotesCache(Manager *git, QObject *parent) : Cache(git, parent)
+RemotesModel::RemotesModel(Manager *git, QObject *parent) : AbstractGitItemsModel(git, parent)
 {
 
 }
 
-int RemotesCache::columnCount(const QModelIndex &parent) const
+int RemotesModel::columnCount(const QModelIndex &parent) const
 {
     Q_UNUSED(parent)
     return 3;
 }
 
-int RemotesCache::rowCount(const QModelIndex &parent) const
+int RemotesModel::rowCount(const QModelIndex &parent) const
 {
     Q_UNUSED(parent)
     return _data.count();
 }
 
-QVariant RemotesCache::data(const QModelIndex &index, int role) const
+QVariant RemotesModel::data(const QModelIndex &index, int role) const
 {
     if (role != Qt::DisplayRole || !index.isValid() || index.row() < 0
         || index.row() >= _data.size())
@@ -41,7 +41,7 @@ QVariant RemotesCache::data(const QModelIndex &index, int role) const
     return QVariant();
 }
 
-Remote *RemotesCache::fromIndex(const QModelIndex &index)
+Remote *RemotesModel::fromIndex(const QModelIndex &index)
 {
     if (!index.isValid() || index.row() < 0 || index.row() >= _data.size())
         return nullptr;
@@ -49,7 +49,7 @@ Remote *RemotesCache::fromIndex(const QModelIndex &index)
     return _data.at(index.row());
 }
 
-Remote *RemotesCache::findByName(const QString &name)
+Remote *RemotesModel::findByName(const QString &name)
 {
     for(const auto &d: qAsConst(_data))
         if (d->name == name)
@@ -57,13 +57,19 @@ Remote *RemotesCache::findByName(const QString &name)
     return nullptr;
 }
 
-void RemotesCache::rename(const QString &oldName, const QString &newName)
+void RemotesModel::rename(const QString &oldName, const QString &newName)
 {
     _git->runGit({"remote", "rename", oldName, newName});
     load();
 }
 
-void RemotesCache::fill()
+void RemotesModel::setUrl(const QString &remoteName, const QString &newUrl)
+{
+    _git->runGit({"remote", "set-url", remoteName, newUrl});
+    load();
+}
+
+void RemotesModel::fill()
 {
     qDeleteAll(_data.begin(), _data.end());
     _data.clear();

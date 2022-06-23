@@ -17,12 +17,12 @@ set(
     ${CMAKE_CURRENT_LIST_DIR}/parameterescommand.cpp
     ${CMAKE_CURRENT_LIST_DIR}/gittag.cpp
 
-    ${CMAKE_CURRENT_LIST_DIR}/models/cache.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/models/logscache.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/models/remotescache.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/models/submodulescache.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/models/branchescache.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/models/stashescache.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/models/abstractgititemsmodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/models/logsmodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/models/remotesmodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/models/submodulesmodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/models/branchesmodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/models/stashesmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/models/tagsmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/models/authorsmodel.cpp
 

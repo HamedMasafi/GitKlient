@@ -75,7 +75,7 @@ private:
 
     friend class LogList;
     friend class GitManager;
-    friend class LogsCache;
+    friend class LogsModel;
 };
 
 }

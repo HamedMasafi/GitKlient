@@ -1,7 +1,7 @@
 #include "dialogs/submoduleinfodialog.h"
 #include "submoduleswidget.h"
 #include "git/gitmanager.h"
-#include "git/models/submodulescache.h"
+#include "git/models/submodulesmodel.h"
 #include "actions/submoduleactions.h"
 
 #include <QDebug>

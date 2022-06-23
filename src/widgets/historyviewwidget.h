@@ -7,13 +7,13 @@
 class GraphPainter;
 class CommitActions;
 namespace Git {
-class LogsCache;
+class LogsModel;
 }
 class HistoryViewWidget : public WidgetBase, private Ui::HistoryViewWidget
 {
     Q_OBJECT
     CommitActions *_actions;
-    Git::LogsCache *_historyModel;
+    Git::LogsModel *_historyModel;
     GraphPainter *_graphPainter;
 
 public:

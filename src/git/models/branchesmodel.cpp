@@ -1,28 +1,28 @@
-#include "branchescache.h"
+#include "branchesmodel.h"
 
 #include "../gitmanager.h"
 
 namespace Git {
 
-BranchesCache::BranchesCache(Manager *git, QObject *parent)
-    : Cache{git, parent}
+BranchesModel::BranchesModel(Manager *git, QObject *parent)
+    : AbstractGitItemsModel{git, parent}
 {
 
 }
 
-int BranchesCache::rowCount(const QModelIndex &parent) const
+int BranchesModel::rowCount(const QModelIndex &parent) const
 {
     Q_UNUSED(parent)
     return _data.size();
 }
 
-int BranchesCache::columnCount(const QModelIndex &parent) const
+int BranchesModel::columnCount(const QModelIndex &parent) const
 {
     Q_UNUSED(parent)
     return 3;
 }
 
-QVariant BranchesCache::data(const QModelIndex &index, int role) const
+QVariant BranchesModel::data(const QModelIndex &index, int role) const
 {
     if (role != Qt::DisplayRole || !index.isValid() || index.row() < 0
         || index.row() >= _data.size())
@@ -40,7 +40,7 @@ QVariant BranchesCache::data(const QModelIndex &index, int role) const
     return QVariant();
 }
 
-QVariant BranchesCache::headerData(int section, Qt::Orientation orientation, int role) const
+QVariant BranchesModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
     if (orientation != Qt::Horizontal || role != Qt::DisplayRole)
         return QVariant();
@@ -56,7 +56,7 @@ QVariant BranchesCache::headerData(int section, Qt::Orientation orientation, int
     return QVariant();
 }
 
-BranchesCache::BranchData *BranchesCache::fromindex(const QModelIndex &index) const
+BranchesModel::BranchData *BranchesModel::fromindex(const QModelIndex &index) const
 {
     if (!index.isValid() || index.row() < 0 || index.row() >= _data.size())
         return nullptr;
@@ -64,7 +64,7 @@ BranchesCache::BranchData *BranchesCache::fromindex(const QModelIndex &index) co
     return _data.at(index.row());
 }
 
-void BranchesCache::fill()
+void BranchesModel::fill()
 {
     qDeleteAll(_data);
     _data.clear();
@@ -91,12 +91,12 @@ void BranchesCache::fill()
     calculateCommitStats();
 }
 
-const QString &BranchesCache::referenceBranch() const
+const QString &BranchesModel::referenceBranch() const
 {
     return _referenceBranch;
 }
 
-void Git::BranchesCache::calculateCommitStats()
+void Git::BranchesModel::calculateCommitStats()
 {
     for (auto &b: _data) {
         auto commitsInfo = _git->uniqueCommiteOnBranches(_referenceBranch, b->name);
@@ -106,14 +106,14 @@ void Git::BranchesCache::calculateCommitStats()
     emit dataChanged(index(0, 1), index(_data.size() - 1, 2));
 }
 
-void BranchesCache::setReferenceBranch(const QString &newReferenceBranch)
+void BranchesModel::setReferenceBranch(const QString &newReferenceBranch)
 {
     _referenceBranch = newReferenceBranch;
 
     calculateCommitStats();
 }
 
-const QString &BranchesCache::currentBranch() const
+const QString &BranchesModel::currentBranch() const
 {
     return _currentBranch;
 }

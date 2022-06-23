@@ -340,12 +340,11 @@ ArgParserReturn CommandArgsParser::blame(const QString &file)
 {
     QFileInfo fi{file};
 
-    if (!fi.exists()) {
+    if (!fi.exists() || !fi.isFile()) {
         return 0;
     }
 
     git->setPath(fi.absolutePath());
-
 
     Git::File f(git->currentBranch(), file, git);
     FileBlameDialog d(f);
@@ -355,7 +354,6 @@ ArgParserReturn CommandArgsParser::blame(const QString &file)
 
 ArgParserReturn CommandArgsParser::history(const QString &file)
 {
-    QDir dir(git->path());
     git->setPath(file.mid(0, file.lastIndexOf("/")));
     auto fileCopy = file;
     fileCopy = file.mid(git->path().size() + 1);

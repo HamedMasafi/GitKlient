@@ -3,7 +3,7 @@
 #include "dialogs/filestreedialog.h"
 #include "diffwindow.h"
 #include "git/gitlog.h"
-#include "git/models/logscache.h"
+#include "git/models/logsmodel.h"
 #include "models/historymodel.h"
 #include "widgets/graphpainter.h"
 
@@ -14,7 +14,7 @@ HistoryViewWidget::HistoryViewWidget(QWidget *parent) :
       WidgetBase(parent)
 {
     setupUi(this);
-    _historyModel = new Git::LogsCache(Git::Manager::instance(), this);
+    _historyModel = new Git::LogsModel(Git::Manager::instance(), this);
 //        Git::Manager::instance()->logsCache();
     treeViewHistory->setModel(_historyModel);
 
@@ -33,7 +33,7 @@ HistoryViewWidget::HistoryViewWidget(Git::Manager *git, AppWindow *parent):
       WidgetBase(git, parent)
 {
     setupUi(this);
-    _historyModel = git->logsCache();
+    _historyModel = git->logsModel();
     treeViewHistory->setModel(_historyModel);
 
     _graphPainter = new GraphPainter(_historyModel, this);

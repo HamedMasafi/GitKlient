@@ -38,7 +38,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "git/commands/commandpull.h"
 #include "git/commands/commandswitchbranch.h"
 #include "git/gitmanager.h"
-#include "git/models/logscache.h"
+#include "git/models/logsmodel.h"
 #include "multipagewidget.h"
 #include "settings/settingsmanager.h"
 #include "widgets/branchesstatuswidget.h"
@@ -265,7 +265,7 @@ void AppWindow::commitPushAction()
 {
     CommitPushDialog d(_git, this);
     if (d.exec() == QDialog::Accepted)
-        _git->logsCache()->load();
+        _git->logsModel()->load();
 }
 
 void AppWindow::pull()

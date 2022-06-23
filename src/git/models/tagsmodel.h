@@ -1,12 +1,12 @@
 #ifndef TAGSMODEL_H
 #define TAGSMODEL_H
 
-#include "cache.h"
+#include "abstractgititemsmodel.h"
 
 namespace Git {
 
 class Tag;
-class TagsModel : public Cache
+class TagsModel : public AbstractGitItemsModel
 {
     Q_OBJECT
 

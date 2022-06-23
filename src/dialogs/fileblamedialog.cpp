@@ -1,7 +1,7 @@
 #include "fileblamedialog.h"
 
 #include "git/gitmanager.h"
-#include "git/models/logscache.h"
+#include "git/models/logsmodel.h"
 #include "qtextobject.h"
 
 #include <klocalizedstring.h>
@@ -16,6 +16,7 @@ FileBlameDialog::FileBlameDialog(Git::Manager *git, const QString &fileName, QWi
     plainTextEdit->setPlainText(content);
 
     setWindowTitle(i18n("Blame file: %1").arg(fileName));
+    logDetailsWidget->setEnableCommitsLinks(false);
 }
 
 FileBlameDialog::FileBlameDialog(const Git::File &file, QWidget *parent)
@@ -30,10 +31,12 @@ FileBlameDialog::FileBlameDialog(const Git::File &file, QWidget *parent)
 
     b.initCommits(file.git()->logs());
     setWindowTitle(i18n("Blame file: %1", file.fileName()));
+
+    logDetailsWidget->setEnableCommitsLinks(false);
 }
 
 void FileBlameDialog::on_plainTextEdit_blockSelected()
 {
     auto b = plainTextEdit->blameData(plainTextEdit->textCursor().block().blockNumber());
-    logDetailsWidget->setLog(_git->logsCache()->findLogByHash(b.commitHash));
+    logDetailsWidget->setLog(_git->logsModel()->findLogByHash(b.commitHash));
 }

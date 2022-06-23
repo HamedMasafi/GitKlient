@@ -2,7 +2,7 @@
 #include "dialogs/submoduleinfodialog.h"
 #include "dialogs/runnerdialog.h"
 #include "git/commands/addsubmodulecommand.h"
-#include "git/models/submodulescache.h"
+#include "git/models/submodulesmodel.h"
 #include "git/gitmanager.h"
 
 #include <QDebug>

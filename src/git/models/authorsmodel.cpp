@@ -2,7 +2,7 @@
 
 namespace Git {
 
-AuthorsModel::AuthorsModel(Manager *git, QObject *parent) : Cache{git, parent} {}
+AuthorsModel::AuthorsModel(Manager *git, QObject *parent) : AbstractGitItemsModel{git, parent} {}
 
 int AuthorsModel::rowCount(const QModelIndex &parent) const
 {

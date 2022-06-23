@@ -22,7 +22,7 @@ IgnoreFileDialog::IgnoreFileDialog(Git::Manager *git, const QString &filePath, Q
     _path = fi.absolutePath() + "/";
     _path = _path.replace(git->path(), "");
     _name = fi.baseName();
-    _ext = fi.suffix();
+    _ext = fi.completeSuffix();
 
     if (_path == "/")
         radioButtonDirIgnoreFile->setEnabled(false);

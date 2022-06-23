@@ -3,7 +3,7 @@
 #include <QPainter>
 #include <QDebug>
 #include <QPainterPath>
-#include "git/models/logscache.h"
+#include "git/models/logsmodel.h"
 #include "git/gitlog.h"
 
 #define HEIGHT 25
@@ -69,7 +69,7 @@ QPoint centerGuide(int x, const Qt::Edge &edge) {
 }
 
 
-GraphPainter::GraphPainter(Git::LogsCache *model, QObject *parent)
+GraphPainter::GraphPainter(Git::LogsModel *model, QObject *parent)
     : QStyledItemDelegate(parent), _model(model)
 {
     _colors = {

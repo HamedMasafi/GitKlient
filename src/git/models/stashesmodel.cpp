@@ -1,4 +1,4 @@
-#include "stashescache.h"
+#include "stashesmodel.h"
 
 #include "../gitmanager.h"
 #include "../stash.h"
@@ -11,21 +11,21 @@
 
 namespace Git {
 
-StashesCache::StashesCache(Manager *git, QObject *parent) : Cache(git, parent) {}
+StashesModel::StashesModel(Manager *git, QObject *parent) : AbstractGitItemsModel(git, parent) {}
 
-int StashesCache::rowCount(const QModelIndex &parent) const
+int StashesModel::rowCount(const QModelIndex &parent) const
 {
     Q_UNUSED(parent)
     return _data.size();
 }
 
-int StashesCache::columnCount(const QModelIndex &parent) const
+int StashesModel::columnCount(const QModelIndex &parent) const
 {
     Q_UNUSED(parent)
     return 4;
 }
 
-QVariant StashesCache::data(const QModelIndex &index, int role) const
+QVariant StashesModel::data(const QModelIndex &index, int role) const
 {
     if (role != Qt::DisplayRole || !index.isValid() || index.row() < 0
         || index.row() >= _data.size())
@@ -46,7 +46,7 @@ QVariant StashesCache::data(const QModelIndex &index, int role) const
     return QVariant();
 }
 
-QVariant StashesCache::headerData(int section, Qt::Orientation orientation, int role) const
+QVariant StashesModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
     if (role != Qt::DisplayRole)
         return QVariant();
@@ -62,7 +62,7 @@ QVariant StashesCache::headerData(int section, Qt::Orientation orientation, int 
     return QVariant();
 }
 
-Stash *StashesCache::fromIndex(const QModelIndex &index) const
+Stash *StashesModel::fromIndex(const QModelIndex &index) const
 {
     if (!index.isValid() || index.row() < 0 || index.row() >= _data.size())
         return nullptr;
@@ -70,7 +70,7 @@ Stash *StashesCache::fromIndex(const QModelIndex &index) const
     return _data.at(index.row());
 }
 
-void StashesCache::fill()
+void StashesModel::fill()
 {
     qDeleteAll(_data);
     _data.clear();

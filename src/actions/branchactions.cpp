@@ -15,7 +15,7 @@
 #include "diffwindow.h"
 #include "git/commands/commandmerge.h"
 #include "git/gitmanager.h"
-#include "git/models/branchescache.h"
+#include "git/models/branchesmodel.h"
 
 BranchActions::BranchActions(Git::Manager *git, QWidget *parent) : AbstractActions(git, parent)
 {

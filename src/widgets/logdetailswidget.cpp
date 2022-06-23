@@ -35,7 +35,7 @@ void LogDetailsWidget::createText()
         return;
     }
     auto files = Git::Manager::instance()->changedFiles(_log->commitHash());
-    QString filesHtml;
+    QStringList filesHtml;
 
     for (auto i = files.begin(); i != files.end(); ++i) {
         QString color;
@@ -99,7 +99,7 @@ void LogDetailsWidget::createText()
 
     clear();
     QString html;
-    appendParagraph(html, _log->subject());
+    appendHeading(html, _log->subject());
     if (_log->refLog() != QString())
         appendParagraph(html, i18n("Ref"), _log->refLog());
     appendParagraph(html, i18n("Committer"), QStringLiteral("%1 &lt;%2&gt;").arg(_log->committerName(), _log->committerEmail()));
@@ -116,9 +116,14 @@ void LogDetailsWidget::createText()
                         _log->childs().size() == 1 ? i18n("Child") : i18n("Children"),
                         childsHashHtml);
 
-    appendParagraph(html, QStringLiteral("<b>Changed files:</b><ul>%1</ul>").arg(filesHtml));
+    appendParagraph(html, i18n("Changed files"), filesHtml);
 
     setHtml(html);
+}
+
+void LogDetailsWidget::appendHeading(QString &html, const QString &title, const short level) const
+{
+    html.append(QStringLiteral("<h%2>%1</h%2>").arg(title).arg(level));
 }
 
 void LogDetailsWidget::appendParagraph(QString &html, const QString &text) const
@@ -128,7 +133,18 @@ void LogDetailsWidget::appendParagraph(QString &html, const QString &text) const
 
 void LogDetailsWidget::appendParagraph(QString &html, const QString &name, const QString &value) const
 {
-    html.append(QStringLiteral("<p>%1: %2</p>").arg(name, value));
+    html.append(QStringLiteral("<p><b>%1:</b> %2</p>").arg(name, value));
+}
+
+void LogDetailsWidget::appendParagraph(QString &html, const QString &name, const QStringList &list) const
+{
+    if (!list.size())
+        return;
+
+    html.append(QStringLiteral("<p><b>%1</b><ul>").arg(name));
+    for (auto &l: list)
+        html.append(QStringLiteral("<li>%1</li>").arg(l));
+    html.append(QStringLiteral("</ul>"));
 }
 
 QString LogDetailsWidget::createHashLink(const QString &hash) const
@@ -137,8 +153,11 @@ QString LogDetailsWidget::createHashLink(const QString &hash) const
     if (!log)
         return QString();
 
-    return QStringLiteral(R"(<a href="hash:%1">%2</a> )")
-        .arg(log->commitHash(), log->subject());
+    if (m_enableCommitsLinks)
+        return QStringLiteral(R"(<a href="hash:%1">%2</a> )")
+            .arg(log->commitHash(), log->subject());
+
+    return log->subject();
 }
 
 QString LogDetailsWidget::createFileLink(const QString &file) const
@@ -155,4 +174,17 @@ void LogDetailsWidget::self_anchorClicked(const QUrl &url)
 
     if (scheme=="file")
         emit fileClicked(url.path());
+}
+
+bool LogDetailsWidget::enableCommitsLinks() const
+{
+    return m_enableCommitsLinks;
+}
+
+void LogDetailsWidget::setEnableCommitsLinks(bool newEnableCommitsLinks)
+{
+    if (m_enableCommitsLinks == newEnableCommitsLinks)
+        return;
+    m_enableCommitsLinks = newEnableCommitsLinks;
+    emit enableCommitsLinksChanged();
 }

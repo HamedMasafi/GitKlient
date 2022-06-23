@@ -8,7 +8,7 @@
 #include "dialogs/runnerdialog.h"
 #include "git/commands/commandaddremote.h"
 #include "git/gitmanager.h"
-#include "git/models/remotescache.h"
+#include "git/models/remotesmodel.h"
 #include "widgets/remoteinfodialog.h"
 
 RemotesActions::RemotesActions(Git::Manager *git, QWidget *parent) : AbstractActions(git, parent)
@@ -70,6 +70,11 @@ void RemotesActions::changeUrl()
                                         "URL",
                                         QLineEdit::Normal,
                                         remote->pushUrl);
+
+    if (!newUrl.isEmpty()) {
+        _git->remotesModel()->setUrl(_remoteName, newUrl);
+        KMessageBox::information(_parent, i18n("Url for remote changed successfully"));
+    }
 }
 
 void RemotesActions::rename()

@@ -4,11 +4,11 @@
 #include "gitmanager.h"
 #include "filestatus.h"
 
-#include "models/branchescache.h"
-#include "models/logscache.h"
-#include "models/remotescache.h"
-#include "models/stashescache.h"
-#include "models/submodulescache.h"
+#include "models/branchesmodel.h"
+#include "models/logsmodel.h"
+#include "models/remotesmodel.h"
+#include "models/stashesmodel.h"
+#include "models/submodulesmodel.h"
 #include "models/tagsmodel.h"
 
 #include <QDebug>
@@ -307,14 +307,14 @@ QString Manager::escapeFileName(const QString &filePath) const
     return filePath;
 }
 
-bool load(Cache *cache)
+bool load(AbstractGitItemsModel *cache)
 {
     cache->load();
     return true;
 }
 void Manager::loadAsync()
 {
-    QList<Cache *> models = {_remotesModel,
+    QList<AbstractGitItemsModel *> models = {_remotesModel,
                              _submodulesModel,
                              _branchesModel,
                              _logsCache,
@@ -330,48 +330,48 @@ TagsModel *Manager::tagsModel() const
 }
 
 
-StashesCache *Manager::stashesCache() const
+StashesModel *Manager::stashesModel() const
 {
     return _stashesCache;
 }
 
-LogsCache *Manager::logsCache() const
+LogsModel *Manager::logsModel() const
 {
     return _logsCache;
 }
 
-BranchesCache *Manager::branchesModel() const
+BranchesModel *Manager::branchesModel() const
 {
     return _branchesModel;
 }
 
-SubmodulesCache *Manager::submodulesModel() const
+SubmodulesModel *Manager::submodulesModel() const
 {
     return _submodulesModel;
 }
 
-RemotesCache *Manager::remotesModel() const
+RemotesModel *Manager::remotesModel() const
 {
     return _remotesModel;
 }
 
 Manager::Manager()
     : QObject()
-      , _remotesModel{new RemotesCache(this)}
-      , _submodulesModel{new SubmodulesCache(this)}
-      , _branchesModel{new BranchesCache(this)}
-      , _logsCache{new LogsCache(this)}
-      , _stashesCache{new StashesCache(this)}
+      , _remotesModel{new RemotesModel(this)}
+      , _submodulesModel{new SubmodulesModel(this)}
+      , _branchesModel{new BranchesModel(this)}
+      , _logsCache{new LogsModel(this)}
+      , _stashesCache{new StashesModel(this)}
       , _tagsModel{new TagsModel(this)}
 {}
 
 Manager::Manager(const QString path)
     : QObject()
-      , _remotesModel{new RemotesCache(this)}
-      , _submodulesModel{new SubmodulesCache(this)}
-      , _branchesModel{new BranchesCache(this)}
-      , _logsCache{new LogsCache(this)}
-      , _stashesCache{new StashesCache(this)}
+      , _remotesModel{new RemotesModel(this)}
+      , _submodulesModel{new SubmodulesModel(this)}
+      , _branchesModel{new BranchesModel(this)}
+      , _logsCache{new LogsModel(this)}
+      , _stashesCache{new StashesModel(this)}
       , _tagsModel{new TagsModel(this)}
 {
     setPath(path);

@@ -5,14 +5,14 @@
 #ifndef GITKLIENT_LOGS_H
 #define GITKLIENT_LOGS_H
 
-#include "cache.h"
+#include "abstractgititemsmodel.h"
 #include <QAbstractListModel>
 
 namespace Git {
 
 class Log;
 class Manager;
-class LogsCache : public Cache
+class LogsModel : public AbstractGitItemsModel
 {
     Q_OBJECT
 
@@ -23,7 +23,7 @@ class LogsCache : public Cache
     QMap<QString, Log *> _dataByCommitHashShort;
 
 public:
-    LogsCache(Manager *git, QObject *parent = nullptr);
+    LogsModel(Manager *git, QObject *parent = nullptr);
 
     int rowCount(const QModelIndex &parent) const override;
     int columnCount(const QModelIndex &parent) const override;

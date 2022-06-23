@@ -6,7 +6,7 @@
 
 namespace Git {
 class Manager;
-class BranchesCache;
+class BranchesModel;
 }
 class BranchActions;
 class BranchesStatusWidget : public WidgetBase, private Ui::BranchesStatusWidget
@@ -15,7 +15,7 @@ class BranchesStatusWidget : public WidgetBase, private Ui::BranchesStatusWidget
 
     QStringList _branches;
     BranchActions *_actions;
-    Git::BranchesCache *_model;
+    Git::BranchesModel *_model;
 
 public:
     explicit BranchesStatusWidget(QWidget *parent = nullptr);
