@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 2.8.12)
+cmake_minimum_required(VERSION 2.8)
 
 project(gitklient)
 set(PROJECT_VERSION_MAJOR 0)
@@ -6,7 +6,7 @@ set(PROJECT_VERSION_MINOR 2)
 set(PROJECT_VERSION_PATCH 1)
 
 add_definitions(-DGK_VERSION="${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}.${PROJECT_VERSION_PATCH}")
-find_package(ECM 1.0.0 REQUIRED NO_MODULE)
+find_package(ECM 5.18 REQUIRED NO_MODULE)
 set(
     CMAKE_MODULE_PATH
     ${ECM_MODULE_PATH}
@@ -27,7 +27,7 @@ include(ECMAddTests)
 
 set (CMAKE_CXX_STANDARD 14)
 
-set(QT_MIN_VERSION "5.5.0")
+set(QT_MIN_VERSION "5.12")
 find_package(
     Qt5 ${QT_MIN_VERSION}
     CONFIG REQUIRED COMPONENTS
@@ -45,7 +45,7 @@ set_package_properties(
     TYPE OPTIONAL
 )
 
-set(REQUIRED_KF5_VERSION "5.37.0")
+set(REQUIRED_KF5_VERSION "5.18")
 find_package(KF5KIO)
 find_package(
     KF5 ${REQUIRED_KF5_VERSION}
