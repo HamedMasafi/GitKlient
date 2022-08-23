@@ -10,10 +10,10 @@ class CommandSwitchBranch : public AbstractCommand
     Q_OBJECT
 
 public:
-    CommandSwitchBranch(Manager *git);
+    explicit CommandSwitchBranch(Manager *git);
     void parseOutput(const QByteArray &output, const QByteArray &errorOutput) override;
 
-    enum Mode { NewBranch, ExistingBranch, Tag };
+    enum Mode { Unknown, NewBranch, ExistingBranch, Tag };
 
     const QString &target() const;
     void setTarget(const QString &newTarget);
@@ -27,7 +27,7 @@ public:
     void setForce(bool newForce);
 
 private:
-    Mode _mode;
+    Mode _mode{Unknown};
     QString _target;
     bool _force{false};
 

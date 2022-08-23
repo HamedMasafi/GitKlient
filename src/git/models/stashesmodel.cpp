@@ -1,7 +1,6 @@
 #include "stashesmodel.h"
 
 #include "../gitmanager.h"
-#include "../stash.h"
 
 #include <QDebug>
 

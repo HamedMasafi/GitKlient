@@ -69,7 +69,7 @@ public:
     };
 
     Manager();
-    Manager(const QString path);
+    explicit Manager(QString path);
     static Manager *instance();
 
     QString currentBranch() const;
@@ -102,13 +102,13 @@ public:
 
     QList<Git::Submodule> submodules() const;
     bool addSubmodule(const Git::Submodule &module);
-    void revertFile(const QString &filePath);
+    void revertFile(const QString &filePath) const;
 
     QMap<QString, Manager::ChangeStatus> changedFiles() const;
-    void commit(const QString &message);
-    void push();
-    void addFile(const QString &file);
-    void removeFile(const QString &file, bool cached);
+    void commit(const QString &message) const;
+    void push() const;
+    void addFile(const QString &file) const;
+    void removeFile(const QString &file, bool cached) const;
     QString getTopLevelPath() const;
 
     const QString &path() const;
@@ -132,9 +132,9 @@ public:
 
     QStringList fileLog(const QString &fileName) const;
 
-    QString diff(const QString &from, const QString &to);
-    QList<FileStatus> diffBranch(const QString &from);
-    QList<FileStatus> diffBranches(const QString &from, const QString &to);
+    QString diff(const QString &from, const QString &to) const;
+    QList<FileStatus> diffBranch(const QString &from) const;
+    QList<FileStatus> diffBranches(const QString &from, const QString &to) const;
 
     enum ConfigType {
         ConfigGlobal,

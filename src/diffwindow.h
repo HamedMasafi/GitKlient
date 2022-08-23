@@ -16,7 +16,7 @@ class DiffWindow : public AppMainWindow
 
 public:
     explicit DiffWindow();
-    DiffWindow(Git::Manager *git);
+    explicit DiffWindow(Git::Manager *git);
     DiffWindow(const Git::File &oldFile, const Git::File &newFile);
     DiffWindow(Git::Manager *git, const QString &oldBranch, const QString &newBranch);
     DiffWindow(const QString &oldDir, const QString &newDir);

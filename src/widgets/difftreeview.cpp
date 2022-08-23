@@ -76,7 +76,7 @@ void DiffTreeView::setHideUnchangeds(bool newHideUnchangeds)
 bool DiffTreeView::eventFilter(QObject *watched, QEvent *event)
 {
     if (watched == lineEditFilter && event->type() == QEvent::KeyPress) {
-        auto ke = static_cast<QKeyEvent*>(event);
+        auto ke = dynamic_cast<QKeyEvent*>(event);
 
         if (ke->key() == Qt::Key_Down) {
             if (stackedWidget->currentIndex() == 0)
@@ -86,7 +86,7 @@ bool DiffTreeView::eventFilter(QObject *watched, QEvent *event)
         }
     }
     if (watched == listView && event->type() == QEvent::KeyPress) {
-        auto ke = static_cast<QKeyEvent*>(event);
+        auto ke = dynamic_cast<QKeyEvent*>(event);
 
         if (ke->key() == Qt::Key_Up && listView->currentIndex().row() == 0)
             lineEditFilter->setFocus();

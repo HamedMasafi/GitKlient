@@ -13,14 +13,11 @@
 #include <QAction>
 #include <QWidget>
 
-SettingsManager::SettingsManager()
-{
-
-}
+SettingsManager::SettingsManager() = default;
 
 SettingsManager *SettingsManager::instance()
 {
-    static SettingsManager *instance = new SettingsManager;
+    static auto *instance = new SettingsManager;
     return instance;
 }
 

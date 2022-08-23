@@ -18,7 +18,7 @@ class Stash
     QString _branch;
     QDateTime _pushTime;
 public:
-    Stash(Git::Manager *git, const QString &name);
+    Stash(Git::Manager *git, QString name);
 
     void apply();
     void drop();

@@ -2,7 +2,6 @@
 
 #include "actions/branchactions.h"
 #include "dialogs/filestreedialog.h"
-#include "diffwindow.h"
 #include "models/treemodel.h"
 #include "git/gitmanager.h"
 

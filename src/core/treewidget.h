@@ -7,7 +7,7 @@ class TreeWidget : public QTreeWidget
 {
     Q_OBJECT
 public:
-    TreeWidget(QWidget *parent = nullptr);
+    explicit TreeWidget(QWidget *parent = nullptr);
 
 
 protected slots:

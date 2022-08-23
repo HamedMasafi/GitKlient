@@ -33,13 +33,8 @@ QVariant SubmodulesModel::data(const QModelIndex &index, int role) const
     switch (index.column()) {
     case 0:
         return submodule->path();
-        break;
     case 1:
         return submodule->refName();
-        break;
-    case 2:
-        return "submodule->";
-        break;
     }
     return QVariant();
 }

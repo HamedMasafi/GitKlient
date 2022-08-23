@@ -14,7 +14,7 @@ public:
         Dirs
     };
     explicit DiffOpenDialog(QWidget *parent = nullptr);
-    ~DiffOpenDialog();
+    ~DiffOpenDialog() override;
 
     QString oldFile() const;
     QString newFile() const;

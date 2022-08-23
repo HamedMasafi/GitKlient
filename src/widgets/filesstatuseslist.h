@@ -8,7 +8,7 @@ class FilesStatusesList : public QTreeWidget
 {
     Q_OBJECT
 public:
-    FilesStatusesList(QWidget *parent = nullptr);
+    explicit FilesStatusesList(QWidget *parent = nullptr);
 
     const QList<FileStatus> &files() const;
     void setFiles(const QList<FileStatus> &newFiles);

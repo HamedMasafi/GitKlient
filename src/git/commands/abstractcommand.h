@@ -36,7 +36,7 @@ class AbstractCommand : public QObject
 
 protected:
     QStringList _args;
-    Manager *_git;
+    Manager *_git{nullptr};
     void setProgress(int newProgress);
     void appendBool(OptionalBool b, QStringList &cmd, const QString &name) const;
     void appendBool(bool b, QStringList &cmd, const QString &name) const;
@@ -51,9 +51,9 @@ public:
         Error
     };
 
-    AbstractCommand(QObject *parent = nullptr);
-    AbstractCommand(const QStringList &args);
-    AbstractCommand(Manager *git);
+    explicit AbstractCommand(QObject *parent = nullptr);
+    explicit AbstractCommand(QStringList args);
+    explicit AbstractCommand(Manager *git);
 
     virtual ~AbstractCommand();
 

@@ -10,7 +10,7 @@ class StashActions : public AbstractActions
     Q_OBJECT
 
 public:
-    StashActions(Git::Manager *git, QWidget *parent = nullptr);
+    explicit StashActions(Git::Manager *git, QWidget *parent = nullptr);
 
     const QString &stashName() const;
     void setStashName(const QString &newStashName);

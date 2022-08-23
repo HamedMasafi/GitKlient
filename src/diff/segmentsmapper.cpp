@@ -46,7 +46,7 @@ int SegmentsMapper::map(int from, int to, int index) const
     int &offsetTo = to == 1 ? offset1 : (to == 2 ? offset2 : offset3);
 
     for (auto &s : _segments) {
-        auto ms = static_cast<Diff::MergeSegment*>(s);
+        auto ms = dynamic_cast<Diff::MergeSegment*>(s);
 
         if (offsetFrom + s->get(from).size() > index) {
             if (s->type != Diff::SegmentType::DifferentOnBoth)
@@ -126,7 +126,7 @@ void SegmentsMapper::setCurrentSegment(Diff::Segment *newCurrentSegment)
 bool SegmentsMapper::isMergeable() const
 {
     for (auto &s : _segments) {
-        auto ms = static_cast<Diff::MergeSegment*>(s);
+        auto ms = dynamic_cast<Diff::MergeSegment*>(s);
         if (ms->mergeType == Diff::MergeType::None)
             return false;
     }
@@ -137,7 +137,7 @@ int SegmentsMapper::conflicts() const
 {
     int r{0};
     for (auto &s: _segments) {
-        auto ms = static_cast<Diff::MergeSegment*>(s);
+        auto ms = dynamic_cast<Diff::MergeSegment*>(s);
         if (ms->mergeType == Diff::None)
             r++;
     }
@@ -148,7 +148,7 @@ void SegmentsMapper::findPrevious(const Diff::SegmentType &type)
 {
     int index;
     if (_currentSegment)
-        index = _segments.indexOf(static_cast<Diff::MergeSegment *>(_currentSegment)) - 1;
+        index = _segments.indexOf(dynamic_cast<Diff::MergeSegment *>(_currentSegment)) - 1;
     else
         index = _segments.size() - 1;
 
@@ -163,7 +163,7 @@ void SegmentsMapper::findNext(const Diff::SegmentType &type)
 {
     int index;
     if (_currentSegment)
-        index = _segments.indexOf(static_cast<Diff::MergeSegment *>(_currentSegment)) + 1;
+        index = _segments.indexOf(dynamic_cast<Diff::MergeSegment *>(_currentSegment)) + 1;
     else
         index = 0;
 

@@ -2,7 +2,7 @@
 
 namespace Git {
 
-CommandCommit::CommandCommit() {}
+CommandCommit::CommandCommit() = default;
 
 QStringList CommandCommit::generateArgs() const
 {

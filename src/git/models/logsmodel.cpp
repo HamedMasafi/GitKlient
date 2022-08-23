@@ -73,7 +73,7 @@ struct LanesFactory {
     {
         QList<int> ret;
         bool myIndexSet{myIndex == -1};
-        int index{-1};
+        int index;
 
         for (const auto &h : children) {
             index = -1;
@@ -191,10 +191,6 @@ struct LanesFactory {
         }
 
         return lanes;
-        int n = lanes.size() - 1;
-        while (lanes[n].type() == GraphLane())
-            --n;
-        return lanes.mid(0, lanes.size() - n);
     }
 };
 

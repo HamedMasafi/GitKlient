@@ -6,7 +6,7 @@
 
 namespace Git {
 class Manager;
-};
+}
 
 class RepoSettingsDialog : public AppDialog, private Ui::RepoSettingsDialog
 {

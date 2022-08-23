@@ -5,8 +5,7 @@ set(
     ${CMAKE_CURRENT_LIST_DIR}/gitloglist.cpp
     ${CMAKE_CURRENT_LIST_DIR}/gitsubmodule.cpp
     ${CMAKE_CURRENT_LIST_DIR}/stash.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/abstractcontainer.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/filestatus.cpp
+        ${CMAKE_CURRENT_LIST_DIR}/filestatus.cpp
     ${CMAKE_CURRENT_LIST_DIR}/gitgraphlane.cpp
     ${CMAKE_CURRENT_LIST_DIR}/gitmanager.cpp
     ${CMAKE_CURRENT_LIST_DIR}/nonemptylinescommand.cpp

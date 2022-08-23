@@ -69,6 +69,18 @@ MergeWindow::MergeWindow(Mode mode, QWidget *parent) : AppMainWindow(parent)
     Q_UNUSED(mode)
 
     initActions();
+    init();
+}
+
+MergeWindow::~MergeWindow()
+{
+    QSettings s;
+    s.beginGroup("MergeWindow");
+    s.setValue("actionType", _actionFilesView->isChecked() ? "file" : "block");
+}
+
+void MergeWindow::init()
+{
     auto mapper = new EditActionsMapper;
     mapper->init(actionCollection());
 
@@ -76,11 +88,9 @@ MergeWindow::MergeWindow(Mode mode, QWidget *parent) : AppMainWindow(parent)
     m_ui.setupUi(w);
     setCentralWidget(w);
 
-
     mapper->addTextEdit(m_ui.plainTextEditMine);
     mapper->addTextEdit(m_ui.plainTextEditTheir);
     mapper->addTextEdit(m_ui.plainTextEditResult);
-
 
     _mapper = new SegmentsMapper;
 
@@ -108,14 +118,6 @@ MergeWindow::MergeWindow(Mode mode, QWidget *parent) : AppMainWindow(parent)
             this,
             &MergeWindow::on_plainTextEditResult_blockSelected);
 
-    /*auto actions = QList<QAction*> ()
-                   << actionKeepThis
-                   << actionKeepThis
-                   << actionKeepThisBeforeOther
-                   << actionKeepThisAfterOther;*/
-
-    //    m_ui.plainTextEditMine->insertActions(nullptr, actions);
-
     _conflictsLabel = new QLabel(this);
     statusBar()->addPermanentWidget(_conflictsLabel);
 
@@ -123,8 +125,6 @@ MergeWindow::MergeWindow(Mode mode, QWidget *parent) : AppMainWindow(parent)
 
     setupGUI(Default, "gitklientmergeui.rc");
 }
-
-MergeWindow::~MergeWindow() {}
 
 void MergeWindow::load()
 {
@@ -275,6 +275,9 @@ void MergeWindow::updateResult()
 
 void MergeWindow::initActions()
 {
+    QSettings s;
+    s.beginGroup("MergeWindow");
+
     KActionCollection *actionCollection = this->actionCollection();
 
     auto actionKeepMine = actionCollection->addAction("keep_mine",
@@ -339,6 +342,11 @@ void MergeWindow::initActions()
                                             &MergeWindow::actionViewFiles_clicked);
     _actionFilesView->setText(i18n("Files"));
     _actionFilesView->setCheckable(true);
+
+    if (s.value("actionType", "file").toString() == "file")
+        actionViewFiles_clicked();
+    else
+        actionViewBlocks_clicked();
 
     auto actionGotoPrevDiff = actionCollection
                                   ->addAction("goto_prev_diff",

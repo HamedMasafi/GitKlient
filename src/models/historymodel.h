@@ -12,7 +12,7 @@ class HistoryModel : public QAbstractListModel
     QString _branch;
 public:
     Q_DECL_DEPRECATED
-    HistoryModel(QObject *parent = nullptr);
+    explicit HistoryModel(QObject *parent = nullptr);
     const QString &branch() const;
     void setBranch(const QString &newBranch);
 

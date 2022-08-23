@@ -23,7 +23,7 @@ class LogsModel : public AbstractGitItemsModel
     QMap<QString, Log *> _dataByCommitHashShort;
 
 public:
-    LogsModel(Manager *git, QObject *parent = nullptr);
+    explicit LogsModel(Manager *git, QObject *parent = nullptr);
 
     int rowCount(const QModelIndex &parent) const override;
     int columnCount(const QModelIndex &parent) const override;

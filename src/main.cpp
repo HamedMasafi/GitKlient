@@ -22,15 +22,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "commandargsparser.h"
 #include "dialogs/changedfilesdialog.h"
 #include "dialogs/fileblamedialog.h"
-#include "dialogs/filehistorydialog.h"
 #include "dialogs/pulldialog.h"
 #include "dialogs/runnerdialog.h"
 #include "diffwindow.h"
 #include "git/gitfile.h"
 #include "git/gitmanager.h"
-#include "appdebug.h"
-#include "mergewindow.h"
-#include "appwindow.h"
 
 // KF headers
 #include <KAboutData>

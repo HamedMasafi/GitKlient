@@ -2,6 +2,7 @@
 #include "gitmanager.h"
 
 #include <QFile>
+#include <utility>
 
 namespace Git {
 
@@ -15,10 +16,10 @@ File::File() : _storage{InValid}
 
 }
 
-File::File(const QString &filePath) : _place(), _filePath(filePath), _storage{Local} {}
+File::File(QString filePath) : _place(), _filePath(std::move(filePath)), _storage{Local} {}
 
-File::File(const QString &place, const QString &filePath, Manager *git)
-    : _place(place), _filePath(filePath), _git(git), _storage{Git}
+File::File(QString place, QString filePath, Manager *git)
+    : _place(std::move(place)), _filePath(std::move(filePath)), _git(git), _storage{Git}
 {
     if (!_git)
         _git = Manager::instance();
@@ -37,14 +38,7 @@ File::File(const File &other)
 
 //}
 
-File &File::operator=(const File &other)
-{
-    _place = other._place;
-    _filePath = other._filePath;
-    _git = other._git;
-    _storage = other._storage;
-    return *this;
-}
+File &File::operator=(const File &other) = default;
 
 const QString &File::place() const
 {

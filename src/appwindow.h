@@ -25,7 +25,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "GitKlientSettings.h"
 
-class GitKlientView;
 class MultiPageWidget;
 class WidgetBase;
 class QLabel;
@@ -76,6 +75,7 @@ private Q_SLOTS:
     void repoSettings();
     void repoSwitch();
     void repoDiffTree();
+    void merge();
 
 private:
     QAction *recentAction;

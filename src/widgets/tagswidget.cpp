@@ -46,7 +46,7 @@ void TagsWidget::restoreState(QSettings &settings)
 void TagsWidget::on_treeViewTags_customContextMenuRequested(const QPoint &pos)
 {
     Q_UNUSED(pos)
-    auto item = _model->fromindex(treeViewTags->currentIndex());
+    auto item = _model->fromIndex(treeViewTags->currentIndex());
     if (item) {
         _actions->setTagName(item->name());
         _actions->popup();
@@ -55,7 +55,7 @@ void TagsWidget::on_treeViewTags_customContextMenuRequested(const QPoint &pos)
 
 void TagsWidget::on_treeViewTags_itemActivated(const QModelIndex &index)
 {
-    auto item = _model->fromindex(index);
+    auto item = _model->fromIndex(index);
     if (item)
         _actions->setTagName(item->name());
 }

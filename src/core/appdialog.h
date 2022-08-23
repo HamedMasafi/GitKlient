@@ -15,8 +15,8 @@ protected:
     Git::Manager *_git;
 
 public:
-    AppDialog(QWidget *parent = nullptr, Qt::WindowFlags f = Qt::WindowFlags());
-    AppDialog(Git::Manager *git, QWidget *parent = nullptr, Qt::WindowFlags f = Qt::WindowFlags());
+    explicit AppDialog(QWidget *parent = nullptr, Qt::WindowFlags f = Qt::WindowFlags());
+    explicit AppDialog(Git::Manager *git, QWidget *parent = nullptr, Qt::WindowFlags f = Qt::WindowFlags());
 
     bool event(QEvent *event) override;
 };

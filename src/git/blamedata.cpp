@@ -1,13 +1,8 @@
 #include "blamedata.h"
 
-#include <QDebug>
-
 namespace Git {
 
-BlameData::BlameData()
-{
-
-}
+BlameData::BlameData() = default;
 
 void BlameData::initCommits(const LogList &logs)
 {

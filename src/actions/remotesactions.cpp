@@ -17,6 +17,7 @@ RemotesActions::RemotesActions(Git::Manager *git, QWidget *parent) : AbstractAct
     _actionRemove = addActionDisabled(i18n("Remove..."), this, &RemotesActions::remove);
     _actionRename = addActionDisabled(i18n("Rename..."), this, &RemotesActions::rename);
     _actionChangeUrl = addActionDisabled(i18n("Change url..."), this, &RemotesActions::changeUrl);
+    _actionUpdate = nullptr;
 }
 
 const QString &RemotesActions::remoteName() const

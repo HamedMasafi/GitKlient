@@ -14,7 +14,7 @@ class CommitActions : public AbstractActions
     DEFINE_ACTION(actionDiff)
 
 public:
-    CommitActions(Git::Manager *git, QWidget *parent = nullptr);
+    explicit CommitActions(Git::Manager *git, QWidget *parent = nullptr);
 
     const QString &commitHash() const;
     void setCommitHash(const QString &newCommitHash);

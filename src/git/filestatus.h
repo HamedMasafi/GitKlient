@@ -21,7 +21,7 @@ public:
     };
 
     FileStatus();
-    FileStatus(const QString &name, Status status);
+    FileStatus(QString name, Status status);
 
     const QString &name() const;
     Status status() const;

@@ -12,7 +12,7 @@ class SegmentsMapper : public QObject
     Q_OBJECT
 
 public:
-    SegmentsMapper(QObject *parent = nullptr);
+    explicit SegmentsMapper(QObject *parent = nullptr);
 
     void addEditor(CodeEditor *editor);
     const QList<Diff::Segment *> &segments() const;

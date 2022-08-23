@@ -12,7 +12,7 @@ class DiffTreeModel : public TreeModel
     Q_OBJECT
 
 public:
-    DiffTreeModel(QObject *parent = nullptr);
+    explicit DiffTreeModel(QObject *parent = nullptr);
 
     void addFile(const FileStatus& file);
     void addFile(const QString &file, const Diff::DiffType &type);

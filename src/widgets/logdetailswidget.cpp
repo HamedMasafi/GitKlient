@@ -108,11 +108,11 @@ void LogDetailsWidget::createText()
     appendParagraph(html, i18n("Date"), date);
     appendParagraph(html, i18n("Hash"), _log->commitHash());
 
-    if (_log->parents().size())
+    if (!_log->parents().empty())
         appendParagraph(html,
                         _log->parents().size() == 1 ? i18n("Parent") : i18n("Parents"),
                         parentHashHtml);
-    if (_log->childs().size())
+    if (!_log->childs().empty())
         appendParagraph(html,
                         _log->childs().size() == 1 ? i18n("Child") : i18n("Children"),
                         childsHashHtml);
@@ -122,22 +122,22 @@ void LogDetailsWidget::createText()
     setHtml(html);
 }
 
-void LogDetailsWidget::appendHeading(QString &html, const QString &title, const short level) const
+void LogDetailsWidget::appendHeading(QString &html, const QString &title, const short level)
 {
     html.append(QStringLiteral("<h%2>%1</h%2>").arg(title).arg(level));
 }
 
-void LogDetailsWidget::appendParagraph(QString &html, const QString &text) const
+void LogDetailsWidget::appendParagraph(QString &html, const QString &text)
 {
     html.append(QStringLiteral("<p>%1</p>").arg(text));
 }
 
-void LogDetailsWidget::appendParagraph(QString &html, const QString &name, const QString &value) const
+void LogDetailsWidget::appendParagraph(QString &html, const QString &name, const QString &value)
 {
     html.append(QStringLiteral("<p><b>%1:</b> %2</p>").arg(name, value));
 }
 
-void LogDetailsWidget::appendParagraph(QString &html, const QString &name, const QStringList &list) const
+void LogDetailsWidget::appendParagraph(QString &html, const QString &name, const QStringList &list)
 {
     if (!list.size())
         return;
@@ -161,7 +161,7 @@ QString LogDetailsWidget::createHashLink(const QString &hash) const
     return log->subject();
 }
 
-QString LogDetailsWidget::createFileLink(const QString &file) const
+QString LogDetailsWidget::createFileLink(const QString &file)
 {
     return QStringLiteral(R"(<a href="file:%1">%1</a> )").arg(file);
 }
