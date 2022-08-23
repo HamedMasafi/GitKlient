@@ -229,7 +229,7 @@ QTextBlock CodeEditor::blockAtPosition(int y) const
     if (!block.isValid())
         return QTextBlock();
 
-    int top = blockBoundingGeometry(block).translated(contentOffset()).top();
+    auto top = blockBoundingGeometry(block).translated(contentOffset()).top();
     int bottom = top + blockBoundingRect(block).height();
     do {
         if (top <= y && y <= bottom)

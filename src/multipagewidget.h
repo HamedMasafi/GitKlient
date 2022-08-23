@@ -17,7 +17,7 @@ class MultiPageWidget : public QWidget, private Ui::MultiPageWidget
     Q_OBJECT
 
     QActionGroup *actionGroup;
-    Git::Manager *_defaultGitManager;
+    Git::Manager *_defaultGitManager{};
 public:
     explicit MultiPageWidget(QWidget *parent = nullptr);
     void addPage(const QString &title, const QIcon &icon, WidgetBase *widget);

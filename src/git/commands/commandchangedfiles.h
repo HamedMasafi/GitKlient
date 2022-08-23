@@ -12,7 +12,7 @@ class CommandChangedFiles : public AbstractCommand
 {
 
 public:
-    CommandChangedFiles(Manager *git);
+    explicit CommandChangedFiles(Manager *git);
 
     const QList<FileStatus> &files() const;
     bool ignored() const;

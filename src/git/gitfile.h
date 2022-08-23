@@ -10,7 +10,7 @@ class File
 {
     QString _place;
     QString _filePath;
-    Manager *_git;
+    Manager *_git{};
 
     enum StorageType {
         InValid,
@@ -21,8 +21,8 @@ class File
 
 public:
     File();
-    File(const QString &filePath);
-    File(const QString &place, const QString &filePath, Manager *git = nullptr);
+    explicit File(QString filePath);
+    File(QString place, QString filePath, Manager *git = nullptr);
     File(const File &other);
 //    File(File &&other);
 

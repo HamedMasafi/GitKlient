@@ -10,11 +10,11 @@ class Log;
 class LogDetailsWidget : public QTextBrowser
 {
     Q_OBJECT
-    Git::Log *_log;
+    Git::Log *_log{};
     Q_PROPERTY(bool enableCommitsLinks READ enableCommitsLinks WRITE setEnableCommitsLinks NOTIFY enableCommitsLinksChanged)
 
 public:
-    LogDetailsWidget(QWidget *parent = nullptr);
+    explicit LogDetailsWidget(QWidget *parent = nullptr);
     Git::Log *log() const;
     void setLog(Git::Log *newLog);
 
@@ -23,12 +23,12 @@ public:
 
 private:
     void createText();
-    void appendHeading(QString &html, const QString &title, const short level = 2) const;
-    void appendParagraph(QString &html, const QString &text) const;
-    void appendParagraph(QString &html, const QString &name, const QString &value) const;
-    void appendParagraph(QString &html, const QString &name, const QStringList &list) const;
+    static void appendHeading(QString &html, const QString &title, short level = 2) ;
+    static void appendParagraph(QString &html, const QString &text) ;
+    static void appendParagraph(QString &html, const QString &name, const QString &value) ;
+    static void appendParagraph(QString &html, const QString &name, const QStringList &list) ;
     QString createHashLink(const QString &hash) const;
-    QString createFileLink(const QString &hash) const;
+    static QString createFileLink(const QString &hash) ;
 
     bool m_enableCommitsLinks{false};
 

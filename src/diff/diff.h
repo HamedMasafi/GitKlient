@@ -51,7 +51,7 @@ enum MergeDiffType
 };
 
 struct Segment {
-    virtual ~Segment() {}
+    virtual ~Segment() = default;
 
     QStringList oldText;
     QStringList newText;
@@ -71,7 +71,7 @@ struct Segment {
 
 struct DiffSegment : Segment
 {
-    virtual ~DiffSegment() {}
+    ~DiffSegment() override = default;
 
     QStringList get(int index) override
     {
@@ -87,7 +87,7 @@ struct DiffSegment : Segment
 
 struct MergeSegment : Segment
 {
-    virtual ~MergeSegment() {}
+    ~MergeSegment() override = default;
     QStringList base;
     QStringList local;
     QStringList remote;
@@ -124,11 +124,7 @@ QList<MergeSegment *> diff3(const QStringList &base,
                             const QStringList &local,
                             const QStringList &remote);
 
-QString gitDiff(QList<Segment*> segments);
-
-QPair<int, int> firstMatch(const QStringList &list1, const QStringList &list2);
-
 QMap<QString, DiffType> diffDirs(const QString &dir1, const QString &dir2);
-}; // namespace Diff
+} // namespace Diff
 
 #endif // DIFF_H

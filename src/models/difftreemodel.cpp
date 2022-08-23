@@ -10,22 +10,18 @@ DiffTreeModel::DiffTreeModel(QObject *parent) : TreeModel(parent)
 
 void DiffTreeModel::addFile(const FileStatus &file)
 {
-    TreeModel::Node *node{nullptr};
+    const auto& nodePath = file.name();
 
-    auto nodePath = file.name();
-
-    auto parts = nodePath.split(seprator());
-    node = createPath(parts, toDiffType(file.status()));
+    auto parts = nodePath.split(separator());
+    auto node = createPath(parts, toDiffType(file.status()));
     node->key = file.name();
     node->metaData = toDiffType(file.status());
 }
 
 void DiffTreeModel::addFile(const QString &file, const Diff::DiffType &type)
 {
-    TreeModel::Node *node{nullptr};
-
-    auto parts = file.split(seprator());
-    node = createPath(parts, type);
+    auto parts = file.split(separator());
+    auto node = createPath(parts, type);
     node->key = file;
     node->metaData = type;
 }
@@ -75,7 +71,7 @@ QColor textColor(const Diff::DiffType &status)
     case  Diff::DiffType::Unchanged:
         return QColor();
     }
-    return QColor();
+    return {};
 }
 
 QColor DiffTreeModel::statusColor(const Diff::DiffType &status) const
@@ -90,7 +86,7 @@ QColor DiffTreeModel::statusColor(const Diff::DiffType &status) const
     case Diff::DiffType::Modified:
         return GitKlientSettings::diffModifiedColor();
     }
-    return QColor();
+    return {};
 }
 
 Diff::DiffType DiffTreeModel::toDiffType(const FileStatus::Status &status)

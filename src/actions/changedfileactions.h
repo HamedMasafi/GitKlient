@@ -13,7 +13,7 @@ class ChangedFileActions : public AbstractActions
     DEFINE_ACTION(actionRevert)
 
 public:
-    ChangedFileActions(Git::Manager *git, QWidget *parent = nullptr);
+    explicit ChangedFileActions(Git::Manager *git, QWidget *parent = nullptr);
 
     const QString &filePath() const;
     void setFilePath(const QString &newFilePath);

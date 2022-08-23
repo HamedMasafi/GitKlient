@@ -14,7 +14,7 @@ class TagsActions : public AbstractActions
     DEFINE_ACTION(actionPush)
 
 public:
-    TagsActions(Git::Manager *git, QWidget *parent = nullptr);
+    explicit TagsActions(Git::Manager *git, QWidget *parent = nullptr);
 
     const QString &tagName() const;
     void setTagName(const QString &newTagName);

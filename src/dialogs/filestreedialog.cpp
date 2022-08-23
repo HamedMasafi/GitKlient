@@ -4,10 +4,8 @@
 #include <QDebug>
 #include <QFileIconProvider>
 #include <QMenu>
-#include <KIOCore/KFileItem>
 #include "dialogs/fileviewerdialog.h"
 #include "dialogs/filehistorydialog.h"
-#include "dialogs/fileblamedialog.h"
 #include "dialogs/searchdialog.h"
 #include "actions/fileactions.h"
 
@@ -20,7 +18,7 @@ FilesTreeDialog::FilesTreeDialog(const QString &place, QWidget *parent) :
     _actions->setPlace(place);
 
     _treeModel = new TreeModel(this);
-    _treeModel->setSeprator("/");
+    _treeModel->setSeparator("/");
 
     auto files = Git::Manager::instance()->ls(place);
 

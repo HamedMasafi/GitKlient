@@ -14,7 +14,7 @@ class RemotesActions: public AbstractActions
     DEFINE_ACTION(actionChangeUrl)
 
 public:
-    RemotesActions(Git::Manager *git, QWidget *parent = nullptr);
+    explicit RemotesActions(Git::Manager *git, QWidget *parent = nullptr);
 
     const QString &remoteName() const;
     void setRemoteName(const QString &newRemoteName);

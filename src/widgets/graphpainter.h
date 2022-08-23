@@ -6,7 +6,7 @@
 
 namespace Git {
 class LogsModel;
-};
+}
 class GraphPainter : public QStyledItemDelegate
 {
     Q_OBJECT

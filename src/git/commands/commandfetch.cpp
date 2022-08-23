@@ -99,6 +99,6 @@ QStringList CommandFetch::generateArgs() const
     return args;
 }
 
-CommandFetch::CommandFetch() {}
+CommandFetch::CommandFetch() = default;
 
 } // namespace Git

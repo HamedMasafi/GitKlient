@@ -10,7 +10,7 @@ class CloneCommand : public AbstractCommand
     Q_OBJECT
 
 public:
-    CloneCommand(QObject *parent = nullptr);
+    explicit CloneCommand(QObject *parent = nullptr);
 
     const QString &repoUrl() const;
     void setRepoUrl(const QString &newRepoUrl);

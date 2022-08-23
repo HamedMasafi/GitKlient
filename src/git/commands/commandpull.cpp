@@ -140,15 +140,15 @@ QStringList CommandPull::generateArgs() const
     return args;
 }
 
-CommandPull::CommandPull() {}
+CommandPull::CommandPull() = default;
 
 CommandPull::~CommandPull()
 {
 #ifdef GIT_GUI
     if (_widget)
         _widget->deleteLater();
-    if (_ui)
-        delete _ui;
+
+    delete _ui;
 #endif
 }
 

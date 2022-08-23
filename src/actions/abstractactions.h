@@ -34,7 +34,7 @@ public:                                                                         
 
 namespace Git {
 class Manager;
-};
+}
 
 class QWidget;
 class QMenu;

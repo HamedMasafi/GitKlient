@@ -23,11 +23,9 @@ KService::Ptr FileActions::getExternalViewer(const QString &mimeType)
 {
     KService::List offers = KMimeTypeTrader::self()->query(mimeType, QStringLiteral("Application"));
 
-    if (!offers.isEmpty()) {
+    if (!offers.isEmpty())
         return offers.first();
-    } else {
-        return KService::Ptr();
-    }
+    return KService::Ptr();
 }
 
 const QString &FileActions::place() const
@@ -99,8 +97,7 @@ void FileActions::viewFile()
 
 void FileActions::saveAsFile()
 {
-    QFileDialog d;
-    auto fileName = d.getSaveFileName(_parent);
+    auto fileName = QFileDialog::getSaveFileName(_parent);
     if (fileName != QString()) {
         Git::File file{_place, _filePath};
         file.save(fileName);
@@ -147,11 +144,9 @@ KService::Ptr FileActions::getViewer(const QString &mimeType)
         offers = KMimeTypeTrader::self()->query(mimeType, QStringLiteral("Application"));
     }
 
-    if (!offers.isEmpty()) {
+    if (!offers.isEmpty())
         return offers.first();
-    } else {
-        return KService::Ptr();
-    }
+    return KService::Ptr();
 }
 
 void FileActions::openWith()

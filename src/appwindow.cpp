@@ -34,6 +34,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "dialogs/searchdialog.h"
 #include "dialogs/selectbranchestodiffdialog.h"
 #include "dialogs/switchbranchdialog.h"
+#include "dialogs/mergedialog.h"
 #include "diffwindow.h"
 #include "git/commands/commandpull.h"
 #include "git/commands/commandswitchbranch.h"
@@ -171,6 +172,9 @@ void AppWindow::initActions()
     auto repoPushAction = actionCollection->addAction("repo_push", this, &AppWindow::commitPushAction);
     repoPushAction->setText(i18n("Push..."));
 
+    auto repoMergeAction = actionCollection->addAction("repo_merge", this, &AppWindow::merge);
+    repoMergeAction->setText(i18n("Merge..."));
+
     auto diffBranchesAction = actionCollection->addAction("diff_branches", this, &AppWindow::diffBranches);
     diffBranchesAction->setText(i18n("Diff branches..."));
 
@@ -292,7 +296,7 @@ void AppWindow::clone()
     if (d.exec() == QDialog::Accepted) {
         RunnerDialog r(this);
 
-        auto cmd = d.command();;
+        auto cmd = d.command();
         r.run(cmd);
         r.exec();
         cmd->deleteLater();
@@ -338,6 +342,12 @@ void AppWindow::repoDiffTree()
 {
     auto w = new DiffWindow(_git);
     w->showModal();
+}
+
+void AppWindow::merge()
+{
+    MergeDialog d(_git, this);
+    d.exec();
 }
 
 template<class T>

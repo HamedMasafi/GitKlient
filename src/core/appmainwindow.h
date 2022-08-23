@@ -11,7 +11,7 @@ class AppMainWindow : public KXmlGuiWindow
 public:
     enum DialogCode { Rejected, Accepted };
 
-    AppMainWindow(QWidget *parent = nullptr, Qt::WindowFlags f = Qt::WindowFlags());
+    explicit AppMainWindow(QWidget *parent = nullptr, Qt::WindowFlags f = Qt::WindowFlags());
 
     int exec();
     void showModal();

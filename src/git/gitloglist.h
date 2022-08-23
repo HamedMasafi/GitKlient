@@ -17,7 +17,7 @@ class LogList : public QList<Log *>
 
 public:
     LogList();
-    LogList(QString branch);
+    explicit LogList(QString branch);
 
     void load();
     void initGraph();

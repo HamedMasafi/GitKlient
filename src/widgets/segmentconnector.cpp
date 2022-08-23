@@ -102,7 +102,7 @@ void SegmentConnector::setRight(CodeEditor *newRight)
 
 void SegmentConnector::paintEvent(QPaintEvent *event)
 {
-    Q_UNUSED(event);
+    Q_UNUSED(event)
 
     if (!_left || !_right)
         return;
@@ -125,7 +125,6 @@ void SegmentConnector::paintEvent(QPaintEvent *event)
         case Diff::SegmentType::SameOnBoth:
             //            painter.setBrush(Qt::magenta);
             continue;
-            break;
         case Diff::SegmentType::OnlyOnRight:
             painter.setBrush(GitKlientSettings::diffAddedColor());
             break;

@@ -78,13 +78,13 @@ void StashActions::diff()
 
 void StashActions::create()
 {
-    if (!_git->changedFiles().size()) {
+    if (_git->changedFiles().empty()) {
         KMessageBox::information(_parent, i18n("You don't have any changes!"), i18n("Stash"));
         return;
     }
     bool ok;
-    QInputDialog d;
-    auto name = d.getText(_parent,
+
+    auto name = QInputDialog::getText(_parent,
                           i18n("Create new stash"),
                           i18n("Name of stash"),
                           QLineEdit::Normal,

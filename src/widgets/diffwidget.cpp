@@ -1,6 +1,5 @@
 #include "codeeditor.h"
 #include "diffwidget.h"
-#include "../widgets/segmentconnector.h"
 #include "diff/diff.h"
 
 #include <QHBoxLayout>

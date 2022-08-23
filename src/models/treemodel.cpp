@@ -6,14 +6,14 @@
 
 #include <KLocalizedString>
 
-const QString &TreeModel::seprator() const
+const QString &TreeModel::separator() const
 {
     return _seprator;
 }
 
-void TreeModel::setSeprator(const QString &newSeprator)
+void TreeModel::setSeparator(const QString &newSeparator)
 {
-    _seprator = newSeprator;
+    _seprator = newSeparator;
 }
 
 bool TreeModel::lastPartAsData() const
@@ -108,19 +108,19 @@ QModelIndex TreeModel::index(int row, int column, const QModelIndex &parent) con
     Node *childItem = parentItem->childs.at(row);
     if (childItem)
         return createIndex(row, column, childItem);
-    return QModelIndex();
+    return {};
 }
 
 QModelIndex TreeModel::parent(const QModelIndex &child) const
 {
     if (!child.isValid())
-        return QModelIndex();
+        return {};
 
     Node *childItem = static_cast<Node*>(child.internalPointer());
     Node *parentItem = childItem->parent;
 
     if (parentItem == rootNode)
-        return QModelIndex();
+        return {};
 
     return createIndex(parentItem->row, 0, parentItem);
 }
@@ -192,7 +192,7 @@ void TreeModel::addData(const QStringList &data, const QString &prefix, bool spl
         if (path.isEmpty())
             continue;
 
-        TreeModel::Node *node{nullptr};
+        TreeModel::Node *node;
 
         if (split) {
             auto nodePath = path;
@@ -228,7 +228,7 @@ void TreeModel::addData(const QStringList &data, const QString &prefix, bool spl
 
 TreeModel::Node *TreeModel::find(QStringList &path, Node *node)
 {
-    if (!path.size())
+    if (path.empty())
         return nullptr;
 
     auto ch = node->find(path.first());
@@ -270,9 +270,9 @@ void TreeModel::sortNode(Node *node)
 {
     qDebug() << "Sorting" << node->title;
     std::sort(node->childs.begin(), node->childs.end(), [](Node *l, Node *r) {
-        if (!l->childs.size() && r->childs.size())
+        if (l->childs.empty() && !r->childs.empty())
             return false;
-        if (l->childs.size() && !r->childs.size())
+        if (!l->childs.empty() && r->childs.empty())
             return true;
         return l->title < r->title;
     });

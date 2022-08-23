@@ -16,7 +16,8 @@ class AbstractGitItemsModel : public QAbstractListModel
     Q_PROPERTY(Status status READ status WRITE setStatus NOTIFY statusChanged)
 
 public:
-    AbstractGitItemsModel(Manager *git, QObject *parent = nullptr);
+    explicit AbstractGitItemsModel(Manager *git, QObject *parent = nullptr);
+
     enum Status { NotLoaded, Loading, Loaded };
     Q_ENUM(Status)
     bool isLoaded() const;

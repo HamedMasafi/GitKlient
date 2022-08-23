@@ -19,17 +19,17 @@ public:
     };
 
     Log();
-    Log(const QString &authorName,
-           const QString &authorEmail,
-           const QDateTime &authDate,
-           const QString &committerName,
-           const QString &committerEmail,
-           const QDateTime &commitDate,
-           const QString &message,
-           const QString &subject,
-           const QString &body,
-           const QString &commitHash,
-           const QStringList &parentHash);
+    Log(QString authorName,
+           QString authorEmail,
+           QDateTime authDate,
+           QString committerName,
+           QString committerEmail,
+           QDateTime commitDate,
+           QString message,
+           QString subject,
+           QString body,
+           QString commitHash,
+           QStringList parentHash);
     ~Log();
 
     const QString &authorName() const;

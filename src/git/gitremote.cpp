@@ -1,12 +1,11 @@
 #include "gitremote.h"
-#include <QStringList>
 #include <QString>
 #include <QRegularExpression>
 #include <QDebug>
 
 namespace Git {
 
-Remote::Remote() {}
+Remote::Remote() = default;
 
 void Remote::parse(const QString &output)
 {

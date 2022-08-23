@@ -2,13 +2,9 @@
 
 #include <QDebug>
 #include <QDir>
-#include <QSet>
 #include <QDateTime>
 #include <set>
 #include <QElapsedTimer>
-
-#include <iostream>
-#include <iomanip>
 
 namespace Diff
 {
@@ -26,7 +22,7 @@ struct Pair3 {
         : first{firstNumber}, second{secondNumber}, third{thirdNumber}
     {}
 
-    bool operator==(const Pair3 &other)
+    bool operator==(const Pair3 &other) const
     {
         return first == other.first && second == other.second && third == other.third;
     }
@@ -129,7 +125,7 @@ int maxIn(int first, int second)
 }
 
 int maxIn(const QList<int> &list) {
-    if (!list.size())
+    if (list.empty())
         return -1;
     int max{list.first()};
     int maxIndex{0};
@@ -219,7 +215,7 @@ Q_OUTOFLINE_TEMPLATE Array3<T>::~Array3()
 template<typename T>
 Q_OUTOFLINE_TEMPLATE T &Array3<T>::operator()(int i1, int i2, int i3)
 {
-    return _data[i3 + (c2 * c2 * i1) + (c3 * i2)];
+    return _data[i3 + (c2 * c1 * i1) + (c3 * i2)];
 }
 
 Solution3 longestCommonSubsequence(const QStringList &source,
@@ -327,7 +323,7 @@ Solution longestCommonSubsequence(const QStringList &source, const QStringList &
         for (int j = 0; j <= target.count(); j++) {
             if (i == 0 || j == 0) {
                 l(i, j) = 0;
-            } else if (isEqual(source.at(i - 1), target.at(j - 1))) {
+            } else if (source.at(i - 1) == target.at(j - 1)) {
                 l(i, j) = l(i - 1, j - 1) + 1;
             } else {
                 l(i, j) = qMax(l(i - 1, j), l(i, j - 1));
@@ -479,7 +475,7 @@ QList<MergeSegment *> diff3(const QStringList &baseList, const QStringList &loca
     QList<MergeSegment *> ret;
 
     Impl::Pair3 p;
-    while (max.size()) {
+    while (!max.empty()) {
         if (p == Impl::Pair3())
             p = max.takeFirst();
 
@@ -494,7 +490,7 @@ QList<MergeSegment *> diff3(const QStringList &baseList, const QStringList &loca
                 segment->local.append(local.takeFirst());
                 segment->remote.append(remote.takeFirst());
 
-                if (max.size())
+                if (!max.empty())
                     p = max.takeFirst();
             }
             ret.append(segment);
@@ -523,7 +519,7 @@ QList<MergeSegment *> diff3(const QStringList &baseList, const QStringList &loca
         ret.append(segment);
     }
 
-    if (base.size() || local.size() || remote.size()) {
+    if (base.empty() && local.empty() && remote.empty()) {
         auto segment = new MergeSegment{base, local, remote};
         ret.append(segment);
     }
@@ -537,7 +533,7 @@ QList<MergeSegment *> diff3_2(const QStringList &baseList, const QStringList &lo
     auto local = localList;
     auto remote = remoteList;
     while (true) {
-        if (!base.size()) {
+        if (base.empty()) {
             segments.append(new MergeSegment{base, local, remote});
             break;
         }
@@ -592,39 +588,16 @@ QList<MergeSegment *> diff3_2(const QStringList &baseList, const QStringList &lo
     return segments;
 }
 
-QPair<int, int> firstMatch(const QStringList &list1, const QStringList &list2)
-{
-    QPair<int, int> ret = qMakePair(-1, -1);
-    for (int n1 = 0; n1 < list1.size(); ++n1)
-        for (int n2 = 0; n2 < list2.size(); ++n2)
-            if (list1.at(n1) == list2.at(n2)) {
-                if (ret.first == -1) {
-                    ret.first = n1;
-                    ret.second = n2;
-                    continue;
-                }
-                if (qMin(ret.first, ret.second) > qMin(n1, n2)) {
-                    ret.first = n1;
-                    ret.second = n2;
-                    continue;
-                }
-            }
-    return ret;;
-}
-
-MergeSegment::MergeSegment()
-{
-
-}
+    MergeSegment::MergeSegment() = default;
 
 MergeSegment::MergeSegment(const QStringList &base, const QStringList &local, const QStringList &remote)
     : base{base}, local{local}, remote{remote}
 {
     if (local == remote)
         type = SegmentType::SameOnBoth;
-    else if (!base.size() && local.size())
+    else if (base.empty() && !local.empty())
         type = SegmentType::OnlyOnLeft;
-    else if (!base.size() && remote.size())
+    else if (base.empty() && !remote.empty())
         type = SegmentType::OnlyOnRight;
     else
         type = SegmentType::DifferentOnBoth;
@@ -667,7 +640,7 @@ QList<Segment *> diff(const QStringList &oldText, const QStringList &newText)
     QList<Segment *> ret;
 
     QPair<int, int> p;
-    while (max.size()) {
+    while (!max.empty()) {
         if (p == QPair<int, int>())
             p = max.takeFirst();
 
@@ -680,14 +653,14 @@ QList<Segment *> diff(const QStringList &oldText, const QStringList &newText)
                 segment->oldText.append(o.takeFirst());
                 segment->newText.append(n.takeFirst());
 
-                if (max.size())
+                if (!max.empty())
                     p = max.takeFirst();
             }
             ret.append(segment);
-            if (!max.size())
+            if (max.empty())
                 break;
         } else {
-            if (!max.size())
+            if (max.empty())
                 break;
             p = max.takeFirst();
         }
@@ -705,9 +678,9 @@ QList<Segment *> diff(const QStringList &oldText, const QStringList &newText)
         segment->oldText = oldList;
         segment->newText = newList;
 
-        if (oldList.size() &&newList.size())
+        if (!oldList.empty() && !newList.empty())
             segment->type = SegmentType::DifferentOnBoth;
-        else if (oldList.size())
+        else if (!oldList.empty())
             segment->type = SegmentType::OnlyOnLeft;
         else
             segment->type = SegmentType::OnlyOnRight;
@@ -726,14 +699,6 @@ QList<Segment *> diff(const QString &oldText, const QString &newText)
         newList = newText.split("\n");
 
     return diff(oldList, newList);
-}
-
-QString gitDiff(QList<Segment *> segments)
-{
-    Q_UNUSED(segments)
-    QString s;
-
-    return s;
 }
 
 void browseDir(QStringList &filesList, const QString &dirPath, const QString &basePath)

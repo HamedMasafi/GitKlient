@@ -3,11 +3,8 @@
 #include "actions/branchactions.h"
 #include "dialogs/filestreedialog.h"
 #include "dialogs/runnerdialog.h"
-#include "diffwindow.h"
 #include "git/gitmanager.h"
 #include "git/models/branchesmodel.h"
-
-#include <KMessageBox>
 
 BranchesStatusWidget::BranchesStatusWidget(QWidget *parent) : WidgetBase(parent)
 {

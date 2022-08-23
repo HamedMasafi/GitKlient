@@ -1,5 +1,7 @@
 #include "abstractcommand.h"
 
+#include <utility>
+
 namespace Git {
 
 bool AbstractCommand::isValid() const
@@ -39,17 +41,15 @@ void AbstractCommand::setErrorMessage(const QString &newErrorMessage)
 
 AbstractCommand::AbstractCommand(QObject *parent) : QObject(parent) {}
 
-AbstractCommand::AbstractCommand(const QStringList &args) : QObject(), _args(args) {}
+AbstractCommand::AbstractCommand(QStringList args) : QObject(), _args(std::move(args)) {}
 
 AbstractCommand::AbstractCommand(Manager *git) : QObject(), _git(git) {}
 
-AbstractCommand::~AbstractCommand()
-{
-}
+AbstractCommand::~AbstractCommand() = default;
 
 void AbstractCommand::parseOutput(const QByteArray &output, const QByteArray &errorOutput)
 {
-    Q_UNUSED(output);
+    Q_UNUSED(output)
     Q_UNUSED(errorOutput)
 }
 

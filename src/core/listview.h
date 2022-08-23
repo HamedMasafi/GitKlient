@@ -8,7 +8,7 @@ class ListView : public QListView
     Q_OBJECT
 
 public:
-    ListView(QWidget *parent = nullptr);
+    explicit ListView(QWidget *parent = nullptr);
 
 protected slots:
     void currentChanged(const QModelIndex &current, const QModelIndex &previous) override;

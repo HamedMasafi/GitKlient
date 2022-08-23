@@ -16,8 +16,8 @@ DiffDialog::DiffDialog(const Git::File &oldFile, const Git::File &newFile, QWidg
       _newFile(newFile)
 {
     setupUi(this);
-    diffWidget->setOldFile(std::move(oldFile));
-    diffWidget->setNewFile(std::move(newFile));
+    diffWidget->setOldFile(oldFile);
+    diffWidget->setNewFile(newFile);
 
     lineEditOldFileName->setText(oldFile.displayName());
     lineEditNewFileName->setText(newFile.displayName());
@@ -69,8 +69,8 @@ void DiffDialog::on_treeView_clicked(const QModelIndex &index)
 
     Git::File oldFile(_oldBranch, fileName);
     Git::File newFile(_newBranch, fileName);
-    diffWidget->setOldFile(std::move(oldFile));
-    diffWidget->setNewFile(std::move(newFile));
+    diffWidget->setOldFile(oldFile);
+    diffWidget->setNewFile(newFile);
     diffWidget->compare();
 
     lineEditOldFileName->setText(oldFile.displayName());

@@ -19,7 +19,7 @@ class DiffWidget : public WidgetBase, private Ui::DiffWIdget
 
     QTextOption _defaultOption;
 public:
-    DiffWidget(QWidget *parent = nullptr);
+    explicit DiffWidget(QWidget *parent = nullptr);
     DiffWidget(const Git::File &oldFile, const Git::File &newFile, QWidget *parent = nullptr);
 
     const Git::File &oldFile() const;

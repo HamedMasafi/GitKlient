@@ -1,6 +1,7 @@
 #include "gitlog.h"
 
 #include <QDebug>
+#include <utility>
 
 namespace Git {
 
@@ -39,23 +40,23 @@ const QString &Log::commitShortHash() const
     return _commitShortHash;
 }
 
-Log::Log() {}
+Log::Log() = default;
 
-Log::Log(const QString &authorName,
-               const QString &authorEmail,
-               const QDateTime &authDate,
-               const QString &committerName,
-               const QString &committerEmail,
-               const QDateTime &commitDate,
-               const QString &message,
-               const QString &subject,
-               const QString &body,
-               const QString &commitHash,
-               const QStringList &parentHash)
-    : _authorName(authorName), _authorEmail(authorEmail), _authDate(authDate),
-      _committerName(committerName), _committerEmail(committerEmail), _commitDate(commitDate),
-      _message(message), _subject(subject), _body(body), _commitHash(commitHash),
-      _parentHash(parentHash)
+Log::Log(QString authorName,
+               QString authorEmail,
+               QDateTime authDate,
+               QString committerName,
+               QString committerEmail,
+               QDateTime commitDate,
+               QString message,
+               QString subject,
+               QString body,
+               QString commitHash,
+               QStringList parentHash)
+    : _authorName(std::move(authorName)), _authorEmail(std::move(authorEmail)), _authDate(std::move(authDate)),
+      _committerName(std::move(committerName)), _committerEmail(std::move(committerEmail)), _commitDate(std::move(commitDate)),
+      _message(std::move(message)), _subject(std::move(subject)), _body(std::move(body)), _commitHash(std::move(commitHash)),
+      _parentHash(std::move(parentHash))
 {}
 
 Log::~Log()

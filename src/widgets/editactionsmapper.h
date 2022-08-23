@@ -22,11 +22,11 @@ class EditActionsMapper : public QObject
     QAction *_actionDelete{nullptr};
 
 public:
-    EditActionsMapper(QObject *parent = nullptr);
-    virtual ~EditActionsMapper() = default;
+    explicit EditActionsMapper(QObject *parent = nullptr);
+    ~EditActionsMapper() override = default;
 
     void addTextEdit(QPlainTextEdit *control);
-    void init(KActionCollection *actionCollection);
+    void init(KActionCollection *actionCollection) const;
 
 private Q_SLOTS:
     void control_undoAvailable(bool b);
