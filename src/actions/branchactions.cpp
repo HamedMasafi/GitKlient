@@ -11,6 +11,7 @@
 #include "dialogs/fetchdialog.h"
 #include "dialogs/filestreedialog.h"
 #include "dialogs/mergedialog.h"
+#include "dialogs/notedialog.h"
 #include "dialogs/runnerdialog.h"
 #include "diffwindow.h"
 #include "git/commands/commandmerge.h"
@@ -28,6 +29,7 @@ BranchActions::BranchActions(Git::Manager *git, QWidget *parent) : AbstractActio
     _actionMerge = addActionDisabled(i18n("Merge..."), this, &BranchActions::merge);
     _actionDiff = addActionDisabled(i18n("Diff"), this, &BranchActions::diff);
     _actionRemove = addActionDisabled(i18n("Remove..."), this, &BranchActions::remove);
+    _actionNote = addActionDisabled(i18n("Note..."), this, &BranchActions::note);
 }
 
 const QString &BranchActions::branchName() const
@@ -45,6 +47,7 @@ void BranchActions::setBranchName(const QString &newBranchName)
     setActionEnabled(_actionMerge, true);
     setActionEnabled(_actionDiff, true);
     setActionEnabled(_actionRemove, true);
+    setActionEnabled(_actionNote, true);
 }
 
 const QString &BranchActions::otherBranch() const
@@ -125,4 +128,10 @@ void BranchActions::merge()
         runner.run(cmd);
         runner.exec();
     }
+}
+
+void BranchActions::note()
+{
+    NoteDialog d{_git, _branchName, _parent};
+    d.exec();
 }

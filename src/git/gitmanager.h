@@ -158,6 +158,10 @@ public:
     const LoadFlags &loadFlags() const;
     void setLoadFlags(const LoadFlags &newLoadFlags);
 
+
+    QString readNote(const QString &branchName) const;
+    void saveNote(const QString &branchName, const QString &note) const;
+
 signals:
     void pathChanged();
 
