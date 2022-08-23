@@ -13,7 +13,7 @@ class WidgetBase : public QWidget
 
 public:
     explicit WidgetBase(QWidget *parent = nullptr);
-    WidgetBase(Git::Manager *git, QWidget *parent = nullptr);
+    explicit WidgetBase(Git::Manager *git, QWidget *parent = nullptr);
     Git::Manager *git() const;
     void setGit(Git::Manager *newGit);
 

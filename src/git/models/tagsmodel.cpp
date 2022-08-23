@@ -56,7 +56,7 @@ QVariant TagsModel::headerData(int section, Qt::Orientation orientation, int rol
     return QVariant();
 }
 
-Tag *TagsModel::fromindex(const QModelIndex &index) const
+Tag *TagsModel::fromIndex(const QModelIndex &index) const
 {
     if (!index.isValid() || index.row() < 0 || index.row() >= _data.size())
         return nullptr;

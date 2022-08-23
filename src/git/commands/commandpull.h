@@ -6,7 +6,7 @@
 #ifdef GIT_GUI
 namespace Ui{
 class CommandPullWidget;
-};
+}
 #endif
 
 namespace Git {
@@ -15,7 +15,7 @@ class CommandPull : public AbstractCommand
 {    
 public:
     CommandPull();
-    ~CommandPull();
+    ~CommandPull() override;
     QStringList generateArgs() const override;
 
     bool squash() const;

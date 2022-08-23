@@ -24,7 +24,7 @@ QPoint centerEdge(int x, const Qt::Edge &edge) {
     case Qt::BottomEdge:
         return {(x * WIDTH) + (WIDTH / 2), HEIGHT};
     }
-    return QPoint();
+    return {};
 }
 
 QPoint point(int col, const Qt::Alignment &align = Qt::AlignCenter) {

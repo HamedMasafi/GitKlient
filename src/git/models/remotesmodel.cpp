@@ -36,7 +36,6 @@ QVariant RemotesModel::data(const QModelIndex &index, int role) const
     switch (index.column()) {
     case 0:
         return remote->name;
-        break;
     }
     return QVariant();
 }

@@ -2,7 +2,6 @@
 
 #include <KActionCollection>
 #include <QEvent>
-#include <QFocusEvent>
 #include <QPlainTextEdit>
 
 #include <KStandardAction>
@@ -28,7 +27,7 @@ void EditActionsMapper::addTextEdit(QPlainTextEdit *control)
     connect(control, &QPlainTextEdit::redoAvailable, this, &EditActionsMapper::control_redoAvailable);
 }
 
-void EditActionsMapper::init(KActionCollection *actionCollection)
+void EditActionsMapper::init(KActionCollection *actionCollection) const
 {
     KStandardAction::cut(this, &EditActionsMapper::actionCut_triggered, actionCollection);
     KStandardAction::copy(this, &EditActionsMapper::actionCopy_triggered, actionCollection);

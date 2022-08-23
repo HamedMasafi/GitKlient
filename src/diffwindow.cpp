@@ -3,15 +3,11 @@
 #include <KActionCollection>
 #include <KLocalizedString>
 
-#include <QApplication>
 #include <QDebug>
 #include <QDockWidget>
 #include <QTreeView>
-#include <qaction.h>
-#include <QStringListModel>
+#include <dialogs/diffopendialog.h>
 
-#include "dialogs/diffopendialog.h"
-#include "git/gitmanager.h"
 #include "models/difftreemodel.h"
 #include "models/filesmodel.h"
 #include "settings/settingsmanager.h"
@@ -19,6 +15,7 @@
 #include "widgets/difftreeview.h"
 #include "widgets/diffwidget.h"
 #include "widgets/editactionsmapper.h"
+#include "git/gitmanager.h"
 
 DiffWindow::DiffWindow() : AppMainWindow()
 {
@@ -166,8 +163,8 @@ void DiffWindow::fileOpen()
         _rightDir = d.newDir();
         compareDirs();
     } else {
-        _diffWidget->setOldFile({d.oldFile()});
-        _diffWidget->setNewFile({d.newFile()});
+        _diffWidget->setOldFile(Git::File{d.oldFile()});
+        _diffWidget->setNewFile(Git::File{d.newFile()});
         _diffWidget->compare();
     }
 }
@@ -181,7 +178,7 @@ void DiffWindow::on_treeView_fileSelected(const QString &file)
 {
     switch (_leftStorage) {
     case FileSystem:
-        _diffWidget->setOldFile({_leftDir + "/" + file});
+        _diffWidget->setOldFile(Git::File{_leftDir + "/" + file});
         break;
     case Git:
         _diffWidget->setOldFile({_oldBranch, file});
@@ -191,7 +188,7 @@ void DiffWindow::on_treeView_fileSelected(const QString &file)
     }
     switch (_rightStorage) {
     case FileSystem:
-        _diffWidget->setNewFile({_rightDir + "/" + file});
+        _diffWidget->setNewFile(Git::File{_rightDir + "/" + file});
         break;
     case Git:
         _diffWidget->setNewFile({_newBranch, file});

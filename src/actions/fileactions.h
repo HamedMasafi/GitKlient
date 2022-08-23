@@ -29,7 +29,7 @@ class FileActions : public AbstractActions
     KService::Ptr getExternalViewer(const QString &mimeType);
     KService::Ptr getViewer(const QString &mimeType);
 public:
-    FileActions(Git::Manager *git, QWidget *parent = nullptr);
+    explicit FileActions(Git::Manager *git, QWidget *parent = nullptr);
     void popup(const QPoint &pos);
 
     const QString &place() const;

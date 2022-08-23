@@ -164,7 +164,7 @@ bool Manager::isIgnored(const QString &path)
 {
     auto tmp = readAllNonEmptyOutput({"check-ignore", path});
     qDebug() << Q_FUNC_INFO << tmp;
-    return tmp.size();
+    return !tmp.empty();
 }
 
 QPair<int, int> Manager::uniqueCommiteOnBranches(const QString &branch1,
@@ -188,12 +188,12 @@ QStringList Manager::fileLog(const QString &fileName) const
     return readAllNonEmptyOutput({"log", "--format=format:%H", "--", fileName});
 }
 
-QString Manager::diff(const QString &from, const QString &to)
+QString Manager::diff(const QString &from, const QString &to) const
 {
     return runGit({"diff", from, to});
 }
 
-QList<FileStatus> Manager::diffBranch(const QString &from)
+QList<FileStatus> Manager::diffBranch(const QString &from) const
 {
     auto buffer = QString(runGit({"diff", from, "--name-status"})).split("\n");
     QList<FileStatus> files;
@@ -212,7 +212,7 @@ QList<FileStatus> Manager::diffBranch(const QString &from)
     return files;
 }
 
-QList<FileStatus> Manager::diffBranches(const QString &from, const QString &to)
+QList<FileStatus> Manager::diffBranches(const QString &from, const QString &to) const
 {
     auto buffer = QString(runGit({"diff", from + ".." + to, "--name-status"})).split("\n");
     QList<FileStatus> files;
@@ -243,7 +243,7 @@ QString Manager::config(const QString &name, ConfigType type) const
         break;
     }
     auto list = readAllNonEmptyOutput(cmd);
-    if (list.size())
+    if (!list.empty())
         return list.first();
 
     return QString();
@@ -319,7 +319,7 @@ void Manager::loadAsync()
     if (_loadFlags & LoadTags)
         models << _tagsModel;
 
-    if (models.size())
+    if (!models.empty())
         QtConcurrent::mapped(models, load);
 }
 
@@ -435,7 +435,14 @@ QByteArray Manager::runGit(const QStringList &args) const
 
 QStringList Manager::ls(const QString &place) const
 {
-    return readAllNonEmptyOutput({"ls-tree", "--name-only", "-r", place});
+    auto buffer = readAllNonEmptyOutput({"ls-tree", "--name-only", "-r", place});
+    QMutableListIterator<QString> it(buffer);
+    while (it.hasNext()) {
+        auto s = it.next();
+        if (s.startsWith("""") && s.endsWith(""""))
+            it.setValue(s.mid(1, s.length() - 2));
+    }
+    return buffer;
 }
 
 QString Manager::fileContent(const QString &place, const QString &fileName) const
@@ -624,7 +631,7 @@ bool Manager::addSubmodule(const Submodule &module)
     return true;
 }
 
-void Manager::revertFile(const QString &filePath)
+void Manager::revertFile(const QString &filePath) const
 {
     runGit({"checkout", "--", filePath});
 }
@@ -664,22 +671,22 @@ QMap<QString, Manager::ChangeStatus> Manager::changedFiles() const
     return statuses;
 }
 
-void Manager::commit(const QString &message)
+void Manager::commit(const QString &message) const
 {
     runGit({"commit", "-m", message});
 }
 
-void Manager::push()
+void Manager::push() const
 {
     runGit({"push", "origin", "master"});
 }
 
-void Manager::addFile(const QString &file)
+void Manager::addFile(const QString &file) const
 {
     runGit({"add", file});
 }
 
-void Manager::removeFile(const QString &file, bool cached)
+void Manager::removeFile(const QString &file, bool cached) const
 {
     QStringList args;
     args.append("rm");

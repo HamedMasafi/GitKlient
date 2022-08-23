@@ -1,6 +1,7 @@
 #ifndef SETTINGSMANAGER_H
 #define SETTINGSMANAGER_H
 
+#include <QObject>
 #include "ui_settingspagebase.h"
 #include "ui_settingspagediff.h"
 #include "ui_settingspagegit.h"
@@ -22,9 +23,9 @@ public slots:
     void show();
 
 private:
-    Ui::SettingsPageBase pageBase;
-    Ui::SettingsPageDiff pageDiff;
-    Ui::SettingsPageGit pageGit;
+    Ui::SettingsPageBase pageBase{};
+    Ui::SettingsPageDiff pageDiff{};
+    Ui::SettingsPageGit pageGit{};
     QWidget * createBasePage();
     QWidget *createGitPage();
     QWidget *createDiffPage();

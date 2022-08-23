@@ -189,7 +189,7 @@ KService::Ptr FileViewerDialog::getExternalViewer(const QString &mimeType)
     }
 }
 
-bool FileViewerDialog::viewInInternalViewer(const KService::Ptr viewer, const QString& fileName, const QMimeType &mimeType)
+bool FileViewerDialog::viewInInternalViewer(const KService::Ptr& viewer, const QString& fileName, const QMimeType &mimeType)
 {
     Q_UNUSED(mimeType)
     // Set icon and comment for the mimetype.

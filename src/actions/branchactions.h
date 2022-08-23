@@ -21,7 +21,7 @@ class BranchActions : public AbstractActions
     DEFINE_ACTION(actionRemove)
 
 public:
-    BranchActions(Git::Manager *git, QWidget *parent = nullptr);
+    explicit BranchActions(Git::Manager *git, QWidget *parent = nullptr);
 
     const QString &branchName() const;
     void setBranchName(const QString &newBranchName);

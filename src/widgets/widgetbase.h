@@ -22,7 +22,7 @@ protected:
 
 public:
     explicit WidgetBase(QWidget *parent = nullptr);
-    WidgetBase(Git::Manager *git, AppWindow *parent = nullptr);
+    explicit WidgetBase(Git::Manager *git, AppWindow *parent = nullptr);
     Git::Manager *git() const;
     void setGit(Git::Manager *newGit);
 

@@ -46,12 +46,12 @@ QVariant BranchesModel::headerData(int section, Qt::Orientation orientation, int
         return QVariant();
 
     switch (section) {
-    case 0:
-        return "Name";
-    case 1:
-        return "Commit(s) behind";
-    case 2:
-        return "Commit(s) ahead";
+        case 0:
+            return "Name";
+        case 1:
+            return "Commit(s) behind";
+        case 2:
+            return "Commit(s) ahead";
     }
     return QVariant();
 }

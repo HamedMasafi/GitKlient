@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 2.8.12)
 project(gitklient)
 set(PROJECT_VERSION_MAJOR 0)
 set(PROJECT_VERSION_MINOR 2)
-set(PROJECT_VERSION_PATCH 0)
+set(PROJECT_VERSION_PATCH 1)
 
 add_definitions(-DGK_VERSION="${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}.${PROJECT_VERSION_PATCH}")
 find_package(ECM 1.0.0 REQUIRED NO_MODULE)
@@ -60,6 +60,7 @@ find_package(
         KIO
         TextWidgets
         TextEditor
+        SyntaxHighlighting
 )
 
 feature_summary(WHAT ALL INCLUDE_QUIET_PACKAGES FATAL_ON_MISSING_REQUIRED_PACKAGES)

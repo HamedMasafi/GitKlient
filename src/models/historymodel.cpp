@@ -1,5 +1,4 @@
 #include "historymodel.h"
-#include "git/gitmanager.h"
 #include "git/gitloglist.h"
 #include "git/gitlog.h"
 #include <QDebug>
@@ -28,7 +27,7 @@ void HistoryModel::setBranch(const QString &newBranch)
 void HistoryModel::reload()
 {
     beginResetModel();
-    if (_logs.size()) {
+    if (!_logs.empty()) {
         qDeleteAll(_logs);
         _logs.clear();
     }
@@ -124,7 +123,7 @@ QModelIndex HistoryModel::findIndexByHash(const QString &hash) const
             return index(idx);
         else
             idx++;
-    return QModelIndex();
+    return {};
 }
 
 Git::Log *HistoryModel::findLogByHash(const QString &hash) const

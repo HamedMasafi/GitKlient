@@ -15,7 +15,7 @@ class DiffDialog : public AppDialog, private Ui::DiffDialog
     QString _oldBranch;
     QString _newBranch;
 
-    DiffTreeModel *_diffModel;
+    DiffTreeModel *_diffModel{};
 
 public:
     Q_DECL_DEPRECATED explicit DiffDialog(QWidget *parent = nullptr);

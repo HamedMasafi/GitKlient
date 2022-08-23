@@ -1,7 +1,6 @@
 #include "commandargsparser.h"
 
 #include "appwindow.h"
-#include "commandargsparser.h"
 #include "dialogs/changedfilesdialog.h"
 #include "dialogs/clonedialog.h"
 #include "dialogs/commitpushdialog.h"
@@ -28,7 +27,7 @@
 #include <klocalizedstring.h>
 
 #define checkGitPath(path)                                                                         \
-    QFileInfo fi(path);                                                                            \
+    do { QFileInfo fi(path);                                                                            \
     if (fi.isFile())                                                                               \
         git->setPath(fi.absolutePath());                                                           \
     else                                                                                           \
@@ -36,7 +35,7 @@
     if (!git->isValid()) {                                                                         \
         KMessageBox::sorry(nullptr, i18n("The path is not git repo: %1", path));                   \
         return 1;                                                                                  \
-    }
+    } } while(false)
 
 CommandArgsParser::CommandArgsParser() : QObject()
 {
@@ -139,7 +138,6 @@ ArgParserReturn CommandArgsParser::run(const QStringList &args)
                 }
 
                 return r;
-                continue;
             }
         }
     }
@@ -182,7 +180,7 @@ ArgParserReturn CommandArgsParser::clone(const QString &path)
     if (d.exec() == QDialog::Accepted) {
         RunnerDialog r;
 
-        auto cmd = d.command();;
+        auto cmd = d.command();
         r.run(cmd);
         r.exec();
         cmd->deleteLater();

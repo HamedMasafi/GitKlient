@@ -116,7 +116,7 @@ target_link_libraries(gitklient
     KF5::TextWidgets
     KF5::TextEditor
 
-    KF5SyntaxHighlighting
+    KF5::SyntaxHighlighting
 )
 #set_property(TARGET KI18n APPEND PROPERTY
 #  INTERFACE_AUTOUIC_OPTIONS ${autouic_options}

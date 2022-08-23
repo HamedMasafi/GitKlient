@@ -1,4 +1,6 @@
 #include "stash.h"
+
+#include <utility>
 #include "gitmanager.h"
 
 namespace Git {
@@ -33,7 +35,7 @@ const QDateTime &Stash::pushTime() const
     return _pushTime;
 }
 
-Stash::Stash(Manager *git, const QString &name) : _git(git), _name(name) {}
+Stash::Stash(Manager *git, QString name) : _git(git), _name(std::move(name)) {}
 
 void Stash::apply()
 {

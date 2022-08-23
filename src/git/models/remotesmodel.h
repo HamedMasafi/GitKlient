@@ -17,7 +17,7 @@ class RemotesModel : public AbstractGitItemsModel
     QList<Remote *> _data;
 
 public:
-    RemotesModel(Manager *git, QObject *parent = nullptr);
+    explicit RemotesModel(Manager *git, QObject *parent = nullptr);
     int columnCount(const QModelIndex &parent) const override;
     int rowCount(const QModelIndex &parent) const override;
     QVariant data(const QModelIndex &index, int role) const override;

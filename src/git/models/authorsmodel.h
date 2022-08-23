@@ -10,7 +10,7 @@ struct Author {
     QString name;
 };
 
-class AuthorsModel : public AbstractGitItemsModel
+class __attribute__((unused)) AuthorsModel : public AbstractGitItemsModel
 {
     Q_OBJECT
     QList<Author *> _data;

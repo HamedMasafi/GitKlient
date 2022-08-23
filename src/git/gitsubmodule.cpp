@@ -2,7 +2,7 @@
 
 namespace Git {
 
-Submodule::Submodule() {}
+Submodule::Submodule() = default;
 
 const QString &Submodule::path() const
 {

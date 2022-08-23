@@ -19,7 +19,7 @@ public:
         QList<Node *> childs;
         Node *parent;
         struct Feature *feature;
-        int row;
+        int row{};
         QStringList data;
         QString key;
         QString prefix;
@@ -27,7 +27,7 @@ public:
         TREEMODEL_NODE_DATA_TYPE metaData;
 #endif
         Node() : parent(nullptr), feature(nullptr) {}
-        Node(Node *parent) : parent(parent), feature(nullptr) { row = parent->childs.count(); }
+        explicit Node(Node *parent) : parent(parent), feature(nullptr) { row = parent->childs.count(); }
 
         ~Node() { qDeleteAll(childs); }
 
@@ -76,8 +76,8 @@ public:
 
     void addData(const QStringList &data, const QString &prefix = QString(), bool split = true);
 
-    const QString &seprator() const;
-    void setSeprator(const QString &newSeprator);
+    const QString &separator() const;
+    void setSeparator(const QString &newSeparator);
 
     bool lastPartAsData() const;
     void setLastPartAsData(bool newLastPartAsData);

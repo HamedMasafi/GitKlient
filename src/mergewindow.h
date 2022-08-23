@@ -65,6 +65,7 @@ private:
     Ui::Form m_ui;
     void updateResult();
     void initActions();
+    void init();
     void doMergeAction(Diff::MergeType type);
     bool isFullyResolved();
 

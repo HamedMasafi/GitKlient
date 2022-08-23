@@ -2,10 +2,7 @@
 
 namespace Git {
 
-Tag::Tag()
-{
-
-}
+Tag::Tag() = default;
 
 const QString &Tag::name() const
 {

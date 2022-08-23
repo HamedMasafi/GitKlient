@@ -15,7 +15,7 @@ class FilesModel: public QAbstractListModel
     QList<QPair<QString, QString>> _files;
 
 public:
-    FilesModel(QObject *parent = nullptr);
+    explicit FilesModel(QObject *parent = nullptr);
 
     int rowCount(const QModelIndex &parent) const override;
     int columnCount(const QModelIndex &parent) const override;

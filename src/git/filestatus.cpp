@@ -1,12 +1,10 @@
 #include "filestatus.h"
 #include <QDebug>
+#include <utility>
 
-FileStatus::FileStatus()
-{
+FileStatus::FileStatus() = default;
 
-}
-
-FileStatus::FileStatus(const QString &name, FileStatus::Status status) : _name(name),
+FileStatus::FileStatus(QString name, FileStatus::Status status) : _name(std::move(name)),
       _status(status)
 {}
 
