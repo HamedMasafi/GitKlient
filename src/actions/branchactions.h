@@ -19,6 +19,7 @@ class BranchActions : public AbstractActions
     DEFINE_ACTION(actionMerge)
     DEFINE_ACTION(actionCreate)
     DEFINE_ACTION(actionRemove)
+    DEFINE_ACTION(actionNote)
 
 public:
     explicit BranchActions(Git::Manager *git, QWidget *parent = nullptr);
@@ -37,6 +38,7 @@ private slots:
     void diff();
     void remove();
     void merge();
+    void note();
 };
 
 #endif // BRANCHACTIONS_H

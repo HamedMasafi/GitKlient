@@ -364,6 +364,16 @@ void Manager::setLoadFlags(const LoadFlags &newLoadFlags)
     _loadFlags = newLoadFlags;
 }
 
+QString Manager::readNote(const QString &branchName) const
+{
+    return runGit({"notes", "show", branchName});
+}
+
+void Manager::saveNote(const QString &branchName, const QString &note) const
+{
+    runGit({"notes", "add", branchName, "-f", "--message=" + note});
+}
+
 Manager::Manager()
     : QObject()
       , _remotesModel{new RemotesModel(this)}
