@@ -29,7 +29,7 @@ void FetchDialog::on_buttonBox_accepted()
 
     cmd.setRemote(comboBoxRemote->currentText());
 
-    if (checkBoxAllBranches->isChecked())
+    if (!checkBoxAllBranches->isChecked())
         cmd.setBranch(comboBoxBranch->currentText());
     cmd.setNoFf(checkBoxNoFastForward->isChecked());
     cmd.setFfOnly(checkBoxFastForwardOnly->isChecked());
